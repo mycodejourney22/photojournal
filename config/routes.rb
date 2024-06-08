@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  root to: "pages#home"
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount Blazer::Engine, at: "blazer"
+  root to: "appointments#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -8,4 +13,16 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  resources :appointments do
+    member do
+      patch :mark_no_show
+    end
+    resources :photo_shoots, except: [:index, :destroy]
+  end
+  resources :photo_shoots, only: [:index] do
+    collection do
+      get :upfront
+      get :notes
+    end
+  end
 end

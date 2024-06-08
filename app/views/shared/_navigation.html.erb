@@ -1,0 +1,16 @@
+<div class="d-flex ps-4 p-heading" data-controller="nav">
+  <p class="" data-calendly-target="upcoming" data-action="click->calendly#upcomingnavigate" data-url="<%= appointments_path %>">
+    <%= link_to "Upcoming", appointments_path, class: "nav-link ",
+    data: { nav_target: "upcoming", action: "click->nav#switch" } %></p>
+  <p class="ps-4 " data-calendly-target="completed" data-action="click->calendly#navigate" data-url="<%= photo_shoots_path %>">
+    <%= link_to "Completed", photo_shoots_path, class: "nav-link" ,
+    data: { nav_target: "completed", action: "click->nav#switch" }%>
+  </p>
+  <p data-calendly-target="upfront" data-action="click->calendly#upfrontnavigate"  class="ps-4 nav-link" data-url="<%= upfront_photo_shoots_path %>" ><%= link_to "Upfront Paid", upfront_photo_shoots_path, class: "nav-link ",
+    data: { nav_target: "upfront", action: "click->nav#switch" }%></p>
+  <p class="ps-4 nav-link"><%= link_to "Important Notes", notes_photo_shoots_path, class: "nav-link nav-link__red",
+    data: { nav_target: "notes", action: "click->nav#switch" } %></p>
+</div>
+<div class="inner-card ps-4 p-heading">
+  <p class="fw-bold"><%= @heading %></p>
+</div>

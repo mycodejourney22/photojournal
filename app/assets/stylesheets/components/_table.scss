@@ -1,0 +1,22 @@
+.bordered-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bordered-table td, .bordered-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.bordered-table tr:nth-child(even){background-color: #f2f2f2;}
+
+.bordered-table tr:hover {background-color: #ddd;}
+
+.bordered-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: white;
+  color: black;
+
+}

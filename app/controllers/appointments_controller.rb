@@ -1,0 +1,115 @@
+class AppointmentsController < ApplicationController
+  def index
+    authorize Appointment
+    appointments_today = policy_scope(Appointment).where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
+    @appointments = appointments_today.select { |appointment| appointment.photo_shoot.nil? && !appointment.no_show }
+    @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
+    respond_to do |format|
+      format.html # Follow regular flow of Rails
+      format.text { render partial: "appointment_table", locals: { appointments: @appointments }, formats: [:html] }
+    end
+    save_data_to_database(customer_info)
+  end
+
+  def show
+  end
+
+  def mark_no_show
+    authorize Appointment
+    @appointment = Appointment.find(params[:id])
+    @appointment.update(no_show: true)
+    redirect_to appointments_path, notice: 'Appointment marked as no-show.'
+  end
+
+  private
+
+  def header_details
+    {
+      Authorization: "Bearer #{ENV.fetch('CALENDLY_BEARER_TOKEN')}",
+      'Content-Type': 'application/json'
+    }
+  end
+
+  def all_booking_params(end_of_day_iso8601, beginning_of_day_iso8601)
+    { organization: 'https://api.calendly.com/organizations/4459d3df-3d64-4cd5-a7c7-ee529a88e257',
+      sort: "start_time:desc", status: 'active',
+      max_start_time: end_of_day_iso8601, min_start_time: beginning_of_day_iso8601 }
+  end
+
+  def make_request(url, header, arr)
+    response = RestClient.get(url, header)
+    resp = JSON.parse(response.body)['collection']
+    resp.each do |res|
+      arr << all_booking_extract(res)
+    end
+  end
+
+  def all_booking_extract(res)
+    { uuid: res["uri"], start_time: res["start_time"], end_time: res["end_time"], location: res["location"]["location"] }
+  end
+
+  def end_of_day
+    end_of_day = Time.now.end_of_day
+    end_of_day.strftime('%Y-%m-%dT%H:%M:%S.%6NZ')
+  end
+
+  def start_of_day
+    beginning_of_day = Time.now.beginning_of_day
+    beginning_of_day.strftime('%Y-%m-%dT%H:%M:%S.%6NZ')
+  end
+
+  def fetch_all_bookings
+    arr = []
+    url = "https://api.calendly.com/scheduled_events"
+    params = all_booking_params(end_of_day, start_of_day)
+    full_url = "#{url}?#{URI.encode_www_form(params)}"
+    make_request(full_url, header_details, arr)
+    arr
+  rescue RestClient::ExceptionWithResponse => e
+    puts "Error fetching bookings: #{e.response}"
+    []
+  end
+
+  def extract_uuid(url)
+    uuid_pattern = /[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}/i
+    url.match(uuid_pattern)[0]
+  end
+
+  def customer_info
+    arr = fetch_all_bookings
+    new_arr = []
+    headers = header_details
+    arr.each do |info|
+      url = "https://api.calendly.com/scheduled_events/#{extract_uuid(info[:uuid])}/invitees"
+      params = { status: 'active' }
+      full_url = "#{url}?#{URI.encode_www_form(params)}"
+      response = RestClient.get(full_url, headers)
+      resp = JSON.parse(response.body)['collection']
+      new_arr << {
+        uuid: extract_uuid(info[:uuid]),
+        name: resp.first["name"], question: resp.first["questions_and_answers"],
+        email: resp.first["email"], start_time: info[:start_time],
+        end_time: info[:end_time], location: info[:location]
+      }
+    end
+    save_data_to_database(new_arr)
+    new_arr
+  rescue RestClient::ExceptionWithResponse => e
+    puts "Error fetching bookings: #{e.response}"
+    []
+  end
+
+  def data_already_exists?(api_data)
+    Appointment.exists?(uuid: api_data[:uuid])
+  end
+
+  def save_data_to_database(api_datas)
+    api_datas.each do |api_data|
+      unless data_already_exists?(api_data)
+        Appointment.create!(uuid: api_data[:uuid], name: api_data[:name], email: api_data[:email],
+                            start_time: api_data[:start_time], end_time: api_data[:end_time], location: api_data[:location],
+                            questions_attributes: api_data[:question])
+      end
+    end
+  end
+end

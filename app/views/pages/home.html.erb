@@ -1,2 +1,16 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="container" data-controller="calendly">
+  <h1>Today's Appointments</h1>
+
+<% @appointments.each do |appointment| %>
+  <p><strong>Name:</strong> <%= appointment.name %></p>
+  <p><strong>Email:</strong> <%= appointment.email %></p>
+  <p><strong>Start Time:</strong> <%= appointment.start_time %></p>
+  <p><strong>End Time:</strong> <%= appointment.end_time %></p>
+  <p><strong>Location:</strong> <%= appointment.location %></p>
+  <hr>
+<% end %>
+
+<% if @appointments.empty? %>
+  <p>No appointments for today.</p>
+<% end %>
+</div>

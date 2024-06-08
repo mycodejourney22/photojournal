@@ -1,0 +1,10 @@
+<div class="container" data-controller="calendly" >
+  <section>
+    <h1>Today's Appointments</h1>
+    <div class="card">
+        <%= render "shared/navigation" %>
+        <%= render "appointment_table", appointments: @appointments %>
+    </div>
+  </section>
+
+</div>
