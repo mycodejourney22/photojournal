@@ -5,7 +5,6 @@
             <th>Phone number</th>
             <th>Appointment Time</th>
             <th>Type of Shoot</th>
-            <th>Location</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -18,12 +17,11 @@
                       <%= phone_number.answer %>
                     <%end%></td>
               <td><%= appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p")%>
-                    - <%= appointment.end_time.in_time_zone('West Central Africa').strftime("%I:%M %p") %></td>
+                    - <%= appointment.end_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if appointment.end_time %></td>
               <td><% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' } %>
                     <% if type_of_shoots %>
                       <%= type_of_shoots.answer %>
                     <% end %></td>
-              <td><%= appointment.location %></td>
               <td>
                 <p><%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(appointment) %></p>
                 <p><%= link_to 'Mark as No-Show', mark_no_show_appointment_path(appointment), method: :patch, data: { confirm: 'Are you sure?' } %></p>

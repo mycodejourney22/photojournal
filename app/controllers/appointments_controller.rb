@@ -1,4 +1,6 @@
+require 'securerandom'
 class AppointmentsController < ApplicationController
+
   def index
     authorize Appointment
     appointments_today = policy_scope(Appointment).where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
@@ -12,6 +14,8 @@ class AppointmentsController < ApplicationController
   end
 
   def show
+    authorize Appointment
+    @appointment = Appointment.find(params[:id])
   end
 
   def mark_no_show
@@ -21,7 +25,37 @@ class AppointmentsController < ApplicationController
     redirect_to appointments_path, notice: 'Appointment marked as no-show.'
   end
 
+  def new
+    authorize Appointment
+    @appointment = Appointment.new
+    build_questions_for(@appointment)
+  end
+
+  def create
+    authorize Appointment
+    @appointment = Appointment.new(appointment_params)
+    @appointment.uuid = SecureRandom.uuid
+    if @appointment.save
+      redirect_to @appointment, notice: 'Appointment was successfully created.'
+    else
+      build_questions_for(@appointment) # Rebuild questions if save fails
+      render :new
+    end
+  end
+
   private
+
+  def appointment_params
+    params.require(:appointment).permit(:name, :email, :start_time, :end_time, :location,
+                                                           questions_attributes: [:id, :question,:answer,:_destroy])
+  end
+
+  def build_questions_for(appointment)
+    Question::QUESTIONS.each do |question_content|
+      appointment.questions.build(question: question_content)
+    end
+  end
+
 
   def header_details
     {
@@ -112,4 +146,5 @@ class AppointmentsController < ApplicationController
       end
     end
   end
+
 end
