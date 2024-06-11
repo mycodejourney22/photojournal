@@ -62,7 +62,7 @@
 
 .card_photoshoot{
   padding: 1rem;
-  width: 70%;
+  // width: 70%;
   margin: 0 auto;
   input, select{
     background-color: white;
@@ -70,11 +70,15 @@
   }
 
   .btn-photoshoot{
-    width: 20%;
-    background: #005FE6;
-    color: white;
+    background: #EDD400;
+    color: black;
     border-radius: 2rem;
     font-weight: bold;
   }
 
+}
+
+.form_card{
+  background-color: #f4f4f4;
+  border: none;
 }

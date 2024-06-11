@@ -1,10 +1,11 @@
 <div class="container">
-  <section>
-    <h1 class="text-center">Add New Appointment</h1>
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <h1 class="ps-3">Add New Appointment</h1>
     <%= simple_form_for @appointment do |f| %>
       <%= f.error_notification %>
 
-      <div class="card card_photoshoot">
+      <div class="card card_photoshoot form_card">
         <div class="grid-container">
           <%= f.input :name, label_html:{class: 'fw-bold'} %>
           <%= f.input :email, label_html:{class: 'fw-bold'} %>
@@ -16,7 +17,7 @@
             <%= question_form.label :question, question_form.object.question, class: 'fw-bold' %>
             <%= question_form.hidden_field :question %>
             <% if question_form.object.question == "Phone number" %>
-              <%= question_form.input :answer, as: :string, class: "w-50", label: false %>
+              <%= question_form.input :answer, as: :string, label: false %>
             <% elsif question_form.object.question == 'Type of shoot' %>
               <div class="grid_app_item">
                   <%= question_form.input :answer, as: :radio_buttons, collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
@@ -25,8 +26,8 @@
             <%= question_form.hidden_field :_destroy %>
           </div>
         <% end %>
-        <%= f.submit "Schedule Event", class: "btn btn-photoshoot mt-4" %>
       </div>
+       <%= f.submit "Schedule Event", class: "btn btn-photoshoot" %>
     <% end %>
   </section>
 </div>

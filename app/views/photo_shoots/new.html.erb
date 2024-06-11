@@ -1,38 +1,40 @@
 <section>
   <div class="container">
-    <div class=" card_photoshoot">
+  <%= render "shared/sidebar" %>
+  <div class="content card_photoshoot form_card">
+  <h1>Add a Photoshoot</h1>
 
-      <%= simple_form_for [@appointment, @photo_shoot] do |f| %>
-        <div >
-          <p class="fw-bold py-4">STUDIO INFORMATION</p>
-          <div class=" grid-container">
-          <%= f.input :date, as: :string, label: false, placeholder: "Shoot date",
-                input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
-            <%= f.association :photographer, collection: Staff.where(role: 'Photographer').pluck(:name, :id), label: false, include_blank: 'Select Photographer', input_html: { class: 'grid-item' } %>
-            <%= f.association :editor, collection: Staff.where(role: 'Editor').pluck(:name, :id), label: false, include_blank: 'Select Editor' , input_html: { class: 'grid-item' } %>
-            <%= f.association :customer_service, collection: Staff.where(role: 'Customer Service').pluck(:name, :id), label: false, include_blank: 'Select Customer Service' %>
-          </div>
-          <p class="fw-bold py-4">PHOTOSHOOT INFORMATION</p>
-          <div class="grid-container">
-            <%= f.input :number_of_selections, label: false, placeholder: "Number of selections" %>
-            <%= f.input :status, label: false,
-                  prompt: "Status", collection: ['New', 'Pending', 'Sent']  %>
-            <%= f.input :type_of_shoot, label: false  , prompt: "Type of shoot", collection: ['Kiddies', 'Newborn', 'Personal', 'Maternity', 'Family', 'Passport', 'Extra copies', 'Frames']%>
-            <%= f.input :number_of_outfits, label: false, placeholder: "Number of outfits" %>
-            <%= f.input :date_sent, as: :string, label: false, placeholder: "Date sent", input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
-            <%= f.input :notes, label: false, placeholder: "Handover Notes" %>
-          </div>
-          <p class="fw-bold py-4">PAYMENT INFORMATION</p>
-          <div class="grid-container">
-            <%= f.input :payment_total, label: false, placeholder: "Payment total" %>
-            <%= f.input :payment_method, label: false, prompt: "Payment method", collection:["POS", "Cash", "Transfer"] %>
-            <%= f.input :payment_type, label: false, placeholder: "Payment type", prompt: "Payment type", collection:["Full Payment", "Part Payment", "Balance Payment", "Deposit (Upfront)"] %>
-            <%= f.input :reference, label: false, placeholder: "Parent reference" %>
-          </div>
+    <%= simple_form_for [@appointment, @photo_shoot] do |f| %>
+      <div >
+        <p class="fw-bold py-4">STUDIO INFORMATION</p>
+        <div class=" grid-container">
+        <%= f.input :date, as: :string, label: false, placeholder: "Shoot date",
+              input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
+          <%= f.association :photographer, collection: Staff.where(role: 'Photographer').pluck(:name, :id), label: false, include_blank: 'Select Photographer', input_html: { class: 'grid-item' } %>
+          <%= f.association :editor, collection: Staff.where(role: 'Editor').pluck(:name, :id), label: false, include_blank: 'Select Editor' , input_html: { class: 'grid-item' } %>
+          <%= f.association :customer_service, collection: Staff.where(role: 'Customer Service').pluck(:name, :id), label: false, include_blank: 'Select Customer Service' %>
         </div>
-        <%= f.button :submit, "Create PhotoShoot", class: "btn btn-photoshoot" %>
-      <% end %>
-    </div>
+        <p class="fw-bold py-4">PHOTOSHOOT INFORMATION</p>
+        <div class="grid-container">
+          <%= f.input :number_of_selections, label: false, placeholder: "Number of selections" %>
+          <%= f.input :status, label: false,
+                prompt: "Status", collection: ['New', 'Pending', 'Sent']  %>
+          <%= f.input :type_of_shoot, label: false  , prompt: "Type of shoot", collection: ['Kiddies', 'Newborn', 'Personal', 'Maternity', 'Family', 'Passport', 'Extra copies', 'Frames']%>
+          <%= f.input :number_of_outfits, label: false, placeholder: "Number of outfits" %>
+          <%= f.input :date_sent, as: :string, label: false, placeholder: "Date sent", input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
+          <%= f.input :notes, label: false, placeholder: "Handover Notes" %>
+        </div>
+        <p class="fw-bold py-4">PAYMENT INFORMATION</p>
+        <div class="grid-container">
+          <%= f.input :payment_total, label: false, placeholder: "Payment total" %>
+          <%= f.input :payment_method, label: false, prompt: "Payment method", collection:["POS", "Cash", "Transfer"] %>
+          <%= f.input :payment_type, label: false, placeholder: "Payment type", prompt: "Payment type", collection:["Full Payment", "Part Payment", "Balance Payment", "Deposit (Upfront)"] %>
+          <%= f.input :reference, label: false, placeholder: "Parent reference" %>
+        </div>
+      </div>
+      <%= f.button :submit, "Create PhotoShoot", class: "btn btn-photoshoot" %>
+    <% end %>
+  </div>
 
   </div>
 </section>
