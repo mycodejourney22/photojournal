@@ -1,0 +1,116 @@
+<div class="container">
+  <section>
+    <div class="report_kpi">
+      <h2>SUMMARY</h2>
+      <div class="d-flex justify-content-between ">
+        <div>
+          <p class="report_kpi_header">MTD Total Shoots</p>
+          <p class="report_kpi_metrics"><%= @total_shoot %></p>
+          <p class="report_kpi_header"><span class="green"><i class="fa-solid fa-arrow-up"></i> 96</span> vs Last Month</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">MTD Total Selections</p>
+          <p class="report_kpi_metrics"><%= @total_selection%></p>
+          <p class="report_kpi_header"><span class="green"><i class="fa-solid fa-arrow-up"></i> 780</span> vs Last Month</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">AVG Selections</p>
+          <p class="report_kpi_metrics"><%= @avg_selection.round(2) %></p>
+          <p class="report_kpi_header"><span class="red"><i class="fa-solid fa-arrow-down"></i> -2.63</span> vs Last Month</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">TW Selections</p>
+          <p class="report_kpi_metrics"><%= @current_week_selection %></p>
+          <p class="report_kpi_header"><span class="green"><i class="fa-solid fa-arrow-up"></i> 44</span> vs LW</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">Total Selections TD</p>
+          <p class="report_kpi_metrics"><%= @total_selection_today %></p>
+          <p class="report_kpi_header"><span class="red"><i class="fa-solid fa-arrow-down"></i> -4</span> vs yesterday</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">Total Photoshoot TD</p>
+          <p class="report_kpi_metrics"><%= @total_count_today %></p>
+        </div>
+      </div>
+    </div>
+    <div class="my-5 report_kpi">
+      <div class="d-flex justify-content-between">
+        <div>
+          <canvas data-controller="chart" data-chart-data="<%= @chart_data %>"></canvas>
+        </div>
+        <div class="chart-pie">
+          <canvas data-controller="chart" data-location-chart-data="<%= @photoshoot_by_location %>"></canvas>
+        </div>
+        <div>
+          <canvas data-controller="chart" data-photographer-chart-data="<%= @photographer_chart_data %>"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between report_kpi">
+      <div class="">
+        <h2>SELECTIONS BY CUSTOMER</h2>
+        <div class="scrollable-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Total Selections</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @selection_by_customer.each do |record| %>
+                <tr>
+                  <td><%= record.name %></td>
+                  <td><%= record.total_selections %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="">
+        <h2>SELECTION BY BRANCH</h2>
+        <div class="scrollable-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Total Selections</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @selection_by_branch.each do |record| %>
+                <tr>
+                  <td><%= record.location %></td>
+                  <td><%= record.total_selections %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="">
+        <h2>SELECTION BY CSO</h2>
+        <div class="scrollable-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>CSO Name</th>
+                <th>Total Selections</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @selection_by_cso.each do |record| %>
+                <tr>
+                  <td><%= record.customer_service_name %></td>
+                  <td><%= record.total_selections %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

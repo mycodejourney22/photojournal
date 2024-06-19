@@ -17,7 +17,7 @@ class PhotoShootPolicy < ApplicationPolicy
         when 'surulere'
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%surulere%")
         when 'ajah'
-          scope.joins(:appointment).where("appointments.location ILIKE ?", "%ilaje%")
+          scope.joins(:appointment).where("appointments.location ILIKE ? OR location ILIKE ?", '%Ajah%', '%Ilaje%')
         else
           scope.none
         end

@@ -4,8 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   # Use a single line for both :verify_authorized and :verify_policy_scoped
-  after_action :verify_authorized, except: :index
-  after_action :verify_policy_scoped, only: :index
+
 
   private
 

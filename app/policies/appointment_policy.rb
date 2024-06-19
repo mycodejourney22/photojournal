@@ -17,7 +17,7 @@ class AppointmentPolicy < ApplicationPolicy
         when 'surulere'
           scope.where('location iLIKE ?', '%Surulere%')
         when 'ajah'
-          scope.where('location iLIKE ?', '%Ilaje%')
+          scope.where('location ILIKE ? OR location ILIKE ?', '%Ajah%', '%Ilaje%')
         else
           scope.none
         end

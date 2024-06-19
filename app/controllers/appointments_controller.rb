@@ -1,5 +1,7 @@
 require 'securerandom'
 class AppointmentsController < ApplicationController
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   def index
     authorize Appointment
@@ -123,7 +125,7 @@ class AppointmentsController < ApplicationController
         uuid: extract_uuid(info[:uuid]),
         name: resp.first["name"], question: resp.first["questions_and_answers"],
         email: resp.first["email"], start_time: info[:start_time],
-        end_time: info[:end_time], location: info[:location]
+        end_time: info[:end_time], location: format_location(info[:location])
       }
     end
     save_data_to_database(new_arr)
@@ -131,6 +133,16 @@ class AppointmentsController < ApplicationController
   rescue RestClient::ExceptionWithResponse => e
     puts "Error fetching bookings: #{e.response}"
     []
+  end
+
+  def format_location(data)
+    if data == "KM 22 Lekki Epe Express way , Ilaje Bus Stop Lagos"
+      "Ajah"
+    elsif data == "115A bode thomas street, Surulere Lagos"
+      "Surulere"
+    elsif data == "66 Adeniyi Jones , Ikeja Lagos"
+      "Ikeja"
+    end
   end
 
   def data_already_exists?(api_data)

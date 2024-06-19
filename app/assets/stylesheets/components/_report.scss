@@ -1,0 +1,70 @@
+.report_kpi{
+  border: 1px solid lightgray;
+  border-radius: 1rem;
+  padding: 8px 28px;
+
+  h2{
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding-bottom: 0.2rem
+  }
+}
+
+.report_kpi_header{
+  font-size: 0.75rem;
+}
+
+.report_kpi_metrics{
+  font-size: 1.25rem;
+}
+
+.green{
+  color: green;
+}
+
+
+.red{
+  color: red;
+}
+
+.chart-pie{
+  width: 300px;
+}
+
+
+/* Add this to your CSS file */
+
+.scrollable-table-container {
+  width: 300px;
+  font-size: 12px;
+  height: 200px; /* Fixed height */
+  overflow: auto;
+  border: 1px solid #ccc; /* Optional border for the table container */
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table th,
+.styled-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.styled-table th {
+  background-color: #f2f2f2;
+  position: sticky;
+  top: 0; /* Makes the header sticky */
+  z-index: 1; /* Ensures header stays above the table body */
+}
+
+.styled-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
