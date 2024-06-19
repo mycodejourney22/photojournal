@@ -1,8 +1,8 @@
 <div class="sidebar" data-controller="active-link">
       <!-- Sidebar content goes here -->
-    <h2><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
-      <a href="#">363 PHOTOGRAPHY</a>
-    </h2>
+  <h2><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+    <a href="#">363 PHOTOGRAPHY</a>
+  </h2>
   <ul>
     <li><%= link_to 'Appointments', appointments_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Photoshoots', photo_shoots_path, data: {active_link_target: "link"} %></li>
@@ -11,4 +11,6 @@
     <li><a data-active-link-target="link" href="#">Sales Logs</a></li>
     <li><a data-active-link-target="link" href="#">Setup</a></li>
   </ul>
+  <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
+
 </div>
