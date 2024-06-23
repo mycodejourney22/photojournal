@@ -3,7 +3,8 @@ class SalesController < ApplicationController
   after_action :verify_policy_scoped, only: :index
   def index
     authorize Sale
-    @sales = policy_scope(Sale).all.order(created_at: :desc)
+    @sales = policy_scope(Sale).all.order(date: :desc)
+    @sales = Sale.global_search(params[:query]) if params[:query].present?
   end
 
   def new
@@ -21,6 +22,21 @@ class SalesController < ApplicationController
       redirect_to sales_path, notice: 'Sale was successfully created.'
     else
       render :new
+    end
+  end
+
+  def edit
+    authorize Sale
+    @sale = Sale.find(params[:id])
+  end
+
+  def update
+    @sale = Sale.find(params[:id])
+    authorize @sale
+    if @sale.update(sale_params)
+      redirect_to sales_path, notice: 'Sale was successfully updated.'
+    else
+      render :edit
     end
   end
 

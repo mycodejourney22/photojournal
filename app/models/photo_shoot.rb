@@ -1,4 +1,12 @@
 class PhotoShoot < ApplicationRecord
+  include PgSearch::Model
+  pg_search_scope :global_search,
+    associated_against: {
+      appointment:[ :name, :email]
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
   belongs_to :appointment
   belongs_to :photographer, class_name: 'Staff', foreign_key: 'photographer_id', optional: true
   belongs_to :editor, class_name: 'Staff', foreign_key: 'editor_id', optional: true

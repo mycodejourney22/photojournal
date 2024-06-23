@@ -9,6 +9,7 @@ gem "rails_admin", "3.0"
 gem "blazer"
 gem "devise"
 gem "pundit"
+gem "pg_search"
 
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]

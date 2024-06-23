@@ -37,6 +37,13 @@ class SalePolicy < ApplicationPolicy
     user.admin? || %w[ikeja surulere ajah].include?(user.role)
   end
 
+  def edit?
+    new?
+  end
+
+  def update?
+    new?
+  end
   def upfront?
     user.admin? || %w[ikeja surulere ajah].include?(user.role)
   end

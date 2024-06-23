@@ -20,7 +20,7 @@
               <td><%= sale.amount_paid %></td>
               <td><%= sale.payment_type %></td>
               <td>
-                <p><%= link_to 'Update Details', '#' %></p>
+                <p><%= link_to 'Update Details', edit_sale_path(sale) %></p>
               </td>
             </tr>
           <% end %>

@@ -1,7 +1,20 @@
 <div class="container">
   <%= render "shared/sidebar" %>
   <section class="content">
-    <h1>All Photoshoots</h1>
+    <div class="d-flex justify-content-between align-items-center">
+      <h1>All Photoshoots</h1>
+      <div class="row justify-content-center w-50">
+        <div class=" my-3">
+          <%= form_with url: photo_shoots_path, method: :get, class: "d-flex" do %>
+            <%= text_field_tag :query,
+                  params[:query],
+                  class: "form-control search-border",
+                  placeholder: "Search by Customer Name or Email"
+              %>
+          <% end %>
+        </div>
+      </div>
+    </div>
     <div class="card">
       <%= render "shared/navigation" %>
       <%= render "table", photoshoots: @photoshoots %>

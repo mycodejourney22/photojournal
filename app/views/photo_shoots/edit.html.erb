@@ -29,7 +29,7 @@
                 <%= sale_f.input :amount_paid, label: false, placeholder: "Payment total"  %>
                 <%= sale_f.input :payment_method, label: false, prompt: "Payment method", collection:["POS", "Cash", "Transfer"] %>
                 <%= sale_f.input :payment_type , label: false, placeholder: "Payment type", prompt: "Payment type", collection:["Full Payment",  "Balance Payment", "Deposit"] %>
-                <%= sale_f.input :reference %>
+                <%= sale_f.input :reference, label: false, placeholder: "Reference" %>
               </div>
             <% end %>
         </div>

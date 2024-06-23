@@ -6,7 +6,8 @@ class PhotoShootsController < ApplicationController
 
   def index
     authorize PhotoShoot
-    @photoshoots = policy_scope(PhotoShoot).all.order(created_at: :desc)
+    @photoshoots = policy_scope(PhotoShoot).all.order(date: :desc)
+    @photoshoots = PhotoShoot.global_search(params[:query]) if params[:query].present?
     @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
     respond_to do |format|
       format.html # Follow regular flow of Rails

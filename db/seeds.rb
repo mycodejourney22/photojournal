@@ -12,54 +12,75 @@
 # require 'securerandom'
 # puts "I am about to Seed"
 
-# file_path = "/mnt/c/Users/yk113/Downloads/data.csv"
-# number = 0
+require 'csv'
 
-# CSV.foreach(file_path, headers: true, header_converters: :symbol) do |row|
-#   number += 1
-#   appointment_uuid = SecureRandom.uuid
+file_path = "/mnt/c/Users/yk113/Downloads/data.csv"
+number = 0
 
-#   # Create the Appointment
-#   puts row.inspect
+CSV.foreach(file_path, headers: true, header_converters: :symbol) do |row|
+  number += 1
+  appointment_uuid = SecureRandom.uuid
 
-#   # Parse date format MM/DD/YYYY
-#   begin
-#     start_time = Date.strptime(row[:date], '%m/%d/%Y')
-#   rescue ArgumentError => e
-#     puts "Invalid date format: #{row[:date]}"
-#     next  # Skip to the next row if date format is invalid
-#   end
-#   appointment = Appointment.create!(
-#     start_time: start_time.to_datetime,
-#     location: row[:branch],
-#     name: "#{row[:customer_firstname]} #{row[:customer_lastname]}",
-#     uuid: appointment_uuid
-#   )
+  # Create the Appointment
+  puts row.inspect
 
-#   puts " I have created appointments"
-#   # Find the staff members
-#   photographer = Staff.find_by(name: row[:photographer])
-#   editor = Staff.find_by(name: row[:editor])
-#   customer_service = Staff.find_by(name: row[:cso])
+  # Parse date format MM/DD/YYYY
+  begin
+    start_time = Date.strptime(row[:date], '%m/%d/%Y')
+  rescue ArgumentError => e
+    puts "Invalid date format: #{row[:date]}"
+    next  # Skip to the next row if date format is invalid
+  end
 
-#   # Create the PhotoShoot
-#   PhotoShoot.create!(
-#     appointment: appointment,
-#     photographer_id: photographer&.id,
-#     editor_id: editor&.id,
-#     customer_service_id: customer_service&.id,
-#     date: start_time.to_date,
-#     number_of_selections: row[:selected_pics_no],
-#     status: row[:status],
-#     date_sent: row[:date_sent],
-#     type_of_shoot: row[:type],
-#     number_of_outfits: row[:no_of_outfit],
-#     payment_total: row[:amount],
-#     reference: row[:reference],
-#     payment_method: row[:payment_method],
-#     payment_type: row[:payment_type]
-#   )
-#   puts "I have created #{number} photoshoots"
-# end
+  appointment = Appointment.create!(
+    start_time: start_time.to_datetime,
+    location: row[:branch],
+    name: "#{row[:customer_firstname]} #{row[:customer_lastname]}",
+    uuid: appointment_uuid
+  )
 
-# puts "I am done creating all Photoshoots"
+  puts "I have created appointment"
+
+  # Find the staff members
+  photographer = Staff.find_by(name: row[:photographer])
+  editor = Staff.find_by(name: row[:editor])
+  customer_service = Staff.find_by(name: row[:cso])
+
+  # Create the PhotoShoot
+  photoshoot = PhotoShoot.create!(
+    appointment: appointment,
+    photographer_id: photographer&.id,
+    editor_id: editor&.id,
+    customer_service_id: customer_service&.id,
+    date: start_time.to_date,
+    number_of_selections: row[:selected_pics_no],
+    status: row[:status],
+    date_sent: row[:date_sent],
+    type_of_shoot: row[:type],
+    number_of_outfits: row[:no_of_outfit],
+    payment_total: row[:amount],
+    reference: row[:reference],
+    payment_method: row[:payment_method],
+    payment_type: row[:payment_type]
+  )
+
+  puts "I have created #{number} photoshoots"
+
+  # Create the Sale
+  Sale.create!(
+    date: start_time.to_datetime,
+    amount_paid: row[:amount],
+    payment_method: row[:payment_method],
+    payment_type: row[:payment_type],
+    customer_name: "#{row[:customer_firstname]} #{row[:customer_lastname]}",
+    customer_phone_number: row[:customer_phone_number],
+    customer_service_officer_name: row[:cso],
+    product_service_name: row[:type],
+    location: appointment.location,
+    photo_shoot_id: photoshoot.id
+  )
+
+  puts "I have created #{number} sales"
+end
+
+puts "I am done creating all Photoshoots and Sales"
