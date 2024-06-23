@@ -1,0 +1,12 @@
+<div class="container">
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>All Sales</h1>
+      <%= link_to '<i class="fa-solid fa-plus"></i> Add a Sale'.html_safe, sales_new_path, class: "btn-photoshoot btn" %>
+    </div>
+    <div class="card">
+      <%= render "table", sales: @sales %>
+    </div>
+  </section>
+</div>

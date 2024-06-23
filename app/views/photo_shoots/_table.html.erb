@@ -8,7 +8,6 @@
             <th>Type of Shoot</th>
             <th>Number of Selected pictures</th>
             <th>Status</th>
-            <th>Amount Paid</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -22,7 +21,6 @@
               <td><%= photoshoot.type_of_shoot %></td>
               <td><%= photoshoot.number_of_selections %></td>
               <td><%= photoshoot.status %></td>
-              <td><%= photoshoot.payment_total %></td>
               <td>
                 <p><%= link_to 'Update Details', edit_appointment_photo_shoot_path(photoshoot.appointment, photoshoot) %></p>
               </td>

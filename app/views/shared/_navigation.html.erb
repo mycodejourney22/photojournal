@@ -6,7 +6,7 @@
     <%= link_to "Completed", photo_shoots_path, class: "nav-link" ,
     data: { nav_target: "completed", action: "click->nav#switch" }%>
   </p>
-  <p data-calendly-target="upfront" data-action="click->calendly#upfrontnavigate"  class="ps-4 nav-link" data-url="<%= upfront_photo_shoots_path %>" ><%= link_to "Upfront Paid", upfront_photo_shoots_path, class: "nav-link ",
+  <p data-calendly-target="upfront" data-action="click->calendly#upfrontnavigate"  class="ps-4 nav-link" data-url="<%= upfront_sales_path %>" ><%= link_to "Upfront Paid", upfront_sales_path, class: "nav-link ",
     data: { nav_target: "upfront", action: "click->nav#switch" }%></p>
   <p class="ps-4 nav-link"><%= link_to "Important Notes", notes_photo_shoots_path, class: "nav-link nav-link__red",
     data: { nav_target: "notes", action: "click->nav#switch" } %></p>

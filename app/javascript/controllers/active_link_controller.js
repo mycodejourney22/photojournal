@@ -5,9 +5,8 @@ export default class extends Controller {
   static targets = [ "link" ]
   connect() {
     const currentPath = window.location.pathname
-    console.log(`Current link is ${currentPath}` )
     this.linkTargets.forEach(link => {
-      if (link.getAttribute('href') === currentPath) {
+      if (currentPath.startsWith(link.getAttribute('href'))){
         link.classList.add('active')
       }
     })

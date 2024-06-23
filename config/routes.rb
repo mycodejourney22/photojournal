@@ -1,10 +1,20 @@
 Rails.application.routes.draw do
+  get 'sales/index'
+  get 'sales/new'
+  get 'sales/create'
+  get 'sales/show'
   devise_for :users, controllers: {
     sessions: 'users/sessions'
   }
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount Blazer::Engine, at: "blazer"
   root to: "appointments#index"
+  resources :sales do
+    collection do
+      get :upfront
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -21,7 +31,6 @@ Rails.application.routes.draw do
   end
   resources :photo_shoots, only: [:index] do
     collection do
-      get :upfront
       get :notes
     end
   end

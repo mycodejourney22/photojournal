@@ -1,0 +1,10 @@
+<div class="container" data-controller="calendly" >
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <h1>Pending Deposit</h1>
+    <div class="card">
+      <%= render "table", sales: @sales %>
+    </div>
+  </section>
+
+</div>

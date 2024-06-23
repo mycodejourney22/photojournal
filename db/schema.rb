@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_08_162109) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_23_004258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -114,6 +114,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_162109) do
     t.index ["appointment_id"], name: "index_questions_on_appointment_id"
   end
 
+  create_table "sales", force: :cascade do |t|
+    t.datetime "date"
+    t.decimal "amount_paid"
+    t.string "payment_method"
+    t.string "payment_type"
+    t.string "customer_name"
+    t.string "customer_phone_number"
+    t.string "customer_service_officer_name"
+    t.string "product_service_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "location"
+    t.bigint "photo_shoot_id"
+    t.string "reference"
+    t.index ["photo_shoot_id"], name: "index_sales_on_photo_shoot_id"
+  end
+
   create_table "staffs", force: :cascade do |t|
     t.string "name"
     t.string "role"
@@ -136,4 +153,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_08_162109) do
 
   add_foreign_key "photo_shoots", "appointments"
   add_foreign_key "questions", "appointments"
+  add_foreign_key "sales", "photo_shoots"
 end
