@@ -1,0 +1,139 @@
+<div class="container">
+  <section>
+    <div class="report_kpi">
+      <h2>SUMMARY</h2>
+      <div class="d-flex justify-content-between ">
+        <div>
+          <p class="report_kpi_header">MTD Total Transaction</p>
+          <p class="report_kpi_metrics"><%= @total_transaction %></p>
+          <p class="report_kpi_header"><span class="green"><i class="fa-solid fa-arrow-up"></i> 96</span> vs Last Month</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">MTD Total Sales</p>
+          <p class="report_kpi_metrics"><%= format_large_number(@total_sales)%></p>
+          <p class="report_kpi_header"><span class="green"><i class="fa-solid fa-arrow-up"></i> 780</span> vs Last Month</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">AVG Per Shoots</p>
+          <p class="report_kpi_metrics"><%=  format_large_number(@avg_sales) %></p>
+          <p class="report_kpi_header"><span class="red"><i class="fa-solid fa-arrow-down"></i> -2.63</span> vs Last Month</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">TD Sales</p>
+          <p class="report_kpi_metrics"><%= @total_sales_today %></p>
+          <p class="report_kpi_header"><span class="green"><i class="fa-solid fa-arrow-up"></i> 44</span> vs LW</p>
+        </div>
+        <div>
+          <p class="report_kpi_header">Total Selections TD</p>
+          <p class="report_kpi_metrics"><%= @total_selection_today %></p>
+          <p class="report_kpi_header"><span class="red"><i class="fa-solid fa-arrow-down"></i> -4</span> vs yesterday</p>
+        </div>
+      </div>
+    </div>
+    <div class="my-5 report_kpi">
+      <div class="d-flex justify-content-between">
+        <div>
+          <canvas data-controller="chart" data-sales-chart-data="<%= @sale_type %>"></canvas>
+        </div>
+        <div class="chart-pie">
+          <canvas data-controller="chart" data-location-chart-data="<%= @sales_by_location_json %>"></canvas>
+        </div>
+        <div>
+          <canvas data-controller="chart" data-sales-outfit-data="<%= @sale_by_number_of_outfit %>"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between report_kpi">
+      <div class="">
+        <h2>MTD BY BRANCH</h2>
+        <div class="scrollable-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Branch</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ajah</td>
+                <td><%=  @sales_by_location["Ajah"] %></td>
+              </tr>
+              <tr>
+                <td>Surulere</td>
+                <td><%=  @sales_by_location["Surulere"] %></td>
+              </tr>
+              <tr>
+                <td>Ikeja</td>
+                <td><%=  @sales_by_location["Ikeja"] %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="">
+        <h2>MTD BY TYPE OF SHOOT</h2>
+        <div class="scrollable-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Type of Shoots</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @sale_by_type_of_shoot.each do |key, value| %>
+                <tr>
+                  <td><%= key.nil? ? 'Unknown' : key %></td>
+                  <td><%= value %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="">
+        <h2>MTD By Number of outfit</h2>
+        <div class="scrollable-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Number of outfits</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @sale_by_outfit.each do |key,value| %>
+                <tr>
+                  <td><%= key.nil? ? 'Unknown' : key %></td>
+                  <td><%= value %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="">
+        <h2>YTD Total Sales</h2>
+        <div class="scrollable-table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Branch</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @sale_total_location.each do |key,value| %>
+                <tr>
+                  <td><%= key.nil? ? 'Unknown' : key %></td>
+                  <td><%= value %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
