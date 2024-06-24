@@ -9,7 +9,8 @@
     <li><a data-active-link-target="link" href="#">Customers</a></li>
     <li><a data-active-link-target="link" href="#">Expenses</a></li>
     <li><%= link_to 'Sales', sales_path, data: {active_link_target: "link"} %></li>
-    <li><a data-active-link-target="link" href="#">Setup</a></li>
+    <li><%= link_to 'Sales Log', reports_sales_path, data: {active_link_target: "link"} %></li>
+    <li><%= link_to 'Photo Log', reports_dashboard_path, data: {active_link_target: "link"} %></li>
   </ul>
   <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
 
