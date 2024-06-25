@@ -1,6 +1,13 @@
 <%= render "shared/nav" %>
 <div class="container">
   <section>
+    <%= form_with url: reports_dashboard_path, method: :get, local: true do %>
+      <div class="form-group">
+        <%= label_tag :location, 'Select Location' %>
+        <%= select_tag :location, options_for_select(Appointment.distinct.pluck(:location), params[:location]), include_blank: 'All Locations', class: 'form-control' %>
+      </div>
+      <%= submit_tag 'Filter', class: 'btn btn-primary' %>
+    <% end %>
     <div class="report_kpi">
       <h2>SUMMARY</h2>
       <div class="d-flex justify-content-between ">

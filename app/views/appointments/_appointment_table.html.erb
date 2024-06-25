@@ -18,7 +18,7 @@
                     <%end%></td>
               <td><%= appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p")%>
                     - <%= appointment.end_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if appointment.end_time %></td>
-              <td><% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' } %>
+              <td><% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot'} %>
                     <% if type_of_shoots %>
                       <%= type_of_shoots.answer %>
                     <% end %></td>

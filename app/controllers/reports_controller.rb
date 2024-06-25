@@ -40,6 +40,18 @@ class ReportsController < ApplicationController
 
   private
 
+  def set_location
+    @location = params[:location]
+  end
+
+  # def filter_by_location(scope)
+  #   @location = set_location
+  #   if @location.present?
+  #     scope.joins(:appointment).where(appointments: { location: @location })
+  #   else
+  #     scope
+  #   end
+  # end
 
   def total_selections_today
     start_of_today = Time.current.beginning_of_day
@@ -65,13 +77,25 @@ class ReportsController < ApplicationController
     PhotoShoot.where(date: start_of_week..end_of_week).sum(:number_of_selections)
   end
 
+  # def editor_selection_data
+  #   start_of_month = Time.current.beginning_of_month
+  #   @editor_selection_data = filter_by_location(PhotoShoot.where(date: start_of_month..Time.current)
+  #                                                         .group(:editor)
+  #                                                         .order('SUM(number_of_selections) DESC')
+  #                                                         .sum(:number_of_selections))
+  #   @chart_data = @editor_selection_data.map { |editor_name, selections| { name: editor_name, y: selections } }.to_json
+  # end
+
   def editor_selection_data
     start_of_month = Time.current.beginning_of_month
-    @editor_selection_data = PhotoShoot.where(date: start_of_month..Time.current)
-                                       .group(:editor)
-                                       .order('SUM(number_of_selections) DESC')
-                                       .sum(:number_of_selections)
-    @chart_data = @editor_selection_data.map { |editor_name, selections| { name: editor_name, y: selections } }.to_json
+    query = PhotoShoot.where(date: start_of_month..Time.current)
+    query = query.joins(:appointment).where(appointments: { location: set_location }) if set_location.present?
+
+    editor_selection_data = query.group(:editor)
+                                 .order('SUM(number_of_selections) DESC')
+                                 .sum(:number_of_selections)
+
+    @chart_data = editor_selection_data.map { |editor_name, selections| { name: editor_name, y: selections } }.to_json
   end
 
   def photographer_data
@@ -84,7 +108,7 @@ class ReportsController < ApplicationController
   end
 
   def photoshoot_by_location
-    PhotoShoot.joins(:appointment)
+    @test = PhotoShoot.joins(:appointment)
               .group('appointments.location')
               .count
               .map do |location, count|

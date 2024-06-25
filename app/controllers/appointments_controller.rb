@@ -38,7 +38,7 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.new(appointment_params)
     @appointment.uuid = SecureRandom.uuid
     if @appointment.save
-      redirect_to @appointment, notice: 'Appointment was successfully created.'
+      redirect_to appointments_path, notice: 'Appointment was successfully created.'
     else
       build_questions_for(@appointment) # Rebuild questions if save fails
       render :new

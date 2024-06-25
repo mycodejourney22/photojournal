@@ -3,6 +3,6 @@ class Question < ApplicationRecord
 
   QUESTIONS = [
     'Phone number',
-    'Type of shoot'
+    'Type of shoots'
   ].freeze
 end
