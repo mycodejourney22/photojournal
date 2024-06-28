@@ -5,6 +5,7 @@ class AppointmentsController < ApplicationController
 
   def index
     authorize Appointment
+    save_data_to_database(customer_info)
     appointments_today = policy_scope(Appointment).where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
     @appointments = appointments_today.select { |appointment| appointment.photo_shoot.nil? && !appointment.no_show }
     @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
@@ -12,7 +13,6 @@ class AppointmentsController < ApplicationController
       format.html # Follow regular flow of Rails
       format.text { render partial: "appointment_table", locals: { appointments: @appointments }, formats: [:html] }
     end
-    save_data_to_database(customer_info)
   end
 
   def show

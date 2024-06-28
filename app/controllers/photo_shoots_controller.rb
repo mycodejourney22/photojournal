@@ -48,7 +48,7 @@ class PhotoShootsController < ApplicationController
 
   def notes
     authorize PhotoShoot
-    @photoshoots = policy_scope(PhotoShoot).where.not(notes: nil)
+    @photoshoots = policy_scope(PhotoShoot).where.not(notes: "")
     respond_to do |format|
       format.html # Follow regular flow of Rails
       format.text { render partial: "notes_table", locals: {photoshoots: @photoshoots}, formats: [:html] }

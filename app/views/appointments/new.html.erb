@@ -18,7 +18,7 @@
             <%= question_form.hidden_field :question %>
             <% if question_form.object.question == "Phone number" %>
               <%= question_form.input :answer, as: :string, label: false %>
-            <% elsif question_form.object.question == 'Type of shoot' %>
+            <% elsif question_form.object.question == 'Type of shoots' %>
               <div class="grid_app_item">
                   <%= question_form.input :answer, as: :radio_buttons, collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
               </div>
