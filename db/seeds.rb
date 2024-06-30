@@ -12,6 +12,12 @@
 # require 'securerandom'
 # puts "I am about to Seed"
 
+Sale.destroy_all
+PhotoShoot.destroy_all
+Appointment.destroy_all
+
+puts "Deleted all previous instance"
+
 require 'csv'
 
 file_path = "/mnt/c/Users/yk113/Downloads/data.csv"
