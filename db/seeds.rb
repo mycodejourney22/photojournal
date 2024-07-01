@@ -28,7 +28,7 @@ s3_client = Aws::S3::Client.new(
 )
 
 bucket_name = 'photograhydata'
-object_key = 's3://photograhydata/data.csv'
+object_key = 'data.csv'
 
 csv_object = s3_client.get_object(bucket: bucket_name, key: object_key)
 csv_content = csv_object.body.read
