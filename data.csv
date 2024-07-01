@@ -1,0 +1,423 @@
+Date,Branch,Customer FirstName,Customer LastName,Photographer,Editor,CSO,Selected pics No,Status,Date Sent,Type,No of Outfit,Amount,Reference,Payment Method,Payment Type
+5/22/2024,Ajah,MOJISOLA,MOJI,Faith,Faith,Joy,10,Sent,,Kiddies,2,66000,,Transfer,
+5/22/2024,Ajah,CHRISTABEL,EDUNEJE,Stephanie,Sunday,Joy,5,Sent,,Personal,1,30000,,Transfer,
+5/22/2024,Ajah,ABIODUN,OLUWAFEMI,Faith,Frank,Joy,15,Sent,,Kiddies,4,90000,,Transfer,
+5/23/2024,Ajah,FAVOUR,IKEGUN,Stephanie,Frank,Joy,22,Sent,,Kiddies,3,70000,,Transfer,
+5/23/2024,Ajah,SYLVIA,ASUELIMEN,Freeman,Sunday,Joy,10,Sent,,Personal,2,50000,,Transfer,
+5/23/2024,Ajah,TOBI,LOBA,Stephanie,Faith,Joy,7,Sent,,Kiddies,1,32500,,Transfer,
+5/24/2024,Ajah,ISAAC,TOSIN,Faith,Frank,Ebube,5,Sent,,Kiddies,1,32500,,Transfer,
+5/25/2024,Ajah,BEAUTY,ALIKA,Faith,Abisoye,Ebube,8,Sent,,Kiddies,2,50000,,Transfer,
+5/25/2024,Ajah,OKORO,FRANCES,Stephanie,Abisoye,Joy,8,Sent,,Kiddies,2,50000,,Transfer,
+5/25/2024,Ajah,MRS,AJAYI,Lanre,Faith,Joy,52,Sent,,Homesession,5,,Shoot done in March,,
+5/25/2024,Ajah,ADEBAYO,OLUWATOSIN,Faith,Sunday,Ebube,5,Sent,,Kiddies,1,32500,,Transfer,
+5/26/2024,Ajah,MRS,MAKINDE,Lanre,Sunday,Joy,5,Sent,,Maternity,1,32500,,Transfer,
+5/26/2024,Ajah,NEHITA,DESTINY,Stephanie,Abisoye,Ebube,8,Sent,,Kiddies,2,50000,,Transfer,
+5/26/2024,Ajah,JESSICA,OLUCHI,Faith,Sunday,Joy,17,Sent,,Kiddies,2,80000,,Transfer,
+5/26/2024,Ajah,ZION,ODUDU,Stephanie,Abisoye,Joy,5,Sent,,Kiddies,1,30000,,Transfer,
+5/26/2024,Ajah,TEMITAYO,OKECHUKWU,Faith,Faith,Joy,10,Sent,,Kiddies,1,32500,,Transfer,
+5/27/2024,Ajah,OGBUDU,OJEKA,Freeman,Abisoye,Ebube,,Sent,,Kiddies,4,90000,,,
+5/27/2024,Ajah,STELLA,MARIS,Freeman,Faith,Ebube,8,Sent,,Personal,2,47500,,,
+5/27/2024,Ajah,DAYO,ADEWUNMI,Faith,Sunday,Ebube,8,Sent,,Personal,2,47500,,,
+5/28/2024,Ajah,DAMILOLA,AFOLABI,Lanre,Sunday,Joy,8,Sent,,Personal,2,47500,,Transfer,Full Payment
+5/28/2024,Ajah,MRS,JOYCE,Stephanie,Sunday,Joy,8,Sent,,Kiddies,2,50000,paid since 25th,transfer,Full Payment
+5/28/2024,Ajah,TEMITOPE,EUNICE,Lanre,Abisoye,Joy,5,Sent,,Kiddies,1,32500,,Transfer,
+5/28/2024,Ajah,DAVID,UTIBE,,Abisoye,Joy,17,Sent,,Kiddies,3,82500,paid 24/03/2024,,
+5/28/2024,Ajah,KIKI,SAHEED,Stephanie,Sunday,Joy,8,Sent,,Kiddies,2,50000,,,
+5/28/2024,Ajah,ADEOLA,GOERGE,Stephanie,Frank,Joy,14,Sent,,Kiddies,3,76000,,,
+5/28/2024,Ajah,GLADYS,OKAFOR,Lanre,Frank,Joy,5,Sent,,Prewedding,1,30000,,Transfer,
+5/29/2024,Ajah,ADEOLA,VIVIAN,Lanre,Sunday,Ebube,15,Sent,,Personal,4,85000,,,
+5/30/2024,Ajah,AUGUSTINE,OKORE,Freeman,Sunday,Joy,2,Sent,,Passport,,4000,,Transfer,
+5/30/2024,Ajah,TAIWO,BABATUNDE,Faith,Faith,Joy,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+5/30/2024,Ajah,MRS,DANIEL,Stephanie,Faith,Joy,18,Sent,,Homesession,4,150000,,,Part Payment
+5/31/2024,Ajah,SIKIRAT,OLAITAN,Faith,Stephanie,Joy,5,Sent,,Newborn,1,40000,,Transfer,
+5/31/2024,Ajah,OMALE,AISHA,Stephanie,Faith,Joy,27,Sent,,Kiddies,3,110000,"extra edited 40,000",Transfer,
+5/31/2024,Ajah,HANNABEL,MUNAHISOM,Faith,Sunday,Joy,5,Sent,,Kiddies,1,10000,,,
+6/1/2024,Ajah,KUSIMO,DAMILOLA,Lanre,Sunday,Joy,8,Sent,,Personal,1,36000,Extra edited paiid 3/06/2024,,
+6/1/2024,Ajah,OZILI,ALMA,Stephanie,Stephanie,Joy,8,Sent,,Newborn,1,49000,paid 29/05/2024,,
+6/1/2024,Ajah,OLUSHINA,AYOOLA,Lanre,Sunday,Joy,11,Sent,,Maternity,2,47500,,Transfer,Balance Payment
+6/1/2024,Ajah,SALAKO,MOTUNRAYO,Faith,Frank,Joy,18,Sent,,Kiddies,3,88000,,,
+6/1/2024,Ajah,LIBERTY,GEORGINA,Freeman,Sunday,Ebube,18,In progress,,Maternity,5,100000,paid 25/05/2024,,
+6/1/2024,Ajah,SARAH,OLAYINKA,Freeman,Abisoye,Joy,5,Sent,,Personal,1,30000,,,
+6/1/2024,Ajah,MUDINA,FATHIMA,Freeman,Sunday,Joy,13,Sent,,Personal,3,65000,,,
+6/2/2024,Ajah,OLUWAFUNMILAYO,SHOWUNMI,Faith,Faith,Ebube,6,Sent,,Kiddies,1,35500,,,
+6/2/2024,Ajah,EJOKEOGHENE,THERESA,Freeman,Abisoye,Ebube,5,Sent,,Kiddies,1,32500,,,
+6/3/2024,Ajah,MRS,QUEENETH,Lanre,Abisoye,Ebube,8,Sent,,Personal,1,30000,,,
+6/4/2024,Ajah,TARIBO,NNENI,Freeman,Abisoye,Joy,13,Sent,,Kiddies,3,80000,plus personal,,
+6/4/2024,Ajah,OLUEH,LAURETTA,Stephanie,Stephanie,Joy,5,Sent,,Newborn,1,40000,paid 04/06/2024,,
+6/4/2024,Ajah,PEARL,CLEMENT,Freeman,Sunday,Joy,8,Sent,,Maternity,2,47500,,,
+6/5/2024,Ajah,PASCALINE,RAPHAEL,Lanre,Sunday,Ebube,5,Sent,,Personal,1,30000,,,
+6/5/2024,Ajah,CYNTHIA,OSEGHALE (Isreal),Lanre,Faith,Ebube,28,Sent,,Prewedding,2,50000,,,
+6/5/2024,Ajah,MS,GRACE,Lanre,Frank,Ebube,5,Sent,,Personal,1,30000,,,
+6/5/2024,Ajah,MR,ABIODUN (Janet),Faith,,Ebube,,yet to select,,Personal,3,80000,,,
+6/5/2024,Ajah,KHALEEL,ABDULRAUF,Faith,Abisoye,Ebube,5,Sent,,Kiddies,1,32500,,,
+6/6/2024,Ajah,MRS,MIA,Stephanie,Stephanie,Ebube,6,Sent,,Newborn,1,43000,,,
+6/6/2024,Ajah,MRS,JESSICA,Freeman,Faith,Ebube,5,Sent,,Maternity,1,30000,,,
+6/6/2024,Ajah,MRS,KATE,Stephanie,Stephanie,Ebube,6,Sent,,Newborn,2,64000,,,
+6/6/2024,Ajah,MRS,IFESINACHI,Freeman,Abisoye,Ebube,9,Sent,,Kiddies,1,32500,,,
+6/7/2024,Ajah,ARINZE,CHUKWUEZE,Freeman,Sunday,Ebube,7,In progress,,Family,1,38500,,,
+6/7/2024,Ajah,OYINKANSIOLA,OJO,Faith,Faith,Ebube,9,Sent,,Kiddies,2,50000,,,
+6/7/2024,Ajah,MR,IWANEFU,Freeman,Frank,Ebube,12,In progress,,Family,3,70000,,,
+6/7/2024,Ajah,ELIZABETH,OBEBE,Freeman,Frank,Ebube,9,Sent,,Personal,2,50000,Paid on 05/06/2024,,
+6/8/2024,Ajah,DAMILOLA,OYEBOLA,Freeman,Faith,Joy,5,Sent,,Family,1,32500,,,
+6/8/2024,Ajah,MR,IFEANYI,Stephanie,Faith,Joy,2,Sent,,Personal,1,20000,,,
+6/8/2024,Ajah,DAMILOLA,BAMIGBOYE,Lanre,Sunday,Joy,18,Sent,,Kiddies,5,105000,,,
+6/8/2024,Ajah,MR,DESMOND,Freeman,Abisoye,Ebube,11,Sent,,Kiddies,2,56000,,,
+6/8/2024,Ajah,MRS,KENTUA,Freeman,Faith,Joy,12,Sent,,Personal,2,66000,,,
+6/8/2024,Ajah,ADEBOYEGA,ANUOLUWAPO,Stephanie,Stephanie,Ebube,8,Sent,,Newborn,2,64000,,,
+6/9/2024,Ajah,MRS,HARRIET,Stephanie,Sunday,Joy,30,Sent,45455,Kiddies,2,95000,,,
+6/9/2024,Ajah,OWOSENI,ZAINAB,Stephanie,Frank,Joy,5,Sent,,Kiddies,1,35000,,,
+6/9/2024,Ajah,HENRY,OBI,Lanre,Sunday,Ebube,15,Sent,,,3,70000,,,
+6/10/2024,Ajah,OJO,DAMILOLA (DMJ),Faith,Frank,Ebube,6,Sent,45456,Personal,1,30000,,,
+6/10/2024,Ajah,AKINNAGBE,JOKE,Lanre,,Ebube,,yet to select,,Personal,4,85000,,,
+6/11/2024,Ajah,NAZEEAH,BELLO,Freeman,Frank,Joy,9,Sent,,Kiddies,2,50000,PAID ON 11/06,,
+6/11/2024,Ajah,SEUN,KARE,Freeman,Abisoye,Joy,16,Sent,,Personal,4,85000,,,
+6/11/2024,Ajah,TEGA,LILIAN,Freeman,Frank,Joy,15,Sent,,Personal,4,85000,,,
+6/12/2024,Ajah,PRECIOUS,RHODA,Faith,Abisoye,Ebube,8,Sent,45456,Kiddies,2,50000,,,
+6/12/2024,Ajah,ODULANA,ADEBUSOLA,Lanre,Faith,Ebube,24,Sent,6/14/2024,Personal,4,100000,,,
+6/12/2024,Ajah,MRS,OBARA,Faith,Abisoye,Ebube,5,Sent,45456,Kiddies,1,32500,,,
+6/12/2024,Ajah,MRS,IGHODARO,Lanre,Abisoye,Ebube,8,Sent,45457,Kiddies,2,50000,,,
+6/12/2024,Ajah,PRINCESS,IDOWU,Faith,Abisoye,Ebube,5,Sent,6/13/2024,Family,1,32500,,,
+6/12/2024,Ajah,MRS,LINDA,Faith,Frank,Ebube,8,Sent,6/14/2024,Kiddies,2,50000,,,
+6/13/2024,Ajah,MRS,HALIMA,Freeman,Sunday,Ebube,16,In progress,,Kiddies,3,75000,,,
+6/13/2024,Ajah,MRS,MARIAM,Stephanie,Abisoye,Ebube,8,In progress,,Kiddies,2,50000,,,
+6/13/2024,Ajah,MRS,BARAKAT,Freeman,Frank,Ebube,6,Sent,6/14/2024,Family,1,,Paid on 9th of June,,
+6/13/2024,Ajah,MRS,OKEKE,Lanre,Faith,Ebube,15,Sent,6/20/2024,Homesession,3,,Down payment made on 10th of June,,
+6/14/2024,Ajah,HAMMED,ABIODUN,Faith,Faith,Joy,12,Sent,,Kiddies,3,70000,PAID 29/05,,
+6/14/2024,Ajah,BLESSING,RITA,Lanre,Frank,Joy,8,Sent,6/17/2024,Kiddies,2,28000,,,Balance Payment
+6/14/2024,Ajah,MOHAMMED,ABU,Faith,Abisoye,Joy,12,Sent,6/17/2024,Kiddies,3,70000,,,
+6/14/2024,Ajah,ADELANA,ADEBUSOLA,Kay,Abisoye,Joy,30,In progress,,Events,,140000,,,
+6/15/2024,Ajah,OMOLARA,OKUNSO,Freeman,Faith,Ebube,28,Sent,6/17/2024,Personal,5,130000,PLUS EXTRA,,
+6/15/2024,Ajah,PROSPER,AKAMEKLU,Stephanie,Abisoye,Ebube,6,Sent,6/17/2024,Maternity,1,33000,,,
+6/15/2024,Ajah,LAURA,EIUMOHU,Faith,Sunday,Joy,5,Sent,45459,Kiddies,1,52500,Plus Frame,,
+6/15/2024,Ajah,OKOYE,EKENE,Freeman,Abisoye,Ebube,8,Sent,45461,Prewedding,2,50000,,,
+6/15/2024,Ajah,SUNMOLA,FATAI,Stephanie,Abisoye,Joy,8,Sent,45461,Family,1,,PAID ON 06/14/2024,,
+6/15/2024,Ajah,MRS,LINDA,Freeman,Abisoye,Ebube,20,Sent,6/19/2024,Kiddies,4,,PAID ON 06/10/2024,,
+6/16/2024,Ajah,ADEOLA,ADETOYIN,Stephanie,Frank,Joy,8,Sent,45460,Newborn,2,65000,,,
+6/17/2024,Ajah,MRS,ZANI,Faith,Abisoye,Joy,5,Sent,45460,Kiddies,1,32500,,,
+6/17/2024,Ajah,EME,VICTORY,Freeman,Frank,Joy,6,Sent,45461,Personal,1,30000,,,
+6/17/2024,Ajah,MRS,EZINNE,Freeman,Abisoye,Joy,1,Sent,45460,Passport,1,2000,,,
+6/18/2024,Ajah,PAMELA,OKECHUKWU,Freeman,Sunday,Joy,13,Sent,6/19/2024,Kiddies,3,70000,,,
+6/18/2024,Ajah,BEVERLY,ELOHOR,Faith,Frank,Joy,5,Sent,45464,Newborn,1,40000,,,
+6/18/2024,Ajah,OSOSE,LUCIA,Faith,Frank,Joy,8,Sent,45463,Kiddies,,47500,,,
+6/18/2024,Ajah,MR,TOYE,Freeman,Abisoye,Joy,1,Sent,45461,Passport,,2000,,,
+6/18/2024,Ajah,EMMANUEL,FASHOLA,Freeman,Frank,Joy,9,In progress,,Kiddies,2,50000,,,
+6/18/2024,Ajah,OMAWUNMI,THERESSA,Faith,Sunday,Joy,8,Sent,45469,Kiddies,2,50000,,,
+6/19/2024,Ajah,JOB,VICTOR,Lanre,Faith,Joy,5,Sent,6/20/2024,Personal,1,30000,,,
+6/19/2024,Ajah,MUNIRAT,FERANMI,Lanre,Faith,Joy,8,Sent,45463,Kiddies,2,50000,,,
+6/19/2024,Ajah,MRS,TINA,Faith,Abisoye,Joy,32,Sent,45464,Kiddies,5,150000,PLUS EXTRA,,
+6/19/2024,Ajah,RICHARD,JENNIFER,Faith,Frank,Joy,8,In progress,,Kiddies,2,50000,,,
+6/19/2024,Ajah,HONEST,OKOAWO,Lanre,Sunday,Joy,30,Sent,45464,Personal,8,175000,,,
+6/19/2024,Ajah,ASHER,NELLY,Faith,Abisoye,Joy,12,Sent,45464,Kiddies,3,70000,,,
+6/20/2024,Ajah,MRS,RACHAEL,Freeman,Faith,Joy,8,Sent,45464,Kiddies,2,50000,,,
+6/20/2024,Ajah,MRS,LARA,,Faith,Joy,11,Sent,45464,EXTRA EDITED,,27000,,,
+6/20/2024,Ajah,ISLAMIAT,ABIODUN,Freeman,Sunday,Joy,8,Sent,45464,Kiddies,1,41500,PLUS extra,,
+6/21/2024,Ajah,MRS,FAVOUR,Lanre,Abisoye,Ebube,5,Sent,45466,Personal,1,30000,,,
+6/22/2024,Ajah,EZEDI,CATHERINE,Faith,Sunday,Joy,7,Sent,45466,Kiddies,1,32500,,,
+6/22/2024,Ajah,ADEMIDUN,OLABANJO,Freeman,Faith,Joy,13,Sent,45467,Kiddies,2,80000,PLUS MATERNITY,,
+6/22/2024,Ajah,EMEKA,LANGA,Freeman,Sunday,Joy,5,Sent,45466,Kiddies,1,30000,,,
+6/22/2024,Ajah,GLORY,OCHUKO,Faith,Faith,Joy,5,Sent,45467,Kiddies,1,32500,,,
+6/22/2024,Ajah,CHINONSO,UGWUANYI,Freeman,Faith,Joy,5,Sent,45467,Kiddies,1,32500,,,
+6/22/2024,Ajah,MRS,FAVOUR,Faith,Frank,Ebube,11,Sent,45467,Kiddies,4,90000,,,
+6/22/2024,Ajah,DAMILOLA,SHUKURU,Freeman,Faith,Ebube,7,Sent,45467,Maternity,1,30000,,,
+6/22/2024,Ajah,GIFT,UZOMA,Faith,Sunday,Ebube,5,Sent,45467,Newborn,1,40000,,,
+6/23/2024,Ajah,MRS,TOKUNBO,Faith,Frank,Joy,12,Sent,45468,Kiddies,2,50000,,,
+6/23/2024,Ajah,MRS,OKECHUKWU,Lanre,Sunday,Ebube,5,Sent,45467,Kiddies,1,32500,,,
+6/23/2024,Ajah,MRS,HALIMAT,Lanre,Frank,Ebube,5,Sent,45467,Personal,1,30000,,,
+6/23/2024,Ajah,MRS,THELMA,Faith,Faith,Joy,8,Sent,45468,Kiddies,2,50000,,,
+6/24/2024,Ajah,MRS,IFEOLUWA,Stephanie,Abisoye,Joy,30,Sent,45468,Events,,,DONE 15/05,,
+6/24/2024,Ajah,MR,NOAH,Lanre,Frank,Joy,3,Sent,45468,Personal,1,20000,,,
+6/25/2024,Ajah,MRS,MOROLARI,Freeman,Sunday,Ebube,8,Sent,45470,Personal,2,47000,,,
+6/25/2024,Ajah,MR,IKECHUKWU,Stephanie,Faith,Ebube,11,In progress,45470,Family,1,32500,,,
+6/25/2024,Ajah,MR,TEGA,Stephanie,Frank,Ebube,8,Sent,45469,Kiddies,2,50000,,,
+6/26/2024,Ajah,MRS,AISHA,Faith,Abisoye,Ebube,8,Sent,45469,Kiddies,2,50000,,,
+6/26/2024,Ajah,MRS,BLESSING,Lanre,Frank,Ebube,5,Sent,45470,Personal,1,30000,,,
+6/26/2024,Ajah,MRS,GLORY,Faith,Sunday,Ebube,8,In progress,,Kiddies,2,50000,,,
+6/27/2024,Ajah,SAMUEL,MICHAEL,Lanre,Abisoye,Joy,1,Sent,45470,Passport,,2000,,,
+6/28/2024,Ajah,STACEY,KARIUKI,Faith,Sunday,Joy,8,Sent,45472,Kiddies,3,60000,8PICTURES,,
+6/28/2024,Ajah,MUM,MIA,Freeman,Faith,Joy,7,Sent,45472,Family,1,38500,PLUS EXTRA,,
+6/28/2024,Ajah,MR,NZUBE,Freeman,,Joy,2,Sent,45471,Passport,,4000,,,
+6/28/2024,Ajah,IKECHUKWU,OKOLIA,,Faith,Joy,5,Sent,45471,EXTRA EDITED,,15000,,,
+6/28/2024,Ajah,MRS,JENNIFER,Freeman,Sunday,Joy,11,Sent,45472,Kiddies,2,50000,,,
+6/28/2024,Ajah,AMAKA,RHODA,Faith,Faith,Joy,8,Sent,45472,Kiddies,1,41500,,,
+6/29/2024,Ajah,GRACE,DANIEL,Lanre,Abisoye,Ebube,12,In progress,,Kiddies,3,,Paid since 27th of MAY,,
+6/29/2024,Ajah,MRS,RAMOTU,Stephanie,Faith,Ebube,12,Sent,6/30/2024,Kiddies,2,50000,,,
+6/29/2024,Ajah,ADEGOKE,SULIAT,Lanre,Sunday,Joy,6,Sent,45473,Kiddies,1,32500,,,
+6/29/2024,Ajah,OMOTOYOSI,KHADIJAT,Lanre,Sunday,Joy,2,Sent,45473,Kiddies,2,50000,,,
+6/29/2024,Ajah,ADEBIYI,DORANG,Stephanie,Sunday,Joy,17,In progress,,Kiddies,4,96000,,,
+6/29/2024,Ajah,BILLYROSE,MINIMART,Stephanie,Faith,Joy,8,Sent,45473,Kiddies,1,32500,,,
+6/29/2024,Ajah,OYINDAMOLA,SHARON,Lanre,Abisoye,Joy,8,In progress,,Personal,2,47500,,,
+6/29/2024,Ajah,MRS,OGE,Stephanie,Abisoye,Joy,13,In progress,,Family,2,32500,PASPOT 6K,,
+6/30/2024,Ajah,MRS,CASANDRA,Stephanie,,Joy,,yet to select,,Kiddies,4,90000,,,
+6/30/2024,Ajah,ZURIEL,IKU,Faith,Frank,Joy,7,In progress,,Kiddies,1,37500,,,
+6/30/2024,Ajah,BOLANLE,ODOTIN,Lanre,Faith,Joy,5,In progress,,Personal,1,30000,,,
+6/30/2024,Ajah,MRS,OLUWAKEMI,Faith,,Joy,,yet to select,,Kiddies,2,,,,
+5/21/2024,Ikeja,JUSTSTOTRTW,,Ademola,Lara,Amaka,15,Sent,,Kiddies,3,82500,,Transfer,Full Payment
+5/23/2024,Ikeja,ABAH,GRACE,Ademola,Samuel,Amaka,12,Sent,,Maternity,1,32500,,Transfer,Full Payment
+5/24/2024,Ikeja,BOLANLE,ANJORIN,Ademola,Samuel,Ope,9,Sent,,Kiddies,1,42500,,Transfer,Full Payment
+5/24/2024,Ikeja,QUADRI,TIARA,Rebecca,Samuel,Ope,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+5/24/2024,Ikeja,YEMISI,ADENIRAN,Rebecca,Samuel,Ope,10,Sent,,Kiddies,2,65000,,POS,Full Payment
+5/23/2024,Ikeja,JULIET,,Rebecca,Samuel,Amaka,5,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+5/25/2024,Ikeja,VICTORIA,DANIEL,Micheal,Samuel,Amaka,5,Sent,,Personal,1,30000,,Transfer,Full Payment
+5/25/2024,Ikeja,YAKUB,,Rebecca,Lara,Amaka,14,Sent,,Kiddies,2,72000,,Transfer,Full Payment
+5/25/2024,Ikeja,ADELEKE,TENI,Micheal,Samuel,Amaka,13,Sent,,Kiddies,3,73000,,Transfer,Full Payment
+5/26/2024,Ikeja,lawal,lafeet,Rebecca,Samuel,Ope,5,Sent,,Kiddies,1,32500,,Transfer,
+5/26/2024,Ikeja,damilola,oyewole,Ademola,Samuel,Ope,8,Sent,,Kiddies,2,50000,,Transfer,
+5/26/2024,Ikeja,ADEBOYEJO,FUNMBI,Rebecca,Lara,Amaka,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+5/26/2024,Ikeja,CYNTHIA,ABASIAKAN,Rebecca,,Ope,,,,Kiddies,3,,,,
+5/21/2024,Ikeja,AMAKA,,,,Amaka,8,Sent,,Personal,2,47500,,Transfer,Full Payment
+5/24/2024,Ikeja,OYAGBILE,,,,Ope,1,Sent,,Passport,1,4000,,Transfer,Full Payment
+5/24/2024,Ikeja,OPEYEMI,YINKA,Lara,Lara,Ope,16,Sent,,Homesession,,35000,,Transfer,Balance Payment
+5/25/2024,Ikeja,NTIEDABASI,ABAH,Rebecca,,Amaka,8,New,,Personal,,17500,,Transfer,Balance Payment
+5/26/2024,Ikeja,LAWAL,LATEEF,Rebecca,Samuel,Ope,5,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+5/26/2024,Ikeja,DAMILOLA,OYEWOLE,Ademola,Samuel,Ope,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+5/27/2024,Ikeja,CHIZOBA,,Micheal,Samuel,Amaka,5,Sent,,Personal,1,30000,,Transfer,Full Payment
+5/27/2024,Ikeja,POPOOLA,FOLASHADE,Micheal,Samuel,Amaka,9,Sent,,Kiddies,1,52500,,Transfer,Full Payment
+5/27/2024,Ikeja,IWUCHUKWU,CHIOMA,Micheal,Samuel,Amaka,5,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+5/27/2024,Ikeja,ABIODUN,ITUNU,Micheal,Samuel,Amaka,11,Sent,,Kiddies,2,59000,,Transfer,Full Payment
+5/27/2024,Ikeja,ALI,,Micheal,Samuel,Amaka,5,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+5/28/2024,Ikeja,NTIEDABASI,ABAH,Rebecca,Peter,Amaka,15,Sent,,Personal,,12000,,Transfer,Full Payment
+5/29/2024,Ikeja,KENDRICK,OKEREKE,Micheal,,Amaka,8,New,,Kiddies,1,41500,,Transfer,Full Payment
+5/27/2024,Ikeja,GBEMISOLA,,Micheal,Samuel,Amaka,5,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+5/30/20204,Ikeja,OLAITAN,ADEWUMI,Rebecca,Samuel,Amaka,15,Sent,,Kiddies,4,100000,,Transfer,Full Payment
+5/30/2024,Ikeja,BLESSING,EROBE,Ademola,Samuel,Amaka,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+5/30/2024,Ikeja,ADEYEYE,,Ademola,Samuel,Amaka,7,Sent,,Kiddies,1,42500,,Transfer,Full Payment
+5/31/2024,Ikeja,chimoso,adeniyi,Rebecca,Lara,Ope,8,New,,Kiddies,,50000,,POS,Full Payment
+5/31/2024,Ikeja,oluwaseyifunmi,evana,Ademola,Samuel,Ope,8,Sent,,Personal,2,47500,,Transfer,Booking Payment
+6/1/2024,Ikeja,SARAH,EHIS,Micheal,Lara,Ope,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+6/1/2024,Ikeja,AWOSIKA,OLUWADUNBARIN,Ademola,Lara,Ope,15,Sent,,Kiddies,2,65000,,POS,Full Payment
+6/2/2024,Ikeja,ADEFILA,OLASUMBO,Rebecca,Samuel,Amaka,10,Sent,,Family,1,47500,,,
+6/3/2024,Ikeja,itunu,olugbodi,Micheal,Lara,Ope,13,New,,Personal,3,65000,,Transfer,Full Payment
+6/3/2024,Ikeja,opeyemi,lateef,Lara,Samuel,Ope,6,Sent,,Kiddies,2,50000,,,
+6/4/2024,Ikeja,JAMES,,Ademola,Lara,Ope,10,Sent,,Family,2,72500,,Transfer,Full Payment
+6/4/2024,Ikeja,JEGEDE,JIDE MR.WASH,Micheal,Samuel,Ope,12,Sent,,Kiddies,3,70000,,Transfer,Full Payment
+6/4/2024,Ikeja,OLAJUWON,onah,Micheal,Samuel,Ope,,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+6/6/2024,Ikeja,ADEWUNMI,,Ademola,Lara,Amaka,12,Sent,,Personal,3,65000,,Transfer,Full Payment
+6/6/2024,Ikeja,INUMIDUN,,Rebecca,Samuel,Amaka,5,Sent,,Personal,1,30000,,Transfer,Full Payment
+6/7/2024,Ikeja,PRECIOUS MICHAEL,OJEKEMI TEMITAYO,Rebecca,Samuel,Amaka,12,Sent,,Kiddies,3,70000,,Transfer,Full Payment
+6/8/2024,Ikeja,MESAIYETE,,Micheal,,Amaka,22,New,,Personal,5,110000,,Transfer,Full Payment
+6/8/2024,Ikeja,UWEH,VIVIAN,Rebecca,Samuel,Amaka,8,Sent,,Kiddies,2,50000,,Transfer,Booking Payment
+6/8/2024,Ikeja,JOY,SOLOMON,Micheal,Samuel,Amaka,5,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+6/8/2024,Ikeja,COKER,OWOLABI,Rebecca,Samuel,Amaka,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+6/8/2024,Ikeja,OLOFA,FOLAKE,Rebecca,Samuel,Amaka,15,Sent,,Kiddies,4,100000,,Transfer,
+6/9/2024,Ikeja,Ogunwole,tammy,Ademola,,Ope,8,Sent,,Kiddies,2,50000,,POS,Full Payment
+6/9/2024,Ikeja,nwabugu,augustine,Rebecca,,Ope,5,Sent,,Personal,1,30000,,POS,Full Payment
+6/9/2024,Ikeja,ADEGBENGA,FOLASHADE,Ademola,,Ope,9,Sent,,Kiddies,2,53000,,Transfer,Full Payment
+6/10/2024,Ikeja,OLUWOLE,KOMOLAFE,Micheal,,Amaka,1,Sent,,Passport,1,3000,,Transfer,Full Payment
+6/10/2024,Ikeja,COKER,OWOLABI,Rebecca,Samuel,Amaka,1,Sent,,Kiddies,1,6000,,Transfer,Full Payment
+6/10/2024,Ikeja,EBERE,NWAIGBO,Micheal,Samuel,Amaka,5,Sent,,Kiddies,1,32500,,Transfer,Full Payment
+6/10/2024,Ikeja,ADESEGHA,DAPHNE,Rebecca,,Amaka,8,Sent,,Kiddies,3,70000,,Transfer,Full Payment
+6/10/2024,Ikeja,ANNA,,Micheal,Samuel,Amaka,5,Sent,,Personal,1,30000,,Transfer,Full Payment
+6/11/2024,Ikeja,ASEKHAMHE,,Lara,Lara,Amaka,5,Sent,,Newborn,1,40000,,Transfer,Full Payment
+6/12/2024,Ikeja,OLARENWAJU,BADMUS,Rebecca,Lara,Amaka,10,New,,Kiddies,2,60000,,Transfer,Full Payment
+6/12/2024,Ikeja,CHUKWUDUMEBI,,Micheal,Samuel,Amaka,8,Sent,,Maternity,2,47500,,Transfer,Full Payment
+6/12/2024,Ikeja,KANNIKE,,Rebecca,Samuel,Amaka,12,New,,Kiddies,3,70000,,Transfer,Full Payment
+6/12/2024,Ikeja,JOHN,YUSUF,Micheal,,Amaka,12,New,,Family,3,70000,,Transfer,Full Payment
+6/12/2024,Ikeja,DIVINEA,,Micheal,Lara,Amaka,19,Sent,,Personal,3,82500,,Transfer,Full Payment
+6/12/2024,Ikeja,ODUNELA,,Rebecca,Samuel,Amaka,13,New,,Kiddies,3,80000,,Transfer,Full Payment
+6/14/2024,Ikeja,oluwatoyin,shokunbi,Rebecca,Samuel,Ope,8,New,,Kiddies,2,50000,,Transfer,Full Payment
+6/15/2024,Ikeja,EUNICE,AYOMIDE,Ademola,Samuel,Ope,12,New,,Kiddies,2,50000,,Transfer,Full Payment
+6/15/2024,Ikeja,OKEKE,CHIZARA,Ademola,Lara,Ope,10,New,,Family,2,53000,,Transfer,Full Payment
+6/15/2024,Ikeja,PEACE,WILLIAM,Micheal,Lara,Ope,8,New,,Kiddies,2,50000,,Transfer,Full Payment
+6/15/2024,Ikeja,TRACEY,AJUNWA,Micheal,Samuel,Ope,8,New,,Kiddies,2,50000,,Transfer,Full Payment
+6/15/2024,Ikeja,TAIWO,ANOWO,Ademola,,Ope,12,New,,Family,2,62000,,Transfer,Full Payment
+6/16/2024,Ikeja,IHENACHO,,Ademola,Samuel,Amaka,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+6/17/2024,Ikeja,ADEKUNLE,KOLEDOYE,Micheal,Samuel,Ope,12,Sent,,Family,2,50000,,Transfer,Full Payment
+6/17/2024,Ikeja,lekan,graffi,Micheal,Lara,Ope,9,Sent,,Family,2,50000,,Transfer,Full Payment
+6/17/2024,Ikeja,olamide,obeisan,Micheal,Lara,Ope,10,Sent,,Kiddies,2,65000,,Transfer,Full Payment
+6/17/2024,Ikeja,Ndubsi,,Micheal,Lara,Ope,8,Sent,,Personal,2,47500,,Transfer,Full Payment
+6/6/2024,Ikeja,HARUNA,ESTHER,Ademola,Lara,Amaka,8,Sent,,Kiddies,2,50000,,Transfer,Booking Payment
+6/18/2024,Ikeja,HARUNA,ESTHER,Ademola,Lara,Amaka,3,Sent,,Kiddies,,9000,,Transfer,Full Payment
+6/18/2024,Ikeja,OMON,OKEI,Ademola,Samuel,Amaka,1,Sent,,Family,5,32500,,Transfer,Full Payment
+6/18/2024,Ikeja,THEYANJULABEL,,Lara,Lara,Amaka,5,Sent,,Newborn,1,40000,,Transfer,Full Payment
+6/18/2024,Ikeja,MOTUNRAYO,,Lara,Lara,Amaka,8,Sent,,Kiddies,2,42000,,Transfer,Part Payment
+6/18/2024,Ikeja,ADERONKE,,Ademola,Lara,Amaka,8,Sent,,Kiddies,1,41500,,Transfer,Full Payment
+6/19/2024,Ikeja,MOTUNRAYO,,Ademola,Lara,Amaka,10,Sent,,Kiddies,,8000,,Transfer,Full Payment
+6/19/2024,Ikeja,THEYANJULABEL,,Lara,Lara,Amaka,,Sent,,Kiddies,,12000,,Transfer,Full Payment
+6/19/2024,Ikeja,OLUWADAMILOLA,,Micheal,,Amaka,8,Sent,,Personal,2,47500,,Transfer,Full Payment
+6/21/2024,Ikeja,urewa,ochai,Ademola,Samuel,Ope,11,Sent,,Personal,2,53500,,Transfer,Full Payment
+6/21/2024,Ikeja,KONSULT,SUAVE,Rebecca,Samuel,Ope,11,Sent,,Personal,2,55000,,Transfer,Full Payment
+6/22/2024,Ikeja,OLUWATOYIN,DADA,,,Amaka,,,,,,55000,,Transfer,Full Payment
+6/22/2024,Ikeja,OLUWATOMISIN,,Micheal,,Amaka,12,Sent,,Kiddies,3,70000,,Transfer,Full Payment
+6/22/2024,Ikeja,GIFT,PROVIDENCE,Rebecca,Samuel,Amaka,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+6/23/2024,Ikeja,IDOWU,OGUNSOLA,Rebecca,Lara,Ope,8,Sent,,Personal,2,47500,,Transfer,Full Payment
+6/23/2024,Ikeja,CATHERINE,CASTON,Ademola,Samuel,Ope,17,Sent,,Kiddies,3,80000,,Transfer,Full Payment
+6/23/2024,Ikeja,TIJANI,MURITALA,Rebecca,Samuel,Ope,13,Sent,,Kiddies,3,70000,,Transfer,Full Payment
+6/25/2024,Ikeja,TIJANI,,Rebecca,Samuel,Ope,2,Sent,,Kiddies,,6000,,Transfer,Full Payment
+6/25/2024,Ikeja,GDA LAURELS,OLUWATAMILORE,Rebecca,Lara,Amaka,5,Sent,,Newborn,1,40000,,Transfer,Full Payment
+6/25/2024,Ikeja,ESEMA,JENNIFER,Lara,Lara,Amaka,5,Sent,,Newborn,1,40000,,Transfer,Full Payment
+6/25/2024,Ikeja,REBECCA,YEMI,Micheal,Lara,Amaka,,Sent,,Passport,,6000,,Transfer,Full Payment
+6/25/2024,Ikeja,TOBACCO,PRO,Micheal,Samuel,Amaka,5,Sent,,Personal,1,30000,,Transfer,Full Payment
+6/26/2024,Ikeja,JALADE,RUKUYAT,Lara,Lara,Amaka,,Sent,,Newborn,,3000,,Transfer,Full Payment
+6/28/2024,Ikeja,ZANIAB,SANNI,Ademola,Samuel,Ope,8,Sent,,Kiddies,2,50000,,Transfer,Full Payment
+6/29/2024,Ikeja,APATA,SHOLA,Rebecca,,Ope,,New,,Kiddies,3,70000,,Transfer,Full Payment
+6/29/2024,Ikeja,ZAINAB,ADEGUNWA,Rebecca,Samuel,Ope,8,New,,Kiddies,2,50000,,Transfer,Full Payment
+6/29/2024,Ikeja,OREZIMMA,OKOH,Ademola,Samuel,Ope,18,New,,Kiddies,4,126000,,Transfer,Full Payment
+6/29/2024,Ikeja,nwachukwu,ogechi chizoba,Ademola,,Ope,8,New,,Kiddies,2,50000,,Transfer,Full Payment
+5/22/2024,Surulere,MARIA,UKAMAKA EBENEZER,Deborah,Peter,Ridwan,5,Sent,23/5/2024,Personal,1,30000,2937,Transfer,
+5/23/2024,Surulere,OKIKIOLA,FAITH,Ernest,Peter,Ope,5,Sent,23/5/2024,Kiddies,1,32500,2942,Transfer,
+5/24/2024,Surulere,AGUNBIADE,HAWAU,Lara,Yusuf,Ridwan,8,Sent,24/5/2024,Newborn,2,64000,2934/2946,Transfer,
+5/24/2024,Surulere,ESTHER,FOLASHADE,Ernest,Peter,Ridwan,17,Sent,24/5/2024,Kiddies,3,70000,2947,Transfer,
+5/24/2024,Surulere,ARASI,ZAINAB,Deborah,Yusuf,Ridwan,12,Sent,24/5/2024,Newborn,3,90000,2935/2948,Transfer,
+5/24/2024,Surulere,OVWIGHOSE,NYERHOVWO,Lara,Yusuf,Ridwan,5,Sent,45297,Newborn,1,40000,,Transfer,
+5/24/2024,Surulere,OLUWAPELUMI,ORIMOGUNJE,Ernest,Peter,Ridwan,11,Sent,27/5/2024,Kiddies,1,44500,2949,Transfer,
+5/25/2024,Surulere,OGUNBI,OMOLARA,Deborah,Yusuf,Ope,16,Sent,27/5/2024,Kiddies,4,85000,2001,Transfer,
+5/25/2024,Surulere,MIRIAM,EKE,Ernest,Yusuf,Ope,5,Sent,29/5/2024,Family,1,32500,2004,Transfer,
+5/25/2024,Surulere,AKINBILE,ABIMBOLA,Sam,Yusuf,Ope,8,Sent,27/5/2024,Kiddies,2,50000,2005,Transfer,
+5/25/2024,Surulere,AYOMIDE,ADEBAYO,Ernest,Yusuf,Ope,12,Sent,27/5/2024,Family,3,70000,2008,Transfer,
+5/25/2024,Surulere,OREOLUWA,OMOJOLA,Deborah,Yusuf,Ope,5,Sent,27/5/2024,Personal,1,35000,2009,Transfer,
+5/25/2024,Surulere,HAMMED,SHITTU,Sam,Yusuf,Ope,10,Sent,27/5/2024,Kiddies,2,56000,2015,Transfer,
+5/26/2024,Surulere,ORIYOMI,ALABA,Deborah,Peter,Ridwan,5,Sent,27/5/2024,Kiddies,1,32500,2012,Transfer,
+5/26/2024,Surulere,OLUBUKOLA,OKUNGHAE,Ernest,Yusuf,Ridwan,8,Sent,28/5/2024,Kiddies,2,50000,2011,Transfer,
+5/26/2024,Surulere,PETER,EGUN,Sam,Yusuf,Ridwan,8,Sent,28/5/2024,Kiddies,2,50000,2013,Transfer,
+5/26/2024,Surulere,UDECHUKWU,JOSEPH,Sam,Peter,Ridwan,6,Sent,27/5/2024,Prewedding,1,35500,2016,Transfer,
+5/26/2024,Surulere,OHONSI,EJEME,Ernest,Peter,Ridwan,8,Sent,27/5/2024,Personal,1,47500,2017,Transfer,
+5/26/2024,Surulere,OKE,EMMANUEL,Deborah,Yusuf,Ridwan,8,Sent,28/5/2024,Maternity,2,47500,2018,Transfer,
+5/27/2024,Surulere,ARIYIBI,KUBURAT,Ernest,Yusuf,Ridwan,15,Sent,29/5/2024,Maternity,2,59500,2019,Transfer,
+5/27/2024,Surulere,EKE,GRACE NGOZI,Ernest,Peter,Ridwan,15,Sent,28/5/2024,Family,1,32500,2943,Transfer,Full Payment
+5/27/2024,Surulere,ADEYEMI,AYOBAMI,Deborah,Peter,Ridwan,10,Sent,28/5/2024,Kiddies,2,65000,2020,Transfer,
+5/27/2024,Surulere,ELIZABETH,RICHARD-BEN,Ernest,Peter,Ridwan,12,Sent,30/5/2024,Personal,3,65000,2021,Transfer,
+5/27/2024,Surulere,ELIZABETH,RICHARD-BEN,Ernest,Peter,Ridwan,12,Sent,30/5/2024,Kiddies,2,50000,2021,Transfer,
+5/30/2024,Surulere,CHINWENDU,ANYABUINE,Ernest,Yusuf,Ope,9,Sent,31/5/2024,Kiddies,2,53000,2036,Transfer,
+5/31/2024,Surulere,OLANIRAN,OLAWUMI,Deborah,Peter,Ridwan,14,Sent,45297,Personal,3,70000,2038,Transfer,
+5/31/2024,Surulere,MOJISOLA,BAKARE,Ernest,Peter,Ridwan,12,Sent,45297,Personal,3,55000,2039,Transfer,
+6/1/2024,Surulere,RABI,LADIPO,Sam,Yusuf,Ridwan,25,Sent,45357,Personal,3,90000,2041,Transfer,
+6/4/2024,Surulere,JULIANA,AJARAT,Deborah,Yusuf,Ridwan,8,Sent,5/6/2024,Personal,2,45000,2050,Transfer,
+6/5/2024,Surulere,ANNI,BENSON,Lara,Peter,Ridwan,9,Sent,16/6/2024,Newborn,2,64000,2048,Transfer,
+6/5/2024,Surulere,ABIOLA,ELIZABETH,Ernest,Peter,Ridwan,31,Sent,45449,Kiddies,2,115000,2048/2854/2860,Transfer,
+6/6/2024,Surulere,OBINNA,OKOLO,Deborah,Peter,Ridwan,11,Sent,45479,Personal,2,9000,2859,Transfer,
+6/7/2024,Surulere,UDOM,ADAEZE,Ernest,Peter,David,6,Sent,45510,Personal,1,30000,2863,Cash,
+6/8/2024,Surulere,VALENTINE,NNAEMEKA,Sam,Yusuf,David,5,Sent,45571,Personal,1,30000,2865,Transfer,
+6/8/2024,Surulere,MOBOLANLE,OJOLOWO,Deborah,Yusuf,David,16,Sent,15/6/2024,Personal,2,71500,2932/2872/2896,Transfer,
+6/8/2024,Surulere,OLUWATOYIN,ESTHER,Ernest,Yusuf,David,6,Sent,45571,Kiddies,1,38500,2043/2873,Transfer,
+6/8/2024,Surulere,OLUJIMI,FAYEMIWO,Ernest,Yusuf,David,6,Sent,45602,Personal,1,30000,2044,Transfer,
+6/8/2024,Surulere,BUNMI,AWODEYI,Sam,Peter,David,8,Sent,45571,Kiddies,2,50000,2871,Transfer,
+6/8/2024,Surulere,CHIBUEZE,SANDY,Deborah,Yusuf,David,8,Sent,45541,Personal,2,47500,2868,Transfer,
+6/8/2024,Surulere,CHARLES,NWAOZUZU,Sam,Yusuf,David,5,Sent,45571,Maternity,1,30000,2869,Transfer,
+6/8/2024,Surulere,VINCENT,ACHEBE,Ernest,Peter,David,14,In progress,,Kiddies,2,70000,2870,Transfer,
+6/9/2024,Surulere,OLAYINKA,AMINU,Ernest,Yusuf,David,12,Sent,14/6/2024,Personal,3,65000,2875,Transfer,
+6/9/2024,Surulere,FRANCIS,IFEANYI,Deborah,Yusuf,David,8,Sent,45632,Personal,1,30000,2876,Transfer,
+6/11/2024,Surulere,AKINOLA,ITUNU,Deborah,Peter,Ridwan,3,Sent,45632,Personal,1,15000,2880,Transfer,
+6/11/2024,Surulere,ISEDEHI,AGBOGUN,Deborah,,Ridwan,9,Sent,21/6/2024,Kiddies,2,50000,2849,Transfer,
+6/11/2024,Surulere,ISEDEHI,AGBOGUN,Deborah,,Ridwan,9,Sent,21/6/2024,Kiddies,2,50000,2849,Transfer,
+6/11/2024,Surulere,DAISY-SHARON,AWOTOREBO,Deborah,Peter,Ridwan,2,Sent,45632,Personal,1,15000,2883,Transfer,
+6/12/2024,Surulere,OPE,AGBI,Deborah,Peter,Ridwan,9,Sent,14/6/2024,Personal,2,47500,2885,Transfer,
+6/12/2024,Surulere,OMOBOLANLE,ORESANYA,Deborah,Peter,Ridwan,8,Sent,13/6/2024,Kiddies,2,50000,2881,Transfer,
+6/12/2024,Surulere,OLUWAPELUMI,ORIMOGUNJE,Deborah,Peter,Ridwan,5,Sent,14/6/2024,Personal,1,30000,2888,Transfer,
+6/12/2024,Surulere,AMANFO,JOSEPHINE,Deborah,Peter,Ridwan,37,Sent,14/6/2024,Personal,3,115000,2890,Transfer,
+6/14/2024,Surulere,IKEZUE,NKECHI,Ernest,Peter,David,11,Sent,15/6/2024,Kiddies,2,59000,2887/2895,Transfer,
+6/15/2024,Surulere,MARY,NWAWENE,Sam,Yusuf,David,10,Sent,18/6/2024,Kiddies,2,65500,2858/2898,Transfer,
+6/15/2024,Surulere,ABOLURIN,MOFOLUWAKE,Ernest,Yusuf,David,25,Sent,17/6/2024,Personal,4,105000,2899,Transfer,
+6/15/2024,Surulere,ADAEZE,IRENE,Sam,Yusuf,David,16,Sent,17/6/2024,Personal,1X3,85000,2892/2902,Transfer,
+6/15/2024,Surulere,PAUL,OLUYEGE,Deborah,Yusuf,David,12,Sent,17/6/2024,Prewedding,3,70000,2893,Transfer,
+6/15/2024,Surulere,OKONMA,VICTOR,Ernest,Yusuf,David,7,Sent,17/6/2024,Prewedding,1,38000,2903,Transfer,
+6/16/2024,Surulere,TOMI,ADENIRAN,Deborah,Peter,David,12,Sent,17/6/2024,Kiddies,3,65000,2904,Transfer,
+6/16/2024,Surulere,OBIJIAKU,ONYINYE,Sam,Peter,David,8,Sent,17/6/2024,Kiddies,2,50000,2905,Transfer,
+6/16/2024,Surulere,ADEOLU,OJO,Ernest,Peter,David,8,Sent,17/6/2024,Kiddies,2,50000,2906,Transfer,
+6/17/2024,Surulere,ADETUTU,OLADUNJOYE,Ernest,Yusuf,Ridwan,12,Sent,18/6/2024,Kiddies,3,20000,2908,Transfer,
+6/17/2024,Surulere,OLUSEGUN,ADEWOLE,Ernest,Peter,David,9,Sent,18/6/2024,Kiddies,2,50000,2910,Transfer,
+6/17/2024,Surulere,NWAOGBO,UDOCHUKWU,Ernest,Yusuf,Ridwan,31,Sent,19/6/2024,Family,2,114000,2907,Transfer,
+6/17/2024,Surulere,QUADRI,GBOLAHAN,Ernest,Peter,David,14,Sent,18/6/2024,Kiddies,3,73000,2913,Transfer,
+6/18/2024,Surulere,OLUWATOBI,AIYEPE,Deborah,Peter,Ridwan,9,Sent,19/6/2024,Kiddies,2,50000,2917,Transfer,
+6/19/2024,Surulere,REBECCA,ADEPEJU,Deborah,Peter,Ridwan,10,Sent,21/6/2024,Personal,2,55500,2919,Transfer,
+6/20/2024,Surulere,EKEMODE,KAFIL,Ernest,Yusuf,Ridwan,9,Sent,21/6/2024,Kiddies,2,53000,2922,Transfer,
+6/21/2024,Surulere,ADESHOLA,ADEBISI,Ernest,Yusuf,David,10,Sent,22/6/2024,Kiddies,2,56000,2926,Transfer,
+6/21/2024,Surulere,REBECCA,ABISOLA,Ernest,Peter,David,5,Sent,22/6/2024,Kiddies,1,32500,2923,Transfer,
+6/21/2024,Surulere,MUHAMMED,KEMI,Deborah,Yusuf,David,10,Sent,22/6/2024,Personal,2,53000,2927,Transfer,
+6/21/2024,Surulere,GLORY,OMOREGIE,Deborah,Peter,David,16,Sent,22/6/2024,Kiddies,3,80000,2928,Transfer,
+6/22/2024,Surulere,OCHUKO,OGHENEOVO,Deborah,Yusuf,David,15,Sent,24/6/2024,Kiddies,4,90000,2930,Transfer,
+6/22/2024,Surulere,OLAYEMI,ODESEYE,Sam,Peter,David,10,Sent,24/6/2024,Kiddies,2,56000,2931,Transfer,
+6/22/2024,Surulere,AINA,OLUWAFUNMILAYO,Lara,Peter,David,5,Sent,24/6/2024,Newborn,1,40000,2932,Transfer,
+6/22/2024,Surulere,ADEOYE,IYABODE,Sam,Yusuf,David,5,Sent,24/6/2024,Kiddies,1,32500,2933,Transfer,
+6/22/2024,Surulere,ROTIBI,OGUNLANA,Ernest,Yusuf,David,16,Sent,24/6/2024,Personal,4,80000,2934,Cash,
+6/22/2024,Surulere,KEHINDE,TAIWO,Sam,Yusuf,David,5,Sent,24/6/2024,Personal,1,30000,2935,Transfer,
+6/22/2024,Surulere,ONYINYE,OBIJIAKU,Deborah,Yusuf,David,7,Sent,24/6/2024,Personal,1,36000,2936,Transfer,
+6/22/2024,Surulere,OTOKI,IBIRONKE,Ernest,,David,,In progress,,Personal,1,30000,2938,Transfer,
+6/23/2024,Surulere,OLAWALE,BANKE,Sam,Yusuf,David,8,Sent,26/6/2024,Kiddies,2,45000,2940,Transfer,
+6/25/2024,Surulere,JOHNSON,JANET,Deborah,Peter,David,16,In progress,,Personal,3,70000,2945,Transfer,
+6/25/2024,Surulere,MEG,OKE,Deborah,Yusuf,David,6,Sent,26/6/2024,Personal,2,38000,2946,Transfer,
+6/27/2024,Surulere,YEMISI,OSONEYE,Ernest,,David,8,In progress,,Kiddies,2,50000,2901,Transfer,
+6/28/2024,Surulere,JUWON,SAMUEL,Ernest,,Ridwan,7,In progress,,Maternity,1,35000,2952,Transfer,
+6/28/2024,Surulere,OKECHUKWU,OKORO,Ernest,,Ridwan,2,In progress,,Personal,1,15000,2953,Transfer,
+6/28/2024,Surulere,AMARACHI,EDINDU,Deborah,,Ridwan,5,In progress,,Newborn,1,40000,2955,Transfer,
+6/29/2024,Surulere,TEMITOPE,JAKPA,Ernest,,Ridwan,,In progress,,Kiddies,2,50000,2958,Transfer,
+6/29/2024,Surulere,AKOLADE,OLADIMEJI,Lara,Yusuf,Ridwan,5,In progress,,Newborn,1,40000,2954,Transfer,
+6/29/2024,Surulere,OLADUNNI,PETER,Deborah,Yusuf,Ridwan,7,In progress,,Kiddies,1,40000,2956,Transfer,
+6/29/2024,Surulere,DIKE,MONICA,Deborah,,Ridwan,,In progress,,Kiddies,1,32500,2957,Transfer,
+6/29/2024,Surulere,TITILOYE,OLADUNNI,Deborah,,Ridwan,,In progress,,Maternity,1,30000,2959,Transfer,
+6/29/2024,Surulere,EBELE,ANYAEGBU,Ernest,Yusuf,Ridwan,6,In progress,,Kiddies,1,35500,2960,Transfer,
+6/30/2024,Surulere,JEGEDE,ADEYEMI,Sam,,Ridwan,,In progress,,Kiddies,3,70000,2961,Transfer,
+6/30/2024,Surulere,ADARAOBONG,INYANG,Deborah,Yusuf,Ridwan,8,In progress,,Kiddies,2,50000,2965,Transfer,
+6/30/2024,Surulere,PHILIPS,ADEBAYO,Ernest,,Ridwan,,In progress,,Personal,2,47500,2966,Transfer,
+5/14/2024,Ikeja,AKERELE,OYINDA,Rebecca,Lara,Amaka,9,Sent,45427,,,,,,
+5/14/2024,Ikeja,IDARA,USORO,Rebecca,Lara,Amaka,13,Sent,45427,,,,,,
+5/14/2024,Ikeja,RABI,HASSAN,Micheal,Samuel,Amaka,6,Sent,5/15/2024,,,,,,
+5/14/2024,Surulere,MARYAM,SULEIMAN,Deborah,Peter,Ridwan,9,Sent,45428,,,,,,
+5/14/2024,Surulere,ALIU,AMINAT,Deborah,Yusuf,Ridwan,5,Sent,45428,,,,,,
+5/13/2024,Ajah,NGOZI,OFUOKWU,Freeman,Sunday,Joy,14,Sent,5/15/2024,,,,,,
+5/13/2024,Ajah,GIFT,UMORU,Stephanie,Stephanie,Joy,26,Sent,5/17/2024,,,,,,
+5/15/2024,Surulere,SWEETIE,EFOSA OSAYI,Deborah,Peter,Ridwan,12,Sent,5/16/2024,,,,,,
+5/15/2024,Surulere,ISIAKA,OLBUSOLA FATIMAH,Deborah,Peter,Ridwan,6,Sent,5/16/2024,,,,,,
+5/13/2024,Surulere,SOLOMON,ADEOLA,Deborah,Yusuf,Ridwan,11,Sent,5/17/2024,,,,,,
+5/12/2024,Ajah,MAUREEN,UZOH,Freeman,Frank,Ebube,20,Sent,5/16/2024,,,,,,
+5/15/2024,Ajah,MIDE,GRACE,Lanre,Faith,Ebube,8,Sent,5/16/2024,,,,,,
+5/15/2024,Ajah,DARAMOLA,JENNIFER,Faith,Sunday,Ebube,5,Sent,,,,,,,
+5/15/2024,Ikeja,BUKOLA,LAWAL,Micheal,Lara,Ope,10,Sent,5/17/2024,,,,,,
+5/15/2024,Ikeja,SEUN,SOWEMIMO,Micheal,Samuel,Ope,12,In Progress,,,,,,,
+5/16/2024,Ikeja,ITUNU,,Ademola,Samuel,Amaka,8,Sent,5/17/2024,,,,,,
+5/16/2024,Ajah,ONOME,ANITA,Freeman,Faith,Joy,8,Sent,5/17/2024,,,,,,
+5/16/2024,Surulere,HANNAH,OKPALA,Lara,Stephanie,Ridwan,11,Sent,5/17/2024,,,,,,
+5/16/2024,Surulere,ELIZABERTH,MOTUNDE,Ernest,Yusuf,Ridwan,5,Sent,5/17/2024,,,,,,
+5/16/2024,Surulere,OGBU,CHIBUZO,Ernest,Peter,Ridwan,19,Sent,5/17/2024,,,,,,
+5/16/2024,Surulere,OLAYEMI,FASILAT,Ernest,Yusuf,Ridwan,6,Sent,5/17/2024,,,,,,
+5/16/2024,Surulere,TEMILADE,GIFT,Ernest,Peter,Ridwan,8,Sent,5/17/2024,,,,,,
+5/17/2024,Ajah,ABOSEDE,ABOSEDE,KAY,Sunday,Joy,15,Sent,,,,,,,
+5/17/2024,Ajah,OMOBOLANLE,BABALOLA,Faith,Faith,Joy,5,Sent,5/18/2024,,,,,,
+5/17/2024,Ajah,NINA,MBATA,Lanre,Faith,Joy,3,Sent,5/18/2024,,,,,,
+5/17/2024,Ajah,AMINU,AISHAT,Lanre,Sunday,Joy,8,Sent,5/19/2024,,,,,,
+5/17/2024,Ikeja,AKINTOLURE,JEFFERY,Ademola,Samuel,Ope,10,Sent,,,,,,,
+5/16/2024,Ikeja,OBIMDIKE,,Rebecca,Samuel,Amaka,23,Sent,5/18/2024,,,,,,
+5/17/2024,Ikeja,MORAYO,OSHODI,Rebecca,Samuel,Ope,12,Sent,,,,,,,
+5/18/2024,Ajah,GRACE,OLANIPEKUN,Lanre,Abisoye,Joy,12,Sent,5/23/2024,,,,,,
+5/18/2024,Ajah,DAMILOLA,EKUNDAYO,Stephanie,Abisoye,Joy,9,Sent,5/19/2024,,,,,,
+5/18/2024,Ajah,OLA,KENDRA,Lanre,stephanie,Joy,5,Sent,5/19/2024,,,,,,
+5/18/2024,Surulere,BLESSING,ODEBUNMI,Sam,Yusuf,David,10,Sent,5/20/2024,,,,,,
+5/18/2024,Surulere,OLANREWAJU,TEMITOPE,Lara,,David,10,In Progress,,,,,,,
+5/18/2024,Ajah,MOTUNRAYO,MOTUN,Stephanie,Sunday,Joy,12,Sent,5/19/2024,,,,,,
+5/18/2024,Surulere,OKONKWO,TOLULOPE,Ernest,,David,,In Progress,,,,,,,
+5/18/2024,Ajah,MANDU,JOSHUA,Stephanie,Faith,Ebube,12,Sent,5/19/2024,,,,,,
+5/18/2024,Surulere,OKONKWO,TOLULOPE,Lara,,David,,In Progress,,,,,,,
+5/18/2024,Surulere,AYODELE,ABISAGBOOLA,Sam,Yusuf,David,11,Sent,45431,,,,,,
+5/18/2024,Surulere,PEACE(THE BELTNATION),OKPALA,Sam,Yusuf,David,8,Sent,45431,,,,,,
+5/18/2024,Surulere,AKINBO,FATIMOH,Deborah,Yusuf,David,5,Sent,5/20/2024,,,,,,
+5/18/2024,Surulere,MOSUNMOLA,AKINKUNMI,Ernest,Yusuf,David,15,Sent,45434,,,,,,
+5/18/2024,Ajah,AGUMA,CONFIDENCE,Lanre,Faith,Ebube,11,Sent,45430,,,,,,
+5/18/2024,Ikeja,AYOMIDE,AROLOYE,Micheal,Lara,Ope,10,In Progress,,,,,,,
+5/18/2024,Ikeja,JOAN,OKAEME,Ademola,,Ope,,In Progress,,,,,,,
+5/18/2024,Ikeja,KUDIRAT,HASSAN,Micheal,Samuel,Ope,10,Sent,,,,,,,
+5/18/2024,Ikeja,MOMODU,NICKIE,Ademola,Samuel,Ope,5,Sent,5/20/2024,,,,,,
+5/18/2024,Ikeja,RONKE,ROTIMI,Rebecca,Samuel,Ope,21,In Progress,,,,,,,
+5/18/2024,Surulere,OREVBA,EMMANUEL,Deborah,Peter,David,7,Sent,5/20/2024,,,,,,
+5/18/2024,Surulere,OCHE,SAMULE,Sam,Peter,David,12,In Progress,,,,,,,
+5/19/2024,Ajah,UGOCHUKWU,OKUGO,Faith,Frank,Joy,13,Sent,5/20/2024,,,,,,
+5/19/2024,Ajah,AYOOLA,OLABISI,Faith,Abisoye,Joy,6,Sent,5/20/2024,,,,,,
+5/19/2024,Ikeja,REBECCA,JEFFEREY,Ademola,Samuel,Ope,17,New,,,,,,,
+5/19/2024,Ikeja,KABIARAT,,,Samuel,Ope,10,New,,,,,,,
+5/19/2024,Ikeja,YINKA,,Lara,Lara,Ope,16,New,,,,,,,
+5/19/2024,Ikeja,MMESOMA,,Ademola,Lara,Ope,15,Sent,5/20/2024,,,,,,
+5/19/2024,Ajah,JUDITH,IFEOMA,Stephanie,Sunday,Ebube,8,Sent,5/20/2024,,,,,,
+5/19/2024,Ajah,CASANDRA,OKOGWU,Freeman,Sunday,Ebube,32,Sent,5/23/2024,,,,,,
+5/19/2024,Ajah,ABIODUN,OSENI,Freeman,Faith,Ebube,12,Sent,5/20/2024,,,,,,
+5/19/2024,Ajah,NENGI,OGBANGA,Lanre,Sunday,Joy,5,Sent,5/20/2024,,,,,,
+5/19/2024,Surulere,JOY,AKAIGHE,Sam,Peter,David,8,Sent,20/5/2024,,,,,,
+5/19/2024,Surulere,AMINAT,MAKANJUOLA,Deborah,Peter,David,10,Sent,20/5/2024,,,,,,
+5/19/2024,Surulere,OLANIKE,EMMANUEL,Ernest,Yusuf,David,5,Sent,20/5/2024,,,,,,
+5/19/2024,Surulere,ADENIYI,JUMOKE,Deborah,Yusuf,David,9,In Progress,,,,,,,
+5/19/2024,Ajah,RITA,ADEREMI,Freeman,Abisoye,Ebube,11,Sent,20/5/2024,,,,,,
+5/19/2024,Ajah,CHINYERE,ARIBEANNA,Stephanie,Sunday,Ebube,5,Sent,20/5/2024,,,,,,
+5/20/2024,Ikeja,SOFIA,ONOWOTU,Micheal,Samuel,Ope,5,In Progress,,,,,,,
+5/20/2024,Ajah,OKOLE,KAIFOCHUKWU,Faith,Frank,Ebube,31,Sent,5/22/2024,,,,,,
+5/21/2024,Ajah,AJAYI,RICHARD,Faith,Abisoye,Ebube,18,Sent,5/22/2024,,,,,,
+5/21/2024,Surulere,WINNIEFRED,BAOKU,Deborah,Peter,Ridwan,23,In Progress,,,,,,,
+5/22/2024,Ajah,MOJISOLA,MOJI,Faith,Faith,Joy,10,Sent,5/23/2024,,,,,,
+5/22/2024,Ajah,CHRISTABEL,EDUNEJU,Stephanie,Sunday,Joy,5,Sent,,,,,,,
+5/22/2024,Ajah,ABIODUN,OLUWAFEMI,Faith,Frank,Joy,15,Sent,5/23/2024,,,,,,

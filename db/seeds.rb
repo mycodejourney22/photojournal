@@ -29,14 +29,19 @@ s3_client = Aws::S3::Client.new(
 
 bucket_name = 'photograhydata'
 object_key = 'data.csv'
+local_file_path = 'data.csv'
+File.open(local_file_path, 'wb') do |file|
+  s3_client.get_object({ bucket: bucket_name, key: object_key }, target: file)
+end
 
-csv_object = s3_client.get_object(bucket: bucket_name, key: object_key)
-csv_content = csv_object.body.read
+
+# csv_object = s3_client.get_object(bucket: bucket_name, key: object_key)
+# csv_content = csv_object.body.read
 
 # file_path = "/mnt/c/Users/yk113/Downloads/data.csv"
 number = 0
 
-CSV.foreach(csv_content, headers: true, header_converters: :symbol) do |row|
+CSV.foreach(local_file_path, headers: true, header_converters: :symbol) do |row|
   number += 1
   appointment_uuid = SecureRandom.uuid
 
