@@ -19,11 +19,24 @@ Appointment.destroy_all
 puts "Deleted all previous instance"
 
 require 'csv'
+require 'aws-sdk-s3'
 
-file_path = "/mnt/c/Users/yk113/Downloads/data.csv"
+s3_client = Aws::S3::Client.new(
+  region: ENV['AWS_REGION'],
+  access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+  secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+)
+
+bucket_name = 'photograhydata'
+object_key = 's3://photograhydata/data.csv'
+
+csv_object = s3_client.get_object(bucket: bucket_name, key: object_key)
+csv_content = csv_object.body.read
+
+# file_path = "/mnt/c/Users/yk113/Downloads/data.csv"
 number = 0
 
-CSV.foreach(file_path, headers: true, header_converters: :symbol) do |row|
+CSV.foreach(csv_content, headers: true, header_converters: :symbol) do |row|
   number += 1
   appointment_uuid = SecureRandom.uuid
 
