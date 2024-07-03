@@ -12,7 +12,6 @@ class SalesController < ApplicationController
     @sale = Sale.new
   end
 
-
   def create
     authorize Sale
     @sale = Sale.new(sale_params)
@@ -21,7 +20,7 @@ class SalesController < ApplicationController
     if @sale.save
       redirect_to sales_path, notice: 'Sale was successfully created.'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

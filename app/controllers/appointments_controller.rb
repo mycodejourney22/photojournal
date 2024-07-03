@@ -41,7 +41,7 @@ class AppointmentsController < ApplicationController
       redirect_to appointments_path, notice: 'Appointment was successfully created.'
     else
       build_questions_for(@appointment) # Rebuild questions if save fails
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

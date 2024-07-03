@@ -42,7 +42,7 @@ class PhotoShootsController < ApplicationController
     if @photo_shoot.save
       redirect_to appointments_path, notice: 'PhotoShoot was successfully created.'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
