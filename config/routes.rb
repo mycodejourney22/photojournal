@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'sales/new'
   get 'sales/create'
   get 'sales/show'
+  post '/webhooks/calendly', to: 'webhooks#calendly'
+
   devise_for :users, controllers: {
     sessions: 'users/sessions'
   }

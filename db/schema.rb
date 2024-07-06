@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_23_004258) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_06_083914) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_23_004258) do
     t.datetime "updated_at", null: false
     t.uuid "uuid", null: false
     t.boolean "no_show", default: false
+    t.boolean "status", default: true
     t.index ["uuid"], name: "index_appointments_on_uuid", unique: true
   end
 
