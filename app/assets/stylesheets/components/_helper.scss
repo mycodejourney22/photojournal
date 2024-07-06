@@ -12,3 +12,17 @@ section{
 
   }
 }
+
+.show-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.show_item{
+  color: #666666;
+  font-weight: bold;
+}
+
+.show_item-header{
+  font-weight: bold;
+}

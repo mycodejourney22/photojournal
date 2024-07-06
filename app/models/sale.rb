@@ -8,6 +8,7 @@ class Sale < ApplicationRecord
   # validates :product_service_name, presence: true
   # belongs_to :photo_shoot, optional: true
   include PgSearch::Model
+  belongs_to :appointment, optional: true
   pg_search_scope :global_search,
   against: [ :customer_name, :customer_phone_number , :payment_type],
     using: {

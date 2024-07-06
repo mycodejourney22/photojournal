@@ -5,15 +5,6 @@
     <p class="fw-bold"><%= date.strftime("%A, %d %B %Y") %></p>
   </div>
   <table class="bordered-table" data-calendly-target="table">
-    <thead>
-      <tr>
-        <th>Customer Name</th>
-        <th>Phone number</th>
-        <th>Appointment Time</th>
-        <th>Type of Shoot</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
     <tbody>
       <% appointments.each do |appointment| %>
         <tr>
@@ -35,8 +26,7 @@
             <% end %>
           </td>
           <td>
-            <p><%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(appointment) %></p>
-            <p><%= link_to 'Mark as No-Show', mark_no_show_appointment_path(appointment), method: :patch, data: { confirm: 'Are you sure?' } %></p>
+            <p><%= link_to 'More Details', appointment_path(appointment) %></p>
           </td>
         </tr>
       <% end %>

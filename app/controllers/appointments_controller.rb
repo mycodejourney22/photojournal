@@ -9,9 +9,8 @@ class AppointmentsController < ApplicationController
                     .where('start_time >= ?', Time.zone.now.beginning_of_day)
                     .order(:start_time)
                     .select { |appointment|
-                      appointment.photo_shoot.nil? &&
-                        !appointment.no_show &&
-                        appointment.status
+                      !appointment.no_show &&
+                      appointment.status
                     }
                     .group_by { |appointment| appointment.start_time.to_date }
     @heading = "#{Date.today.strftime("%A, %d %B %Y") }"

@@ -23,15 +23,7 @@
             <%= f.input :date_sent, as: :string, label: false, placeholder: "Date sent", input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
             <%= f.input :notes, label: false, placeholder: "Handover Notes" %>
           </div>
-          <p class="fw-bold py-4">PAYMENT INFORMATION</p>
-            <%= f.simple_fields_for :sale do |sale_f| %>
-              <div class="form-inputs grid-container">
-                <%= sale_f.input :amount_paid, label: false, placeholder: "Payment total"  %>
-                <%= sale_f.input :payment_method, label: false, prompt: "Payment method", collection:["POS", "Cash", "Transfer"] %>
-                <%= sale_f.input :payment_type , label: false, placeholder: "Payment type", prompt: "Payment type", collection:["Full Payment",  "Balance Payment", "Deposit"] %>
-                <%= sale_f.input :reference, label: false, placeholder: "Reference" %>
-              </div>
-            <% end %>
+
         </div>
         <%= f.button :submit, "Create PhotoShoot", class: "btn btn-photoshoot" %>
       <% end %>

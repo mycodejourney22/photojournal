@@ -1,6 +1,8 @@
 class SalesController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
+  before_action :set_appointment, only: [:new, :create]
+
   def index
     authorize Sale
     @sales = policy_scope(Sale).all.order(date: :desc)
@@ -9,16 +11,25 @@ class SalesController < ApplicationController
 
   def new
     authorize Sale
-    @sale = Sale.new
+    @sale = @appointment ? @appointment.sales.build : Sale.new
   end
 
   def create
     authorize Sale
-    @sale = Sale.new(sale_params)
+    if @appointment
+      @sale = @appointment.sales.build(sale_params)
+      @sale.customer_name = @appointment.name
+    else
+      @sale = Sale.new(sale_params)
+    end
     @sale.location = determine_location(current_user)
 
     if @sale.save
-      redirect_to sales_path, notice: 'Sale was successfully created.'
+      if @sale.appointment
+        redirect_to @sale.appointment, notice: 'Sale was successfully created.'
+      else
+        redirect_to sales_path, notice: 'Sale was successfully created.'
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -52,6 +63,10 @@ class SalesController < ApplicationController
   end
 
   private
+
+  def set_appointment
+    @appointment = Appointment.find(params[:appointment_id]) if params[:appointment_id]
+  end
 
   def sale_params
     params.require(:sale).permit(:date, :amount_paid, :payment_method, :payment_type, :customer_name, :customer_phone_number, :customer_service_officer_name, :product_service_name)

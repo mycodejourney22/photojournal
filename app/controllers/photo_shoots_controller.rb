@@ -34,11 +34,6 @@ class PhotoShootsController < ApplicationController
   def create
     authorize PhotoShoot
     @photo_shoot = @appointment.build_photo_shoot(photo_shoot_params)
-    @photo_shoot.sale.date = @photo_shoot.date
-    @photo_shoot.sale.customer_service_officer_name = Staff.find(@photo_shoot.customer_service_id).name
-    @photo_shoot.sale.customer_name = @photo_shoot.appointment.name
-    @photo_shoot.sale.location = determine_location(current_user)
-    @photo_shoot.sale.product_service_name = "PhotoShoot"
     if @photo_shoot.save
       redirect_to appointments_path, notice: 'PhotoShoot was successfully created.'
     else
@@ -66,7 +61,7 @@ class PhotoShootsController < ApplicationController
     @photo_shoot.assign_attributes(photo_shoot_params)
     appointment = Appointment.find(params[:appointment_id])
     @photo_shoot.appointment = appointment
-    build_sales(@photo_shoot)
+    # build_sales(@photo_shoot)
     if @photo_shoot.save
       redirect_to photo_shoots_path, notice: 'PhotoShoot and Sale were successfully updated.'
     else
@@ -91,13 +86,7 @@ class PhotoShootsController < ApplicationController
       :status,
       :type_of_shoot,
       :number_of_outfits,
-      :date_sent,
-      sale_attributes: [
-        :amount_paid,
-        :payment_method,
-        :payment_type,
-        :reference
-      ]
+      :date_sent
     )
   end
 
@@ -116,11 +105,11 @@ class PhotoShootsController < ApplicationController
     end
   end
 
-  def build_sales(photo_shoot)
-    photo_shoot.sale.date = photo_shoot.date
-    photo_shoot.sale.customer_service_officer_name = Staff.find(photo_shoot.customer_service_id).name
-    photo_shoot.sale.customer_name = photo_shoot.appointment.name
-    photo_shoot.sale.location = determine_location(current_user)
-    photo_shoot.sale.product_service_name = "PhotoShoot"
-  end
+  # def build_sales(photo_shoot)
+  #   photo_shoot.sale.date = photo_shoot.date
+  #   photo_shoot.sale.customer_service_officer_name = Staff.find(photo_shoot.customer_service_id).name
+  #   photo_shoot.sale.customer_name = photo_shoot.appointment.name
+  #   photo_shoot.sale.location = determine_location(current_user)
+  #   photo_shoot.sale.product_service_name = "PhotoShoot"
+  # end
 end

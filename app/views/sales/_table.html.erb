@@ -7,7 +7,7 @@
             <th>Product Name</th>
             <th>Amount Paid</th>
             <th>Payment type</th>
-            <th>Actions</th>
+            <%# <th>Actions</th> %>
           </tr>
         </thead>
         <tbody>
@@ -19,9 +19,9 @@
               <td><%= sale.product_service_name %></td>
               <td><%= sale.amount_paid %></td>
               <td><%= sale.payment_type %></td>
-              <td>
-                <p><%= link_to 'Update Details', edit_sale_path(sale) %></p>
-              </td>
+              <%# <td>
+                <p><%= link_to 'Update Details', edit_sale_path(sale) %>
+              <%# </td> %>
             </tr>
           <% end %>
         </tbody>

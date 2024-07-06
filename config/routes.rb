@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       patch :mark_no_show
     end
     resources :photo_shoots, except: [:index, :destroy]
+    resources :sales, only: [:index, :new, :create]
   end
   resources :photo_shoots, only: [:index] do
     collection do
