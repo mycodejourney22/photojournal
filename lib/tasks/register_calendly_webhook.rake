@@ -13,7 +13,7 @@ namespace :calendly do
     request['Authorization'] = "Bearer #{ENV['CALENDLY_BEARER_TOKEN']}"
 
     request.body = {
-      url: 'http://localhost:3000/webhooks/calendly', # Replace with your actual endpoint
+      url: 'https://photologger-0d07f7db019d.herokuapp.com/webhooks/calendly', # Replace with your actual endpoint
       events: ['invitee.created', 'invitee.canceled'], # Add any other events you want to subscribe to
       scope: 'organization',
       organization: ENV['CALENDLY_ORGANIZATION_UUID'] # Replace with your organization UUID
