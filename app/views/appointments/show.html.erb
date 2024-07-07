@@ -86,13 +86,13 @@
           <% @appointment.sales.each  do  |sale_info| %>
             <div class="show-grid mb-1">
               <div>
-                <p class="show_item"><%= sale_info.product_service_name %></p>
+                <p class="show_item"><%= sale_info.product_service_name if sale_info.product_service_name %></p>
               </div>
               <div>
-                <p class="show_item"><%= sale_info.payment_type %></p>
+                <p class="show_item"><%= sale_info.payment_type if sale_info.payment_type %></p>
               </div>
               <div>
-                <p class="show_item"><%= sale_info.amount_paid %></p>
+                <p class="show_item"><%= sale_info.amount_paid if sale_info.amount_paid %></p>
               </div>
             </div>
           <% end %>
@@ -107,15 +107,15 @@
           <div class="show-grid mb-3">
             <div>
               <p class="show_item-header">Photographer</p>
-              <p class="show_item"><%= @appointment.photo_shoot.photographer.name %></p>
+              <p class="show_item"><%= @appointment.photo_shoot.photographer.name  if @appointment.photo_shoot.photographer %></p>
             </div>
             <div>
               <p class="show_item-header">Editor</p>
-              <p class="show_item"><%= @appointment.photo_shoot.editor.name %></p>
+              <p class="show_item"><%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %></p>
             </div>
             <div>
               <p class="show_item-header">CSO</p>
-              <p class="show_item"><%= @appointment.photo_shoot.customer_service.name %></p>
+              <p class="show_item"><%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %></p>
             </div>
           </div>
           <div class="show-grid">
