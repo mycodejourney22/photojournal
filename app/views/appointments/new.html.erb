@@ -10,17 +10,17 @@
           <%= f.input :name, label_html:{class: 'fw-bold'} %>
           <%= f.input :email, label_html:{class: 'fw-bold'} %>
           <%= f.input :location, label_html:{class: 'fw-bold'}, collection: ['KM 22 Lekki Epe Express way , Ilaje Bus Stop Lagos', '66 Adeniyi Jones , Ikeja Lagos', '115A bode thomas street, Surulere Lagos'] %>
-          <%= f.input :start_time ,  as: :string, label_html:{class: 'fw-bold'}, input_html: {data: { controller: "datepicker" }} %>
+          <%= f.input :start_time ,  as: :string, required: true, label_html:{class: 'fw-bold'}, input_html: {data: { controller: "datepicker" }} %>
         </div>
         <%= f.simple_fields_for :questions do |question_form| %>
           <div class="nested-fields">
             <%= question_form.label :question, question_form.object.question, class: 'fw-bold' %>
             <%= question_form.hidden_field :question %>
             <% if question_form.object.question == "Phone number" %>
-              <%= question_form.input :answer, as: :string, label: false %>
+              <%= question_form.input :answer, as: :string, required: true,  label: false %>
             <% elsif question_form.object.question == 'Type of shoots' %>
               <div class="grid_app_item">
-                  <%= question_form.input :answer, as: :radio_buttons, collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
+                  <%= question_form.input :answer, as: :radio_buttons, required: true, collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
               </div>
             <% end %>
             <%= question_form.hidden_field :_destroy %>

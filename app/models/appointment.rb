@@ -5,5 +5,12 @@ class Appointment < ApplicationRecord
   has_one :photo_shoot
   validates :name, presence: true
   validates :email, presence: true
-  validates :name, presence: true
+  validates :location, presence: true
+
+  include PgSearch::Model
+  pg_search_scope :global_search,
+  against: [ :name, :email],
+    using: {
+      tsearch: { prefix: true }
+    }
 end

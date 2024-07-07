@@ -12,8 +12,9 @@ class AppointmentsController < ApplicationController
                       !appointment.no_show &&
                       appointment.status
                     }
-                    .group_by { |appointment| appointment.start_time.to_date }
     @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
+    @appointments = Appointment.global_search(params[:query]) if params[:query].present?
+    @appointments = @appointments.group_by { |appointment| appointment.start_time.to_date }
     respond_to do |format|
       format.html # Follow regular flow of Rails
       format.text { render partial: "appointment_table", locals: { appointments: @appointments }, formats: [:html] }
