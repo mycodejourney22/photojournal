@@ -2,28 +2,6 @@
   <%= render "shared/sidebar" %>
   <section class="content">
     <h1 class="ps-3">Add New Sale</h1>
-    <%= simple_form_for [@appointment, @sale].compact do |f| %>
-      <%= f.error_notification %>
-        <div class="field">
-          <%= f.input :appointment_id, as: :hidden, input_html: { value: @appointment.try(:id) } %>
-        </div>
-      <div class="card card_photoshoot form_card">
-        <div class="grid-container">
-          <%= f.input :date, as: :string, label: false, placeholder: "Date", input_html: {data: { controller: "datepicker" }}  %>
-          <%= f.input :customer_service_officer_name, label: false, placeholder: "Customer Service", prompt: "Customer Service", collection:["Joy", "Ridwan", "Ebube", "Amaka", "David", "Ope"] %>
-          <%= f.input :product_service_name, label: false,
-              placeholder: "Product Type", prompt: "Product Type", collection:["PhotoShoot", "Passport", "Frame", "Home Session",
-                                                                                "Outdoor Event","Prints", "Photobook","Extra Pictures", "Others"]%>
-          <%= f.input :amount_paid, label: false, placeholder: "Amount Paid"%>
-          <%= f.input :payment_method, label: false, prompt: "Payment method", collection:["POS", "Cash", "Transfer"] %>
-          <%= f.input :payment_type, label: false, placeholder: "Payment type", prompt: "Payment type", collection:["Full Payment", "Balance Payment", "Deposit"]%>
-          <% unless @appointment %>
-            <%= f.input :customer_name,label: false, placeholder: "Customer Name" %>
-            <%= f.input :customer_phone_number, label: false, placeholder: "Customer Phone number" %>
-          <% end %>
-        </div>
-      </div>
-        <%= f.submit "Create Sales", class: "btn btn-photoshoot" %>
-    <% end %>
+      <%= render "form", appointment: @appointment, sale: @sale %>
   </section>
 </div>
