@@ -3,6 +3,7 @@ class Question < ApplicationRecord
 
   QUESTIONS = [
     'Phone number',
-    'Type of shoots'
+    'Type of shoots',
+    'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?'
   ].freeze
 end

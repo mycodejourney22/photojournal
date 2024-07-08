@@ -18,6 +18,10 @@
             <%= question_form.hidden_field :question %>
             <% if question_form.object.question == "Phone number" %>
               <%= question_form.input :answer, as: :string, required: true,  label: false %>
+            <% elsif question_form.object.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' %>
+              <div class="grid_app_item">
+                  <%= question_form.input :answer, as: :radio_buttons, required: true, collection: ['Yes', 'No'], label: false %>
+              </div>
             <% elsif question_form.object.question == 'Type of shoots' %>
               <div class="grid_app_item">
                   <%= question_form.input :answer, as: :radio_buttons, required: true, collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
