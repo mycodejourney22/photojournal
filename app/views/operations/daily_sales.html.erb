@@ -1,0 +1,34 @@
+<div class="container">
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <div class="d-flex justify-content-between">
+      <h1>Sales Breakdown for <%= @date.strftime("%A, %B %d, %Y") %></h1>
+      <%= link_to 'Back to Monthly Sales', operations_path %>
+    </div>
+    <table class="bordered-table" data-calendly-target="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Amount Paid</th>
+          <th>Customer</th>
+          <th>Employee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @daily_sales.each do |sale| %>
+          <tr>
+            <% if sale.appointment %>
+              <% product =  sale.appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+              <td><%= product.answer if product %></td>
+            <% else %>
+              <td><%= sale.product_service_name %></td>
+            <% end %>
+            <td><%= number_to_currency(sale.amount_paid, unit: "₦") %></td>
+            <td><%= sale.customer_name %></td>
+            <td><%= sale.customer_service_officer_name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+</div>

@@ -3,7 +3,12 @@ Rails.application.routes.draw do
   get 'sales/new'
   get 'sales/create'
   get 'sales/show'
-  get 'operations/report', to: 'operations#report'
+  # config/routes.rb
+  resources :operations, only: [:index] do
+    get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
+  end
+
+
   post '/webhooks/calendly', to: 'webhooks#calendly'
 
   devise_for :users, controllers: {

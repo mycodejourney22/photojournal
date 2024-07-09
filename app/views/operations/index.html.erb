@@ -7,6 +7,7 @@
         <tr>
           <th>Date</th>
           <th>Total Amount Paid</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -14,6 +15,8 @@
           <tr>
             <td><%= date.strftime("%A, %B %d, %Y") %></td>
             <td><%= number_to_currency(amount_paid, unit: "₦") %></td>
+            <td><%= link_to 'View Details', daily_sales_operations_path(date: date) %></td>
+
           </tr>
         <% end %>
         <tr>
