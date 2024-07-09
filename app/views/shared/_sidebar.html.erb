@@ -9,6 +9,7 @@
     <li><a data-active-link-target="link" href="#">Customers</a></li>
     <li><a data-active-link-target="link" href="#">Expenses</a></li>
     <li><%= link_to 'Sales', sales_path, data: {active_link_target: "link"} %></li>
+    <li><%= link_to 'Daily Report', operations_report_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Sales Log', reports_sales_path, data: {active_link_target: "link"}  if current_user.admin? %></li>
     <li><%= link_to 'Photo Log', reports_dashboard_path, data: {active_link_target: "link"} if current_user.admin? %></li>
   </ul>

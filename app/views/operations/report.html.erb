@@ -1,0 +1,26 @@
+<div class="container">
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <h1>Sales Data for <%= Time.zone.now.strftime("%B %Y") %></h1>
+    <table class="bordered-table" data-calendly-target="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Total Amount Paid</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sales.each do |date, amount_paid| %>
+          <tr>
+            <td><%= date.strftime("%A, %B %d, %Y") %></td>
+            <td><%= number_to_currency(amount_paid, unit: "₦") %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td><strong>Total</strong></td>
+          <td><strong><%= number_to_currency(@total_sales, unit: "₦") %></strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
