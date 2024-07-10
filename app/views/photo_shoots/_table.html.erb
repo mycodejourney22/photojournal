@@ -16,7 +16,7 @@
           <% photoshoots.each do |photoshoot| %>
             <tr>
               <td><%= photoshoot.date.to_date %></td>
-              <td><%= photoshoot.appointment.name %></td>
+              <td><%= photoshoot.appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
               <td><%= photoshoot.customer_service.name  if photoshoot.customer_service %></td>
               <td><%= photoshoot.photographer.name if photoshoot.photographer %></td>
               <td><%= photoshoot.editor.name if photoshoot.editor %></td>

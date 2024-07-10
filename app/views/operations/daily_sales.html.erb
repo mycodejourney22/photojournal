@@ -24,7 +24,7 @@
               <td><%= sale.product_service_name %></td>
             <% end %>
             <td><%= number_to_currency(sale.amount_paid, unit: "₦") %></td>
-            <td><%= sale.customer_name %></td>
+            <td><%= sale.customer_name.split(" ").map(&:capitalize).join(" ") %></td>
             <td><%= sale.customer_service_officer_name %></td>
           </tr>
         <% end %>
