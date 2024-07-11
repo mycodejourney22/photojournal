@@ -59,8 +59,11 @@ class AppointmentsController < ApplicationController
   end
 
   def build_questions_for(appointment)
-    Question::QUESTIONS.each do |question_content|
-      appointment.questions.build(question: question_content)
+    if appointment.questions.empty?
+      # Assuming you want to build a set of default questions
+      Question::QUESTIONS.each do |question_text|
+        appointment.questions.build(question: question_text)
+      end
     end
   end
 

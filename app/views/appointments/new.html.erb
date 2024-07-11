@@ -5,7 +5,7 @@
     <%= simple_form_for @appointment do |f| %>
       <%= f.error_notification %>
 
-      <div class="card card_photoshoot form_card">
+      <div class="card card_photoshoot form_card" data-controller="form">
         <div class="grid-container">
           <%= f.input :name, label_html:{class: 'fw-bold'} %>
           <%= f.input :email, label_html:{class: 'fw-bold'} %>
@@ -20,18 +20,19 @@
               <%= question_form.input :answer, as: :string, required: true,  label: false %>
             <% elsif question_form.object.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' %>
               <div class="grid_app_item">
-                  <%= question_form.input :answer, as: :radio_buttons, required: true, collection: ['Yes', 'No'], label: false %>
+                  <%= question_form.input :answer, as: :radio_buttons, required: true, collection: ['Yes', 'No'], label: false, data: {form_target: "radioGroup"} %>
               </div>
             <% elsif question_form.object.question == 'Type of shoots' %>
               <div class="grid_app_item">
-                  <%= question_form.input :answer, as: :radio_buttons, required: true, collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
+                  <%= question_form.input :answer, as: :radio_buttons, required: true,
+                  collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
               </div>
             <% end %>
             <%= question_form.hidden_field :_destroy %>
           </div>
         <% end %>
       </div>
-       <%= f.submit "Schedule Event", class: "btn btn-photoshoot" %>
+       <%= f.submit "Schedule Event", class: "btn btn-photoshoot", data: {action: "submit->form#radioCheck"} %>
     <% end %>
   </section>
 </div>
