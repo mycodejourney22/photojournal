@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'expenses/new'
+  get 'expenses/create'
+  get 'expenses/index'
   get 'sales/index'
   get 'sales/new'
   get 'sales/create'
@@ -8,6 +11,7 @@ Rails.application.routes.draw do
     get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
   end
 
+  resources :expenses , only: [:index, :create, :new]
 
   post '/webhooks/calendly', to: 'webhooks#calendly'
 

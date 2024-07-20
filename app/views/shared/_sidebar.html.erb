@@ -7,7 +7,7 @@
     <li><%= link_to 'Appointments', appointments_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Photoshoots', photo_shoots_path, data: {active_link_target: "link"} %></li>
     <li><a data-active-link-target="link" href="#">Customers</a></li>
-    <li><a data-active-link-target="link" href="#">Expenses</a></li>
+    <li><%= link_to 'Expenses', expenses_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Sales', sales_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Daily Report', operations_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Sales Log', reports_sales_path, data: {active_link_target: "link"}  if current_user.admin? %></li>

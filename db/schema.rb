@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_06_120109) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_19_220530) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_06_120109) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.date "date"
+    t.string "description"
+    t.string "category"
+    t.string "staff"
+    t.decimal "amount"
+    t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "photo_shoots", force: :cascade do |t|
