@@ -64,7 +64,7 @@ class PhotoShootsController < ApplicationController
     end
 
     # Order by start_time and group by date
-    @appointments = base_query.order(:start_time)
+    @appointments = base_query.order(start_time: :desc)
                                .group_by { |appointment| appointment.start_time.to_date }
   end
 

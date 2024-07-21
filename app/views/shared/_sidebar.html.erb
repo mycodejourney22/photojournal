@@ -4,12 +4,12 @@
     <a href="#">363 PHOTOGRAPHY</a>
   </h2>
   <ul>
+    <li><%= link_to 'Consent', photo_shoots_consent_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Appointments', appointments_path, data: {active_link_target: "link"} if current_user.not_social? %></li>
     <li><%= link_to 'Photoshoots', photo_shoots_path, data: {active_link_target: "link"} if current_user.not_social? %></li>
     <%# <li><a data-active-link-target="link" href="#">Customers</a></li> %>
     <li><%= link_to 'Expenses', expenses_path, data: {active_link_target: "link"} if current_user.not_social? %></li>
     <li><%= link_to 'Sales', sales_path, data: {active_link_target: "link"} if current_user.not_social? %></li>
-    <li><%= link_to 'Consent', photo_shoots_consent_path, data: {active_link_target: "link"} %></li>
     <li><%= link_to 'Daily Report', operations_path, data: {active_link_target: "link"} if current_user.not_social? %></li>
     <li><%= link_to 'Sales Log', reports_sales_path, data: {active_link_target: "link"}  if current_user.admin? %></li>
     <li><%= link_to 'Photo Log', reports_dashboard_path, data: {active_link_target: "link"} if current_user.admin? %></li>
