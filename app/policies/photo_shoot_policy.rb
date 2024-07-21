@@ -33,6 +33,10 @@ class PhotoShootPolicy < ApplicationPolicy
     true
   end
 
+  def consent?
+    true
+  end
+
   def notes?
     true
   end

@@ -2,7 +2,7 @@ class PhotoShootsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
 
-  before_action :set_appointment, except: [:index, :notes]
+  before_action :set_appointment, except: [:index, :notes, :consent]
 
   def index
     authorize PhotoShoot
@@ -49,6 +49,25 @@ class PhotoShootsController < ApplicationController
       format.text { render partial: "notes_table", locals: {photoshoots: @photoshoots}, formats: [:html] }
     end
   end
+
+  def consent
+    authorize PhotoShoot
+
+    # Base query with joins and filtering
+    base_query = Appointment.joins(:questions, :photo_shoot)
+                            .where(questions: { question: 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' })
+                            .where("TRIM(questions.answer) = ?", 'Yes')
+
+    # Apply full-text search if query parameter is present
+    if params[:query].present?
+      base_query = base_query.global_search(params[:query])
+    end
+
+    # Order by start_time and group by date
+    @appointments = base_query.order(:start_time)
+                               .group_by { |appointment| appointment.start_time.to_date }
+  end
+
 
   def edit
     authorize PhotoShoot

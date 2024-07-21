@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
   end
 
+  get 'photo_shoots/consent'
+
   resources :expenses , only: [:index, :create, :new]
 
   post '/webhooks/calendly', to: 'webhooks#calendly'

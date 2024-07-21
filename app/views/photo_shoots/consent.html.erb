@@ -1,0 +1,24 @@
+<div class="container" data-controller="calendly" >
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Social Media Consent Details</h1>
+      <div class="row justify-content-center w-50">
+        <div class=" my-3">
+          <%= form_with url: photo_shoots_consent_path, method: :get, class: "d-flex" do %>
+            <%= text_field_tag :query,
+                  params[:query],
+                  class: "form-control search-border",
+                  placeholder: "Customer Name or Email Address"
+              %>
+          <% end %>
+        </div>
+      </div>
+      <%= link_to '<i class="fa-solid fa-plus"></i> Add'.html_safe, new_appointment_path, class: "btn-photoshoot btn" %>
+    </div>
+    <div class="card">
+        <%= render "consent", appointments: @appointments %>
+    </div>
+  </section>
+
+</div>
