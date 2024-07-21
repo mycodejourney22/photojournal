@@ -10,6 +10,7 @@
         <th>Customer Name</th>
         <th>Do you authorize us to post on social media? </th>
         <th>Type</th>
+        <th>Branch</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -29,6 +30,7 @@
               <%= type_of_shoots.answer %>
             <% end %>
           </td>
+          <td><%= appointment.location %></td>
           <td>
             <p><%= link_to 'More Details', appointment_path(appointment) %></p>
           </td>
