@@ -3,7 +3,7 @@ class OperationsController < ApplicationController
   def index
     @sales = policy_scope(Sale).where('date >= ? AND date <= ?', Time.zone.now.beginning_of_month, Time.zone.now.end_of_month)
                                .group("DATE(date)")
-                               .order("DATE(date)")
+                               .order("DATE(date) DESC")
                                .sum(:amount_paid)
     @total_sales = @sales.values.sum
   end
