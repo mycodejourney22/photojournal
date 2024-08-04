@@ -23,7 +23,7 @@ class SalesController < ApplicationController
       @sale = Sale.new(sale_params)
     end
     @sale.location = determine_location(current_user)
-
+    # raise
     if @sale.save
       if @sale.appointment
         redirect_to @sale.appointment, notice: 'Sale was successfully created.'
@@ -69,7 +69,8 @@ class SalesController < ApplicationController
   end
 
   def sale_params
-    params.require(:sale).permit(:date, :amount_paid, :payment_method, :payment_type, :customer_name, :customer_phone_number, :customer_service_officer_name, :product_service_name)
+    params.require(:sale).permit(:date, :amount_paid, :payment_method, :payment_type, :appointment_id,:staff_id,
+      :customer_name, :customer_phone_number, :customer_service_officer_name, :product_service_name)
   end
 
   def determine_location(user)

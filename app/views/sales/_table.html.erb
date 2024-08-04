@@ -15,7 +15,7 @@
             <tr>
               <td><%= sale.date.to_date %></td>
               <td><%= sale.customer_name.split(" ").map(&:capitalize).join(" ") %></td>
-              <td><%= sale.customer_service_officer_name %></td>
+              <td><%= sale.customer_service_officer_name || Staff.find(sale.staff_id).name %></td>
               <td><%= sale.product_service_name %></td>
               <td><%= sale.amount_paid %></td>
               <td><%= sale.payment_type %></td>

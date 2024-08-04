@@ -19,4 +19,8 @@ class User < ApplicationRecord
   def not_social?
     self.role != 'social'
   end
+
+  def social?
+    self.role = 'social'
+  end
 end

@@ -3,6 +3,7 @@ source "https://rubygems.org"
 ruby "3.1.2"
 
 gem 'aws-sdk-s3', '~> 1.0'
+gem 'kaminari'
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
