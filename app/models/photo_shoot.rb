@@ -13,4 +13,5 @@ class PhotoShoot < ApplicationRecord
   belongs_to :customer_service, class_name: 'Staff', foreign_key: 'customer_service_id', optional: true
   has_one :sale, dependent: :destroy
   accepts_nested_attributes_for :sale
+  validates :date, presence: true
 end
