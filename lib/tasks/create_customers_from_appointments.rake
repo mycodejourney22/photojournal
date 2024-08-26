@@ -47,10 +47,10 @@ def normalize_phone_number(phone_number)
   # Check if phone number starts with the country code +234 or 234
   if phone_number.start_with?("234")
     # Replace '234' with '0'
-    phone_number = phone_number.sub("234", "0")
+    phone_number.sub("234", "0")
   elsif phone_number.start_with?("+234")
     # Remove the '+' and replace '234' with '0'
-    phone_number = phone_number.sub("+234", "0")
+    phone_number.sub("+234", "0")
   end
 
 end

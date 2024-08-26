@@ -13,4 +13,17 @@ class Appointment < ApplicationRecord
     using: {
       tsearch: { prefix: true }
     }
+
+  def mapped_location
+    case location.downcase
+    when /ikeja/
+      'Ikeja'
+    when /surulere/
+      'Surulere'
+    when /ajah/, /ilaje/
+      'Ajah'
+    else
+      'unknown'
+    end
+  end
 end

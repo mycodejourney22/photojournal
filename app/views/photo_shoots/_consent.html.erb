@@ -12,7 +12,7 @@
     <tbody>
       <% @appointments.each do |appointment| %>
         <tr>
-          <td><%= appointment.name %></td>
+          <td><%= appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
           <td>
             <% social_consent = appointment.questions.find { |q| q.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' } %>
             <% if social_consent %>
@@ -25,7 +25,7 @@
               <%= type_of_shoots.answer %>
             <% end %>
           </td>
-          <td><%= appointment.location %></td>
+          <td><%= appointment.mapped_location %></td>
           <td>
             <p><%= appointment.start_time.strftime("%A, %d %B %Y") %></p>
           </td>
