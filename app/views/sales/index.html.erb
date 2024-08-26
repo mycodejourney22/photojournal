@@ -14,9 +14,9 @@
           <% end %>
         </div>
       </div>
-      <%= link_to '<i class="fa-solid fa-plus"></i> Add a Sale'.html_safe, sales_new_path, class: "btn-photoshoot btn" %>
+      <%= link_to ' New Sale', sales_new_path, class: "btn-photoshoot btn" %>
     </div>
-    <div class="card">
+    <div >
       <%= render "table", sales: @sales %>
     </div>
   </section>

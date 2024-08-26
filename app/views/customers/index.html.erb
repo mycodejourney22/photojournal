@@ -14,9 +14,9 @@
           <% end %>
         </div>
       </div>
-      <%= link_to '<i class="fa-solid fa-plus"></i> Add'.html_safe, new_customer_path, class: "btn-photoshoot btn" %>
+      <%= link_to 'New Contact', new_customer_path, class: "btn-photoshoot btn" %>
     </div>
-    <div class="card">
+    <div>
         <%= render "customer_table", customers: @customers %>
     </div>
   </section>
