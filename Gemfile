@@ -15,6 +15,9 @@ gem "devise"
 gem "pundit"
 gem "pg_search"
 
+gem 'pry'
+gem 'pry-rails'
+
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"

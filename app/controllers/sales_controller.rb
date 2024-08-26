@@ -1,4 +1,6 @@
+require 'pry'
 class SalesController < ApplicationController
+
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
   before_action :set_appointment, only: [:new, :create]
@@ -16,20 +18,13 @@ class SalesController < ApplicationController
 
   def create
     authorize Sale
-    if @appointment
-      @sale = @appointment.sales.build(sale_params)
-      @sale.customer_name = @appointment.name
-    else
-      @sale = Sale.new(sale_params)
-    end
+    @sale = build_sale
+    assign_customer_to_sale(@sale)
+
     @sale.location = determine_location(current_user)
-    # raise
+
     if @sale.save
-      if @sale.appointment
-        redirect_to @sale.appointment, notice: 'Sale was successfully created.'
-      else
-        redirect_to sales_path, notice: 'Sale was successfully created.'
-      end
+      redirect_to_success
     else
       render :new, status: :unprocessable_entity
     end
@@ -87,5 +82,77 @@ class SalesController < ApplicationController
       'unknown'
     end
   end
+
+  def build_sale
+    if @appointment
+      sale = @appointment.sales.build(sale_params)
+      sale.customer_name = @appointment.name
+      sale
+    else
+      Sale.new(sale_params)
+    end
+  end
+
+  def assign_customer_to_sale(sale)
+    phone_number = extract_phone_number_from_appointment(@appointment) if @appointment
+    customer = find_or_create_customer(phone_number)
+
+    sale.customer_id = customer.id if customer.present?
+  end
+
+  def find_or_create_customer(phone_number)
+    normalized_phone_number = phone_number ? normalize_phone_number(phone_number) : phone_number
+    customer = Customer.find_by(phone_number: @appointment ? normalized_phone_number : @sale.customer_phone_number)
+
+    unless customer && customer.phone_number.present?
+      if @appointment.present?
+        customer = Customer.new(name: @appointment.name, phone_number: normalized_phone_number)
+      else
+        customer = Customer.new(name: @sale.customer_name, phone_number: @sale.customer_phone_number)
+      end
+      if customer.save
+        customer
+      else
+        Rails.logger.error "Failed to create customer: #{customer.errors.full_messages.join(', ')}"
+        return nil
+      end
+    end
+    customer
+  end
+
+  def redirect_to_success
+    if @sale.appointment
+      redirect_to @sale.appointment, notice: 'Sale was successfully created.'
+    else
+      redirect_to sales_path, notice: 'Sale was successfully created.'
+    end
+  end
+
+  def extract_phone_number_from_appointment(appointment)
+    appointment.questions.find { |q| q.question == 'Phone number' }.answer
+  end
+
+  def normalize_phone_number(phone_number)
+    # Remove non-numeric characters
+    phone_number = phone_number.gsub(/\D/, "") if phone_number
+
+    # Check if phone number starts with the country code +234 or 234
+    if phone_number.start_with?("234")
+      # Replace '234' with '0'
+      phone_number.sub("234", "0")
+    elsif phone_number.start_with?("+234")
+      # Remove the '+' and replace '234' with '0'
+      phone_number.sub("+234", "0")
+    end
+    phone_number
+  end
+
+  def create_customer(customer, sale)
+      customer.name = sale.customer_name
+      # customer.email = sale.email
+      customer.phone_number = sale.customer_phone_number
+      customer.save
+  end
+
 
 end

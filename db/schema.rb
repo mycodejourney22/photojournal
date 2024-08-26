@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_04_202521) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_25_204126) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,6 +84,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_04_202521) do
     t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
   end
 
+  create_table "customers", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone_number"
+    t.date "date_of_birth"
+    t.integer "visits_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phone_number"], name: "index_customers_on_phone_number", unique: true
+  end
+
   create_table "expenses", force: :cascade do |t|
     t.date "date"
     t.string "description"
@@ -142,7 +153,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_04_202521) do
     t.string "reference"
     t.bigint "appointment_id"
     t.integer "staff_id"
+    t.integer "customer_id"
     t.index ["appointment_id"], name: "index_sales_on_appointment_id"
+    t.index ["customer_id"], name: "index_sales_on_customer_id"
     t.index ["photo_shoot_id"], name: "index_sales_on_photo_shoot_id"
   end
 

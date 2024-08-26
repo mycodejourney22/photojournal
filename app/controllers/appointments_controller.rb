@@ -43,6 +43,7 @@ class AppointmentsController < ApplicationController
     authorize Appointment
     @appointment = Appointment.new(appointment_params)
     @appointment.uuid = SecureRandom.uuid
+
     if @appointment.save
       redirect_to appointments_path, notice: 'Appointment was successfully created.'
     else
