@@ -24,7 +24,7 @@
             <%= customer.visits_count > 0 ? "Repeating" : "New"%>
           </td>
           <td>
-            <p><%= link_to 'More Details', "#" %></p>
+            <p><%= link_to 'More Details', customer_path(customer) %></p>
           </td>
         </tr>
       <% end %>
