@@ -34,7 +34,10 @@ class PhotoShootsController < ApplicationController
   def create
     authorize PhotoShoot
     @photo_shoot = @appointment.build_photo_shoot(photo_shoot_params)
+    phone_number = extract_phone_number_from_appointment(@appointment)
+    @customer = Customer.find_or_initialize_by(phone_number: normalize_phone_number(phone_number))
     if @photo_shoot.save
+      create_customer(@customer, @appointment, normalize_phone_number(phone_number))
       redirect_to appointments_path, notice: 'PhotoShoot was successfully created.'
     else
       render :new, status: :unprocessable_entity
@@ -65,7 +68,6 @@ class PhotoShootsController < ApplicationController
 
     # Order by start_time and group by date
     @appointments = base_query.order(start_time: :desc)
-                               .group_by { |appointment| appointment.start_time.to_date }
   end
 
 
@@ -108,6 +110,37 @@ class PhotoShootsController < ApplicationController
       :date_sent
     )
   end
+
+  def extract_phone_number_from_appointment(appointment)
+    appointment.questions.find { |q| q.question == 'Phone number' }.answer
+  end
+
+  def normalize_phone_number(phone_number)
+    # Remove non-numeric characters
+    phone_number = phone_number.gsub(/\D/, "")
+
+    # Check if phone number starts with the country code +234 or 234
+    if phone_number.start_with?("234")
+      # Replace '234' with '0'
+      phone_number.sub("234", "0")
+    elsif phone_number.start_with?("+234")
+      # Remove the '+' and replace '234' with '0'
+      phone_number.sub("+234", "0")
+    end
+    phone_number
+  end
+
+  def create_customer(customer, appointment, phone_number)
+    if customer.new_record?
+      customer.name = appointment.name
+      customer.email = appointment.email
+      customer.phone_number = phone_number
+    else
+      customer.increment_visits
+    end
+    customer.save
+  end
+
 
   def determine_location(user)
     case user.role

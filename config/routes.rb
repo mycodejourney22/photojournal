@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   end
 
   get 'photo_shoots/consent'
+  resources :customers
 
   resources :expenses , only: [:index, :create, :new]
 

@@ -1,32 +1,28 @@
 <table class="bordered-table" data-calendly-target="table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Customer Name</th>
-            <th>Customer Service Officer</th>
-            <th>Photographer</th>
-            <th>Editor</th>
-            <th>Type of Shoot</th>
-            <th>Number of Selected pictures</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% photoshoots.each do |photoshoot| %>
-            <tr>
-              <td><%= photoshoot.date.to_date %></td>
-              <td><%= photoshoot.appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
-              <td><%= photoshoot.customer_service.name  if photoshoot.customer_service %></td>
-              <td><%= photoshoot.photographer.name if photoshoot.photographer %></td>
-              <td><%= photoshoot.editor.name if photoshoot.editor %></td>
-              <td><%= photoshoot.type_of_shoot %></td>
-              <td><%= photoshoot.number_of_selections %></td>
-              <td><%= photoshoot.status %></td>
-              <td>
-                <p><%= link_to 'Update Details', edit_appointment_photo_shoot_path(photoshoot.appointment, photoshoot) %></p>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+  <thead>
+    <tr>
+      <th>NAME</th>
+      <th>C.S.O</th>
+      <th>PHOTOGRAPHER</th>
+      <th>EDITOR</th>
+      <th>SELECTIONS</th>
+      <th>STATUS</th>
+      <th>DATE</th>
+      <th>UPDATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% photoshoots.each do |photoshoot| %>
+      <tr>
+        <td><%= photoshoot.appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
+        <td><%= photoshoot.customer_service.name if photoshoot.customer_service %></td>
+        <td><%= photoshoot.photographer.name if photoshoot.photographer %></td>
+        <td><%= photoshoot.editor.name if photoshoot.editor %></td>
+        <td><%= photoshoot.number_of_selections %></td>
+        <td><%= photoshoot.status %></td>
+        <td><%= photoshoot.date.to_date %></td>
+        <td><%= link_to "Update", edit_appointment_photo_shoot_path(photoshoot.appointment, photoshoot) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -4,11 +4,14 @@
 }
 
 .bordered-table td, .bordered-table th {
-  border: 1px solid #ddd;
-  padding: 8px;
+  // border: 1px solid #ddd;
+  // border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 14px;
+  font-size: 0.75rem;
 }
 
-.bordered-table tr:nth-child(even){background-color: #f2f2f2;}
+// .bordered-table tr:nth-child(even){background-color: #f2f2f2;}
 
 .bordered-table tr:hover {background-color: #ddd;}
 
@@ -17,6 +20,6 @@
   padding-bottom: 12px;
   text-align: left;
   background-color: white;
-  color: black;
+  color: #888;
 
 }

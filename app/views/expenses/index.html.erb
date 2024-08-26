@@ -14,12 +14,12 @@
           <% end %>
         </div>
       </div>
-      <%= link_to '<i class="fa-solid fa-plus"></i> Add'.html_safe, new_expense_path, class: "btn-photoshoot btn" %>
+      <%= link_to 'New Expense', new_expense_path, class: "btn-photoshoot btn" %>
     </div>
     <% if  @expenses.empty? %>
       <h3 class="text-center">You do not have any expenses recorded yet!!!</h3>
     <% else %>
-      <div class="card">
+      <div>
         <%= render "expense_table", expenses: @expenses %>
       </div>
     <% end %>

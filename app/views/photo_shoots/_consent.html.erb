@@ -1,21 +1,16 @@
 <!-- app/views/appointments/index.html.erb -->
-
-<% @appointments.each do |date, appointments| %>
-  <div class="inner-card ps-4 p-heading">
-    <p class="fw-bold"><%= date.strftime("%A, %d %B %Y") %></p>
-  </div>
   <table class="bordered-table" data-calendly-target="table">
     <thead>
       <tr>
-        <th>Customer Name</th>
-        <th>Do you authorize us to post on social media? </th>
+        <th>Name</th>
+        <th>Authorize to post </th>
         <th>Type</th>
         <th>Branch</th>
-        <th>Actions</th>
+        <th>Date</th>
       </tr>
     </thead>
     <tbody>
-      <% appointments.each do |appointment| %>
+      <% @appointments.each do |appointment| %>
         <tr>
           <td><%= appointment.name %></td>
           <td>
@@ -32,10 +27,9 @@
           </td>
           <td><%= appointment.location %></td>
           <td>
-            <p><%= link_to 'More Details', appointment_path(appointment) %></p>
+            <p><%= appointment.start_time.strftime("%A, %d %B %Y") %></p>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-<% end %>

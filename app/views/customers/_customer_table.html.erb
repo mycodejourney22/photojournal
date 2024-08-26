@@ -1,0 +1,32 @@
+<!-- app/views/customers/index.html.erb -->
+
+  <div class="inner-card ps-4 p-heading">
+  </div>
+  <table class="bordered-table" data-calendly-target="table">
+    <thead>
+      <th>NAME</th>
+      <th>PHONE NUMBER</th>
+      <th>EMAIL</th>
+      <th>STATUS</th>
+      <th>ACTION</th>
+    </thead>
+    <tbody>
+      <% @customers.each do |customer| %>
+        <tr>
+          <td><%= customer.name %></td>
+          <td>
+            <%= customer.phone_number if customer.phone_number %>
+          </td>
+          <td>
+            <%= customer.email if customer.email %>
+          </td>
+          <td>
+            <%= customer.visits_count > 0 ? "Repeating" : "New"%>
+          </td>
+          <td>
+            <p><%= link_to 'More Details', "#" %></p>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
