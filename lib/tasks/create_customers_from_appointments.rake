@@ -5,6 +5,7 @@ namespace :customers do
 
   task create_from_appointments_with_sales: :environment do
     # Loop through all appointments that have at least one sale
+    Customer.destroy_all
     Appointment.joins(:photo_shoot).distinct.find_each do |appointment|
       # Ensure each appointment only gets processed once for customer creation
       # next if appointment.customer_id.present?
