@@ -25,12 +25,12 @@
             <tbody>
 
               <tr>
-                <td><%= @appointment.photo_shoot.type_of_shoot %></td>
+                <td><%= @appointment.photo_shoot.type_of_shoot if @appointment.photo_shoot.type_of_shoot %></td>
                 <td><%= @appointment.photo_shoot.photographer.name if @appointment.photo_shoot.photographer %></td>
                 <td><%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %></td>
                 <td><%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %></td>
                 <td>
-                  <%= @appointment.photo_shoot.status%>
+                  <%= @appointment.photo_shoot.status if @appointment.photo_shoot.status%>
                 </td>
                 <td>
                   <%= @appointment.photo_shoot.number_of_outfits if @appointment.photo_shoot.number_of_outfits %>
@@ -89,7 +89,7 @@
         </div>
         <div class="mt-4">
           <div class="mt-2 d-flex justify-content-between">
-            <p>Type of shoot</p>
+            <p>Type</p>
             <% type_of_shoots = @appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
             <% if type_of_shoots %>
               <div>
