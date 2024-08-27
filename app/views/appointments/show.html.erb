@@ -1,136 +1,132 @@
-
 <div class="container" data-controller="calendly" >
   <%= render "shared/sidebar" %>
   <section class="content">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>More Information</h1>
-      <%= link_to 'Back', (request.referer || root_path) %>
+      <h2><%= @appointment.name.capitalize %></h2>
+      <%= link_to 'New Contact', new_appointment_path, class: "btn-photoshoot btn" %>
     </div>
-    <div>
-      <div class="show-grid mb-4">
-        <div>
-          <p class="show_item-header">Customer Name</p>
-          <p class="show_item"><%= @appointment.name %></p>
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <div class="d-flex justify-content-between align-items-center">
+          <h6>Photoshoot Info</h6>
+          <h6><%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(@appointment) , class: "black-link"  if @appointment.photo_shoot.nil?  %> </h6>
         </div>
-        <div>
-          <p class="show_item-header">Email</p>
-          <p class="show_item"><%= @appointment.email %></p>
-        </div>
-        <div>
-          <p class="show_item-header">Appointment Time</p>
-          <p class="show_item"><%= @appointment.start_time.in_time_zone('West Central Africa').strftime("%A, %B %e, %I:%M%p") %></p>
-        </div>
-      </div>
-      <div class="show-grid mb-4"">
-        <% type_of_shoots = @appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
-          <% if type_of_shoots %>
-            <div>
-              <p class="show_item-header">Type of Shoot</p>
-              <p class="show_item"><%= type_of_shoots.answer %></p>
-            </div>
-          <% end %>
-        <% phone_number = @appointment.questions.find { |q| q.question == 'Phone number' || q.question == 'Type of shoot' } %>
-          <% if phone_number %>
-            <div>
-              <p class="show_item-header">Phone Number</p>
-              <p class="show_item"><%= phone_number.answer %></p>
-            </div>
-          <% end %>
-        <% question_makeup = @appointment.questions.find { |q| q.question == 'Are you coming with a makeup artist?' || q.question == 'Type of shoot' } %>
-          <% if question_makeup %>
-            <div>
-              <p class="show_item-header">Are you coming with a makeup artist?</p>
-              <p class="show_item"><%= question_makeup.answer %></p>
-            </div>
-          <% end %>
-      </div>
-      <div class="show-grid mb-4">
-        <% question_makeup_two = @appointment.questions.find { |q| q.question == 'Are you doing makeup in our studio?' || q.question == 'Type of shoot' } %>
-          <% if question_makeup_two %>
-            <div>
-              <p class="show_item-header">Are you doing makeup in our studio?</p>
-              <p class="show_item"><%= question_makeup_two.answer %></p>
-            </div>
-          <% end %>
-        <% social_question = @appointment.questions.find { |q| q.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' || q.question == 'Type of shoot' } %>
-          <% if social_question %>
-            <div>
-              <p class="show_item-header">Can we share your pictures on  social media?</p>
-              <p class="show_item"><%= social_question.answer %></p>
-            </div>
-          <% end %>
-      </div>
-      <div class="mb-4">
-      <% other = @appointment.questions.find { |q| q.question == 'Please share anything else that would help prepare for your shoot with us.' || q.question == 'Type of shoot' } %>
-        <% if other %>
-          <p class="show_item-header">Other message from customer</p>
-          <p class="show_item"><%= other.answer %></p>
+        <hr>
+        <% if @appointment.present? %>
+          <table class="bordered-table" data-calendly-target="table">
+            <thead>
+              <th>TYPE</th>
+              <th>PHOTOGRAPHER</th>
+              <th>EDITOR</th>
+              <th>CSO</th>
+              <th>STATUS</th>
+              <th>OUTFITS</th>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td><%= @appointment.photo_shoot.type_of_shoot %></td>
+                <td><%= @appointment.photo_shoot.photographer.name if @appointment.photo_shoot.photographer %></td>
+                <td><%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %></td>
+                <td><%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %></td>
+                <td>
+                  <%= @appointment.photo_shoot.status%>
+                </td>
+                <td>
+                  <%= @appointment.photo_shoot.number_of_outfits if @appointment.photo_shoot.number_of_outfits %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        <% else %>
+          <p>No photoshoots linked to this contact</p>
         <% end %>
-      </div>
-        <div class="d-flex justify-content-between align-items-center mt-5 mb-2">
-          <h1>SALES HISTORY</h1>
-          <%= link_to 'Add New Sale', new_appointment_sale_path(@appointment) %>
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mt-5">Sales Info</h6>
+          <h6 class="mt-5"><%= link_to 'Add Sale', new_appointment_sale_path(@appointment), class: "black-link" %></h6>
         </div>
+        <hr>
         <% if @appointment.sales.present? %>
-          <div class="show-grid mb-1">
-              <div>
-                <p class="show_item-header">Product</p>
-              </div>
-              <div>
-                <p class="show_item-header">Payment Type</p>
-              </div>
-              <div>
-                <p class="show_item-header">Amount Paid</p>
-              </div>
-            </div>
-          <% @appointment.sales.each  do  |sale_info| %>
-            <div class="show-grid mb-1">
-              <div>
-                <p class="show_item"><%= sale_info.product_service_name if sale_info.product_service_name %></p>
-              </div>
-              <div>
-                <p class="show_item"><%= sale_info.payment_type if sale_info.payment_type %></p>
-              </div>
-              <div>
-                <p class="show_item"><%= sale_info.amount_paid if sale_info.amount_paid %></p>
-              </div>
-            </div>
-          <% end %>
+          <table class="bordered-table" data-calendly-target="table">
+            <thead>
+              <th>PRODUCT</th>
+              <th>AMOUNT</th>
+              <th>STATUS</th>
+              <th>METHOD</th>
+              <th>DATE</th>
+            </thead>
+            <tbody>
+            <% @appointment.sales.each do |sale| %>
+              <% if sale %>
+              <tr>
+                <td><%= sale.product_service_name %></td>
+                <td><%= sale.amount_paid %></td>
+                <td><%= sale.payment_type %></td>
+                <td>
+                  <%= sale.payment_method%>
+                </td>
+                <td>
+                  <%= sale.date.strftime("%A, %d %B %Y")%>
+                </td>
+              </tr>
+              <% end %>
+            <% end %>
+            </tbody>
+          </table>
         <% else %>
-          <p>No Sales Record Yet!!! </p>
+          <p>No Sales linked to this contact</p>
         <% end %>
-        <div class="d-flex justify-content-between align-items-center mt-5 mb-2">
-          <h1>PHOTOSHOOT INFORMATION</h1>
-          <%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(@appointment)  %>
+      </div>
+      <div>
+        <h6>Contact Info</h6><hr>
+        <div class="d-flex">
+          <h2><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+          </h2>
+          <div class="ps-2">
+            <p><%= @appointment.name.capitalize %></p>
+            <p><%= @appointment.email %></p>
+          </div>
         </div>
-        <% if @appointment.photo_shoot %>
-          <div class="show-grid mb-3">
-            <div>
-              <p class="show_item-header">Photographer</p>
-              <p class="show_item"><%= @appointment.photo_shoot.photographer.name  if @appointment.photo_shoot.photographer %></p>
-            </div>
-            <div>
-              <p class="show_item-header">Editor</p>
-              <p class="show_item"><%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %></p>
-            </div>
-            <div>
-              <p class="show_item-header">CSO</p>
-              <p class="show_item"><%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %></p>
-            </div>
+        <div class="mt-4">
+          <div class="mt-2 d-flex justify-content-between">
+            <p>Type of shoot</p>
+            <% type_of_shoots = @appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+            <% if type_of_shoots %>
+              <div>
+                <p><%= type_of_shoots.answer %></p>
+              </div>
+            <% end %>
           </div>
-          <div class="show-grid">
-            <div>
-              <p class="show_item-header">No of Selections</p>
-              <p class="show_item"><%= @appointment.photo_shoot.number_of_selections%></p>
-            </div>
-            <div>
-              <p class="show_item-header">Number of outfits</p>
-              <p class="show_item"><%= @appointment.photo_shoot.number_of_outfits %></p>
-            </div>
+          <div class="mt-2">
+            <p>Phone <span class="ps-5"><% phone_number = @appointment.questions.find { |q| q.question == 'Phone number' || q.question == 'Type of shoot' } %>
+              <% if phone_number %>
+                  <%= phone_number.answer %>
+              <% end %>
+      </p>
           </div>
-        <% else %>
-          <p>No Information for PhotoShoot Yet</p>
-        <% end %>
+          <div class="mt-2 d-flex justify-content-between">
+            <p>Time</p>
+            <p><%= @appointment.start_time.strftime("%A, %d %B %Y") %></p>
+          </div>
+
+          <div class="mt-2 d-flex justify-content-between">
+            <p>Studio makeup artist? </p>
+            <p><% question_makeup_two = @appointment.questions.find { |q| q.question == 'Are you doing makeup in our studio?' || q.question == 'Type of shoot' } %>
+              <% if question_makeup_two %>
+                  <%= question_makeup_two.answer %>
+              <% end %>
+            </p>
+          </div>
+          <div class="mt-2 d-flex justify-content-between">
+            <p>Coming with a makeup artist?</p>
+            <p><% question_makeup = @appointment.questions.find { |q| q.question == 'Are you coming with a makeup artist?' || q.question == 'Type of shoot' } %>
+              <% if question_makeup %>
+                <%= question_makeup.answer %>
+              <% end %>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 

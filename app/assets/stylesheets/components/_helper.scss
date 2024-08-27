@@ -26,3 +26,14 @@ section{
 .show_item-header{
   font-weight: bold;
 }
+
+.black-link{
+  color: #666666;
+  text-decoration-color: #EED500;
+  text-decoration-thickness: 4px;
+}
+
+.black-link:hover{
+  color: black;
+  text-decoration-thickness: 2px;
+}
