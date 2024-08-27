@@ -23,19 +23,20 @@
               <th>OUTFITS</th>
             </thead>
             <tbody>
-
-              <tr>
-                <td><%= @appointment.photo_shoot.type_of_shoot if @appointment.photo_shoot.type_of_shoot %></td>
-                <td><%= @appointment.photo_shoot.photographer.name if @appointment.photo_shoot.photographer %></td>
-                <td><%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %></td>
-                <td><%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %></td>
-                <td>
-                  <%= @appointment.photo_shoot.status if @appointment.photo_shoot.status%>
-                </td>
-                <td>
-                  <%= @appointment.photo_shoot.number_of_outfits if @appointment.photo_shoot.number_of_outfits %>
-                </td>
-              </tr>
+              <% if @appointment.photo_shoot %>
+                <tr>
+                  <td><%= @appointment.photo_shoot.type_of_shoot if @appointment.photo_shoot.type_of_shoot %></td>
+                  <td><%= @appointment.photo_shoot.photographer.name if @appointment.photo_shoot.photographer %></td>
+                  <td><%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %></td>
+                  <td><%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %></td>
+                  <td>
+                    <%= @appointment.photo_shoot.status if @appointment.photo_shoot.status%>
+                  </td>
+                  <td>
+                    <%= @appointment.photo_shoot.number_of_outfits if @appointment.photo_shoot.number_of_outfits %>
+                  </td>
+                </tr>
+              <% end %>
             </tbody>
           </table>
         <% else %>
