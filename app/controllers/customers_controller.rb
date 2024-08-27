@@ -14,6 +14,8 @@ class CustomersController < ApplicationController
     phone_number = @customer.phone_number
     @appointments = Appointment.joins(:questions)
                                .where(questions: { question: 'Phone number' })
-                               .where("REGEXP_REPLACE(questions.answer, '\\D', '', 'g') = ?", phone_number)
+                               .where("REGEXP_REPLACE(questions.answer, '\\D', '', 'g') ~ '^234' AND '0' || SUBSTRING(REGEXP_REPLACE(questions.answer, '\\D', '', 'g') FROM 4) = ? OR REGEXP_REPLACE(questions.answer, '\\D', '', 'g') = ?", phone_number, phone_number)
+
   end
+
 end
