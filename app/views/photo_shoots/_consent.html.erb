@@ -5,6 +5,7 @@
         <th>Name</th>
         <th>Authorize to post </th>
         <th>Type</th>
+        <th>Post From Date</th>
         <th>Branch</th>
         <th>Date</th>
       </tr>
@@ -21,6 +22,12 @@
           </td>
           <td>
             <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+            <% if type_of_shoots %>
+              <%= type_of_shoots.answer %>
+            <% end %>
+          </td>
+          <td>
+            <% type_of_shoots = appointment.questions.find { |q| q.question == 'Date of birth(Month-Day): This information will be used to wish you happy birthday!' } %>
             <% if type_of_shoots %>
               <%= type_of_shoots.answer %>
             <% end %>
