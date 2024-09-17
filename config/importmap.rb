@@ -14,5 +14,3 @@ pin "chart.js", to: "https://ga.jspm.io/npm:chart.js@3.7.0/dist/chart.esm.js"
 pin "dropzone" # @6.0.0
 pin "just-extend" # @5.1.1
 pin "@rails/activestorage", to: "@rails--activestorage.js" # @7.2.100
-pin "dropzone_controller", to: "controllers/dropzone_controller.js"
-pin "dropzone_helpers", to: "helpers/dropzone.js"

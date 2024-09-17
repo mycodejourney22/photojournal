@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import Dropzone from "dropzone";
 import { DirectUpload } from "@rails/activestorage";
-import { getMetaValue, findElement, removeElement, insertAfter } from "dropzone_helpers";
+// import { getMetaValue, findElement, removeElement, insertAfter, testing } from "dropzone_helpers";
 
 
 // Connects to data-controller="dropzone"
@@ -138,6 +138,32 @@ function createDirectUploadController(source, file) {
 
 function createDirectUpload(file, url, controller) {
   return new DirectUpload(file, url, controller);
+}
+
+function getMetaValue(name) {
+  const element = findElement(document.head, `meta[name="${name}"]`);
+  if (element) {
+    return element.getAttribute("content");
+  }
+}
+
+function findElement(root, selector) {
+  if (typeof root == "string") {
+    selector = root;
+    root = document;
+  }
+  return root.querySelector(selector);
+}
+
+function removeElement(el) {
+  if (el && el.parentNode) {
+    el.parentNode.removeChild(el);
+  }
+}
+
+
+function insertAfter(el, referenceNode) {
+  return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
 }
 
 function createDropZone(controller) {
