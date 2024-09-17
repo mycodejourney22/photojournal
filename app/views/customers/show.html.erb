@@ -69,6 +69,17 @@
         <% else %>
           <p>No Sales linked to this contact</p>
         <% end %>
+        <div>
+          <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mt-5">Gallery Info</h6>
+          </div>
+          <hr>
+            <% if @appointments_with_galleries.present? %>
+              <p>View all galleries <%= link_to "here", all_galleries_customer_path(@customer), class: "black-link" %></p>
+            <% else %>
+                <p>No Gallery Found</p>
+            <% end %>
+        </div>
       </div>
       <div>
         <h6>Contact Info</h6><hr>

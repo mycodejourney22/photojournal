@@ -6,6 +6,7 @@ class Appointment < ApplicationRecord
   validates :name, presence: true
   validates :email, presence: true
   validates :location, presence: true
+  has_many :galleries
 
   include PgSearch::Model
   pg_search_scope :global_search,
@@ -25,5 +26,9 @@ class Appointment < ApplicationRecord
     else
       'unknown'
     end
+  end
+
+  def has_galleries?
+    galleries.exists?
   end
 end

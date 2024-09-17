@@ -1,0 +1,32 @@
+<div class="container" data-controller="calendly" >
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2><%= @appointment.name.capitalize %></h2>
+    </div>
+    <%= simple_form_for [@appointment, @gallery] do |f| %>
+      <%= f.input :title %>
+      <div class="dropzone dropzone-default dz-clickable"
+        data-controller="dropzone"
+        data-dropzone-max-file-size="20"
+        data-dropzone-accepted-files="image/*"
+        data-dropzone-max-files="20"
+        data-upload-multiple="true">
+
+        <%= f.input :photos, as: :file,
+            input_html: {
+              multiple: true,
+              direct_upload: true,
+              data: { dropzone_target: 'input' }
+            },
+            wrapper_html: { class: 'dropzone' } %>
+
+        <div class="dropzone-msg dz-message needsclick">
+          <h3 class="dropzone-msg-title grey"><i class="fa-solid fa-cloud-arrow-up"></i></h3>
+          <p >Drag photo here or <span class="browse">browse to</span> upload</p>
+        </div>
+      </div>
+      <%= f.button :submit %>
+    <% end %>
+  </section>
+</div>

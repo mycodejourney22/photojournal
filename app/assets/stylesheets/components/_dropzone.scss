@@ -1,0 +1,10 @@
+.mb-3.file.optional.gallery_photos.dropzone {
+  display: none;
+}
+
+.dropzone.dropzone-default.dz-clickable{
+  max-height: 300px;
+  overflow: auto;
+  margin-bottom: 1rem;
+  border: 1px solid #dee2e6;
+}
