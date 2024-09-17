@@ -19,6 +19,10 @@ gem 'pry'
 gem 'pry-rails'
 
 
+# gem 'sidekiq'
+
+
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

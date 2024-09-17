@@ -1,0 +1,21 @@
+<div class="container" data-controller="calendly" >
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2><%= @customer.name.capitalize %></h2>
+    </div>
+    <div class="d-flex">
+      <% @appointments_with_galleries.each do |appointment| %>
+        <% appointment.galleries.each do |gallery| %>
+          <%= link_to appointment_gallery_path(appointment, gallery), class: "folder-link" do %> <!-- The entire div is now clickable -->
+            <div class="folder-cover" style="background-image: url(<%= url_for(gallery.photos.first) %>)">
+              <div class="folder-name">
+                <%= gallery.title %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+</div>

@@ -3,6 +3,8 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "@popperjs/core"
 import "bootstrap"
+import "./dropzone";
+
 // import "chartkick"
 // import "Chart.bundle"
 

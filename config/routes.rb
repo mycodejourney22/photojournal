@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'galleries/new'
+  get 'galleries/show'
+  get 'galleries/index'
+  get 'galleries/create'
   get 'expenses/new'
   get 'expenses/create'
   get 'expenses/index'
@@ -12,7 +16,11 @@ Rails.application.routes.draw do
   end
 
   get 'photo_shoots/consent'
-  resources :customers
+  resources :customers do
+    member do
+      get :all_galleries
+    end
+  end
 
   resources :expenses , only: [:index, :create, :new]
 
@@ -45,6 +53,7 @@ Rails.application.routes.draw do
       patch :mark_no_show
     end
     resources :photo_shoots, except: [:index, :destroy]
+    resources :galleries, only: [:new, :create, :show, :update, :edit]
     resources :sales, only: [:index, :new, :create]
   end
   resources :photo_shoots, only: [:index] do
@@ -52,4 +61,5 @@ Rails.application.routes.draw do
       get :notes
     end
   end
+  resources :galleries, only: [:index]
 end
