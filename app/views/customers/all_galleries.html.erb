@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2><%= @customer.name.capitalize %></h2>
     </div>
-    <div class="d-flex">
+    <div class="d-flex flex-wrap">
       <% @appointments_with_galleries.each do |appointment| %>
         <% appointment.galleries.each do |gallery| %>
           <%= link_to appointment_gallery_path(appointment, gallery), class: "folder-link" do %> <!-- The entire div is now clickable -->
