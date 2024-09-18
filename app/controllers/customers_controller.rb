@@ -24,6 +24,7 @@ class CustomersController < ApplicationController
     @appointments = Appointment.joins(:questions)
                                .where(questions: { question: 'Phone number' })
                                .where("REGEXP_REPLACE(questions.answer, '\\D', '', 'g') ~ '^234' AND '0' || SUBSTRING(REGEXP_REPLACE(questions.answer, '\\D', '', 'g') FROM 4) = ? OR REGEXP_REPLACE(questions.answer, '\\D', '', 'g') = ?", phone_number, phone_number)
+                               .includes(:galleries)
     @appointments_with_galleries = @appointments.select(&:has_galleries?)
   end
 
