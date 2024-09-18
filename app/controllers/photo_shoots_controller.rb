@@ -6,7 +6,10 @@ class PhotoShootsController < ApplicationController
 
   def index
     authorize PhotoShoot
-    @photoshoots = policy_scope(PhotoShoot).all.order(date: :desc)
+    @photoshoots = policy_scope(PhotoShoot)
+               .includes(:appointment, :photographer, :customer_service, :editor)  # Eager load associations
+               .order(date: :desc)
+
     @photoshoots = PhotoShoot.global_search(params[:query]) if params[:query].present?
     @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
     respond_to do |format|
@@ -61,13 +64,15 @@ class PhotoShootsController < ApplicationController
                             .where(questions: { question: 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' })
                             .where("TRIM(questions.answer) = ?", 'Yes')
 
+
     # Apply full-text search if query parameter is present
     if params[:query].present?
       base_query = base_query.global_search(params[:query])
     end
 
     # Order by start_time and group by date
-    @appointments = base_query.order(start_time: :desc)
+    @appointments = base_query
+                    .order(start_time: :desc)
   end
 
 

@@ -7,6 +7,7 @@ class AppointmentsController < ApplicationController
     authorize Appointment
     @appointments = policy_scope(Appointment)
                     .where('start_time >= ?', Time.zone.now.beginning_of_day)
+                    .includes(:questions)
                     .order(:start_time)
                     .select { |appointment|
                       !appointment.no_show &&

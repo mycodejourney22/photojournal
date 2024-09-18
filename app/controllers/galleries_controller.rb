@@ -6,7 +6,8 @@ class GalleriesController < ApplicationController
 
   def show
     @appointment = Appointment.find(params[:appointment_id])
-    @gallery = Gallery.find(params[:id])
+    @gallery = Gallery.includes(photos_attachments: :blob).find(params[:id])
+
   end
 
   def edit
