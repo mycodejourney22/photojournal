@@ -18,5 +18,6 @@
     <div >
       <%= render "table", photoshoots: @photoshoots %>
     </div>
+    <%= paginate @photoshoots, class: "mt-4" %>
   </section>
 </div>

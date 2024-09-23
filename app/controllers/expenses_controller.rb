@@ -19,7 +19,7 @@ class ExpensesController < ApplicationController
 
   def index
     authorize Expense
-    @expenses = policy_scope(Expense).all.order(date: :desc)
+    @expenses = policy_scope(Expense).all.order(date: :desc).page(params[:page])
   end
 
   private

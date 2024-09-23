@@ -29,8 +29,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: 'users/sessions'
   }
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  mount Blazer::Engine, at: "blazer"
+  # mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  # mount Blazer::Engine, at: "blazer"
   root to: "appointments#index"
   resources :sales do
     collection do

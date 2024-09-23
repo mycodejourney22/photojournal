@@ -19,6 +19,7 @@
     <div>
         <%= render "customer_table", customers: @customers %>
     </div>
+    <%= paginate @customers, class: "mt-4" %>
   </section>
 
 </div>

@@ -1,7 +1,7 @@
 class CustomersController < ApplicationController
 
   def index
-    @customers = Customer.all
+    @customers = Customer.all.page(params[:page])
     @customers = Customer.global_search(params[:query]) if params[:query].present?
     respond_to do |format|
       format.html # Follow regular flow of Rails

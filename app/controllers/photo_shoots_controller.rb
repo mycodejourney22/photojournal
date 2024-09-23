@@ -7,8 +7,9 @@ class PhotoShootsController < ApplicationController
   def index
     authorize PhotoShoot
     @photoshoots = policy_scope(PhotoShoot)
-               .includes(:appointment, :photographer, :customer_service, :editor)  # Eager load associations
-               .order(date: :desc)
+                  .includes(:appointment, :photographer, :customer_service, :editor)
+                  .order(date: :desc)
+                  .page(params[:page])
 
     @photoshoots = PhotoShoot.global_search(params[:query]) if params[:query].present?
     @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
@@ -73,6 +74,7 @@ class PhotoShootsController < ApplicationController
     # Order by start_time and group by date
     @appointments = base_query
                     .order(start_time: :desc)
+                    .page(params[:page])
   end
 
 
