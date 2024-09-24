@@ -7,8 +7,9 @@ class SalesController < ApplicationController
 
   def index
     authorize Sale
-    @sales = policy_scope(Sale).all.order(date: :desc).page(params[:page])
+    @sales = policy_scope(Sale).all.order(date: :desc)
     @sales = Sale.global_search(params[:query]) if params[:query].present?
+    @sales = @sales.page(params[:page])
   end
 
   def new

@@ -9,9 +9,9 @@ class PhotoShootsController < ApplicationController
     @photoshoots = policy_scope(PhotoShoot)
                   .includes(:appointment, :photographer, :customer_service, :editor)
                   .order(date: :desc)
-                  .page(params[:page])
 
     @photoshoots = PhotoShoot.global_search(params[:query]) if params[:query].present?
+    @photoshoots = @photoshoots.page(params[:page])
     @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
     respond_to do |format|
       format.html # Follow regular flow of Rails
