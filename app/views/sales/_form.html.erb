@@ -9,7 +9,7 @@
       <%= f.association :staff, collection: Staff.where(role: 'Customer Service').pluck(:name, :id), label: false, include_blank: 'Select CSO', input_html: { class: 'grid-item' } %>
       <%= f.input :product_service_name, label: false,
           placeholder: "Product Type", prompt: "Product Type", collection:["PhotoShoot", "Passport", "Frame", "Home Session","Training",
-                                                                            "Outdoor Event","Prints", "Photobook","Extra Pictures", "Others"]%>
+                                                                            "Outdoor Event","Prints", "Photobook","Extra Pictures", "Product Shoots","Others"]%>
       <%= f.input :amount_paid, label: false, placeholder: "Amount Paid"%>
       <%= f.input :payment_method, label: false, prompt: "Payment method", collection:["POS", "Cash", "Transfer"] %>
       <%= f.input :payment_type, label: false, placeholder: "Payment type", prompt: "Payment type", collection:["Full Payment", "Balance Payment", "Deposit"]%>

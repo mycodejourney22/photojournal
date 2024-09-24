@@ -5,7 +5,7 @@
       <%= f.input :date, as: :string, label: false, placeholder: "Date", input_html: {data: { controller: "datepicker" }} %>
       <%= f.input :description, label: false, placeholder: "Description" %>
       <%= f.input :category, label: false, collection: ["Office Monthly Supplies", "Data Subscription", "Delivery",
-       "Frame/Photobook production", 'Diesel', 'Petrol', 'Transport', 'Studio Props', 'Studio Gadget'], prompt: "Select Category" %>
+       "Frame/Photobook production", 'Diesel', 'Petrol', 'Transport', 'Studio Props', 'Studio Gadget', 'Electricity'], prompt: "Select Category" %>
       <%= f.input :staff, label: false,
         collection: ['Ridwan', 'Joy', 'Chioma', 'Amaka', 'Ope', 'Ebube', 'David'], prompt: "Select Staff"%>
       <%= f.input :amount, label: false, placeholder: "Amount" %>

@@ -19,7 +19,7 @@
           <%= f.input :number_of_selections, label: false, placeholder: "Number of selections" %>
           <%= f.input :status, label: false,
                 prompt: "Status", collection: ['New', 'Pending', 'Sent']  %>
-          <%= f.input :type_of_shoot, label: false  , prompt: "Type of shoot", collection: ['Kiddies', 'Newborn', 'Personal', 'Maternity', 'Family', 'Passport', 'Extra copies', 'Frames']%>
+          <%= f.input :type_of_shoot, label: false  , prompt: "Type of shoot", collection: ['Kiddies', 'Newborn', 'Personal', 'Maternity', 'Family', 'Passport', 'Extra copies', 'Frames', 'Product Shoot']%>
           <%= f.input :number_of_outfits, label: false, placeholder: "Number of outfits" %>
           <%= f.input :date_sent, as: :string, label: false, placeholder: "Date sent", input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
           <%= f.input :notes, label: false, placeholder: "Handover Notes" %>
