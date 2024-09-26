@@ -2,15 +2,21 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="nav"
 export default class extends Controller {
-  static targets = ["completed", "upfront", "notes", "upcoming"]
+  static targets = ["past", "today", "upcoming", "link"]
   connect() {
+    const currentPath = window.location.pathname
+    this.linkTargets.forEach(link => {
+      if (currentPath.endsWith(link.getAttribute('href'))){
+        link.classList.add('active-nav')
+      }
+    })
   }
 
 
   switch(event){
-    this.completedTarget.classList.remove("active")
-    this.upfrontTarget.classList.remove("active")
-    this.notesTarget.classList.remove("active")
+    this.todayTarget.classList.remove("active")
+    this.pastTarget.classList.remove("active")
+    // this.notesTarget.classList.remove("active")
     this.upcomingTarget.classList.remove("active")
     event.currentTarget.classList.add("active")
   }

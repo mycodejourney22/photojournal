@@ -37,3 +37,31 @@ section{
   color: black;
   text-decoration-thickness: 2px;
 }
+
+
+.attached, .unattached{
+  font-weight: bold;
+  font-size: 0.5rem;
+  width: fit-content;
+  padding: 0.25rem;
+  border-radius: 1rem;
+}
+
+.attached{
+  background: #E8F0EF;
+  color: #1ABC9C;
+}
+
+.unattached{
+  background: #faf3f6;
+  color: red;
+}
+
+.active-nav{
+  font-weight: 600;
+  text-decoration: underline;
+  background: none;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: #EDD400;
+}

@@ -49,6 +49,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   resources :appointments do
+    collection do
+      get :upcoming
+      get :past
+    end
+
     member do
       patch :mark_no_show
     end
@@ -56,6 +61,9 @@ Rails.application.routes.draw do
     resources :galleries, only: [:new, :create, :show, :update, :edit]
     resources :sales, only: [:index, :new, :create]
   end
+  # get 'appointments/completed'
+  get 'appointments/past'
+
   resources :photo_shoots, only: [:index] do
     collection do
       get :notes

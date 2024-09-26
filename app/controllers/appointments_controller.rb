@@ -2,25 +2,26 @@ require 'securerandom'
 class AppointmentsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
+  before_action :set_appointments, only: [:upcoming, :past, :index]
+
+  def upcoming
+    authorize Appointment
+    filter_appointments('upcoming')
+    respond_to_format
+  end
+
+  def past
+    authorize Appointment
+    filter_appointments('past')
+    respond_to_format
+  end
 
   def index
     authorize Appointment
-    @appointments = policy_scope(Appointment)
-                    .where('start_time >= ?', Time.zone.now.beginning_of_day)
-                    .includes(:questions)
-                    .order(:start_time)
-                    .select { |appointment|
-                      !appointment.no_show &&
-                      appointment.status
-                    }
-    @heading = "#{Date.today.strftime("%A, %d %B %Y") }"
-    @appointments = Appointment.global_search(params[:query]) if params[:query].present?
-    @appointments = @appointments.group_by { |appointment| appointment.start_time.to_date }
-    respond_to do |format|
-      format.html # Follow regular flow of Rails
-      format.text { render partial: "appointment_table", locals: { appointments: @appointments }, formats: [:html] }
-    end
+    filter_appointments('index')
+    respond_to_format
   end
+
 
   def show
     authorize Appointment
@@ -167,6 +168,49 @@ class AppointmentsController < ApplicationController
                             start_time: api_data[:start_time], end_time: api_data[:end_time], location: api_data[:location],
                             questions_attributes: api_data[:question])
       end
+    end
+  end
+
+  def filter_appointments(type)
+    base_query = @appointments.includes(:questions).order(start_time: :desc)
+
+    case type
+    when 'upcoming'
+      appointments = base_query.where('start_time >= ?', Time.zone.now.beginning_of_day)
+                                .select { |appointment| !appointment.no_show && appointment.status }
+      appointments = Appointment.global_search(params[:query]) if params[:query].present?
+      if appointments.present?
+        ids = appointments.map(&:id)
+        appointments = Appointment.where(id: ids)
+      end
+    when 'past'
+      appointments = base_query.joins(:photo_shoot)
+                                .where('start_time < ?', Time.zone.now.beginning_of_day)
+                                # .includes(:photo_shoot)
+                                .order(:start_time)
+    when 'index'
+      @appointments = base_query.where('start_time = ?', Time.zone.now.beginning_of_day)
+                                .select { |appointment| !appointment.no_show && appointment.status }
+      @appointments = Appointment.global_search(params[:query]) if params[:query].present?
+      if appointments.present?
+        ids = appointments.map(&:id)
+        appointments = Appointment.where(id: ids)
+      end
+    end
+
+    @appointments = appointments.page(params[:page]) if appointments.present?
+    @url = request.url.split('/').last
+  end
+
+  def set_appointments
+    @appointments = policy_scope(Appointment)
+  end
+
+  # Common respond_to block
+  def respond_to_format
+    respond_to do |format|
+      format.html # Follow regular flow of Rails
+      format.text { render partial: "appointment_table", locals: { appointments: @appointments }, formats: [:html] }
     end
   end
 

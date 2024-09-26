@@ -1,35 +1,40 @@
-<!-- app/views/appointments/index.html.erb -->
-
-<% @appointments.each do |date, appointments| %>
-  <div class="inner-card ps-4 p-heading">
-    <p class="fw-bold"><%= date.strftime("%A, %d %B %Y") %></p>
-  </div>
-  <table class="bordered-table" data-calendly-target="table">
-    <tbody>
-      <% appointments.each do |appointment| %>
-        <tr>
-          <td><%= appointment.name %></td>
-          <td>
-            <% phone_number = appointment.questions.find { |q| q.question == 'Phone number' } %>
-            <% if phone_number %>
-              <%= phone_number.answer %>
-            <% end %>
-          </td>
-          <td>
-            <%= appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p") %>
-            - <%= appointment.end_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if appointment.end_time %>
-          </td>
-          <td>
-            <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
-            <% if type_of_shoots %>
-              <%= type_of_shoots.answer %>
-            <% end %>
-          </td>
-          <td>
-            <p><%= link_to 'More Details', appointment_path(appointment) %></p>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+<table class="bordered-table" data-calendly-target="table">
+  <thead>
+    <tr>
+      <th>NAME</th>
+      <%= '<th></th>'.html_safe if @url == 'past'%>
+      <th>TYPE</th>
+      <th>PHONE</th>
+      <th>DATE</th>
+      <th>MORE DETAILS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% appointments.each do |appointment| %>
+      <tr>
+        <td><%= appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
+        <% if appointment.galleries.exists? && @url == 'past' %>
+          <%= '<td><p class="attached">PHOTO ATTACHED</p></td>'.html_safe %>
+        <% elsif !appointment.galleries.exists? && @url == 'past' %>
+          <%= '<td><p class="unattached">PHOTO UNATTACHED</p></td>'.html_safe %>
+        <% end %>
+        <td>
+          <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+          <% if type_of_shoots %>
+            <%= type_of_shoots.answer %>
+          <% end %>
+        </td>
+        <td>
+          <% phone_number = appointment.questions.find { |q| q.question == 'Phone number' } %>
+          <% if phone_number %>
+            <%= phone_number.answer %>
+          <% end %>
+        </td>
+        <td><%= appointment.start_time.to_date %></td>
+        <td>
+          <p><%= link_to 'More Details', appointment_path(appointment) %></p>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -29,6 +29,14 @@ class AppointmentPolicy < ApplicationPolicy
     user.admin? || %w[ikeja surulere ajah social].include?(user.role)
   end
 
+  def past?
+    index?
+  end
+
+  def upcoming?
+    index?
+  end
+
   def mark_no_show?
     true
   end
