@@ -2,11 +2,11 @@
   <thead>
     <tr>
       <th>NAME</th>
-      <%= '<th></th>'.html_safe if @url == 'past'%>
+      <%= '<th>PHOTO</th>'.html_safe if @url == 'past'%>
       <th>TYPE</th>
       <th>PHONE</th>
       <th>DATE</th>
-      <th>TIME</th>
+      <%= '<th>TIME</th>'.html_safe if @url != 'past'%>
       <th>MORE DETAILS</th>
     </tr>
   </thead>
@@ -15,9 +15,9 @@
       <tr>
         <td><%= appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
         <% if appointment.galleries.exists? && @url == 'past' %>
-          <%= '<td><p class="attached">PHOTO ATTACHED</p></td>'.html_safe %>
+          <%= '<td><p class="attached">ATTACHED</p></td>'.html_safe %>
         <% elsif !appointment.galleries.exists? && @url == 'past' %>
-          <%= '<td><p class="unattached">PHOTO UNATTACHED</p></td>'.html_safe %>
+          <%= '<td><p class="unattached">UNATTACHED</p></td>'.html_safe %>
         <% end %>
         <td>
           <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
@@ -32,7 +32,9 @@
           <% end %>
         </td>
         <td><%= appointment.start_time.strftime("%A, %d %B %Y")  %></td>
-        <td><%= appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p") %></td>
+        <% unless @url == 'past'  %>
+          <td><%= appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p")%></td>
+        <% end %>
         <td>
           <p><%= link_to 'Details', appointment_path(appointment) %></p>
         </td>
