@@ -172,11 +172,11 @@ class AppointmentsController < ApplicationController
   end
 
   def filter_appointments(type)
-    base_query = @appointments.includes(:questions).order(start_time: :desc)
+    base_query = @appointments.includes(:questions)
 
     case type
     when 'upcoming'
-      appointments = base_query.where('start_time >= ?', Time.zone.now.beginning_of_day)
+      appointments = base_query.where('start_time > ?', Time.zone.now.end_of_day).order(:start_time)
                                 .select { |appointment| !appointment.no_show && appointment.status }
       appointments = Appointment.global_search(params[:query]) if params[:query].present?
       if appointments.present?
@@ -184,12 +184,13 @@ class AppointmentsController < ApplicationController
         appointments = Appointment.where(id: ids)
       end
     when 'past'
-      appointments = base_query.joins(:photo_shoot)
+      appointments = base_query.order(start_time: :desc).joins(:photo_shoot)
                                 .where('start_time < ?', Time.zone.now.beginning_of_day)
                                 # .includes(:photo_shoot)
                                 .order(:start_time)
     when 'index'
-      @appointments = base_query.where('start_time = ?', Time.zone.now.beginning_of_day)
+      @appointments = base_query.where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
+                                .order(:start_time)
                                 .select { |appointment| !appointment.no_show && appointment.status }
       @appointments = Appointment.global_search(params[:query]) if params[:query].present?
       if appointments.present?

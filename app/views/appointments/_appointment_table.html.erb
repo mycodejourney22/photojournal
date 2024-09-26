@@ -30,7 +30,7 @@
             <%= phone_number.answer %>
           <% end %>
         </td>
-        <td><%= appointment.start_time.to_date %></td>
+        <td><%= appointment.start_time.strftime("%A, %d %B %Y")  %></td>
         <td>
           <p><%= link_to 'More Details', appointment_path(appointment) %></p>
         </td>
