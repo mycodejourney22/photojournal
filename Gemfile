@@ -21,8 +21,8 @@ gem 'pry'
 gem 'pry-rails'
 
 
-# gem 'mini_magick'
-# gem 'image_processing', '~> 1.2'
+gem 'ruby-vips', '~> 2.0'
+gem 'image_processing', '~> 1.2'
 
 
 

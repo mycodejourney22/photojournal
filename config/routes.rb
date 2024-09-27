@@ -69,5 +69,9 @@ Rails.application.routes.draw do
       get :notes
     end
   end
-  resources :galleries, only: [:index]
+  resources :galleries, only: [:index] do
+    member do
+      get 'download/:id', to: 'galleries#download', as: 'download'
+    end
+  end
 end

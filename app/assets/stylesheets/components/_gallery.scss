@@ -1,11 +1,11 @@
 .gallery-img{
-  width: 170px;
-  height: 170px;
+  width: 150px;
+  height: 150px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
-  margin: 20px;
+  margin: 6px;
   cursor: pointer; /* Cursor changes to indicate it's clickable */
   object-fit: cover;
 }
@@ -43,3 +43,50 @@
 .grey{
   color: grey;
 }
+
+.modal-content{
+  background-color: black;
+}
+
+.modal-header{
+  color: white;
+  padding: 0.4rem 0;
+  border: none;
+}
+.carousel-item {
+  height: 90vh;
+  background-color: black;
+}
+
+.img_grid{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.carousel-item img {
+  object-fit: contain;  /* Ensures the image covers the entire area */
+  height: 100%;
+}
+
+.download-icon {
+  position: absolute;
+  top: -30px;
+  right: 40px;
+  color: white;
+  padding: 6px;
+  z-index: 3;
+
+}
+
+.download-icon:hover {
+  background: #3E3E3E;
+  padding: 6px;
+  border-radius: 8px; /* Change color on hover */
+}
+
+// .download-icon i {
+//   font-size: 24px; /* Adjust icon size */
+// }

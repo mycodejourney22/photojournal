@@ -28,6 +28,11 @@ class GalleriesController < ApplicationController
     end
   end
 
+  def download
+    photo = ActiveStorage::Attachment.find(params[:id]) # find the attachment by id
+    send_data photo.download, filename: photo.filename.to_s, type: photo.content_type, disposition: 'attachment'
+  end
+
   def index
   end
 
