@@ -50,7 +50,7 @@
 
 .modal-header{
   color: white;
-  padding: 0.4rem 0;
+  padding: 0.7rem 0;
   border: none;
 }
 .carousel-item {
@@ -71,7 +71,7 @@
   height: 100%;
 }
 
-.download-icon {
+.download-icon, .btn-close, .photo-name {
   position: absolute;
   top: -30px;
   right: 40px;
@@ -81,11 +81,23 @@
 
 }
 
-.download-icon:hover {
+.btn-close{
+  left: 40px;
+  background: none;
+}
+
+.photo-name{
+  left: 90px;
+  top: -25px;
+}
+
+
+.download-icon:hover, .btn-close:hover {
   background: #3E3E3E;
   padding: 6px;
   border-radius: 8px; /* Change color on hover */
 }
+
 
 // .download-icon i {
 //   font-size: 24px; /* Adjust icon size */

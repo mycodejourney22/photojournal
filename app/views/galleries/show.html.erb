@@ -40,7 +40,6 @@
           <div class="carousel-inner ">
             <div class="modal-header">
               <%# <h5 class="modal-title" id="carouselModalLabel">Download</h5> %>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <% @gallery.photos.each_with_index do |photo, index| %>
               <div class=" carousel-item <%= 'active' if index == 0 %>">
@@ -52,6 +51,10 @@
                       <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
                     </svg>
                   </a>
+                  <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                  </svg></button>
+                  <p class="photo-name"><%= photo.blob.filename.to_s %></p>
                 </div>
               </div>
             <% end %>
