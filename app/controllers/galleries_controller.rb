@@ -1,5 +1,5 @@
 class GalleriesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:public_show]
+  skip_before_action :authenticate_user!, only: [:public_show, :download]
 
   def new
     @appointment = Appointment.find(params[:appointment_id])
