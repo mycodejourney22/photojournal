@@ -51,7 +51,7 @@ class GalleriesController < ApplicationController
     @gallery_url = gallery_public_url(@gallery.share_token, host: request.base_url)
 
     # Send the email
-    PhotoMailer.send_gallery(@appointment, @gallery_url).deliver_now
+    PhotoMailer.send_gallery(@appointment, @gallery_url, @gallery).deliver_later
 
     redirect_to appointment_gallery_path(@appointment, @gallery), notice: 'Gallery link sent to customer!'
   end

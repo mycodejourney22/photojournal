@@ -12,20 +12,21 @@
   </div>
 </div>
 <div>
-  <div class ="d-flex flex-wrap custom-flex">
+  <div class="public-gallery-wrapper">
     <% if @gallery.photos.attached? %>
-        <% @gallery.photos.each_with_index  do |photo, index| %>
-          <div >
-            <a href="#" data-bs-toggle="modal" data-bs-target="#carouselModal" data-bs-slide-to="<%= index %>">
-              <%= image_tag photo.variant(resize_to_limit: [300, 300]), class: 'gallery-img-public' %>
-            </a>
-          </div>
-        <% end %>
+      <% @gallery.photos.each_with_index  do |photo, index| %>
+        <div class="gallery-item">
+          <a href="#" data-bs-toggle="modal" data-bs-target="#carouselModal" data-bs-slide-to="<%= index %>">
+            <%= image_tag photo.variant(resize_to_limit: [600, 600]), class: 'gallery-img-public' %>
+          </a>
+        </div>
+      <% end %>
     <% else %>
-        <p>No photos available</p>
+      <p>No photos available</p>
     <% end %>
   </div>
 </div>
+
 <div class="modal fade" id="carouselModal" tabindex="-1" aria-labelledby="carouselModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-fullscreen">
     <div class="modal-content">
@@ -40,7 +41,7 @@
             <% @gallery.photos.each_with_index do |photo, index| %>
               <div class=" carousel-item <%= 'active' if index == 0 %>">
                 <div class="img_grid position-relative">
-                  <%= image_tag photo.variant(resize_to_limit: [1000, 1000], format: "webp", quality: 100), class: '' %>
+                  <%= image_tag photo.variant(resize_to_limit: [2000, 2000], format: "webp", quality: 100), class: '' %>
                   <a href="<%= download_gallery_path(@gallery, photo.id) %>" class="download-icon" title="Download Image">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                       <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>

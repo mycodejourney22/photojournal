@@ -1,4 +1,28 @@
-<h1>Hello <%= @appointment.name %>,</h1>
-<p>Your photo gallery is ready. You can view it by clicking the link below:</p>
+<table width="50%" cellpadding="0" align="start" cellspacing="0" border="0" style="background-color: #f9f9f9; font-family: Arial, sans-serif;">
+  <tr>
+    <td align="start">
+      <table width="600" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="padding: 20px; text-align: start;">
+            <h1 style="color: #333; font-size: 0.85rem;">Hello <%= @appointment.name %>,</h1>
+            <p style="color: #555;">Your photo gallery is ready. You can view it by clicking the link below:</p>
 
-<p><a href="<%= @gallery_url %>">View Photo Gallery</a></p>
+            <!-- Button -->
+            <table border="0" cellpadding="0" cellspacing="0" style="background-color: #EDD400; border-radius: 4px;" align="start">
+              <tr>
+                <td align="start" style="padding: 10px 20px;">
+                  <a href="<%= @gallery_url %>" style="color: black; text-decoration: none;">View Photo Gallery</a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="color: #555;">Tap the image, then press and hold to save it on your gallery</p>
+
+            <!-- Image Preview -->
+            <p style="color: #555;">Thank you for trusting 363 Photography</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
