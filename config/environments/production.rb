@@ -42,14 +42,14 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'https://photologger-0d07f7db019d.herokuapp.com/' }
 
   # SMTP settings for Gmail
-  config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    user_name: Rails.application.credentials.gmail.address,
-    password: Rails.application.credentials.gmail.password,
-    authentication: "plain",
-    enable_starttls_auto: true
-  }
+  # config.action_mailer.smtp_settings = {
+  #   address: "smtp.gmail.com",
+  #   port: 587,
+  #   user_name: Rails.application.credentials.gmail.address,
+  #   password: Rails.application.credentials.gmail.password,
+  #   authentication: "plain",
+  #   enable_starttls_auto: true
+  # }
 
 
   # Mount Action Cable outside main process or domain.
