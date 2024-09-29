@@ -74,4 +74,7 @@ Rails.application.routes.draw do
       get 'download/:id', to: 'galleries#download', as: 'download'
     end
   end
+  post 'appointments/:appointment_id/galleries/:gallery_id', to: 'galleries#send_gallery', as: 'send_gallery'
+  get 'galleries/public/:share_token', to: 'galleries#public_show', as: 'gallery_public'
+
 end
