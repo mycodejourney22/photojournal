@@ -1,4 +1,6 @@
 class GalleriesController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:public_show]
+
   def new
     @appointment = Appointment.find(params[:appointment_id])
     @gallery = Gallery.new
@@ -7,7 +9,16 @@ class GalleriesController < ApplicationController
   def show
     @appointment = Appointment.find(params[:appointment_id])
     @gallery = Gallery.includes(photos_attachments: :blob).find(params[:id])
+  end
 
+  def public_show
+    @gallery = Gallery.includes(photos_attachments: :blob).find_by(share_token: params[:share_token])
+    @appointment = @gallery.appointment if @gallery
+    if @gallery
+      render :public_show # This will use a different view for the public gallery
+    else
+      redirect_to root_path, alert: 'Gallery not found'
+    end
   end
 
   def edit
@@ -33,6 +44,17 @@ class GalleriesController < ApplicationController
     send_data photo.download, filename: photo.filename.to_s, type: photo.content_type, disposition: 'attachment'
   end
 
+  def send_gallery
+    @appointment = Appointment.find(params[:appointment_id])
+    @gallery = Gallery.find(params[:gallery_id])
+    @gallery_url = "http://localhost:3000/galleries/public/#{@gallery.share_token}"
+
+    # Send the email
+    PhotoMailer.send_gallery(@appointment, @gallery_url).deliver_now
+
+    redirect_to appointment_gallery_path(@appointment, @gallery), notice: 'Gallery link sent to customer!'
+  end
+
   def index
   end
 
@@ -55,4 +77,6 @@ class GalleriesController < ApplicationController
   def gallery_params
     params.require(:gallery).permit(:title, photos:[])
   end
+
+
 end

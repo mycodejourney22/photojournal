@@ -1,4 +1,4 @@
-.gallery-img{
+.gallery-img, .gallery-img-public{
   width: 150px;
   height: 150px;
   background-size: cover;
@@ -8,6 +8,11 @@
   margin: 6px;
   cursor: pointer; /* Cursor changes to indicate it's clickable */
   object-fit: cover;
+}
+
+.gallery-img-public{
+  width: 191px;
+  height: 191px;
 }
 
 .folder-cover {
