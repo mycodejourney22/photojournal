@@ -47,7 +47,8 @@ class GalleriesController < ApplicationController
   def send_gallery
     @appointment = Appointment.find(params[:appointment_id])
     @gallery = Gallery.find(params[:gallery_id])
-    @gallery_url = "http://localhost:3000/galleries/public/#{@gallery.share_token}"
+    # @gallery_url = "http://localhost:3000/galleries/public/#{@gallery.share_token}"
+    @gallery_url = gallery_public_url(@gallery.share_token, host: request.base_url)
 
     # Send the email
     PhotoMailer.send_gallery(@appointment, @gallery_url).deliver_now
