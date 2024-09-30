@@ -9,16 +9,15 @@ gem 'kaminari'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.3", ">= 7.1.3.2"
 
-gem "rails_admin", "3.0"
+# gem "rails_admin", "3.0"
 # gem "blazer"
 gem "devise"
 gem "pundit"
 gem "pg_search"
 
-gem 'bullet'
 
-gem 'pry'
-gem 'pry-rails'
+# gem 'pry'
+# gem 'pry-rails'
 
 
 gem 'ruby-vips', '~> 2.0'
@@ -48,7 +47,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -74,11 +73,13 @@ gem "font-awesome-sass", "~> 6.1"
 gem "simple_form", github: "heartcombo/simple_form"
 gem "sassc-rails"
 
-gem 'rest-client'
+# gem 'rest-client'
 
 
 group :development, :test do
   gem "dotenv-rails"
+  gem 'bullet'
+
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
@@ -88,7 +89,7 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 
-  gem 'letter_opener'
+  # gem 'letter_opener'
 
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]

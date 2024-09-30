@@ -63,10 +63,6 @@ GEM
       globalid (>= 0.3.6)
     activemodel (7.1.4)
       activesupport (= 7.1.4)
-    activemodel-serializers-xml (1.0.2)
-      activemodel (> 5.x)
-      activesupport (> 5.x)
-      builder (~> 3.1)
     activerecord (7.1.4)
       activemodel (= 7.1.4)
       activesupport (= 7.1.4)
@@ -129,9 +125,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    childprocess (5.1.0)
-      logger (~> 1.5)
-    coderay (1.1.3)
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -145,7 +138,6 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    domain_name (0.6.20240107)
     dotenv (3.1.3)
     dotenv-rails (3.1.3)
       dotenv (= 3.1.3)
@@ -161,9 +153,6 @@ GEM
       sassc (~> 2.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    http-accept (1.7.0)
-    http-cookie (1.0.7)
-      domain_name (~> 0.5)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     image_processing (1.13.0)
@@ -177,9 +166,6 @@ GEM
     irb (1.14.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jbuilder (2.13.0)
-      actionview (>= 5.0.0)
-      activesupport (>= 5.0.0)
     jmespath (1.6.2)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -193,11 +179,6 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    launchy (3.0.1)
-      addressable (~> 2.8)
-      childprocess (~> 5.0)
-    letter_opener (1.10.0)
-      launchy (>= 2.2, < 4)
     logger (1.6.1)
     loofah (2.22.0)
       crass (~> 1.0.2)
@@ -209,16 +190,11 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
-    method_source (1.1.0)
-    mime-types (3.5.2)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2024.0903)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
     minitest (5.25.1)
     msgpack (1.7.2)
     mutex_m (0.2.0)
-    nested_form (0.3.2)
     net-imap (0.4.16)
       date
       net-protocol
@@ -228,7 +204,6 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
-    netrc (0.11.0)
     nio4r (2.7.3)
     nokogiri (1.16.7-aarch64-linux)
       racc (~> 1.4)
@@ -248,11 +223,6 @@ GEM
       activerecord (>= 6.1)
       activesupport (>= 6.1)
     popper_js (2.11.8)
-    pry (0.14.2)
-      coderay (~> 1.1)
-      method_source (~> 1.0)
-    pry-rails (0.3.11)
-      pry (>= 0.13.0)
     psych (5.1.2)
       stringio
     public_suffix (6.0.1)
@@ -290,12 +260,6 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    rails_admin (3.0.0)
-      activemodel-serializers-xml (>= 1.0)
-      kaminari (>= 0.14, < 2.0)
-      nested_form (~> 0.3)
-      rails (>= 6.0, < 8)
-      turbo-rails (~> 1.0)
     railties (7.1.4)
       actionpack (= 7.1.4)
       activesupport (= 7.1.4)
@@ -313,11 +277,6 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rest-client (2.1.0)
-      http-accept (>= 1.7.0, < 2.0)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 4.0)
-      netrc (~> 0.8)
     rexml (3.3.7)
     ruby-vips (2.2.2)
       ffi (~> 1.12)
@@ -395,18 +354,12 @@ DEPENDENCIES
   font-awesome-sass (~> 6.1)
   image_processing (~> 1.2)
   importmap-rails
-  jbuilder
   kaminari
-  letter_opener
   pg (~> 1.1)
   pg_search
-  pry
-  pry-rails
   puma (>= 5.0)
   pundit
   rails (~> 7.1.3, >= 7.1.3.2)
-  rails_admin (= 3.0)
-  rest-client
   ruby-vips (~> 2.0)
   sassc-rails
   selenium-webdriver

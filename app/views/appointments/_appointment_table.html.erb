@@ -2,11 +2,11 @@
   <thead>
     <tr>
       <th>NAME</th>
-      <%= '<th>PHOTO</th>'.html_safe if @url == 'past'%>
+      <%= '<th>PHOTO</th>'.html_safe if @url.include?("past")%>
       <th>TYPE</th>
       <th>PHONE</th>
       <th>DATE</th>
-      <%= '<th>TIME</th>'.html_safe if @url != 'past'%>
+      <%= '<th>TIME</th>'.html_safe if @url.include?("past")%>
       <th>MORE DETAILS</th>
     </tr>
   </thead>
@@ -14,9 +14,9 @@
     <% appointments.each do |appointment| %>
       <tr>
         <td><%= appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
-        <% if appointment.galleries.exists? && @url == 'past' %>
+        <% if appointment.galleries.exists? && @url.include?("past") %>
           <%= '<td><p class="attached">ATTACHED</p></td>'.html_safe %>
-        <% elsif !appointment.galleries.exists? && @url == 'past' %>
+        <% elsif !appointment.galleries.exists? && @url.include?("past") %>
           <%= '<td><p class="unattached">UNATTACHED</p></td>'.html_safe %>
         <% end %>
         <td>
