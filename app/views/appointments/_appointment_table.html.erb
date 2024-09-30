@@ -6,7 +6,7 @@
       <th>TYPE</th>
       <th>PHONE</th>
       <th>DATE</th>
-      <%= '<th>TIME</th>'.html_safe if @url.include?("past")%>
+      <%= '<th>TIME</th>'.html_safe if !@url.include?("past")%>
       <th>MORE DETAILS</th>
     </tr>
   </thead>
@@ -32,7 +32,7 @@
           <% end %>
         </td>
         <td><%= appointment.start_time.strftime("%A, %d %B %Y")  %></td>
-        <% unless @url == 'past'  %>
+        <% unless @url.include?("past")  %>
           <td><%= appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p")%></td>
         <% end %>
         <td>
