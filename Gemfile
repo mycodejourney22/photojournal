@@ -73,7 +73,7 @@ gem "font-awesome-sass", "~> 6.1"
 gem "simple_form", github: "heartcombo/simple_form"
 gem "sassc-rails"
 
-# gem 'rest-client'
+gem 'rest-client'
 
 
 group :development, :test do
