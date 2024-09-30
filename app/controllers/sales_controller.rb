@@ -1,4 +1,4 @@
-require 'pry'
+# require 'pry'
 class SalesController < ApplicationController
 
   after_action :verify_authorized, except: :index
