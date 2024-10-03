@@ -182,7 +182,7 @@ class AppointmentsController < ApplicationController
                                   .order(:start_time)
       end
     when 'past'
-      Rails.cache.fetch("upcoming_appointments/#{current_user.id}", expires_in: 12.hour) do
+      Rails.cache.fetch("past_appointments/#{current_user.id}", expires_in: 12.hour) do
         @appointments = base_query.joins(:photo_shoot)
                                   .where('start_time < ?', Time.zone.now.beginning_of_day)
                                   .order(start_time: :desc)
@@ -193,10 +193,7 @@ class AppointmentsController < ApplicationController
                                 .order(:start_time)
     end
     @appointments = @appointments.global_search(params[:query]) if params[:query].present?
-    # @appointments.each do |appointment|
-    #   appointment.formatted_start_time = appointment.start_time.strftime("%A, %d %B %Y")
-    #   appointment.formatted_time = appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if appointment.start_time
-    # end
+
     @appointments = @appointments.page(params[:page]) if @appointments.present?
     @url = request.url.split('/').last
   end
