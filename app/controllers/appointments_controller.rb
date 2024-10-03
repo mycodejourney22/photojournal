@@ -180,8 +180,10 @@ class AppointmentsController < ApplicationController
                                 .where(no_show: false, status: true)
                                 .order(:start_time)
     when 'past'
-      @appointments = base_query.order(start_time: :desc)
-                                .where('start_time < ?', Time.zone.now.beginning_of_day)
+      Rails.cache.fetch("past/#{current_user.id}", expires_in: 12.hours) do
+        @appointments = base_query.order(start_time: :desc)
+                                  .where('start_time < ?', Time.zone.now.beginning_of_day)
+      end
     when 'index'
       @appointments = base_query.where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
                                 .where(no_show: false, status: true)
