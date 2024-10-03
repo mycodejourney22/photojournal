@@ -16,7 +16,7 @@
         <td><%= appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
         <td>
           <% if @url.include?("past") %>
-            <% if appointment.galleries.exists? %>
+            <% if appointment.galleries.any? { |gallery| gallery.photos.attached? } %>
               <p class="attached">ATTACHED</p>
             <% else %>
               <p class="unattached">UNATTACHED</p>

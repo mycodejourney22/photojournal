@@ -1,8 +1,9 @@
 require 'securerandom'
 class AppointmentsController < ApplicationController
+  include ActiveStorage::Streaming
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
-  before_action :set_appointments, only: [:upcoming, :past, :index]
+  before_action :set_appointments, :set_url, only: [:upcoming, :past, :index]
 
   def upcoming
     authorize Appointment
@@ -188,13 +189,16 @@ class AppointmentsController < ApplicationController
                                 .order(:start_time)
     end
     @appointments = @appointments.global_search(params[:query]) if params[:query].present?
-    @url = request.url.split('/').last
     @appointments = @appointments.page(params[:page]) if @appointments.present?
 
   end
 
   def set_appointments
     @appointments = policy_scope(Appointment)
+  end
+
+  def set_url
+    @url = request.url.split('/').last
   end
 
   # Common respond_to block

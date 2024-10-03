@@ -72,6 +72,7 @@ Rails.application.routes.draw do
   resources :galleries, only: [:index] do
     member do
       get 'download/:id', to: 'galleries#download', as: 'download'
+      get 'stream_photo/:photo_id', to: 'galleries#stream_photo', as: :stream_photo
     end
   end
   post 'appointments/:appointment_id/galleries/:gallery_id', to: 'galleries#send_gallery', as: 'send_gallery'

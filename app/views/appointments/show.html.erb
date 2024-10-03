@@ -83,7 +83,9 @@
         <hr>
         <% if @appointment.galleries.exists? %>
           <% @appointment.galleries.each do |gallery| %>
-            <p>View attached images <%= link_to "here", appointment_gallery_path(@appointment, gallery), class: "black-link" %></p>
+            <% if gallery.photos.attached? %>
+              <p>View attached images <%= link_to "here", appointment_gallery_path(@appointment, gallery), class: "black-link" %></p>
+            <% end %>
           <% end %>
         <% else %>
             <p>Add a new <%= link_to 'gallery', new_appointment_gallery_path(@appointment), class: "black-link" %></p>

@@ -7,10 +7,27 @@ class GalleriesController < ApplicationController
   end
 
   def show
+    # @appointment = Appointment.find(params[:appointment_id])
+    # @editor_name = @appointment.photo_shoot.editor.name if @appointment.photo_shoot
+    # @photographer_name = @appointment.photo_shoot.photographer.name if @appointment.photo_shoot
+    # @gallery = Gallery.includes(photos_attachments: :blob).find(params[:id])
     @appointment = Appointment.find(params[:appointment_id])
     @editor_name = @appointment.photo_shoot.editor.name if @appointment.photo_shoot
     @photographer_name = @appointment.photo_shoot.photographer.name if @appointment.photo_shoot
     @gallery = Gallery.includes(photos_attachments: :blob).find(params[:id])
+
+    # Stream each photo from the gallery in the view
+    @photos = @gallery.photos
+  end
+
+  def stream_photo
+      @gallery = Gallery.find(params[:id])
+      @photo = @gallery.photos.find(params[:photo_id])
+
+      # Stream the photo using `send_data`
+      photo_blob = @photo.download
+
+      send_data photo_blob, type: @photo.content_type, disposition: 'inline', buffer_size: 64.kilobytes, cache_control: 'public, max-age=31536000'
   end
 
   def public_show
