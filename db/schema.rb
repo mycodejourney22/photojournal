@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_28_230058) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_03_175456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_28_230058) do
     t.uuid "uuid", null: false
     t.boolean "no_show", default: false
     t.boolean "status", default: true
+    t.index ["start_time"], name: "index_appointments_on_start_time"
     t.index ["uuid"], name: "index_appointments_on_uuid", unique: true
   end
 

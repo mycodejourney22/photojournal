@@ -182,10 +182,9 @@ class AppointmentsController < ApplicationController
                                   .order(:start_time)
       end
     when 'past'
-      Rails.cache.fetch("past_appointments/#{current_user.id}", expires_in: 12.hour) do
-        @appointments = base_query.joins(:photo_shoot)
+      Rails.cache.fetch("past_appointments/#{current_user.id}", expires_in: 1.hour) do
+        @appointments = base_query.order(start_time: :desc)
                                   .where('start_time < ?', Time.zone.now.beginning_of_day)
-                                  .order(start_time: :desc)
       end
     when 'index'
       @appointments = base_query.where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
@@ -196,6 +195,7 @@ class AppointmentsController < ApplicationController
 
     @appointments = @appointments.page(params[:page]) if @appointments.present?
     @url = request.url.split('/').last
+
   end
 
   def set_appointments
