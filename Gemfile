@@ -15,6 +15,9 @@ gem "devise"
 gem "pundit"
 gem "pg_search"
 
+gem 'scout_apm'
+
+
 
 # gem 'pry'
 # gem 'pry-rails'
