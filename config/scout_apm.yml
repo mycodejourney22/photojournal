@@ -1,0 +1,3 @@
+# config/scout_apm.yml
+production:
+  auto_instruments: true
