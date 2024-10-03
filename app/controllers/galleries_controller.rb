@@ -8,6 +8,8 @@ class GalleriesController < ApplicationController
 
   def show
     @appointment = Appointment.find(params[:appointment_id])
+    @editor_name = @appointment.photo_shoot.editor.name if @appointment.photo_shoot
+    @photographer_name = @appointment.photo_shoot.photographer.name if @appointment.photo_shoot
     @gallery = Gallery.includes(photos_attachments: :blob).find(params[:id])
   end
 

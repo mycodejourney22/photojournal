@@ -17,6 +17,11 @@ gem "pg_search"
 
 gem 'scout_apm'
 
+gem 'puma_worker_killer'
+
+
+
+
 
 
 # gem 'pry'

@@ -31,4 +31,13 @@ class Appointment < ApplicationRecord
   def has_galleries?
     galleries.exists?
   end
+
+  def formatted_start_time
+    start_time.strftime("%A, %d %B %Y") if start_time
+  end
+
+  def formatted_time
+    start_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if start_time
+  end
+
 end

@@ -14,26 +14,25 @@
     <% appointments.each do |appointment| %>
       <tr>
         <td><%= appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
-        <% if appointment.galleries.exists? && @url.include?("past") %>
-          <%= '<td><p class="attached">ATTACHED</p></td>'.html_safe %>
-        <% elsif !appointment.galleries.exists? && @url.include?("past") %>
-          <%= '<td><p class="unattached">UNATTACHED</p></td>'.html_safe %>
-        <% end %>
         <td>
-          <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
-          <% if type_of_shoots %>
-            <%= type_of_shoots.answer %>
+          <% if @url.include?("past") %>
+            <% if appointment.galleries.exists? %>
+              <p class="attached">ATTACHED</p>
+            <% else %>
+              <p class="unattached">UNATTACHED</p>
+            <% end %>
           <% end %>
         </td>
+
         <td>
-          <% phone_number = appointment.questions.find { |q| q.question == 'Phone number' } %>
-          <% if phone_number %>
-            <%= phone_number.answer %>
-          <% end %>
+          <%= find_question_answer(appointment, 'Type of shoots') %>
         </td>
-        <td><%= appointment.start_time.strftime("%A, %d %B %Y")  %></td>
+        <td>
+          <%= find_question_answer(appointment, 'Phone number') %>
+        </td>
+         <td><%= appointment.formatted_start_time %></td>
         <% unless @url.include?("past")  %>
-          <td><%= appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p")%></td>
+           <td><%= appointment.formatted_time %></td>
         <% end %>
         <td>
           <p><%= link_to 'Details', appointment_path(appointment) %></p>

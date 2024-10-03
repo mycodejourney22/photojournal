@@ -176,28 +176,28 @@ class AppointmentsController < ApplicationController
 
     case type
     when 'upcoming'
-      appointments = base_query.where('start_time > ?', Time.zone.now.end_of_day)
-                               .select { |appointment| !appointment.no_show && appointment.status }
-      appointments = Appointment.global_search(params[:query]) if params[:query].present?
-      if appointments.present?
-        ids = appointments.map(&:id)
-        appointments = Appointment.where(id: ids).order(:start_time)
+      Rails.cache.fetch("upcoming_appointments/#{current_user.id}", expires_in: 12.hour) do
+        @appointments = base_query.where('start_time > ?', Time.zone.now.end_of_day)
+                                  .where(no_show: false, status: true)
+                                  .order(:start_time)
       end
     when 'past'
-      appointments = base_query.order(start_time: :desc).joins(:photo_shoot)
-                               .where('start_time < ?', Time.zone.now.beginning_of_day)
+      Rails.cache.fetch("upcoming_appointments/#{current_user.id}", expires_in: 12.hour) do
+        @appointments = base_query.joins(:photo_shoot)
+                                  .where('start_time < ?', Time.zone.now.beginning_of_day)
+                                  .order(start_time: :desc)
+      end
     when 'index'
       @appointments = base_query.where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
+                                .where(no_show: false, status: true)
                                 .order(:start_time)
-                                .select { |appointment| !appointment.no_show && appointment.status }
-      @appointments = Appointment.global_search(params[:query]) if params[:query].present?
-      if appointments.present?
-        ids = appointments.map(&:id)
-        appointments = Appointment.where(id: ids)
-      end
     end
-
-    @appointments = appointments.page(params[:page]) if appointments.present?
+    @appointments = @appointments.global_search(params[:query]) if params[:query].present?
+    # @appointments.each do |appointment|
+    #   appointment.formatted_start_time = appointment.start_time.strftime("%A, %d %B %Y")
+    #   appointment.formatted_time = appointment.start_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if appointment.start_time
+    # end
+    @appointments = @appointments.page(params[:page]) if @appointments.present?
     @url = request.url.split('/').last
   end
 
