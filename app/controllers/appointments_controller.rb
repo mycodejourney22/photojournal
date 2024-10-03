@@ -176,16 +176,12 @@ class AppointmentsController < ApplicationController
 
     case type
     when 'upcoming'
-      Rails.cache.fetch("upcoming_appointments/#{current_user.id}", expires_in: 12.hour) do
-        @appointments = base_query.where('start_time > ?', Time.zone.now.end_of_day)
-                                  .where(no_show: false, status: true)
-                                  .order(:start_time)
-      end
+      @appointments = base_query.where('start_time > ?', Time.zone.now.end_of_day)
+                                .where(no_show: false, status: true)
+                                .order(:start_time)
     when 'past'
-      Rails.cache.fetch("past_appointments/#{current_user.id}", expires_in: 1.hour) do
-        @appointments = base_query.order(start_time: :desc)
-                                  .where('start_time < ?', Time.zone.now.beginning_of_day)
-      end
+      @appointments = base_query.order(start_time: :desc)
+                                .where('start_time < ?', Time.zone.now.beginning_of_day)
     when 'index'
       @appointments = base_query.where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
                                 .where(no_show: false, status: true)
