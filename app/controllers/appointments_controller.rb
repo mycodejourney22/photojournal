@@ -181,10 +181,12 @@ class AppointmentsController < ApplicationController
   end
 
   def today_appointment
-    today_appointments = Appointment.includes(:questions).where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
+    appointments = Appointment.includes(:questions)
+                                    .where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
                                     .where(no_show: false, status: true)
                                     .order(:start_time)
-    appointments = today_appointments.global_search(params[:query]) if params[:query].present?
+
+    appointments = appointments.global_search(params[:query]) if params[:query].present?
     appointments.page(params[:page]) if appointments.present?
   end
 
