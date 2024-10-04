@@ -173,9 +173,9 @@ class AppointmentsController < ApplicationController
 
   def past_appointment
     appointments = policy_scope(Appointment).includes(:questions)
-                                            .where(start_time: 30.days.ago.beginning_of_day..Time.zone.now.beginning_of_day)
+                                            .where(start_time: 14.days.ago.beginning_of_day..Time.zone.now.beginning_of_day)
                                             .order(start_time: :desc)
-    appointments = appointments.global_search(params[:query]) if params[:query].present?
+    appointments = policy_scope(Appointment).global_search(params[:query]) if params[:query].present?
     appointments.page(params[:page]) if appointments.present?
   end
 
@@ -185,7 +185,7 @@ class AppointmentsController < ApplicationController
                                             .where(no_show: false, status: true)
                                             .order(:start_time)
 
-    appointments = appointments.global_search(params[:query]) if params[:query].present?
+    appointments = policy_scope(Appointment).global_search(params[:query]) if params[:query].present?
     appointments.page(params[:page]) if appointments.present?
   end
 
