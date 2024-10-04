@@ -7,19 +7,19 @@ class AppointmentsController < ApplicationController
 
   def upcoming
     authorize Appointment
-    filter_appointments('upcoming')
+    @appointments = upcoming_appointment
     respond_to_format
   end
 
   def past
     authorize Appointment
-    filter_appointments('past')
+    @appointments = past_appointment
     respond_to_format
   end
 
   def index
     authorize Appointment
-    filter_appointments('index')
+    @appointments = today_appointment
     respond_to_format
   end
 
@@ -172,25 +172,28 @@ class AppointmentsController < ApplicationController
   #   end
   # end
 
-  def filter_appointments(type)
-    base_query = @appointments.includes(:questions)
+  def past_appointment
+    appointments = Appointment.includes(:questions)
+                              .where(start_time: 30.days.ago.beginning_of_day..Time.zone.now.beginning_of_day)
+                              .order(start_time: :desc)
+    appointments = appointments.global_search(params[:query]) if params[:query].present?
+    appointments.page(params[:page]) if appointments.present?
+  end
 
-    case type
-    when 'upcoming'
-      @appointments = base_query.where('start_time > ?', Time.zone.now.end_of_day)
-                                .where(no_show: false, status: true)
-                                .order(:start_time)
-    when 'past'
-        @appointments = base_query.order(start_time: :desc)
-                                  .where('start_time < ?', Time.zone.now.beginning_of_day)
-    when 'index'
-      @appointments = base_query.where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
-                                .where(no_show: false, status: true)
-                                .order(:start_time)
-    end
-    @appointments = @appointments.global_search(params[:query]) if params[:query].present?
-    @appointments = @appointments.page(params[:page]) if @appointments.present?
+  def today_appointment
+    today_appointments = Appointment.includes(:questions).where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
+                                    .where(no_show: false, status: true)
+                                    .order(:start_time)
+    appointments = today_appointments.global_search(params[:query]) if params[:query].present?
+    appointments.page(params[:page]) if appointments.present?
+  end
 
+  def upcoming_appointment
+    appointments = Appointment.includes(:questions).where('start_time > ?', Time.zone.now.end_of_day)
+                              .where(no_show: false, status: true)
+                              .order(:start_time)
+    appointments = today_appointments.global_search(params[:query]) if params[:query].present?
+    appointments.page(params[:page]) if appointments.present?
   end
 
   def set_appointments

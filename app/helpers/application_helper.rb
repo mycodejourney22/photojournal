@@ -9,4 +9,17 @@ module ApplicationHelper
       number.to_s
     end
   end
+
+
+    def dynamic_appointments_url
+      if request.path.include?("past")
+        past_appointments_path
+      elsif request.path.include?("upcoming")
+        upcoming_appointments_path
+      else
+        appointments_path
+      end
+    end
+
+
 end
