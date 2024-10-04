@@ -26,9 +26,18 @@ Rails.application.routes.draw do
 
   post '/webhooks/calendly', to: 'webhooks#calendly'
 
-  devise_for :users, controllers: {
-    sessions: 'users/sessions'
-  }
+  # devise_for :users, controllers: {
+  #   sessions: 'users/sessions'
+  # }
+
+  devise_for :users
+  # devise_scope :user do
+  #   match '/sign-in' => "devise/sessions#new", :as => :login
+  # end
+
+  # devise_scope :user do
+  #   delete 'sign_out'
+  # end
   # mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   # mount Blazer::Engine, at: "blazer"
   root to: "appointments#index"
