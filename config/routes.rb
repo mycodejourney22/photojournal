@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'gadgets/index'
+  get 'gadgets/new'
+  get 'gadgets/show'
   get 'galleries/new'
   get 'galleries/show'
   get 'galleries/index'
@@ -86,5 +89,6 @@ Rails.application.routes.draw do
   end
   post 'appointments/:appointment_id/galleries/:gallery_id', to: 'galleries#send_gallery', as: 'send_gallery'
   get 'galleries/public/:share_token', to: 'galleries#public_show', as: 'gallery_public'
+  resources :gadgets
 
 end

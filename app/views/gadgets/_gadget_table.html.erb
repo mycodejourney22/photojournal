@@ -1,0 +1,25 @@
+
+<table class="bordered-table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <th>Quantity</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% gadgets.each do |gadget| %>
+      <tr>
+        <td><%= gadget.date.strftime("%A, %d %B %Y") %></td>
+        <td><%= gadget.name.capitalize %></td>
+        <td><%= gadget.descriptions.capitalize %></td>
+        <td><%= number_to_currency(gadget.amount, unit: "₦") %></td>
+        <td><%= gadget.quantity %></td>
+        <td><%= gadget.location.capitalize %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

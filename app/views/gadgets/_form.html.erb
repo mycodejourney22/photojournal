@@ -1,0 +1,17 @@
+<%= simple_form_for @gadget do |f| %>
+  <%= f.error_notification %>
+  <div class="card card_photoshoot form_card">
+    <div class="grid-container">
+      <%= f.input :name, label: false, placeholder: "Name" %>
+      <%= f.input :date, as: :string, label: false, placeholder: "Date", input_html: {data: { controller: "datepicker" }} %>
+      <%= f.input :descriptions, label: false, placeholder: "Description" %>
+      <%= f.input :location, label: false,
+        collection: ['Ajah', 'Ikeja', 'Surulere'], prompt: "Select Location"%>
+      <%= f.input :amount, label: false, placeholder: "Amount" %>
+      <%= f.input :quantity, label: false, placeholder: "Quantity" %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= f.submit "Create Gadget Details", class: "btn btn-photoshoot mt-3" %>
+  </div>
+<% end %>

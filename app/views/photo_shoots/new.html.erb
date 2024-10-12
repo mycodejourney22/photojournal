@@ -10,9 +10,9 @@
         <div class=" grid-container">
         <%= f.input :date, as: :string, label: false, placeholder: "Shoot date",
               input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
-          <%= f.association :photographer, collection: Staff.where(role: 'Photographer').pluck(:name, :id), label: false, include_blank: 'Select Photographer', input_html: { class: 'grid-item' } %>
-          <%= f.association :editor, collection: Staff.where(role: 'Editor').pluck(:name, :id), label: false, include_blank: 'Select Editor' , input_html: { class: 'grid-item' } %>
-          <%= f.association :customer_service, collection: Staff.where(role: 'Customer Service').pluck(:name, :id), label: false, include_blank: 'Select Customer Service' %>
+          <%= f.association :photographer, collection: Staff.where(role: 'Photographer', active: true).pluck(:name, :id), label: false, include_blank: 'Select Photographer', input_html: { class: 'grid-item' } %>
+          <%= f.association :editor, collection: Staff.where(role: 'Editor', active: true).pluck(:name, :id), label: false, include_blank: 'Select Editor' , input_html: { class: 'grid-item' } %>
+          <%= f.association :customer_service, collection: Staff.where(role: 'Customer Service', active: true).pluck(:name, :id), label: false, include_blank: 'Select Customer Service' %>
         </div>
         <p class="fw-bold py-4">PHOTOSHOOT INFORMATION</p>
         <div class="grid-container">
