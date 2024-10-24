@@ -1,0 +1,212 @@
+.fc-direction-ltr.fc-theme-standard{
+  width: 400px;
+
+}
+
+
+
+.fc .fc-toolbar-title{
+  font-size: 1em;
+}
+
+.fc .fc-col-header-cell-cushion{
+  text-decoration: none;
+  color: grey;
+  font-size: 0.75rem;
+}
+
+.fc .fc-daygrid-day-number{
+  text-decoration: none;
+  color: black;
+  font-size: 0.75rem;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
+  display: none;
+  height: 0;
+  min-height: none;
+}
+
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
+  min-height: 0;
+}
+
+/* .fc-theme-standard td, .fc .fc-daygrid-day-frame{
+  height: 24px;
+} */
+
+.fc-theme-standard td{
+  border-style: hidden !important;
+  text-align: center;
+}
+/* Remove border from the table */
+.fc-theme-standard th{
+  border: none;
+}
+
+.fc .fc-scrollgrid{
+  border-collapse: collapse;
+  border: none;
+
+}
+
+.fc .fc-day-other .fc-daygrid-day-top, .fc .fc-daygrid-day-top{
+  display: block;
+  text-align: center;
+
+}
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: white;
+}
+
+.fc-daygrid-day {
+  box-sizing: border-box; /* Ensure padding and margin are calculated correctly */
+}
+
+.fc-daygrid-day-frame {
+  padding: 2px; /* Optional: Add padding inside each day cell */
+  background: #FAF9F6	; /* Optional: Set a background color */
+  /* border-radius: 4px; */
+  margin: 4px ; /* Optional: Add rounded corners */
+  /* border: 1px solid #ccc; Optional: Add a border for better visibility */
+}
+
+.fc{
+  overflow: hidden;
+}
+
+.fc-day-past{
+  display: hidden;
+}
+
+
+.fc-direction-ltr .fc-button-group > .fc-button{
+  background: white;
+  border: none;
+}
+
+.fc .fc-button .fc-icon{
+  color: black;
+}
+
+.fc .fc-daygrid-day-frame:active, .fc .fc-daygrid-bg-harness, .fc .fc-highlight{
+  background-color: #eecc24;
+  font-weight: bold;
+}
+
+.fc .fc-button-primary:disabled, .fc-today-button.fc-button.fc-button-primary {
+  display: none;
+}
+
+.fc-direction-ltr.fc-theme-standard{
+  height: 387px;
+}
+
+.fc-scrollgrid-sync-table {
+  height: 100% !important;
+}
+
+.fc .fc-day-disabled, .fc .fc-day-disabled > .fc-daygrid-day-frame.fc-scrollgrid-sync-inner{
+  background-color: white;
+}
+
+.fc-day-today > .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+  background: white;
+  text-decoration: underline;
+  text-decoration-color: #eecc24;
+  text-decoration-thickness: 4px;
+}
+
+.time_slot{
+  display: block;
+  flex-direction: column;
+  /* height: 350px; */
+  overflow: auto;
+  /* padding: 2rem; */
+  width: 30rem;
+}
+
+/* .scroll-container {
+  overflow: auto;
+  max-height: 300px;
+} */
+
+/* Customize the entire scrollbar */
+.time_slot::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Customize the track (background of the scrollbar) */
+.time_slot::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Customize the scrollbar handle (thumb) */
+.time_slot::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+  border: 3px solid #f1f1f1;
+}
+
+/* Customize the scrollbar thumb when hovered */
+.time_slot::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* Optional: Customize the scrollbar buttons */
+.time_slot::-webkit-scrollbar-button {
+  background-color: #888;
+}
+
+/* Optional: Customize the bottom corner of the scrollbar */
+/* .time_slot::-webkit-scrollbar-corner {
+  background-color: #999;
+} */
+
+
+.time_slot button, .next-btn{
+  border: 1px solid #eecc24;
+  background-color: white;
+  padding: 0.5rem 2rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  width: 16rem;
+}
+
+.btn-brown{
+  background: #666666;
+  border: none;
+  color: white;
+}
+
+.btn-yellow{
+  background-color: #eecc24;
+  color: black;
+  border: none;
+}
+
+.next-btn{
+  margin-left: 10px;
+}
+
+.hidden{
+  display: none;
+}
+
+.time_slot > button:hover, button:focus {
+  border: 2px solid #eecc24;
+}
+
+.time_slot > button:focus{
+  background-color: #eecc24;
+}
+
+.time_slot > h3{
+  font-size: 0.85rem;
+}
+
+// .fc .fc-highlight{
+//   background-color: red;
+// }

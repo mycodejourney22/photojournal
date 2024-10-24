@@ -1,0 +1,30 @@
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <div>
+    <%= form_with model: @appointment, url: selected_date_appointments_path, method: :post, local: true, data: { turbo: false } do |form| %>
+      <div data-controller="calendar">
+        <!-- Calendar for selecting the date -->
+        <div>
+          <div data-calendar-target="calendar"></div>
+
+        <!-- Slots will be displayed here -->
+          <%# <div data-calendar-target="timeSlots" class="time_slot"></div> %>
+        </div>
+
+        <!-- Input fields for user details -->
+        <%= form.hidden_field :selected_date, value: @appointment.start_time&.to_date, id: 'selected_date_input' %>
+
+
+        <!-- Hidden input field for storing selected start time -->
+        <%= form.hidden_field :start_time, id: 'start_time_input', required: true %>
+        <div class='d-flex flex-column'>
+          <%= form.label :location, "Studio Location:" %>
+          <%= form.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere']), { prompt: 'Choose your location' }, class: "w-100 form-data__input" %>
+        </div>
+        <button type="button" id="redirect_button"  class= "btn_new btn btn-photoshoot mt-3"  data-action="click->calendar#redirectToAvailableHours">See Available Hours</button>
+
+        <!-- Submit button -->
+      </div>
+    <% end %>
+  </div>
+
+</div>

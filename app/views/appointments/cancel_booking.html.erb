@@ -1,0 +1,14 @@
+<div class="container d-flex justify-content-center align-items-center">
+  <div>
+    <h2 class="logo_heading my-3"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+      <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
+    </h2>
+    <h1>Cancel your booking?</h1>
+    <div>
+      <p>Name: <%= @appointment.name %> </p>
+      <p>Time: <%= @appointment.formatted_time%>, <%= @appointment.formatted_start_time%></p>
+      <p>Location: <%= @appointment.location%></p>
+    </div>
+    <%= link_to 'Cancel Booking', cancel_appointment_path(@appointment), method: :patch, class: "btn btn-photoshoot mt-3"%>
+  </div>
+</div>

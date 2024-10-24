@@ -1,0 +1,33 @@
+<div class="container">
+  <%= form_with model: @appointment, url: select_date_time_appointments_path, method: :post, local: true, data: { turbo: false } do |form| %>
+    <div data-controller="calendar">
+      <!-- Calendar for selecting the date -->
+      <div class="d-flex gap-3">
+        <div data-calendar-target="calendar"></div>
+
+      <!-- Slots will be displayed here -->
+        <div data-calendar-target="timeSlots" class="time_slot"></div>
+      </div>
+
+      <!-- Input fields for user details -->
+            <div>
+        <%= form.label :name, "Your Name" %>
+        <%= form.text_field :name, required: true %>
+      </div>
+
+      <div>
+        <%= form.label :email, "Your Email" %>
+        <%= form.email_field :email, required: true %>
+      </div>
+
+      <!-- Hidden input field for storing selected start time -->
+      <%= form.hidden_field :start_time, id: 'start_time_input', required: true %>
+
+      <!-- Submit button -->
+      <div>
+        <%= form.submit "Next", class: "btn_new btn btn-photoshoot mt-3" %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

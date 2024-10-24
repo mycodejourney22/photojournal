@@ -1,0 +1,13 @@
+<div class="container">
+<h2 class="logo_heading my-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+  <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
+</h2>
+<h1>Thank You <%= @appointment.name.split(" ").first %>!</h1>
+<p>Your appointment has been successfully booked.</p>
+<h2 class="fs-5 my-2">Appointment Details:</h2>
+<p><strong>Date:</strong> <%= @appointment.start_time.strftime("%B %d, %Y") %></p>
+<p><strong>Time:</strong> <%= @appointment.start_time.strftime("%I:%M %p") %></p>
+<p><strong>Location:</strong> <%= @appointment.location %></p>
+
+<p class="mt-3">If you have any questions, please contact us at info@363photography.org.</p>
+</div>

@@ -4,4 +4,9 @@ module AppointmentsHelper
     question = appointment.questions.find { |q| q.question == question_text }
     question&.answer || 'N/A' # Default to 'N/A' if not found
   end
+
+  def format_date_string(date_str)
+    date = DateTime.parse(date_str)
+    date.strftime("%A, %d, %Y")
+  end
 end
