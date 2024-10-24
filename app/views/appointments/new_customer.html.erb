@@ -1,0 +1,71 @@
+<div class="container form-data d-flex justify-content-center align-items-center">
+  <div>
+    <h2 class="logo_heading mb-5"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+      <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
+    </h2>
+    <%= form_with model: @appointment, url: @appointment.persisted? ? appointment_path(@appointment) : appointments_path, method: @appointment.persisted? ? :patch : :post, local: true, data: { turbo: false } do |form| %>
+      <h1>Enter Details</h1>
+      <div>
+        <!-- Input fields for user details -->
+        <div class='d-flex flex-column'>
+          <%= form.label :name, "Name", class: 'fw-bold mt-4' %>
+          <%= form.text_field :name, required: true, class: "form-data__input" %>
+        </div>
+
+        <div class='d-flex flex-column'>
+          <%= form.label :email, "Email", class: 'fw-bold mt-4' %>
+          <%= form.email_field :email, required: true, class: "form-data__input" %>
+        </div>
+
+        <%= form.hidden_field :location, value: params[:location], required: true %>
+        <%= form.hidden_field :start_time, value: params[:date], required: true %>
+
+        <!-- Questions section -->
+        <%= form.fields_for :questions do |question_form| %>
+          <div class="nested-fields d-flex flex-column">
+            <%= question_form.label :question, question_form.object.question, class: 'fw-bold booking_label' %>
+            <%= question_form.hidden_field :question %>
+
+            <% if question_form.object.question == "Phone number" %>
+              <%= question_form.text_field :answer, required: true, class: "form-data__input" %>
+
+            <% elsif question_form.object.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c)?' %>
+              <div>
+                <%= question_form.radio_button :answer, 'Yes' %> Yes
+                <%= question_form.radio_button :answer, 'No' %> No
+              </div>
+
+            <% elsif question_form.object.question == 'Type of shoots' %>
+              <div class="grid_app_item">
+                <%= question_form.radio_button :answer, 'Kiddies' %> Kiddies
+                <%= question_form.radio_button :answer, 'Newborn' %> Newborn
+                <%= question_form.radio_button :answer, 'Family' %> Family
+                <%= question_form.radio_button :answer, 'Personal' %> Personal
+                <%= question_form.radio_button :answer, 'Maternity' %> Maternity
+                <%= question_form.radio_button :answer, 'PreWedding' %> PreWedding
+              </div>
+
+            <% elsif question_form.object.question == 'Please share anything else that would help prepare for your shoot with us.' %>
+              <div>
+                <%= question_form.text_area :answer, class: 'form-data__input' %>
+              </div>
+
+            <% else %>
+              <div class="grid_app_item">
+                <%= question_form.radio_button :answer, 'Yes' %> Yes
+                <%= question_form.radio_button :answer, 'No' %> No
+              </div>
+            <% end %>
+
+            <%= question_form.hidden_field :_destroy %>
+          </div>
+        <% end %>
+
+        <!-- Submit button -->
+        <div>
+          <%= form.submit "Book Appointment", class: "btn_new btn btn-photoshoot mt-3" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

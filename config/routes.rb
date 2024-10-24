@@ -64,10 +64,21 @@ Rails.application.routes.draw do
     collection do
       get :upcoming
       get :past
+      get :new_customer
+      get :available_slots
+      post :selected_date
+      get :available_hours
+      get :booking
+      get :thank_you
     end
 
     member do
       patch :mark_no_show
+      get :available_hours
+      get :new_customer
+      get :cancel_booking
+      patch :cancel
+
     end
     resources :photo_shoots, except: [:index, :destroy]
     resources :galleries, only: [:new, :create, :show, :update, :edit]

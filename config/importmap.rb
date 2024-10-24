@@ -14,3 +14,6 @@ pin "chart.js", to: "https://ga.jspm.io/npm:chart.js@3.7.0/dist/chart.esm.js"
 pin "dropzone" # @6.0.0
 pin "just-extend" # @5.1.1
 pin "@rails/activestorage", to: "@rails--activestorage.js" # @7.2.100
+pin "@fullcalendar/core", to: "https://cdn.skypack.dev/@fullcalendar/core@6.1.15"
+pin "@fullcalendar/daygrid", to: "https://cdn.skypack.dev/@fullcalendar/daygrid@6.1.15"
+pin "@fullcalendar/interaction", to: "https://cdn.skypack.dev/@fullcalendar/interaction@6.1.15" #

@@ -52,4 +52,40 @@ class AppointmentPolicy < ApplicationPolicy
   def create?
     true
   end
+
+  def new_customer?
+    true
+  end
+
+  def booking?
+    true
+  end
+
+  def available_hours?
+    true
+  end
+
+  def selected_date?
+    true
+  end
+
+  def edit?
+    true
+  end
+
+  def update?
+    true
+  end
+
+  def cancel_booking?
+    true
+  end
+
+  def cancel?
+    true
+  end
+
+  def thank_you?
+    true
+  end
 end
