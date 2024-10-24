@@ -1,9 +1,9 @@
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
   <div class="p-3">
-    <h2 class="logo_heading mb-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+    <h2 class="logo_heading mb-4 p-3"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
       <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
     </h2>
-    <p>Please kindly complete the form below to schedule your photoshoot.</p>
+    <p class="p-3">Please kindly complete the form below to schedule your photoshoot.</p>
     <p class="text-center fw-bold my-3">Select a Day</p>
     <%= form_with model: @appointment, url: selected_date_appointments_path, method: :post, local: true, data: { turbo: false } do |form| %>
       <div data-controller="calendar">
@@ -21,11 +21,11 @@
 
         <!-- Hidden input field for storing selected start time -->
         <%= form.hidden_field :start_time, id: 'start_time_input', required: true %>
-        <div class='d-flex flex-column'>
+        <div class='d-flex flex-column p-3'>
           <%= form.label :location, "Studio Location:" %>
           <%= form.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere']), { prompt: 'Choose your location' }, class: "w-100 form-data__input" %>
         </div>
-        <button type="button" id="redirect_button"  class= "btn_new btn btn-photoshoot mt-3"  data-action="click->calendar#redirectToAvailableHours">See Available Hours</button>
+        <button type="button" id="redirect_button"  class= "btn_new btn btn-photoshoot m-3"  data-action="click->calendar#redirectToAvailableHours">See Available Hours</button>
 
         <!-- Submit button -->
       </div>
