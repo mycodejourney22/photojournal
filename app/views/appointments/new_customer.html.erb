@@ -3,7 +3,7 @@
     <h2 class="logo_heading mb-5"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
       <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
     </h2>
-    <%= form_with model: @appointment, url: @appointment.persisted? ? appointment_path(@appointment) : appointments_path, method: @appointment.persisted? ? :patch : :post, local: true, data: { turbo: false } do |form| %>
+    <%= form_with model: @appointment, url: @appointment.persisted? ? appointment_path(@appointment) : appointments_path, method: @appointment.persisted? ? :patch : :post, local: true, data: { turbo: false }, class: "booking_form" do |form| %>
       <h1>Enter Details</h1>
       <div>
         <!-- Input fields for user details -->
