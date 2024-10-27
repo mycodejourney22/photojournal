@@ -12,13 +12,13 @@
 .fc .fc-col-header-cell-cushion{
   text-decoration: none;
   color: grey;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .fc .fc-daygrid-day-number{
   text-decoration: none;
   color: black;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{
@@ -99,8 +99,9 @@
 }
 
 .fc-direction-ltr.fc-theme-standard{
-  height: 387px;
+  height: 308px;
   padding: 0 1rem;
+  width: 100%;
 }
 
 .fc-scrollgrid-sync-table {
@@ -166,14 +167,18 @@
 } */
 
 
+
 .time_slot button, .next-btn{
-  border: 1px solid #eecc24;
+  border: 2px solid #eecc24;
   background-color: white;
   padding: 0.5rem 2rem;
   border-radius: 6px;
   margin-top: 1rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
   width: 16rem;
+}
+.available_hours_width{
+  width: 28%;
 }
 
 .btn-brown{
@@ -207,6 +212,15 @@
 .time_slot > h3{
   font-size: 0.85rem;
 }
+
+.available_button{
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
 
 // .fc .fc-highlight{
 //   background-color: red;

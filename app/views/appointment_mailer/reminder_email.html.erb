@@ -1,6 +1,6 @@
 <div style="font-family: Arial, sans-serif; padding: 10px;">
   <p>Hi <%= @appointment.name %>,</p>
-  <p>Your PhotoShoot with 363 PHOTOGRAPHY at <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %> is scheduled.</p>
+  <p>This is a friendly reminder that your Photo Shoot  with 363 PHOTOGRAPHY at <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %> is scheduled.</p>
   <p>Below is information about the upcoming photoshoot:</p>
   <p><span style="font-weight: bold;">Location:</span> <%= @appointment.location %></p>
   <% @appointment.questions.each do |question| %>
@@ -15,8 +15,6 @@
   <p>363 Photography Team</p>
 
   <p>Make changes to booking:</p>
-  <p>
-    <a href="<%= edit_appointment_url(@appointment) %>" style="color: #007bff;">Reschedule Booking</a><br>
-    <a href="<%= cancel_booking_appointment_url(@appointment) %>" style="color: #dc3545;">Cancel Booking</a>
-  </p>
+  <%= link_to "Reschedule Booking", "#" %>
+  <%= link_to "Cancel Booking", "#" %>
 </div>

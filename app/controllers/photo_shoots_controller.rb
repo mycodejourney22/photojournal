@@ -1,6 +1,7 @@
 class PhotoShootsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
+  after_action :schedule_thank_you_email, only: :create
 
   before_action :set_appointment, except: [:index, :notes, :consent]
 
@@ -98,6 +99,10 @@ class PhotoShootsController < ApplicationController
   end
 
   private
+
+  def schedule_thank_you_email
+    ThankYouEmailJob.set(wait_until: @photo_shoot.created_at + 2.minutes).perform_later(@photo_shoot) if @photo_shoot.id.present?
+  end
 
   def set_appointment
     @appointment = Appointment.find(params[:appointment_id])

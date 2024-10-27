@@ -1,5 +1,5 @@
 class AppointmentMailer < ApplicationMailer
-  default from: 'info@363photography.org'
+  default from: '363 Photography'
 
   def appointment_created(appointment)
     @appointment = appointment
@@ -14,5 +14,10 @@ class AppointmentMailer < ApplicationMailer
   def appointment_canceled(appointment)
     @appointment = appointment
     mail(to: @appointment.email, subject: '363 Photography Booking Cancellation')
+  end
+
+  def reminder_email(appointment)
+    @appointment = appointment
+    mail(to: @appointment.email, subject: 'Your Upcoming Appointment Reminder')
   end
 end

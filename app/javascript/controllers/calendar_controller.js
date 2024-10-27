@@ -19,6 +19,7 @@ export default class extends Controller {
   initializeCalendar() {
     const calendarEl = this.calendarTarget;
     const calendar = new Calendar(calendarEl, {
+      timeZone: 'Africa/Lagos',
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
       validRange: {
@@ -82,31 +83,36 @@ export default class extends Controller {
 
 
   selectTime(event) {
-    event.preventDefault()
+    event.preventDefault();
     const selectedTime = event.target.dataset.slot;
     this.selectedTime = selectedTime;
     const nextButton = event.target.nextElementSibling;
     const parentElement = event.target.parentElement;
 
-    if (this.previousButton && this.previousButton !== nextButton) {
-      this.previousButton.classList.add('hidden');
-      this.previousButton.classList.remove('btn-yellow');
-      this.previousButton.parentElement.classList.remove('d-flex');
+    // Reset the width of the previously selected button
+    if (this.previousTarget && this.previousTarget !== event.target) {
+        this.previousTarget.style.width = '16rem';
     }
+
+    if (this.previousButton && this.previousButton !== nextButton) {
+        this.previousButton.classList.add('hidden');
+        this.previousButton.classList.remove('btn-yellow');
+        this.previousButton.parentElement.classList.remove('d-flex');
+    }
+
     nextButton.classList.remove('hidden');
     nextButton.classList.add('btn-yellow');
-    parentElement.classList.add('d-flex')
+    parentElement.classList.add('available_button');
+    nextButton.classList.add('available_hours_width');
+    event.target.style.width = '30%'; // Set new width
 
+    // Update previousTarget and previousButton to current selections
+    this.previousTarget = event.target;
     this.previousButton = nextButton;
-    // const selectedDate = new URLSearchParams(window.location.search).get('date');
-    // const selectedLocation = new URLSearchParams(window.location.search).get('location'); // Get the selected location
 
-    return new URLSearchParams(window.location.search)
-    // const combinedDateTime = `${selectedDate.split('T')[0]}T${selectedTime}:00`;
-    // Set the selected time in the hidden input field
-    // window.location.href = `new_customer?date=${combinedDateTime}&location=${selectedLocation}`;
+    return new URLSearchParams(window.location.search);
+}
 
-  }
 
   nextTime() {
     // Ensure that the selected time is available before proceeding
@@ -136,7 +142,7 @@ export default class extends Controller {
     const year = selectedDate.getFullYear();
     const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
     const day = String(selectedDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}T23:00:00.000Z`;
+    const formattedDate = `${year}-${month}-${day}T00:00:00.000Z`;
     // Redirect to the available hours page with the selected date as a parameter
     document.getElementById('selected_date_input').value = formattedDate;
 

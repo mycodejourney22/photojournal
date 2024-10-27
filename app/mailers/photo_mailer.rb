@@ -1,5 +1,5 @@
 class PhotoMailer < ApplicationMailer
-  default from: 'info@363photography.org'
+  default from: '363 Photography'
 
   def send_gallery(appointment, gallery_url, gallery)
     @appointment = appointment
@@ -9,4 +9,8 @@ class PhotoMailer < ApplicationMailer
     mail(to: @appointment.email, subject: 'Your Photo Gallery from 363 Photography')
   end
 
+  def thank_you_email(photoshoot)
+    @photoshoot = photoshoot
+    mail(to: @photoshoot.appointment.email, subject: 'Thank you for trusting 363 Photography')
+  end
 end

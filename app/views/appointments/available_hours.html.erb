@@ -1,7 +1,7 @@
 <!-- app/views/bookings/available_hours.html.erb -->
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;" data-controller="calendar">
   <div class="p-2">
-
+    <p class="text-center fw-bold my-3">Select a Time- West Africa Time Zone</p>
     <p class="text-center">Available Hours for <%= format_date_string(params[:date]) %></p>
     <%= form_with model: @appointment, url: new_customer_appointments_path, method: :get, local: true do |form| %>
       <div data-calendar-target="calendar" style="display: none;"></div>

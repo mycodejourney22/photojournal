@@ -6,8 +6,15 @@ class Question < ApplicationRecord
   QUESTIONS = [
     'Phone number',
     'Type of shoots',
-    'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?'
+    'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?',
+    'Please share anything else that would help prepare for your shoot with us.'
   ].freeze
+
+  QUESTIONS_NEW = [
+    'Phone number',
+    'Type of shoots',
+    'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?'
+    ].freeze
 
   def required_question?
     self.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' ||

@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th>NAME</th>
-      <%= '<th>PHOTO</th>'.html_safe if @url.include?("past")%>
+      <%# <%= '<th>PHOTO</th>'.html_safe if @url.include?("past")%>
       <th>TYPE</th>
       <th>PHONE</th>
       <th>DATE</th>
@@ -14,15 +14,15 @@
     <% appointments.each do |appointment| %>
       <tr>
         <td><%= appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
-        <td>
-          <% if @url.include?("past") %>
-            <% if appointment.galleries.any? { |gallery| gallery.photos.attached? } %>
-              <p class="attached">ATTACHED</p>
-            <% else %>
-              <p class="unattached">UNATTACHED</p>
-            <% end %>
-          <% end %>
-        </td>
+        <%# <td> %>
+          <%# <% if @url.include?("past") %>
+            <%# <% if appointment.galleries.any? { |gallery| gallery.photos.attached? } %>
+              <%# <p class="attached">ATTACHED</p> %>
+            <%# <% else %>
+              <%# <p class="unattached">UNATTACHED</p> %>
+            <%# <% end %>
+          <%# <% end %>
+        <%# </td> %>
 
         <td>
           <%= find_question_answer(appointment, 'Type of shoots') %>

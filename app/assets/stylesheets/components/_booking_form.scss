@@ -11,12 +11,48 @@ a.logo_link {
   padding-right: 6rem;
   padding-left: 1rem;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .booking_form{
   font-family: "Poppins", "Helvetica", "sans-serif";
   label, input{
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
+}
+
+/* Add this to your CSS file */
+.is-invalid {
+  border-color: red; /* Change the border color to red */
+  background-color: #ffe6e6; /* Light red background for emphasis */
+  color: red;
+}
+
+/* Optional: Style the error message */
+.error-message, .field_with_errors {
+  color: red; /* Color for error messages */
+  font-size: 0.875em; /* Slightly smaller font size */
+  margin-top: 0.25em; /* Space between the input and the error message */
+  width: 100px;
+}
+
+.custom-radio {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px;
+  border: 1px solid #ccc; /* Default border color */
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-radio:hover {
+  border-color: #aaa; /* Change border color on hover */
+}
+
+.is-invalid {
+  border-color: red; /* Highlight border in red if invalid */
+}
+
+.is-invalid:hover {
+  border-color: darkred; /* Darker border color on hover if invalid */
 }

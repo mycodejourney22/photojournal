@@ -33,6 +33,9 @@ module Photojournal
     config.active_job.queue_adapter = :async
     config.active_storage.variant_processor = :mini_magick
 
+    config.time_zone = 'West Central Africa'
+    config.active_record.default_timezone = :utc
+
 
   end
 end

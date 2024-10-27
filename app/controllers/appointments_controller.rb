@@ -6,6 +6,7 @@ class AppointmentsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:booking, :available_hours, :selected_date,
                                                  :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit, :update]
 
+  after_action :schedule_reminder_email, only: :create
 
   def upcoming
     authorize Appointment
@@ -28,37 +29,26 @@ class AppointmentsController < ApplicationController
   def booking
     authorize Appointment
     @appointment = Appointment.new
-    Question::QUESTIONS.each do |q|
-      @appointment.questions.build(question: q)
-    end
+    build_questions_for_booking(@appointment)
   end
 
   def edit
     authorize Appointment
     @appointment = Appointment.find(params[:id])
-    Question::QUESTIONS.each do |q|
-      @appointment.questions.build(question: q)
-    end
+    build_questions_for_booking(@appointment)
   end
+
   def new_customer
     authorize Appointment
     @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new
-    # raise
-    # Only build questions if they don't already exist
-    if @appointment.questions.empty?
-      Question::QUESTIONS.each do |q|
-        @appointment.questions.build(question: q)
-      end
-    end
+    build_questions_for_booking(@appointment)
   end
 
   def available_hours
     authorize Appointment
     @available_hours = available_slots(params[:location])
     @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new
-    Question::QUESTIONS.each do |q|
-      @appointment.questions.build(question: q)
-    end
+    build_questions_for_booking(@appointment)
   end
 
   def update
@@ -99,13 +89,17 @@ class AppointmentsController < ApplicationController
     date = utc_date.in_time_zone(Time.zone)
     # Fetch all bookings for the selected date
     booked_slots = Appointment.where(location: location, start_time: date.beginning_of_day..date.end_of_day).pluck(:start_time)
-
     # Define your available slots (e.g., from 9am to 6pm)
     available_slots = generate_time_slots.reject { |slot| booked_slots.include?(slot) }
+    if date.to_date == Time.zone.today
+      current_time = Time.zone.now
+      available_slots = available_slots.reject { |slot| slot < current_time }
+    end
 
     available_slots.map do |slot|
       format_time(slot)
     end
+    # raise
   end
 
 
@@ -133,6 +127,7 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.new(appointment_params)
     @appointment.uuid = SecureRandom.uuid
     if @appointment.save
+      session.delete(:form_data)
       if user_signed_in?
         redirect_to appointments_path, notice: 'Appointment was successfully created.'
       else
@@ -140,14 +135,24 @@ class AppointmentsController < ApplicationController
         redirect_to thank_you_appointments_path(appointment_id: @appointment.id), notice: "Your appointment has been booked successfully."
       end
     else
-      build_questions_for(@appointment) # Rebuild questions if save fails
-      render :new, status: :unprocessable_entity
+      if user_signed_in?
+        build_questions_for(@appointment) # Rebuild questions if save fails
+        render :new, status: :unprocessable_entity
+      else
+        build_questions_for_booking(@appointment)
+        render :new_customer, status: :unprocessable_entity
+      end
     end
   end
 
   def thank_you
     authorize Appointment
     @appointment = Appointment.find(params[:appointment_id])
+  end
+
+  def schedule_reminder_email
+    ReminderEmailJob.set(wait_until: @appointment.start_time - 2.hours).perform_later(@appointment) if @appointment.id.present?
+    ReminderEmailJob.set(wait_until: @appointment.start_time - 24.hours).perform_later(@appointment) if @appointment.id.present?
   end
 
   private
@@ -160,11 +165,21 @@ class AppointmentsController < ApplicationController
   def build_questions_for(appointment)
     if appointment.questions.empty?
       # Assuming you want to build a set of default questions
+      Question::QUESTIONS_NEW.each do |question_text|
+        appointment.questions.build(question: question_text)
+      end
+    end
+  end
+
+  def build_questions_for_booking(appointment)
+    if appointment.questions.empty?
+      # Assuming you want to build a set of default questions
       Question::QUESTIONS.each do |question_text|
         appointment.questions.build(question: question_text)
       end
     end
   end
+
 
 
   def format_location(data)
@@ -237,11 +252,12 @@ class AppointmentsController < ApplicationController
     # Assuming appointments are hourly from 9 AM to 6 PM
     date = Date.parse(params[:date])
     if date.sunday?
-      start_time = Time.zone.parse("12:30")
+      start_time = Time.zone.parse("#{date} 12:30")
     else
-      start_time = Time.zone.parse("09:30")
+      start_time = Time.zone.parse("#{date} 09:30")
     end
-    end_time = Time.zone.parse("17:30")
+
+    end_time = Time.zone.parse("#{date} 17:30")
     (start_time.to_i..end_time.to_i).step(1.hour).map { |time| Time.zone.at(time) }
   end
 
