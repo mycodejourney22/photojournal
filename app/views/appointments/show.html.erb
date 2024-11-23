@@ -78,15 +78,22 @@
           <p>No Sales linked to this contact</p>
         <% end %>
         <div class="d-flex justify-content-between align-items-center">
-          <h6 class="mt-5">Gallery Info</h6>
+          <h6 class="mt-5">Customer Outfit </h6>
         </div>
         <hr>
-        <% if @appointment.galleries.any? { |gallery| gallery.photos.attached? }  %>
-          <% @appointment.galleries.each do |gallery| %>
-            <p>View attached images <%= link_to "here", appointment_gallery_path(@appointment, gallery), class: "black-link" %></p>
-          <% end %>
+        <% if @appointment.customer_pictures.attached? %>
+          <p>View Customer outfits <%= link_to "here", customer_pictures_appointment_path(@appointment), class: "black-link"%></p>
         <% else %>
-            <p>Add a new <%= link_to 'gallery', new_appointment_gallery_path(@appointment), class: "black-link" %></p>
+          <p>No customer Outfits Pictures.</p>
+        <% end %>
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mt-5">Inspo Images</h6>
+        </div>
+        <hr>
+        <% if @appointment.photo_inspirations.attached? %>
+          <p>View Customer Inspiration images <%= link_to "here", photo_inspirations_appointment_path(@appointment), class: "black-link"%></p>
+        <% else %>
+          <p>No Inspo Images.</p>
         <% end %>
       </div>
       <div>

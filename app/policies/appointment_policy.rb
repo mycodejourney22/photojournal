@@ -73,6 +73,14 @@ class AppointmentPolicy < ApplicationPolicy
     true
   end
 
+  def customer_pictures?
+    show?
+  end
+
+  def photo_inspirations?
+    show?
+  end
+
   def update?
     true
   end

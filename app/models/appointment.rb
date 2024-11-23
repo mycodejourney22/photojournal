@@ -7,6 +7,11 @@ class Appointment < ApplicationRecord
   validates :email, presence: true
   validates :location, presence: true
   has_many :galleries
+  has_many_attached :customer_pictures
+  has_many_attached :photo_inspirations
+  after_commit :process_images, on: :create
+
+
 
   include PgSearch::Model
   pg_search_scope :global_search,
@@ -38,6 +43,15 @@ class Appointment < ApplicationRecord
 
   def formatted_time
     start_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if start_time
+  end
+
+  private
+
+  def process_images
+    images = customer_pictures + photo_inspirations
+    images.each do |photo|
+      ProcessImageJob.perform_later(photo.id)
+    end
   end
 
 end

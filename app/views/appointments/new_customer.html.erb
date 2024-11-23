@@ -81,7 +81,15 @@
         </div>
       <% end %>
 
+      <div>
+        <%= form.label :photos, "Please upload pictures of your outfit", class: 'fw-bold mt-4' %>
+        <%= form.file_field :customer_pictures, multiple: true, class: "form-control" %>
+      </div>
 
+      <div>
+        <%= form.label :photos, "Please upload any inspirations you have for your shoots", class: 'fw-bold mt-4' %>
+        <%= form.file_field :photo_inspirations, multiple: true, class: "form-control" %>
+      </div>
 
         <!-- Submit button -->
         <div>

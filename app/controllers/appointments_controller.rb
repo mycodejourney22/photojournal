@@ -145,6 +145,17 @@ class AppointmentsController < ApplicationController
     end
   end
 
+  def customer_pictures
+    authorize Appointment
+    render_photos(:customer_pictures)
+  end
+
+  def photo_inspirations
+    authorize Appointment
+    render_photos(:photo_inspirations)
+  end
+
+
   def thank_you
     authorize Appointment
     @appointment = Appointment.find(params[:appointment_id])
@@ -158,9 +169,29 @@ class AppointmentsController < ApplicationController
   private
 
   def appointment_params
-    params.require(:appointment).permit(:name, :email, :start_time, :end_time, :location,
-                                                           questions_attributes: [:id, :question,:answer,:_destroy])
+    params.require(:appointment).permit(
+      :name,
+      :email,
+      :start_time,
+      :end_time,
+      :location,
+      customer_pictures: [],
+      photo_inspirations: [],
+      questions_attributes: [:id, :question, :answer, :_destroy]
+    )
   end
+
+  def render_photos(photo_type)
+    @appointment = Appointment.find(params[:id])
+    @pictures = @appointment.send(photo_type)
+
+    if @pictures.attached?
+      render photo_type
+    else
+      redirect_to appointment_path(@appointment), notice: "No #{photo_type.to_s.humanize.downcase} attached."
+    end
+  end
+
 
   def build_questions_for(appointment)
     if appointment.questions.empty?

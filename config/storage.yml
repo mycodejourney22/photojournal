@@ -7,6 +7,11 @@ local:
   root: <%= Rails.root.join("storage") %>
 
 
+cloudinary:
+  service: Cloudinary
+  folder: <%= Rails.env %>
+
+
 wasabi:
   service: S3
   access_key_id: <%= ENV['WASABI_ACCESS_KEY'] %>

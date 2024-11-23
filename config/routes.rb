@@ -78,6 +78,8 @@ Rails.application.routes.draw do
       get :new_customer
       get :cancel_booking
       patch :cancel
+      get :customer_pictures
+      get :photo_inspirations
 
     end
     resources :photo_shoots, except: [:index, :destroy]

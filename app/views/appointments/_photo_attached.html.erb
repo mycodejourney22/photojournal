@@ -1,0 +1,47 @@
+<div class="container" data-controller="calendly">
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2><%= "#{heading} for #{@appointment.name.capitalize}" %></h2>
+    </div>
+    <div class="d-flex flex-wrap custom-flex">
+      <% @pictures.each_with_index do |picture, index| %>
+        <div>
+          <%= link_to "#", data: { bs_toggle: "modal", bs_target: "#carouselModal", bs_slide_to: index } do %>
+            <%= image_tag url_for(picture), alt: "Customer Picture", style: "max-width: 200px; max-height: 200px;" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>
+
+<!-- Modal with Carousel -->
+<div class="modal fade" id="carouselModal" tabindex="-1" aria-labelledby="carouselModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <% @pictures.each_with_index do |picture, index| %>
+              <div class="carousel-item <%= 'active' if index == 0 %>">
+                <%= image_tag url_for(picture), class: "d-block w-100", alt: "Customer Picture" %>
+              </div>
+            <% end %>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
