@@ -288,7 +288,7 @@ class AppointmentsController < ApplicationController
       start_time = Time.zone.parse("#{date} 09:30")
     end
 
-    end_time = Time.zone.parse("#{date} 17:30")
+    end_time = Time.zone.parse("#{date} 16:30")
     (start_time.to_i..end_time.to_i).step(1.hour).map { |time| Time.zone.at(time) }
   end
 
