@@ -52,6 +52,9 @@
               <%= question_form.radio_button :answer, 'Newborn', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Newborn
               <%= question_form.radio_button :answer, 'Family', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Family
               <%= question_form.radio_button :answer, 'Personal', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Personal
+              <%= question_form.radio_button :answer, 'Christmas Kiddies', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Christmas Kiddies
+              <%= question_form.radio_button :answer, 'Christmas Family', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Christmas Family
+              <%= question_form.radio_button :answer, 'Christmas Personal', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Christmas Personal
               <%= question_form.radio_button :answer, 'Maternity', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Maternity
               <%= question_form.radio_button :answer, 'PreWedding', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> PreWedding
               <% if question_form.object.errors[:answer].any? %>
