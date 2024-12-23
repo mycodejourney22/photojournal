@@ -4,7 +4,8 @@ class AppointmentsController < ApplicationController
   after_action :verify_policy_scoped, only: :index
   before_action :set_appointments, :set_url, only: [:upcoming, :past, :index, :cancel, :cancel_booking]
   skip_before_action :authenticate_user!, only: [:booking, :available_hours, :selected_date,
-                                                 :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit, :update]
+                                                 :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit,
+                                                 :update, :type_of_shoots,:select_price]
 
   after_action :schedule_reminder_email, only: :create
 
@@ -28,7 +29,7 @@ class AppointmentsController < ApplicationController
 
   def booking
     authorize Appointment
-    @appointment = Appointment.new
+    @appointment = Appointment.new(price: Price.find_by(id: params[:price_id]))
     build_questions_for_booking(@appointment)
   end
 
@@ -40,14 +41,14 @@ class AppointmentsController < ApplicationController
 
   def new_customer
     authorize Appointment
-    @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new
+    @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new(price: Price.find_by(id: params[:price_id]))
     build_questions_for_booking(@appointment)
   end
 
   def available_hours
     authorize Appointment
     @available_hours = available_slots(params[:location])
-    @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new
+    @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new(price: Price.find_by(id: params[:price_id]))
     build_questions_for_booking(@appointment)
   end
 
@@ -121,10 +122,22 @@ class AppointmentsController < ApplicationController
     build_questions_for(@appointment)
   end
 
+  def type_of_shoots
+    authorize Appointment
+    @shoot_types = Price.select(:shoot_type, :icon).distinct
+  end
+
+  def select_price
+    authorize Appointment
+    @shoot_type = params[:shoot_type]
+    @prices = Price.where(shoot_type: @shoot_type)
+  end
+
 
   def create
     authorize Appointment
     @appointment = Appointment.new(appointment_params)
+    @appointment.set_defaults(current_user)
     @appointment.uuid = SecureRandom.uuid
     if @appointment.save
       session.delete(:form_data)
@@ -175,6 +188,7 @@ class AppointmentsController < ApplicationController
       :start_time,
       :end_time,
       :location,
+      :price_id,
       customer_pictures: [],
       photo_inspirations: [],
       questions_attributes: [:id, :question, :answer, :_destroy]

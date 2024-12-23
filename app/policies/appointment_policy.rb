@@ -65,6 +65,10 @@ class AppointmentPolicy < ApplicationPolicy
     true
   end
 
+  def type_of_shoots?
+    true
+  end
+
   def selected_date?
     true
   end
@@ -75,6 +79,10 @@ class AppointmentPolicy < ApplicationPolicy
 
   def customer_pictures?
     show?
+  end
+
+  def select_price?
+    true
   end
 
   def photo_inspirations?

@@ -63,6 +63,9 @@ Rails.application.routes.draw do
   resources :appointments do
     collection do
       get :upcoming
+      get :type_of_shoots
+      post :select_price
+      get :select_price
       get :past
       get :new_customer
       get :available_slots

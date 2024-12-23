@@ -1,0 +1,43 @@
+<%# <div class="container">
+  <h1 class="my-4">Choose Type of shoot</h1>
+  <div class="public-gallery-package">
+    <div class="package">
+      <i class="fa-solid fa-baby"></i>
+      <p>Kiddies</p>
+    </div>
+    <div class="package">
+      <i class="fa-solid fa-person-through-window"></i>
+      <p>Personal</p>
+    </div>
+    <div class="package">
+      <i class="fa-solid fa-people-group"></i>
+      <p>Family</p>
+    </div>
+    <div class="package">
+      <i class="fa-solid fa-person-breastfeeding"></i>
+      <p>Newborn</p>
+    </div>
+    <div class="package">
+      <i class="fa-solid fa-person-pregnant"></i>
+      <p>Maternity</p>
+    </div>
+    <div class="package">
+      <i class="fa-solid fa-passport"></i>
+      <p>Passport Photo</p>
+    </div>
+  </div>
+</div> %>
+
+<div class="container">
+  <h1 class="my-4">Choose Type of Shoot</h1>
+  <div class="public-gallery-package">
+    <% @shoot_types.each do |shoot_type| %>
+      <%= link_to select_price_appointments_path(shoot_type: shoot_type.shoot_type),  class: "package-link" do %>
+        <div class="package">
+          <i class="fa-solid <%= shoot_type.icon %>"></i> <!-- Dynamic Icon -->
+          <p><%= shoot_type.shoot_type %></p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

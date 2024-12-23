@@ -15,6 +15,9 @@
           <% end %>
         </div>
         <%= form.hidden_field :start_time, value: select_datetime, id: 'start_time_input' %>
+        <%= form.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
+
+
       <% end %>
     <% else %>
       <div>

@@ -122,6 +122,8 @@ export default class extends Controller {
       const urlParams = new URLSearchParams(window.location.search);
       const selectedDate = urlParams.get('date');
       const selectedLocation = urlParams.get('location');
+      const priceId = urlParams.get('price_id');
+
 
       // Combine the selected date and time into a single string, if needed
       const combinedDateTime = `${selectedDate.split('T')[0]}T${this.selectedTime}:00`;
@@ -130,7 +132,7 @@ export default class extends Controller {
       document.getElementById('start_time_input').value = combinedDateTime;
 
       // Optionally, redirect to a new URL with the selected time and other parameters
-      window.location.href = `new_customer?date=${combinedDateTime}&location=${selectedLocation}`;
+      window.location.href = `new_customer?date=${combinedDateTime}&location=${selectedLocation}&price_id=${priceId}`;
     } else {
       console.log("No time selected yet.");
     }
@@ -152,9 +154,10 @@ export default class extends Controller {
   redirectToAvailableHours() {
     const selectedDate = document.getElementById('selected_date_input').value;
     const selectedLocation = document.querySelector('select[name="appointment[location]"]').value;
+    const priceId = document.getElementById('appointment_price_id').value;
 
     if (selectedDate && selectedLocation) {
-      window.location.href = `available_hours?date=${selectedDate}&location=${selectedLocation}`;
+      window.location.href = `available_hours?date=${selectedDate}&location=${selectedLocation}&price_id=${priceId}`;
     }
   }
 

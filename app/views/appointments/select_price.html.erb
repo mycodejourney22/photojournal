@@ -1,0 +1,23 @@
+<div class="container">
+  <h1 class="my-4 text-center">Choose a Package for <%= @shoot_type %></h1>
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <% @prices.each do |price| %>
+      <div class="pricing" style="cursor: pointer;"
+            onclick="window.location='<%= booking_appointments_path(price_id: price.id) %>'">
+        <div class="pricing__top-item">
+          <p><%= price.outfit %></p>
+          <p>#<%= price.amount %></p>
+        </div>
+        <div class="pricing__description">
+          <p><%= price.description %></p>
+        </div>
+
+        <div class="pricing__bottom-item">
+          <p>Edited Copies: <%= price.included %></p>
+          <p>Unedited Copies: Available on request</p>
+          <p>Hardcopies/Print: Not included in pricing</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

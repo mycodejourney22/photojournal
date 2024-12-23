@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_12_181146) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_22_200020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_12_181146) do
     t.uuid "uuid", null: false
     t.boolean "no_show", default: false
     t.boolean "status", default: true
+    t.string "channel"
+    t.integer "price"
+    t.bigint "price_id"
+    t.index ["price_id"], name: "index_appointments_on_price_id"
     t.index ["start_time"], name: "index_appointments_on_start_time"
     t.index ["uuid"], name: "index_appointments_on_uuid", unique: true
   end
@@ -176,6 +180,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_12_181146) do
     t.index ["appointment_id"], name: "index_photo_shoots_on_appointment_id"
   end
 
+  create_table "prices", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.decimal "amount"
+    t.decimal "discount"
+    t.integer "duration"
+    t.text "included"
+    t.string "shoot_type"
+    t.boolean "still_valid"
+    t.text "icon"
+    t.text "outfit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string "answer"
     t.integer "position"
@@ -231,6 +250,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_12_181146) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "appointments", "prices"
   add_foreign_key "galleries", "appointments"
   add_foreign_key "photo_shoots", "appointments"
   add_foreign_key "questions", "appointments"

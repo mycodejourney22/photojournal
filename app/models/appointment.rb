@@ -10,6 +10,8 @@ class Appointment < ApplicationRecord
   has_many_attached :customer_pictures
   has_many_attached :photo_inspirations
   after_commit :process_images, on: :create
+  belongs_to :price, optional: true # This assumes a Price model exists
+  before_validation :set_defaults
 
 
 
@@ -45,6 +47,15 @@ class Appointment < ApplicationRecord
     start_time.in_time_zone('West Central Africa').strftime("%I:%M %p") if start_time
   end
 
+  def set_defaults(user = nil)
+    if user.present?
+      self.channel ||= "walk in"
+    else
+      self.channel ||= "online"
+      self.price ||= Price.find(price_id) if price_id.present? # Assign price from the selected price instance
+    end
+  end
+
   private
 
   def process_images
@@ -53,5 +64,7 @@ class Appointment < ApplicationRecord
       ProcessImageJob.perform_later(photo.id)
     end
   end
+
+
 
 end
