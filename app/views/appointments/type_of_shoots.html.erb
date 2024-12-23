@@ -29,7 +29,10 @@
 </div> %>
 
 <div class="container">
-  <h1 class="my-4">Choose Type of Shoot</h1>
+  <h2 class="logo_heading mb-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+      <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
+  </h2>
+  <h4 class="my-4">Choose Type of Shoot</h4>
   <div class="public-gallery-package">
     <% @shoot_types.each do |shoot_type| %>
       <%= link_to select_price_appointments_path(shoot_type: shoot_type.shoot_type),  class: "package-link" do %>

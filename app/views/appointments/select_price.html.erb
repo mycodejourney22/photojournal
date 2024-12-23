@@ -1,5 +1,8 @@
 <div class="container">
-  <h1 class="my-4 text-center">Choose a Package for <%= @shoot_type %></h1>
+  <h2 class="logo_heading mb-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+      <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
+  </h2>
+  <h4 class="my-4 text-center">Choose a Package for <%= @shoot_type %></h4>
   <div class="d-flex flex-column justify-content-center align-items-center">
     <% @prices.each do |price| %>
       <div class="pricing" style="cursor: pointer;"
