@@ -60,4 +60,8 @@ class PhotoShootPolicy < ApplicationPolicy
   def show?
     true
   end
+
+  def editors_stats?
+    true
+  end
 end

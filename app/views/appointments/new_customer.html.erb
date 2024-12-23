@@ -24,6 +24,8 @@
 
         <%= form.hidden_field :location, value: params[:location], required: true %>
         <%= form.hidden_field :start_time, value: params[:date], required: true %>
+        <%= form.hidden_field :price_id, value: params[:price_id] %>
+
 
         <!-- Questions section -->
       <%= form.fields_for :questions do |question_form| %>

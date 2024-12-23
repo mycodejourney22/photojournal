@@ -3,7 +3,7 @@ class PhotoShootsController < ApplicationController
   after_action :verify_policy_scoped, only: :index
   after_action :schedule_thank_you_email, only: :create
 
-  before_action :set_appointment, except: [:index, :notes, :consent]
+  before_action :set_appointment, except: [:index, :notes, :consent, :editors_stats]
 
   def index
     authorize PhotoShoot
@@ -48,6 +48,11 @@ class PhotoShootsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
+  # def editors_stats
+  #   authorize PhotoShoot
+  #   raise
+  # end
 
   def notes
     authorize PhotoShoot

@@ -1,0 +1,65 @@
+.package{
+  background: #1f1f1f1f;
+  padding: 2rem;
+  width: 160px;
+  height: 120px;
+  text-align: center;
+  border-radius: 8px;
+
+  i{
+    font-size: 2rem;
+    color: grey;
+  }
+
+
+}
+
+.pricing{
+  // font-size: 12px;
+  width: 320px;
+  margin: 12px 0;
+  background: #f1f1f1;
+  padding: 12px;
+
+  .pricing__top-item{
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .pricing__description p{
+    font-size: 11px;
+    margin: 6px 0;
+  }
+
+  .pricing__bottom-item p{
+    font-size: 8px;
+    color: grey;
+  }
+}
+
+a.package-link{
+  color: black;
+  text-decoration: none;
+}
+
+.public-gallery-package{
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(6, 1fr)
+}
+
+@media (max-width: 1024px) {
+  .public-gallery-package {
+    grid-template-columns: repeat(3, 1fr); /* 3 images per row */
+  }
+
+
+}
+
+/* For iPhone or small mobile level (1 image per row) */
+@media (max-width: 600px) {
+  .public-gallery-package {
+    grid-template-columns: 1fr 1fr; /* 1 image per row */
+  }
+}

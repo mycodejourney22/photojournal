@@ -34,7 +34,7 @@
 /* For iPad or tablet level (3 images per row) */
 @media (max-width: 1024px) {
   .public-gallery-wrapper {
-    grid-template-columns: repeat(3, 1fr); /* 3 images per row */
+    grid-template-columns: repeat(4, 1fr); /* 3 images per row */
   }
 
   .gallery-img-public  {
