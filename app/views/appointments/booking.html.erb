@@ -3,6 +3,8 @@
     <h2 class="logo_heading mb-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
       <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
     </h2>
+
+
     <p class="py-2">Please kindly complete the form below to schedule your photoshoot.</p>
     <p class="text-center fw-bold my-3">Select a Day</p>
     <%= form_with model: @appointment, url: selected_date_appointments_path, method: :post, local: true, data: { turbo: false } do |form| %>
