@@ -1,17 +1,21 @@
 <div style="font-family: Arial, sans-serif; padding: 10px;">
   <p>Hi <%= @appointment.name %>,</p>
   <p>Your PhotoShoot with 363 PHOTOGRAPHY at <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %> is scheduled.</p>
-  <p>Below is information about the upcoming photoshoot:</p>
-  <p><span style="font-weight: bold;">Location:</span> <%= @appointment.location %></p>
+  <p>Below are important informations to help with your photoshoot:</p>
+  <p><span>Location:</span> <%= @location %></p>
+  <p><span>Studio Phone number:</span> <%= @studio_phone_number %></p>
+
+  <p style="margin-bottom: 20px; font-weight: bold;">Studio Make up Policy</p>
+  <p>If you’re planning to have makeup done at the studio, whether by our in-house makeup artist or your own, please arrive at least one hour before your photoshoot appointment.</p>
+  <p style="margin-bottom: 20px; font-weight: bold;">Missed Appointment Policy</p>
+  <p>We suggest arriving at the studio at least 30 minutes before your session. In the event of a missed appointment, please be prepared to wait in line for the next available studio slot. Your patience and understanding are appreciated.</p>
+
+  <p style="font-weight: bold;">Below are details you filled for your appointment:</p>
   <% @appointment.questions.each do |question| %>
     <div style="margin-bottom: 10px;">
-      <p style="font-weight: bold;"><%= question.question %></p>
-      <p><%= question.answer %></p>
+      <p><span style="font-weight: bold;"><%= question.question %></span>: <%= question.answer %></p>
     </div>
   <% end %>
-
-  <p style="margin-bottom: 20px; font-weight: bold;">Missed Appointment Policy</p>
-  <p>We suggest arriving at the studio at least 30 minutes before your session. In the event of a missed appointment, please be prepared to wait in line for the next available studio slot. Your patience and understanding are appreciated. Thank you.</p>
   <p>363 Photography Team</p>
 
   <p>Make changes to booking:</p>
