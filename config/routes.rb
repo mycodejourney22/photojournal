@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
   end
 
+  post 'webhooks/paystack', to: 'paystackwebhooks#paystack'
+  get 'display_price', to: 'test_payment#display_price'
+  post 'paystack_payment', to: 'payments#initiate_payment'
+
+
+
   get 'photo_shoots/consent'
   resources :customers do
     member do
