@@ -3,8 +3,12 @@
   <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
 </h2>
 <h1>Thank You <%= @appointment.name.split(" ").first %>!</h1>
-<p>Your appointment has been successfully booked.</p>
-<h2 class="fs-5 my-2">Appointment Details:</h2>
+<p class="mt-2">Your appointment has been scheduled.</p>
+<% if  !@appointment.payment_status && @appointment.price_id.present?%>
+  <p class="mt-2">Complete your booking by using the link below to make payment.</p>
+  <%= link_to "Make Payment Now", make_payment_path(appointment_id: @appointment.id) %><hr>
+<% end %>
+<p class=" my-2">Appointment Details:</p>
 <p><strong>Date:</strong> <%= @appointment.start_time.strftime("%B %d, %Y") %></p>
 <p><strong>Time:</strong> <%= @appointment.start_time.strftime("%I:%M %p") %></p>
 <p><strong>Location:</strong> <%= @appointment.location %></p>

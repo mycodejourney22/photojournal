@@ -19,9 +19,15 @@ Rails.application.routes.draw do
   end
 
   post 'webhooks/paystack', to: 'paystackwebhooks#paystack'
-  get 'display_price', to: 'test_payment#display_price'
+  get 'make_payment', to: 'payments#make_payment'
   post 'paystack_payment', to: 'payments#initiate_payment'
-
+  resources :payments, only: [] do
+    collection do
+      get :verify_payment
+      get :success
+      get :failure
+    end
+  end
 
 
   get 'photo_shoots/consent'

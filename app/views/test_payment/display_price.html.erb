@@ -1,7 +1,0 @@
-<div class="container">
-  <%= form_with url: paystack_payment_path, method: :post do %>
-    <h1>I am testing payment for <%= @price.amount %></h1>
-    <%= hidden_field_tag :price_id, @price.id %>
-    <%= submit_tag "Proceed to Payment" %>
-  <% end %>
-</div>

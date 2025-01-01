@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_22_200020) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_31_203859) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_22_200020) do
     t.string "channel"
     t.integer "price"
     t.bigint "price_id"
+    t.boolean "payment_status", default: false
     t.index ["price_id"], name: "index_appointments_on_price_id"
     t.index ["start_time"], name: "index_appointments_on_start_time"
     t.index ["uuid"], name: "index_appointments_on_uuid", unique: true

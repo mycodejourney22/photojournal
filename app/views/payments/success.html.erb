@@ -1,0 +1,18 @@
+<div class="container">
+  <h2 class="logo_heading my-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+    <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
+  </h2>
+  <h1 class="payment_preview_heading">Payment & Booking Confirmed</h1>
+  <div class="payment-preview-card">
+    <p>Name:</p>
+    <p><%= @appointment.name %></p>
+    <p>Type of Shoot:</p>
+    <p><%= @price.shoot_type %></p>
+    <p>Total Amount Due:</p>
+    <p><%= @price.amount %></p>
+    <p>Number of outfit:</p>
+    <p><%= @price.outfit %></p>
+    <p>Appointment Time:</p>
+    <p><%= @appointment.formatted_start_time %>,  <%= @appointment.formatted_time %></p>
+  </div>
+</div>
