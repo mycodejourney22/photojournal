@@ -56,6 +56,15 @@ class Appointment < ApplicationRecord
     end
   end
 
+  def schedule_policy_email
+    SendPolicyEmailJob.set(wait: 1.minute).perform_later(id)
+  end
+
+  def schedule_reminder_email
+    ReminderEmailJob.set(wait_until: @appointment.start_time - 2.hours).perform_later(@appointment) if @appointment.id.present?
+    ReminderEmailJob.set(wait_until: @appointment.start_time - 24.hours).perform_later(@appointment) if @appointment.id.present?
+  end
+
   private
 
   def process_images

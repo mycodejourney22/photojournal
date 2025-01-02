@@ -7,8 +7,6 @@ class AppointmentsController < ApplicationController
                                                  :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit,
                                                  :update, :type_of_shoots,:select_price]
 
-  after_action :schedule_reminder_email, only: :create
-
   def upcoming
     authorize Appointment
     @appointments = upcoming_appointment
@@ -144,6 +142,8 @@ class AppointmentsController < ApplicationController
       if user_signed_in?
         redirect_to appointments_path, notice: 'Appointment was successfully created.'
       else
+        @appointment.schedule_policy_email
+        @appointment.schedule_reminder_email
         AppointmentNotificationJob.perform_later(@appointment, 'created')
         redirect_to thank_you_appointments_path(appointment_id: @appointment.id), notice: "Your appointment has been booked successfully."
       end
@@ -174,10 +174,7 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.find(params[:appointment_id])
   end
 
-  def schedule_reminder_email
-    ReminderEmailJob.set(wait_until: @appointment.start_time - 2.hours).perform_later(@appointment) if @appointment.id.present?
-    ReminderEmailJob.set(wait_until: @appointment.start_time - 24.hours).perform_later(@appointment) if @appointment.id.present?
-  end
+
 
   private
 

@@ -15,7 +15,7 @@
     <p>Appointment Time:</p>
     <p><%= @appointment.formatted_start_time %>,  <%= @appointment.formatted_time %></p>
   </div>
-  <%= form_with url: paystack_payment_path, method: :post, data: { turbo: false } do |form| %>
+  <%= form_with url: paystack_payment_path(appointment_id: @appointment.id), method: :post, data: { turbo: false } do |form| %>
     <%= hidden_field_tag :price_id, @price.id %>
     <%= submit_tag "Proceed to Payment", class: "btn preview_btn" %>
   <% end %>

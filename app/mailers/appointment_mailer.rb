@@ -24,6 +24,14 @@ class AppointmentMailer < ApplicationMailer
     mail(to: @appointment.email, subject: 'Your Upcoming Appointment Reminder')
   end
 
+  def policy_email(appointment)
+    @appointment = appointment
+    mail(
+      to: @appointment.email,
+      subject: "363 Photography Studio Policy"
+    )
+  end
+
   private
 
   def studio_address

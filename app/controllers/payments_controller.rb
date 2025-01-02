@@ -10,10 +10,10 @@ class PaymentsController < ApplicationController
   end
 
   def initiate_payment
+    appointment = Appointment.find(params[:appointment_id])
     price = Price.find(params[:price_id])
-    email = current_user&.email || "default@example.com"
+    email = appointment.email || "default@example.com"
     amount = (price.amount * 100).to_i
-    appointment = Appointment.last
 
 
     uri = URI("https://api.paystack.co/transaction/initialize")
