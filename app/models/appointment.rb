@@ -61,8 +61,8 @@ class Appointment < ApplicationRecord
   end
 
   def schedule_reminder_email
-    ReminderEmailJob.set(wait_until: @appointment.start_time - 2.hours).perform_later(@appointment) if @appointment.id.present?
-    ReminderEmailJob.set(wait_until: @appointment.start_time - 24.hours).perform_later(@appointment) if @appointment.id.present?
+    ReminderEmailJob.set(wait_until: start_time - 2.hours).perform_later(id)
+    ReminderEmailJob.set(wait_until: start_time - 24.hours).perform_later(id)
   end
 
   private
