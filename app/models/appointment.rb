@@ -61,9 +61,21 @@ class Appointment < ApplicationRecord
   end
 
   def schedule_reminder_email
-    ReminderEmailJob.set(wait_until: start_time - 2.hours).perform_later(id)
-    ReminderEmailJob.set(wait_until: start_time - 24.hours).perform_later(id)
+    # Calculate the reminder times
+    reminder_2_hours = start_time - 2.hours
+    reminder_24_hours = start_time - 24.hours
+
+    # Schedule the 2-hour reminder only if it's in the future
+    if reminder_2_hours > Time.current
+      ReminderEmailJob.set(wait_until: reminder_2_hours).perform_later(id)
+    end
+
+    # Schedule the 24-hour reminder only if it's in the future
+    if reminder_24_hours > Time.current
+      ReminderEmailJob.set(wait_until: reminder_24_hours).perform_later(id)
+    end
   end
+
 
   private
 
