@@ -178,19 +178,31 @@ class AppointmentsController < ApplicationController
 
   private
 
+  # def appointment_params
+  #   params.require(:appointment).permit(
+  #     :name,
+  #     :email,
+  #     :start_time,
+  #     :end_time,
+  #     :location,
+  #     :price_id,
+  #     customer_pictures: [],
+  #     photo_inspirations: [],
+  #     questions_attributes: [:id, :question, :answer, :_destroy]
+  #   )
+  # end
+
   def appointment_params
     params.require(:appointment).permit(
-      :name,
-      :email,
-      :start_time,
-      :end_time,
-      :location,
-      :price_id,
+      :name, :email, :location, :start_time, :price_id,
+      questions_attributes: [:id, :question, :answer, :_destroy],
       customer_pictures: [],
-      photo_inspirations: [],
-      questions_attributes: [:id, :question, :answer, :_destroy]
-    )
+      photo_inspirations: []
+    ).tap do |whitelisted|
+      whitelisted[:price_id] = nil if whitelisted[:price_id] == "null"
+    end
   end
+
 
   def render_photos(photo_type)
     @appointment = Appointment.find(params[:id])

@@ -154,7 +154,11 @@ export default class extends Controller {
   redirectToAvailableHours() {
     const selectedDate = document.getElementById('selected_date_input').value;
     const selectedLocation = document.querySelector('select[name="appointment[location]"]').value;
-    const priceId = document.getElementById('appointment_price_id').value;
+    const priceId = document.getElementById('appointment_price_id').value || null;
+
+    console.log(selectedDate)
+    console.log(selectedLocation)
+    console.log(priceId)
 
     if (selectedDate && selectedLocation) {
       window.location.href = `available_hours?date=${selectedDate}&location=${selectedLocation}&price_id=${priceId}`;

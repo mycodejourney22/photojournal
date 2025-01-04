@@ -52,7 +52,7 @@ class Appointment < ApplicationRecord
       self.channel ||= "walk in"
     else
       self.channel ||= "online"
-      self.price ||= Price.find(price_id) if price_id.present? # Assign price from the selected price instance
+      self.price ||= Price.find(price_id) if price_id.present?
     end
   end
 

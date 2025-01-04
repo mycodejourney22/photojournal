@@ -16,6 +16,8 @@
 
         <!-- Input fields for user details -->
         <%= form.hidden_field :selected_date, value: @appointment.start_time&.to_date, id: 'selected_date_input' %>
+        <%= form.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
+
 
 
         <!-- Hidden input field for storing selected start time -->
