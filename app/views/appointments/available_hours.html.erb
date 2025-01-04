@@ -1,27 +1,33 @@
-<!-- app/views/bookings/available_hours.html.erb -->
-<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;" data-controller="calendar">
+<div class="container d-flex align-items-center" style="height: 100vh;" data-controller="calendar">
   <div class="p-2">
-    <p class="text-center fw-bold my-3">Select a Time- West Africa Time Zone</p>
+    <p class="fw-bold my-3">Select a Time - West Africa Time Zone</p>
     <% if @available_hours.size >= 1 %>
-      <p class="text-center">Available Hours for <%= format_date_string(params[:date]) %></p>
-      <%= form_with model: @appointment, url: new_customer_appointments_path, method: :get, local: true do |form| %>
-        <div data-calendar-target="calendar" style="display: none;"></div>
-        <div data-calendar-target="timeSlots" class="time_slot">
+      <p>Available Hours for <%= format_date_string(params[:date]) %></p>
+
+      <form action="<%= new_customer_appointments_path %>" method="get">
+        <!-- Time Slots -->
+        <div class="grid_app_item">
           <% @available_hours.each do |slot| %>
-            <div class="text-center">
-              <button data-action="click->calendar#selectTime" data-slot="<%= slot %>" data><%= slot %></button>
-              <%= form.submit "Next", class: "next-btn hidden", data: { action: "click->calendar#nextTime" } %>
-            </div>
+            <%# Combine params[:date] with the slot (time) to form the full date-time %>
+            <% combined_date_time = Time.zone.parse("#{Date.parse(params[:date])} #{slot}") %>
+            <input type="radio" name="date" value="<%= combined_date_time %>" id="slot_<%= slot.gsub(':', '_') %>" required>
+            <label for="slot_<%= slot.gsub(':', '_') %>" style="width: max-content;"><%= slot %></label>
           <% end %>
         </div>
-        <%= form.hidden_field :start_time, value: select_datetime, id: 'start_time_input' %>
-        <%= form.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
 
+        <!-- Location -->
+        <input type="hidden" name="location" value="<%= params[:location] %>">
 
-      <% end %>
+        <!-- Price ID -->
+        <input type="hidden" name="price_id" value="<%= params[:price_id] || 'null' %>">
+
+        <div class="text-center">
+          <button type="submit" class="btn_new btn btn-photoshoot mt-2 w-100">Next</button>
+        </div>
+      </form>
     <% else %>
       <div>
-        <p>No available hours for <%= format_date_string(params[:date]) %> </p>
+        <p>No available hours for <%= format_date_string(params[:date]) %></p>
         <%= link_to "Go Back", :back, class: "black-link" %>
       </div>
     <% end %>

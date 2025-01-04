@@ -27,8 +27,12 @@ class AppointmentsController < ApplicationController
 
   def booking
     authorize Appointment
-    @appointment = Appointment.new(price: Price.find_by(id: params[:price_id]))
-    build_questions_for_booking(@appointment)
+    if params[:price_id].present?
+      @appointment = Appointment.new(price: Price.find_by(id: params[:price_id]))
+      build_questions_for_booking(@appointment)
+    else
+      redirect_to type_of_shoots_appointments_path
+    end
   end
 
   def edit

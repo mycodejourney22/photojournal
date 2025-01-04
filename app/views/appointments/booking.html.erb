@@ -1,38 +1,46 @@
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
   <div>
-    <h2 class="logo_heading mb-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
+    <h2 class="logo_heading mb-4">
+      <%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
       <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
     </h2>
 
-
     <p class="py-2">Please kindly complete the form below to schedule your photoshoot.</p>
     <p class="text-center fw-bold my-3">Select a Day</p>
-    <%= form_with model: @appointment, url: selected_date_appointments_path, method: :post, local: true, data: { turbo: false } do |form| %>
-      <div data-controller="calendar">
-        <!-- Calendar for selecting the date -->
-        <div class="d-flex justify-content-center align-items-center">
-          <div data-calendar-target="calendar"></div>
 
-        <!-- Slots will be displayed here -->
-          <%# <div data-calendar-target="timeSlots" class="time_slot"></div> %>
-        </div>
+    <!-- Placeholder for JS Form -->
+    <div id="js-form-placeholder"></div>
 
-        <!-- Input fields for user details -->
-        <%= form.hidden_field :selected_date, value: '', id: 'selected_date_input' %>
-
-        <%= form.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
-
-        <!-- Hidden input field for storing selected start time -->
-        <%= form.hidden_field :start_time, id: 'start_time_input', required: true %>
-        <div class='d-flex flex-column py-3'>
-          <%= form.label :location, "Studio Location:" %>
-          <%= form.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere']), { prompt: 'Choose your location' }, class: "w-100 form-data__input" %>
-        </div>
-        <button type="button" id="redirect_button"  class= "btn_new btn btn-photoshoot mt-2"  data-action="click->calendar#redirectToAvailableHours">See Available Hours</button>
-
-        <!-- Submit button -->
+    <!-- Fallback for No JavaScript -->
+    <noscript>
+      <div id="noscript-form">
+        <%= form_with url: available_hours_appointments_path(price_id: params[:price_id] || @appointment.price_id), method: :get, local: true do |f| %>
+          <%= f.label :date, "Choose a date:" %>
+          <%= f.date_field :date, class: "form-control", required: true %>
+          <div class="d-flex flex-column py-3">
+            <%= f.label :location, "Studio Location:" %>
+            <%= f.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere']), { prompt: 'Choose your location' }, class: "form-data__input", required: true %>
+          </div>
+          <%= f.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
+          <%= f.submit "See Available Hours", class: "btn_new btn btn-photoshoot mt-2" %>
+        <% end %>
       </div>
-    <% end %>
+    </noscript>
   </div>
-
 </div>
+
+<script>
+  (function renderJsForm() {
+    const jsFormContainer = document.getElementById('js-form-placeholder');
+
+    if (jsFormContainer) {
+      jsFormContainer.innerHTML = `
+        <%= escape_javascript(
+          form_with(model: @appointment, url: selected_date_appointments_path, method: :post, local: true, data: { turbo: false }) do |form|
+            render(partial: 'calendar_form', locals: { form: form })
+          end
+        ) %>
+      `;
+    }
+  })();
+</script>
