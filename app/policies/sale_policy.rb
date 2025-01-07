@@ -13,11 +13,14 @@ class SalePolicy < ApplicationPolicy
       else
         case user.role
         when 'ikeja'
-          scope.where("location ILIKE ?", "%ikeja%")
+          scope.where("location ILIKE ?", '%ikeja%')
+          .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%ikeja%")))
         when 'surulere'
-          scope.where("location ILIKE ?", "%surulere%")
+          scope.where("location ILIKE ?", '%surulere%')
+          .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%surulere%")))
         when 'ajah'
           scope.where("location ILIKE ? OR location ILIKE ?", '%Ajah%', '%Ilaje%')
+               .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%Ajah%")))
         else
           scope.none
         end
