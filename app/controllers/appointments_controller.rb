@@ -127,12 +127,13 @@ class AppointmentsController < ApplicationController
   def type_of_shoots
     authorize Appointment
     @shoot_types = Price.select(:shoot_type, :icon).distinct
+
   end
 
   def select_price
     authorize Appointment
     @shoot_type = params[:shoot_type]
-    @prices = Price.where(shoot_type: @shoot_type)
+    @prices = Price.where(shoot_type: @shoot_type).order(:outfit)
   end
 
 
