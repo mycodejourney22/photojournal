@@ -91,7 +91,7 @@ class AppointmentsController < ApplicationController
     utc_date = Time.zone.parse(params[:date])
     date = utc_date.in_time_zone(Time.zone)
     # Fetch all bookings for the selected date
-    booked_slots = Appointment.where(location: location, start_time: date.beginning_of_day..date.end_of_day).pluck(:start_time)
+    booked_slots = Appointment.where(location: location, status: true, start_time: date.beginning_of_day..date.end_of_day).pluck(:start_time)
     # Define your available slots (e.g., from 9am to 6pm)
     available_slots = generate_time_slots.reject { |slot| booked_slots.include?(slot) }
     if date.to_date == Time.zone.today
