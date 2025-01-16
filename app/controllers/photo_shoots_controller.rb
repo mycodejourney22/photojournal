@@ -3,7 +3,7 @@ class PhotoShootsController < ApplicationController
   after_action :verify_policy_scoped, only: :index
   after_action :schedule_thank_you_email, only: :create
 
-  before_action :set_appointment, except: [:index, :notes, :consent, :editors_stats]
+  before_action :set_appointment, except: [:index, :notes, :consent]
 
   def index
     authorize PhotoShoot
