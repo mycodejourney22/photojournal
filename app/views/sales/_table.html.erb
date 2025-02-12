@@ -7,7 +7,9 @@
             <th>PRODUCT</th>
             <th>AMOUNT</th>
             <th>PAYMENT</th>
-            <%# <th>Actions</th> %>
+            <% if current_user.admin? || current_user.manager? || current_user.super_admin? %>
+              <th>ACTIONS</th>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -19,9 +21,56 @@
               <td><%= sale.product_service_name %></td>
               <td><%= sale.amount_paid %></td>
               <td><%= sale.payment_type %></td>
-              <%# <td>
-                <p><%= link_to 'Update Details', edit_sale_path(sale) %>
-              <%# </td> %>
+              <% if current_user.admin? || current_user.manager? || current_user.super_admin? %>
+                <td>
+                  <div data-controller="modal">
+                    <% if sale.void? %>
+                      <span class="text-muted">Voided</span>
+                    <% else %>
+                      <%= link_to 'Void Sale', '#',
+                          data: { action: "click->modal#open" },
+                          class: "text-danger" %>
+
+                      <!-- Modal -->
+                      <div data-modal-target="modal" class="modal fade show" style="display: none; background: rgba(0,0,0,0.5);">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Void Sale</h5>
+                              <button type="button" class="btn-close" data-action="modal#close"></button>
+                            </div>
+
+                            <%= form_with(model: sale, local: true) do |f| %>
+                              <div class="modal-body">
+                                <div class="mb-3">
+                                  <div class="form-check">
+                                    <%= f.check_box :void, class: "form-check-input" %>
+                                    <%= f.label :void, "Void this sale", class: "form-check-label" %>
+                                  </div>
+                                </div>
+
+                                <div class="mb-3">
+                                  <%= f.label :void_reason, "Reason", class: "form-label" %>
+                                  <%= f.text_area :void_reason,
+                                      class: "form-control",
+                                      rows: 3,
+                                      placeholder: "Enter reason for voiding sale" %>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn " data-action="modal#close">
+                                  Cancel
+                                </button>
+                                <%= f.submit "Confirm", class: "btn " %>
+                              </div>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>

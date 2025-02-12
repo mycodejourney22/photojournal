@@ -1,0 +1,29 @@
+<div class="container">
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <h1 class="ps-5">Create New Session</h1>
+    <%= simple_form_for @price, class: "price_new_form" do |f| %>
+        <div class=" price_new" >
+          <%= f.input :name , label: "Session Type Name *",
+              placeholder: "e.g Kiddies", input_html: {class: "input_field"}%>
+          <%= f.input :amount, label: "Session Price *" ,
+            input_html: { value: 0 , class: "input_field"} %>
+          <%= f.input :still_valid %>
+
+          <div class="grid-container">
+            <%= f.input :duration, input_html: { value: 60 ,  class: "input_field"} %>
+            <%= f.input :period,
+              label: "Hr/Min",
+              collection: [['Minutes', 'minutes'], ['Hours', 'hours']],
+              prompt: "Select period" %>
+          </div>
+          <%= f.input :description, placeholder: "Describe what's included in the session..." %>
+            <div class="grid-container">
+              <%= f.input :discount, input_html: { value: 0, class: "input_field" } %>
+              <%= f.input :photo, as: :file , input_html: {class: "input_field" }%>
+            </div>
+          <%= f.submit "Add Session", class: "btn btn-photoshoot mt-3 w-100" %>
+        </div>
+    <% end %>
+  </section>
+</div>

@@ -11,19 +11,20 @@
       <% @prices.each do |price| %>
         <div class="pricing">
           <a href="<%= booking_appointments_path(price_id: price.id) %>" style="text-decoration: none; color:black;">
-            <div class="pricing__top-item">
-              <p><%= price.outfit %></p>
-              <p>#<%= price.amount %></p>
-            </div>
-
-            <div class="pricing__description">
-              <p><%= price.description %></p>
-            </div>
-
-            <div class="pricing__bottom-item">
-              <p>Edited Copies: <%= price.included %></p>
-              <p>Unedited Copies: Available on request</p>
-              <p>Hardcopies/Print: Not included in pricing</p>
+            <div class="card-trip">
+              <%= price.photo.attached? ? cl_image_tag(price.photo.key) : image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", alt: "default photo")  %>
+              <div class="card-trip-infos">
+                <div>
+                  <h2><%= price.outfit %></h2>
+                  <p><%= price.description %></p>
+                  <div class="pricing__bottom-item">
+                    <p>Edited Copies: <%= price.included %></p>
+                    <p>Unedited Copies: Available on request</p>
+                    <p>Hardcopies/Print: Not included in pricing</p>
+                  </div>
+                </div>
+                <h2 class="card-trip-pricing">₦<%= price.amount %></h2>
+              </div>
             </div>
           </a>
         </div>

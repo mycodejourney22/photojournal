@@ -65,7 +65,7 @@ class SalesController < ApplicationController
   end
 
   def sale_params
-    params.require(:sale).permit(:date, :amount_paid, :payment_method, :payment_type, :appointment_id,:staff_id,
+    params.require(:sale).permit(:void, :void_reason,:date, :amount_paid, :payment_method, :payment_type, :appointment_id,:staff_id,
       :customer_name, :customer_phone_number, :customer_service_officer_name, :product_service_name)
   end
 

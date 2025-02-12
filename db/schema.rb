@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_31_203859) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_11_232422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -187,13 +187,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_31_203859) do
     t.decimal "amount"
     t.decimal "discount"
     t.integer "duration"
-    t.text "included"
+    t.string "included"
     t.string "shoot_type"
     t.boolean "still_valid"
     t.text "icon"
-    t.text "outfit"
+    t.string "outfit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "period"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -223,6 +224,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_31_203859) do
     t.bigint "appointment_id"
     t.integer "staff_id"
     t.integer "customer_id"
+    t.boolean "void", default: false
+    t.string "void_reason"
     t.index ["appointment_id"], name: "index_sales_on_appointment_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"
     t.index ["photo_shoot_id"], name: "index_sales_on_photo_shoot_id"
@@ -245,6 +248,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_31_203859) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role"
+    t.string "password_setup_token"
+    t.datetime "password_setup_sent_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

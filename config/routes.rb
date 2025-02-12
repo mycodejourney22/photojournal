@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get 'prices/new'
+  get 'prices/index'
+  get 'prices/create'
+  get 'prices/update'
+  get 'prices/post'
   get 'gadgets/index'
   get 'gadgets/new'
   get 'gadgets/show'
@@ -46,6 +51,12 @@ Rails.application.routes.draw do
   # }
 
   devise_for :users
+  namespace :admin do
+    resources :users, only: [:index, :edit, :update, :new, :create]
+  end
+
+  get 'password_setup/:token', to: 'password_setups#edit', as: :password_setup
+  patch 'password_setup/:token', to: 'password_setups#update'
   # devise_scope :user do
   #   match '/sign-in' => "devise/sessions#new", :as => :login
   # end
@@ -104,6 +115,7 @@ Rails.application.routes.draw do
   # get 'appointments/completed'
   get 'appointments/past'
 
+  resources :prices
   resources :photo_shoots, only: [:index] do
     collection do
       get :notes

@@ -55,6 +55,7 @@
               <th>STATUS</th>
               <th>METHOD</th>
               <th>DATE</th>
+              <th>STATUS</th>
             </thead>
             <tbody>
             <% @appointment.sales.each do |sale| %>
@@ -69,6 +70,7 @@
                 <td>
                   <%= sale.date.strftime("%A, %d %B %Y")%>
                 </td>
+                <td><%= sale.void ? "Voided" : "Valid" %></td>
               </tr>
               <% end %>
             <% end %>

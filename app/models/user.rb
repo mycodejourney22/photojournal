@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  ROLES = %w[admin ikeja surulere ajah social]
+  ROLES = %w[admin ikeja surulere ajah social super_admin manager customer_service user]
 
   validates :role, presence: true, inclusion: { in: ROLES }
 
@@ -9,18 +9,48 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   def admin?
-    self.role == 'admin'
+    role == 'admin'
+  end
+
+  def super_admin?
+    role == 'super_admin'
   end
 
   def ikeja?
-    self.role = 'ikeja'
+    role == 'ikeja'
   end
 
   def not_social?
-    self.role != 'social'
+    role != 'social'
   end
 
   def social?
-    self.role = 'social'
+    role == 'social'
+  end
+
+  def manager?
+    role == 'manager'
+  end
+
+  def customer_service?
+    role == 'customer_service'
+  end
+
+  attr_accessor :skip_password_validation
+
+  def generate_password_setup_token!
+    token = SecureRandom.hex(20)
+    update_columns(
+      password_setup_token: token,
+      password_setup_sent_at: Time.current
+    )
+    token
+  end
+
+  protected
+
+  def password_required?
+    return false if skip_password_validation
+    super
   end
 end

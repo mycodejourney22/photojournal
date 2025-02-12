@@ -8,7 +8,7 @@ class SalePolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve
-      if user.admin?
+      if user.admin? || user.manager? || user.super_admin?
         scope.all
       else
         case user.role
@@ -29,15 +29,15 @@ class SalePolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
   end
 
   def new?
-    user.admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
   end
 
   def create?
-    user.admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
   end
 
   def edit?
@@ -48,6 +48,6 @@ class SalePolicy < ApplicationPolicy
     new?
   end
   def upfront?
-    user.admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
   end
 end

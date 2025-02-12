@@ -1,0 +1,51 @@
+<%= render "shared/sidebar" %>
+<section class="content">
+  <div class="admin-wrapper">
+    <div class="admin-header">
+      <div class="title-section">
+        <h1>Team Members</h1>
+        <p><%= @users.count %> users in total</p>
+      </div>
+      <%= link_to new_admin_user_path, class: "add-user-btn" do %>
+        Add Member
+      <% end %>
+    </div>
+
+    <div class="user-list">
+      <div class="list-header">
+        <div class="header-item">User</div>
+        <div class="header-item">Role</div>
+        <div class="header-item">Status</div>
+        <div class="header-item">Actions</div>
+      </div>
+
+      <% @users.each do |user| %>
+        <div class="user-item">
+          <div class="user-info">
+            <div class="user-avatar"><%= user.email[0].upcase %></div>
+            <div class="user-details">
+              <h3><%= user.email %></h3>
+              <p>Joined <%= user.created_at.strftime("%b %d, %Y") %></p>
+            </div>
+          </div>
+
+          <div class="user-role">
+            <span class="role-tag <%= user.role %>"><%= user.role.titleize %></span>
+          </div>
+
+          <div class="user-status">
+            <span class="status-dot"></span>
+            Active
+          </div>
+
+          <div class="user-actions">
+            <%= link_to edit_admin_user_path(user), class: "action-btn edit" do %>
+              Edit
+            <% end %>
+            <button class="action-btn delete">Delete</button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

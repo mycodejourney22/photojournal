@@ -1,0 +1,32 @@
+[data-modal-target="modal"] {
+  transition: opacity 0.25s ease;
+}
+
+[data-modal-target="modal"].hidden {
+  display: none;
+  opacity: 0;
+}
+
+[data-modal-target="modal"]:not(.hidden) {
+  display: block;
+  opacity: 1;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1051;
+  padding: 2rem;
+}

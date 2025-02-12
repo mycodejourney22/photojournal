@@ -21,5 +21,21 @@ module ApplicationHelper
       end
     end
 
+    def role_badge_color(role)
+      case role
+      when 'super_admin'
+        'danger'
+      when 'admin'
+        'warning'
+      when 'manager'
+        'info'
+      when 'customer_service'
+        'success'
+      else
+        'secondary'
+      end
+    end
+
+
 
 end

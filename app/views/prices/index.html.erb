@@ -1,0 +1,76 @@
+<div class="container">
+  <%= render "shared/sidebar" %>
+  <section class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Current Prices</h1>
+      <div class="row justify-content-center w-50">
+        <div class=" my-3">
+          <%= form_with  method: :get, class: "d-flex" do %>
+            <%= text_field_tag :query,
+                  params[:query],
+                  class: "form-control search-border",
+                  placeholder: "Price Name"
+              %>
+          <% end %>
+        </div>
+      </div>
+      <%= link_to 'New Session', new_price_path, class: "btn-photoshoot btn" %>
+    </div>
+    <table class="bordered-table" data-calendly-target="table">
+  <thead>
+    <tr>
+      <th>NAME</th>
+      <%# <%= '<th>PHOTO</th>'.html_safe if @url.include?("past")%>
+      <th>Outfits</th>
+      <th>Description</th>
+      <th>Amount</th>
+      <th>Date Added</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @prices.each do |price| %>
+      <tr>
+        <td><%= price.name.split(" ").map(&:capitalize).join(" ") %></td>
+        <td>
+          <%= price.outfit%>
+        </td>
+        <td>
+          <%= price.description %>
+        </td>
+        <td><%= price.amount %></td>
+        <td><%= price.formatted_start_time %></td>
+        <td class="relative"> <!-- Add relative positioning to the td -->
+          <div data-controller="dropdown" class="inline-block"> <!-- Add inline-block -->
+            <a href="#" data-action="dropdown#toggle" class="text-gray-500">
+              <i class="fa-solid fa-ellipsis"></i>
+            </a>
+
+            <!-- Modify the card positioning -->
+            <div data-dropdown-target="card" class="hidden absolute bg-white shadow-lg rounded-lg p-4 z-50"
+                 style="min-width: 160px; right: 0; top: 60%;">
+                    <%= link_to edit_price_path(price),
+                        class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
+                        <p>
+                          <i class="fas fa-edit"></i>
+                          <span style="margin-left: 8px;">Edit</span>
+                        </p>
+                    <% end %><br>
+                    <%= link_to price_path(price),
+                        class: "block px-4 py-2 text-sm text-red-600 hover:bg-gray-100",
+                        data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } do %>
+                        <p>
+                          <i class="fas fa-trash mr-2"></i>
+                          <span style="margin-left: 8px;">Delete</span>
+
+                        </p>
+                    <% end %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+  </section>
+</div>

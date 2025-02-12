@@ -14,9 +14,29 @@
 
 }
 
+.new_price{
+  max-width: 700px;
+  padding-left: 3rem;
+}
+
+.price_new{
+  padding-top: 1rem;
+  font-size: 0.75rem;
+
+  .input_field, select, textarea{
+    background-color: white;
+    border-radius: 8px;
+    font-size: 0.75rem;
+
+  }
+  label{
+    font-weight: 600;
+  }
+}
+
 .pricing{
   // font-size: 12px;
-  width: 320px;
+  width: 380px;
   margin: 12px 0;
   background: #f1f1f1;
   padding: 12px;
@@ -62,4 +82,21 @@ a.package-link{
   .public-gallery-package {
     grid-template-columns: 1fr 1fr; /* 1 image per row */
   }
+}
+
+.hidden {
+  display: none;
+}
+
+.relative {
+  position: relative;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+[data-dropdown-target="card"] {
+  position: absolute;
+  z-index: 50;
 }
