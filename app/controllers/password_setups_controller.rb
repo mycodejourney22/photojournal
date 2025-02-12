@@ -1,5 +1,7 @@
 # app/controllers/password_setups_controller.rb
 class PasswordSetupsController < ApplicationController
+  skip_before_action :authenticate_user!
+
   def edit
     @user = User.find_by(password_setup_token: params[:token])
 
