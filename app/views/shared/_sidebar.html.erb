@@ -1,72 +1,72 @@
-<div data-controller="sidebar" class="sidebar-container">
-  <!-- Hamburger button for mobile -->
-  <button data-action="sidebar#toggle" class="hamburger-btn d-lg-none">
-    <i class="fas fa-bars"></i>
-  </button>
+<!-- app/views/shared/_sidebar.html.erb -->
+<div class="sidebar">
+  <div class="brand">
+    <div class="brand-logo"></div>
+    <span class="brand-name">363 PHOTOGRAPHY</span>
+  </div>
 
-  <!-- Sidebar -->
-  <div class="sidebar" data-sidebar-target="sidebar" data-controller="active-link">
-    <div class="sidebar-header">
-      <%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
-      <h2><a href="#">363 PHOTOGRAPHY</a></h2>
-    </div>
-
-    <ul class="sidebar-menu">
-      <li>
-        <%= link_to photo_shoots_consent_path, data: {active_link_target: "link"} do %>
-          <i class="fas fa-file-signature"></i>
-          <span>Consent</span>
-        <% end %>
-      </li>
-
-      <% if current_user.not_social? %>
-        <li>
-          <%= link_to appointments_path, data: {active_link_target: "link"} do %>
-            <i class="fas fa-calendar-alt"></i>
-            <span>Appointments</span>
-          <% end %>
-        </li>
-
-        <li>
-          <%= link_to photo_shoots_path, data: {active_link_target: "link"} do %>
-            <i class="fas fa-camera"></i>
-            <span>Photoshoots</span>
-          <% end %>
-        </li>
-
-        <li>
-          <%= link_to expenses_path, data: {active_link_target: "link"} do %>
-            <i class="fas fa-receipt"></i>
-            <span>Expenses</span>
-          <% end %>
-        </li>
-
-        <li>
-          <%= link_to sales_path, data: {active_link_target: "link"} do %>
-            <i class="fas fa-chart-line"></i>
-            <span>Sales</span>
-          <% end %>
-        </li>
-
-        <li>
-          <%= link_to customers_path, data: {active_link_target: "link"} do %>
-            <i class="fas fa-address-book"></i>
-            <span>Contact</span>
-          <% end %>
-        </li>
-
-        <li>
-          <%= link_to operations_path, data: {active_link_target: "link"} do %>
-            <i class="fas fa-chart-bar"></i>
-            <span>Daily Report</span>
-          <% end %>
-        </li>
+  <aside class="g-sidebar">
+  <ul class="g-sidebar__nav">
+    <li>
+      <%= link_to photo_shoots_consent_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name == 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
+        <div class="g-sidebar__nav-icon <%= controller_name == 'photo_shoots' && action_name == 'consent' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+        <span class="g-sidebar__nav-text">Consent</span>
       <% end %>
-    </ul>
+    </li>
 
+    <li>
+      <%= link_to appointments_path, class: "g-sidebar__nav-item #{controller_name == 'appointments' ? 'g-sidebar__nav-item--active' : ''}" do %>
+        <div class="g-sidebar__nav-icon <%= controller_name == 'appointments' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+        <span class="g-sidebar__nav-text">Appointments</span>
+      <% end %>
+    </li>
+
+    <li>
+      <%= link_to photo_shoots_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name != 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
+        <div class="g-sidebar__nav-icon <%= controller_name == 'photo_shoots' && action_name != 'consent' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+        <span class="g-sidebar__nav-text">Photoshoots</span>
+      <% end %>
+    </li>
+
+    <li>
+      <%= link_to sales_path, class: "g-sidebar__nav-item #{controller_name == 'sales' ? 'g-sidebar__nav-item--active' : ''}" do %>
+        <div class="g-sidebar__nav-icon <%= controller_name == 'sales' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+        <span class="g-sidebar__nav-text">Sales</span>
+      <% end %>
+    </li>
+
+    <li>
+      <%= link_to expenses_path, class: "g-sidebar__nav-item #{controller_name == 'expenses' ? 'g-sidebar__nav-item--active' : ''}" do %>
+        <div class="g-sidebar__nav-icon <%= controller_name == 'expenses' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+        <span class="g-sidebar__nav-text">Expenses</span>
+      <% end %>
+    </li>
+
+    <li>
+      <%= link_to customers_path, class: "g-sidebar__nav-item #{controller_name == 'customers' ? 'g-sidebar__nav-item--active' : ''}" do %>
+        <div class="g-sidebar__nav-icon <%= controller_name == 'customers' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+        <span class="g-sidebar__nav-text">Contacts</span>
+      <% end %>
+    </li>
+
+    <li>
+      <%= link_to operations_path, class: "g-sidebar__nav-item #{controller_name == 'operations' ? 'g-sidebar__nav-item--active' : ''}" do %>
+        <div class="g-sidebar__nav-icon <%= controller_name == 'operations' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+        <span class="g-sidebar__nav-text">Reports</span>
+      <% end %>
+    </li>
+  </ul>
+
+  <div class="g-sidebar__footer">
+    <%= link_to "New Booking", new_appointment_path, class: "g-sidebar__new-booking" %>
+    <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "g-sidebar__logout" %>
+  </div>
+</aside>
+
+  <div class="logout">
     <%= link_to destroy_user_session_path, data: {turbo_method: :delete}, class: "logout-link" do %>
-      <i class="fas fa-sign-out-alt"></i>
-      <span>Log out</span>
+      <span class="logout-icon"><i class="fas fa-sign-out-alt"></i></span>
+      <span class="logout-text">Log out</span>
     <% end %>
   </div>
 </div>

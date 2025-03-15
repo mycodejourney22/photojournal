@@ -1,0 +1,114 @@
+/* app/assets/stylesheets/public_ui/_time_slots.scss */
+
+.time-selection-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.time-selection-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #202124;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.time-selection-subtitle {
+  font-size: 16px;
+  color: #5f6368;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.time-slot-item {
+  position: relative;
+}
+
+.time-slot-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.time-slot-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 12px;
+  background-color: #f1f3f4;
+  border: 2px solid #f1f3f4;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #202124;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-slot-label:hover {
+  background-color: #e8eaed;
+  border-color: #e8eaed;
+}
+
+.time-slot-input:checked + .time-slot-label {
+  border-color: #edd400;
+  background-color: rgba(237, 212, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.time-slot-input:focus + .time-slot-label {
+  box-shadow: 0 0 0 3px rgba(237, 212, 0, 0.25);
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.booking-action-button {
+  padding: 12px 24px;
+  background-color: #edd400;
+  color: #202124;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  transition: all 0.2s ease;
+}
+
+.booking-action-button:hover {
+  background-color: #d9c000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.booking-action-button:active {
+  transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .time-selection-title {
+    font-size: 20px;
+  }
+
+  .time-selection-subtitle {
+    font-size: 14px;
+  }
+}

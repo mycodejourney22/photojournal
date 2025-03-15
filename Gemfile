@@ -89,6 +89,13 @@ gem "sassc-rails"
 
 # gem 'rest-client'
 
+gem 'view_component'
+
+
+
+# gem 'view_component', require: 'view_component/engine'
+
+
 
 group :development, :test do
   gem "dotenv-rails"
@@ -112,7 +119,7 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 
-  gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
+  gem 'error_highlight', '~> 0.7.0'
 end
 
 group :test do

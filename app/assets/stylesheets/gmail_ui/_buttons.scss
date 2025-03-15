@@ -1,0 +1,90 @@
+/* app/assets/stylesheets/gmail_ui/_buttons.scss */
+.g-button {
+  &--new-booking {
+    margin: $spacing-sm $spacing-md $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    background-color: $color-brand;
+    color: $color-text-primary;
+    border-radius: $spacing-lg;
+    border: none;
+    font-size: $font-size-md;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: box-shadow 0.2s;
+    text-decoration: none;
+
+    &:hover {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    }
+  }
+
+  &--link {
+    color: #1a73e8;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(26, 115, 232, 0.1);
+    }
+  }
+
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+
+  &--primary {
+    background-color: #eecc24;
+    color: #202124;
+
+    &:hover {
+      background-color: #ddbf20;
+    }
+  }
+
+  &--secondary {
+    background-color: #f1f3f4;
+    color: #5f6368;
+
+    &:hover {
+      background-color: #e8eaed;
+    }
+  }
+
+  &--link {
+    background: none;
+    color: #1a73e8;
+    padding: 0;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &.g-button--danger {
+      color: #d93025;
+    }
+  }
+
+  &--action {
+    background-color: #eecc24; /* Same yellow as New Booking */
+    color: #202124;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+
+    &:hover {
+      background-color: #ddbf20;
+    }
+  }
+}
+
+.g-text--muted {
+  color: #5f6368;
+
+}

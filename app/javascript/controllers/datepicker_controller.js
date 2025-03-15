@@ -1,13 +1,16 @@
+// app/javascript/controllers/datepicker_controller.js
 import { Controller } from "@hotwired/stimulus"
 import flatpickr from "flatpickr"
 
-// Connects to data-controller="datepicker"
 export default class extends Controller {
   connect() {
-    console.log("I am here man")
+    // Configure flatpickr to disable time selection
     flatpickr(this.element, {
-      enableTime: true,
-      dateFormat: "Y-m-d H:i"
-    })
+      enableTime: false,
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "F j, Y",
+      allowInput: true
+    });
   }
 }

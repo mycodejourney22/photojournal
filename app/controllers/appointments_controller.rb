@@ -1,7 +1,9 @@
 require 'securerandom'
 class AppointmentsController < ApplicationController
   after_action :verify_authorized, except: :index
+  layout 'public', only: [:type_of_shoots, :booking, :new_customer]
   after_action :verify_policy_scoped, only: :index
+  layout :determine_layout
   before_action :set_appointments, :set_url, only: [:upcoming, :past, :index, :cancel, :cancel_booking]
   skip_before_action :authenticate_user!, only: [:booking, :available_hours, :selected_date,
                                                  :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit,
@@ -137,22 +139,50 @@ class AppointmentsController < ApplicationController
   end
 
 
+  # def create
+  #   authorize Appointment
+  #   @appointment = Appointment.new(appointment_params)
+  #   @appointment.set_defaults(current_user)
+  #   @appointment.uuid = SecureRandom.uuid
+  #   if @appointment.save
+  #     session.delete(:form_data)
+  #     if user_signed_in?
+  #       redirect_to appointments_path, notice: 'Appointment was successfully created.'
+  #     else
+  #       @appointment.schedule_policy_email
+  #       @appointment.schedule_reminder_email
+  #       AppointmentNotificationJob.perform_later(@appointment, 'created')
+  #       redirect_to thank_you_appointments_path(appointment_id: @appointment.id), notice: "Your appointment has been booked successfully."
+  #     end
+  #   else
+  #     if user_signed_in?
+  #       build_questions_for(@appointment) # Rebuild questions if save fails
+  #       render :new, status: :unprocessable_entity
+  #     else
+  #       build_questions_for_booking(@appointment)
+  #       render :new_customer, status: :unprocessable_entity
+  #     end
+  #   end
+  # end
+
   def create
     authorize Appointment
-    @appointment = Appointment.new(appointment_params)
-    @appointment.set_defaults(current_user)
-    @appointment.uuid = SecureRandom.uuid
-    if @appointment.save
+
+    service = AppointmentCreationService.new(appointment_params, current_user)
+    result = service.call
+
+    if result[:success]
       session.delete(:form_data)
+
       if user_signed_in?
         redirect_to appointments_path, notice: 'Appointment was successfully created.'
       else
-        @appointment.schedule_policy_email
-        @appointment.schedule_reminder_email
-        AppointmentNotificationJob.perform_later(@appointment, 'created')
-        redirect_to thank_you_appointments_path(appointment_id: @appointment.id), notice: "Your appointment has been booked successfully."
+        redirect_to thank_you_appointments_path(appointment_id: result[:appointment].id),
+                    notice: "Your appointment has been booked successfully."
       end
     else
+      @appointment = result[:appointment]
+
       if user_signed_in?
         build_questions_for(@appointment) # Rebuild questions if save fails
         render :new, status: :unprocessable_entity
@@ -267,16 +297,14 @@ class AppointmentsController < ApplicationController
 
   def past_appointment
     appointments = policy_scope(Appointment).includes(:questions)
-                                            .where(start_time: 14.days.ago.beginning_of_day..Time.zone.now.beginning_of_day)
-                                            .order(start_time: :desc)
+                                            .past
     appointments = policy_scope(Appointment).global_search(params[:query]) if params[:query].present?
     appointments.page(params[:page]) if appointments.present?
   end
 
   def today_appointment
     appointments = policy_scope(Appointment).includes(:questions)
-                                            .where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)
-                                            .where(no_show: false, status: true)
+                                            .today
                                             .order(:start_time)
 
     appointments = policy_scope(Appointment).global_search(params[:query]) if params[:query].present?
@@ -284,8 +312,7 @@ class AppointmentsController < ApplicationController
   end
 
   def upcoming_appointment
-    appointments = policy_scope(Appointment).includes(:questions).where('start_time > ?', Time.zone.now.end_of_day)
-                                            .where(no_show: false, status: true)
+    appointments = policy_scope(Appointment).includes(:questions).upcoming
                                             .order(:start_time)
     appointments = today_appointments.global_search(params[:query]) if params[:query].present?
     appointments.page(params[:page]) if appointments.present?
@@ -332,4 +359,15 @@ class AppointmentsController < ApplicationController
     @available_slots = generate_time_slots.reject { |slot| booked_slots.include?(slot) }
     @available_slots = @available_slots.map { |slot| format_time(slot) }
   end
+
+  def determine_layout
+    public_actions = ['type_of_shoots', 'booking', 'new_customer', 'available_hours', 'selected_date', 'cancel_booking', 'thank_you', 'edit', 'select_price']
+
+    if public_actions.include?(action_name)
+      'public'
+    else
+      'application'
+    end
+  end
+
 end

@@ -1,0 +1,38 @@
+/* app/assets/stylesheets/gmail_ui/_variables.scss */
+// Colors
+$color-background: #f6f8fc;
+$color-white: #ffffff;
+$color-border: #e0e0e0;
+$color-text-primary: #202124;
+$color-text-secondary: #5f6368;
+$color-brand: #eecc24; // Yellow brand color
+$color-active: #1a73e8; // Blue for active tab
+$color-active-bg: #e8f0fe;
+$color-hover: rgba(0, 0, 0, 0.04);
+$color-status-confirmed: #4caf50;
+$color-status-pending: #ff9800;
+$color-status-cancelled: #f44336;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// Font sizes
+$font-size-xs: 8px;
+$font-size-sm: 10px;
+$font-size-md: 12px;
+$font-size-lg: 16px;
+$font-size-xl: 20px;
+
+// Breakpoints
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+
+// Layout
+$header-height: 64px;
+$sidebar-width: 240px;
+$toolbar-height: 50px;

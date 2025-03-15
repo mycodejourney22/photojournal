@@ -1,25 +1,55 @@
-<div class="container" data-controller="calendly" >
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>Contacts</h1>
-      <div class="row justify-content-center w-50">
-        <div class=" my-3">
-          <%= form_with url: customers_path, method: :get, class: "d-flex" do %>
-            <%= text_field_tag :query,
-                  params[:query],
-                  class: "form-control search-border",
-                  placeholder: "Customer Name or Email Address"
-              %>
-          <% end %>
-        </div>
-      </div>
-      <%= link_to 'New Contact', new_customer_path, class: "btn-photoshoot btn" %>
-    </div>
-    <div>
-        <%= render "customer_table", customers: @customers %>
-    </div>
-    <%= paginate @customers, class: "mt-4" %>
-  </section>
-
+<!-- app/views/customers/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "All Contacts", customers_path, class: "g-content__tab g-content__tab--active" %>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to "New Contact", new_customer_path, class: "g-button g-button--action" %>
+  </div>
 </div>
+
+<div class="g-table__header">
+  <div class="g-table__col--name">Name</div>
+  <div class="g-table__col--phone">Phone Number</div>
+  <div class="g-table__col--email">Email</div>
+  <div class="g-table__col--status">Status</div>
+  <div class="g-table__col--actions">Action</div>
+</div>
+
+<% if @customers.present? %>
+  <% @customers.each do |customer| %>
+    <div class="g-table__row">
+      <div class="g-table__status <%= customer.visits_count > 0 ? 'g-table__status--confirmed' : 'g-table__status--new' %>"></div>
+
+      <div class="g-table__col--name g-table__cell">
+        <%= customer.name %>
+      </div>
+
+      <div class="g-table__col--phone g-table__cell">
+        <%= customer.phone_number if customer.phone_number %>
+      </div>
+
+      <div class="g-table__col--email g-table__cell">
+        <%= customer.email if customer.email %>
+      </div>
+
+      <div class="g-table__col--status g-table__cell">
+        <%= customer.visits_count > 0 ? "Repeating" : "New" %>
+      </div>
+
+      <div class="g-table__col--actions g-table__cell">
+        <%= link_to 'More Details', customer_path(customer), class: "g-button--link" %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <p>No contacts available.</p>
+  </div>
+<% end %>
+
+<% if @customers.respond_to?(:total_pages) %>
+  <div class="g-content__pagination">
+    <%= paginate @customers %>
+  </div>
+<% end %>

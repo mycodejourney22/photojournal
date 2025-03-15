@@ -1,0 +1,192 @@
+/* app/assets/stylesheets/modern_ui.scss */
+// Modern appointment cards
+.appointment-card {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  // Status indicator on left border
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    border-radius: 3px 0 0 3px;
+  }
+
+  &.status-active:before {
+    background-color: #4caf50; // Green
+  }
+
+  &.status-cancelled:before {
+    background-color: #f44336; // Red
+  }
+
+  &.status-no-show:before {
+    background-color: #ff9800; // Amber
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .card-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+
+  .card-time {
+    font-size: 16px;
+    color: #555;
+  }
+
+  .card-details {
+    margin-bottom: 20px;
+  }
+
+  .detail-row {
+    margin-bottom: 8px;
+    display: flex;
+  }
+
+  .detail-label {
+    font-size: 14px;
+    color: #555;
+    width: 70px;
+    flex-shrink: 0;
+  }
+
+  .detail-value {
+    font-size: 14px;
+    color: #333;
+  }
+
+  .card-actions {
+    margin-top: 12px;
+  }
+
+  .btn-view-details {
+    display: inline-block;
+    background-color: #f7f8fc;
+    color: #0066cc;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #e7eaf4;
+    }
+  }
+}
+
+// Modern tab navigation
+.tab-navigation {
+  display: flex;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+
+  .tab-item {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+
+    &.active {
+      color: #333;
+      font-weight: 600;
+
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: #eecc24;
+        border-radius: 3px 3px 0 0;
+      }
+    }
+
+    &:hover:not(.active) {
+      color: #333;
+    }
+  }
+}
+
+// Modern search bar
+.search-container {
+  position: relative;
+  margin-bottom: 24px;
+
+  .search-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      border-color: #eecc24;
+      box-shadow: 0 0 0 3px rgba(238, 204, 36, 0.2);
+    }
+
+    &::placeholder {
+      color: #aaa;
+    }
+  }
+}
+
+// New booking button
+.btn-new-booking {
+  background-color: #eecc24;
+  color: #333;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.1s;
+
+  &:hover {
+    background-color: #e0bf1f;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// Grid layout for cards
+.appointments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}

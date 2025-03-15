@@ -1,23 +1,64 @@
-<div class="container">
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between align-items-center">
-      <h1>Photoshoots</h1>
-      <div class="row justify-content-center w-50">
-        <div class=" my-3">
-          <%= form_with url: photo_shoots_path, method: :get, class: "d-flex" do %>
-            <%= text_field_tag :query,
-                  params[:query],
-                  class: "form-control search-border",
-                  placeholder: "Search by Customer Name or Email"
-              %>
-          <% end %>
+<!-- app/views/photo_shoots/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "All Photoshoots", photo_shoots_path, class: "g-content__tab g-content__tab--active" %>
+  </div>
+</div>
+
+<div class="g-table__header">
+  <div class="g-table__col--name">Name</div>
+  <div class="g-table__col--photographer">Photographer</div>
+  <div class="g-table__col--editor">Editor</div>
+  <div class="g-table__col--selections">Selections</div>
+  <div class="g-table__col--status">Status</div>
+  <div class="g-table__col--date">Date</div>
+  <div class="g-table__col--actions">Actions</div>
+</div>
+
+<% if @photoshoots.present? %>
+  <% @photoshoots.each do |photoshoot| %>
+    <div class="g-table__row">
+      <div class="g-table__status <%= photoshoot.status == 'Sent' ? 'g-table__status--confirmed' : (photoshoot.status == 'Pending' ? 'g-table__status--pending' : 'g-table__status--new') %>"></div>
+
+      <div class="g-table__col--name g-table__cell">
+        <div class="g-table__name-container">
+          <div class="g-table__name"><%= photoshoot.appointment.name %></div>
         </div>
       </div>
+
+      <div class="g-table__col--photographer g-table__cell">
+        <%= photoshoot.photographer&.name %>
+      </div>
+
+      <div class="g-table__col--editor g-table__cell">
+        <%= photoshoot.editor&.name %>
+      </div>
+
+      <div class="g-table__col--selections g-table__cell">
+        <%= photoshoot.number_of_selections %>
+      </div>
+
+      <div class="g-table__col--status g-table__cell">
+        <%= photoshoot.status %>
+      </div>
+
+      <div class="g-table__col--date g-table__cell">
+        <%= photoshoot.date&.to_date %>
+      </div>
+
+      <div class="g-table__col--actions g-table__cell">
+        <%= link_to "Update", edit_appointment_photo_shoot_path(photoshoot.appointment, photoshoot), class: "g-button--link" %>
+      </div>
     </div>
-    <div >
-      <%= render "table", photoshoots: @photoshoots %>
-    </div>
-    <%= paginate @photoshoots, class: "mt-4" %>
-  </section>
-</div>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <p>No photoshoots available.</p>
+  </div>
+<% end %>
+
+<% if @photoshoots.respond_to?(:total_pages) %>
+  <div class="g-content__pagination">
+    <%= paginate @photoshoots %>
+  </div>
+<% end %>

@@ -1,29 +1,60 @@
-<div class="container" data-controller="calendly" >
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>All Expenses</h1>
-      <div class="row justify-content-center w-50">
-        <div class=" my-3">
-          <%= form_with url: expenses_path, method: :get, class: "d-flex" do %>
-            <%= text_field_tag :query,
-                  params[:query],
-                  class: "form-control search-border",
-                  placeholder: "Category or Description or Staff"
-              %>
-          <% end %>
-        </div>
-      </div>
-      <%= link_to 'New Expense', new_expense_path, class: "btn-photoshoot btn" %>
-    </div>
-    <% if  @expenses.empty? %>
-      <h3 class="text-center">You do not have any expenses recorded yet!!!</h3>
-    <% else %>
-      <div>
-        <%= render "expense_table", expenses: @expenses %>
-      </div>
-    <% end %>
-    <%= paginate @expenses %>
-  </section>
-
+<!-- app/views/expenses/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "All Expenses", expenses_path, class: "g-content__tab g-content__tab--active" %>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to "New Expense", new_expense_path, class: "g-button g-button--action" %>
+  </div>
 </div>
+
+<div class="g-table__header">
+  <div class="g-table__col--date">Date</div>
+  <div class="g-table__col--description">Description</div>
+  <div class="g-table__col--category">Category</div>
+  <div class="g-table__col--staff">Staff</div>
+  <div class="g-table__col--amount">Amount</div>
+  <div class="g-table__col--location">Location</div>
+</div>
+
+<% if @expenses.present? %>
+  <% @expenses.each do |expense| %>
+    <div class="g-table__row">
+      <div class="g-table__status g-table__status--expense"></div>
+
+      <div class="g-table__col--date g-table__cell">
+        <%= expense.date %>
+      </div>
+
+      <div class="g-table__col--description g-table__cell">
+        <%= expense.description.capitalize %>
+      </div>
+
+      <div class="g-table__col--category g-table__cell">
+        <%= expense.category %>
+      </div>
+
+      <div class="g-table__col--staff g-table__cell">
+        <%= expense.staff_name %>
+      </div>
+
+      <div class="g-table__col--amount g-table__cell">
+        <%= number_to_currency(expense.amount, unit: "₦") %>
+      </div>
+
+      <div class="g-table__col--location g-table__cell">
+        <%= expense.location.capitalize %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <h3 class="text-center">You do not have any expenses recorded yet!!!</h3>
+  </div>
+<% end %>
+
+<% if @expenses.respond_to?(:total_pages) %>
+  <div class="g-content__pagination">
+    <%= paginate @expenses %>
+  </div>
+<% end %>

@@ -1,0 +1,194 @@
+// app/assets/stylesheets/public_ui/_customer_form.scss
+
+// Variables
+$primary-color: #edd400;
+$primary-dark: #d9c000;
+$text-color: #202124;
+$light-gray: #f1f3f4;
+$border-color: #ccc;
+$error-color: #dc3545;
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+$shadow-md: 0 2px 6px rgba(0, 0, 0, 0.15);
+$transition: all 0.2s ease;
+
+/* Custom styles for appointment form with unique classnames */
+.custom-appointment-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.custom-logo-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.custom-logo-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: #edd400;
+  margin-right: 12px;
+}
+
+.custom-logo-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.custom-form-title {
+  font-size: 24px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.custom-form-field {
+  margin-bottom: 20px;
+}
+
+.custom-form-label {
+  display: block;
+  font-weight: normal;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #333;
+}
+
+.custom-form-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.custom-form-input:focus {
+  outline: none;
+  border-color: #edd400;
+  box-shadow: 0 0 0 3px rgba(237, 212, 0, 0.25);
+}
+
+/* Radio button grid for shoot types */
+.custom-shoot-types-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.custom-shoot-type-item {
+  position: relative;
+}
+
+.custom-shoot-type-input {
+  position: absolute;
+  opacity: 0;
+}
+
+.custom-shoot-type-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 10px;
+  background-color: #f1f3f4;
+  border: 1px solid #f1f3f4;
+  border-radius: 4px;
+  font-size: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.custom-shoot-type-input:checked + .custom-shoot-type-label {
+  background-color: #fffceb;
+  border: 1px solid #edd400;
+}
+
+/* Radio buttons for yes/no questions */
+.custom-radio-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.custom-radio-item {
+  position: relative;
+  flex: 1;
+  max-width: 200px;
+}
+
+.custom-radio-input {
+  position: absolute;
+  opacity: 0;
+}
+
+.custom-radio-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 10px 20px;
+  background-color: #f1f3f4;
+  border: 1px solid #f1f3f4;
+  border-radius: 4px;
+  font-size: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.custom-radio-input:checked + .custom-radio-label {
+  background-color: #fffceb;
+  border: 1px solid #edd400;
+}
+
+/* Submit button */
+.custom-submit-button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background-color: #edd400;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.custom-submit-button:hover {
+  background-color: #d9c000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-appointment-container {
+    padding: 20px;
+  }
+
+  .custom-shoot-types-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-radio-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .custom-radio-item {
+    max-width: 100%;
+  }
+}

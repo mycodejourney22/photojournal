@@ -1,120 +1,180 @@
-<div class="container" data-controller="calendly" >
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2><%= @customer.name.capitalize %></h2>
-      <%= link_to 'New Contact', new_customer_path, class: "btn-photoshoot btn" %>
-    </div>
-    <div class="d-flex justify-content-between align-items-start">
-      <div>
-        <h6>Past Photoshoots</h6><hr>
-        <% if @appointments.present? %>
-          <table class="bordered-table" data-calendly-target="table">
-            <thead>
-              <th>TYPE</th>
-              <th>PHOTOGRAPHER</th>
-              <th>EDITOR</th>
-              <th>STATUS</th>
-              <th>DATE</th>
-            </thead>
-            <tbody>
-              <% @appointments.each do |appointment| %>
-                <% if appointment.photo_shoot %>
-                <tr>
-                  <td><%= appointment.photo_shoot.type_of_shoot %></td>
-                  <td><%= appointment.photo_shoot.photographer.name if appointment.photo_shoot.photographer %></td>
-                  <td><%= appointment.photo_shoot.editor.name if appointment.photo_shoot.editor %></td>
-                  <td>
-                    <%= appointment.photo_shoot.status%>
-                  </td>
-                  <td>
-                    <%= appointment.photo_shoot.date.strftime("%A, %d %B %Y")%>
-                  </td>
-                </tr>
-                <% end %>
-              <% end %>
-            </tbody>
-          </table>
-        <% else %>
+<!-- app/views/customers/show.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1><%= @customer.name.capitalize %></h1>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to 'New Contact', new_customer_path, class: "g-button g-button--action" %>
+  </div>
+</div>
+
+<div class="g-content__tabs">
+  <%= link_to "Past Photoshoots", "#past-photoshoots", class: "g-content__tab g-content__tab--active" %>
+  <%= link_to "Past Orders", "#past-orders", class: "g-content__tab" %>
+  <%= link_to "Gallery Info", "#gallery-info", class: "g-content__tab" %>
+  <%= link_to "Contact Info", "#contact-info", class: "g-content__tab" %>
+</div>
+
+<div class="g-content__layout">
+  <!-- Main Content Area -->
+  <div class="g-content__main">
+    <!-- Past Photoshoots Section -->
+    <div id="past-photoshoots" class="g-section">
+      <div class="g-section__header">
+        <h2 class="g-section__title">Past Photoshoots</h2>
+      </div>
+
+      <% if @appointments.present? && @appointments.any? { |appointment| appointment.photo_shoot.present? } %>
+        <div class="g-table">
+          <div class="g-table__header">
+            <div class="g-table__col--type">TYPE</div>
+            <div class="g-table__col--photographer">PHOTOGRAPHER</div>
+            <div class="g-table__col--editor">EDITOR</div>
+            <div class="g-table__col--status">STATUS</div>
+            <div class="g-table__col--date">DATE</div>
+          </div>
+
+          <% @appointments.each do |appointment| %>
+            <% if appointment.photo_shoot %>
+              <div class="g-table__row">
+                <div class="g-table__status <%= appointment.photo_shoot.status&.downcase == 'new' ? 'g-table__status--new' : 'g-table__status--confirmed' %>"></div>
+                <div class="g-table__col--type g-table__cell">
+                  <%= appointment.photo_shoot.type_of_shoot %>
+                </div>
+                <div class="g-table__col--photographer g-table__cell">
+                  <%= appointment.photo_shoot.photographer.name if appointment.photo_shoot.photographer %>
+                </div>
+                <div class="g-table__col--editor g-table__cell">
+                  <%= appointment.photo_shoot.editor.name if appointment.photo_shoot.editor %>
+                </div>
+                <div class="g-table__col--status g-table__cell">
+                  <%= appointment.photo_shoot.status %>
+                </div>
+                <div class="g-table__col--date g-table__cell">
+                  <%= appointment.photo_shoot.date.strftime("%A, %d %B %Y") if appointment.photo_shoot.date %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
           <p>No photoshoots linked to this contact</p>
-        <% end %>
-        <h6 class="mt-5">Past Orders</h6><hr>
-        <% if @customer.sales.present? %>
-          <table class="bordered-table" data-calendly-target="table">
-            <thead>
-              <th>PRODUCT</th>
-              <th>AMOUNT</th>
-              <th>STATUS</th>
-              <th>METHOD</th>
-              <th>DATE</th>
-            </thead>
-            <tbody>
-            <% @customer.sales.each do |sale| %>
-              <% if sale %>
-              <tr>
-                <td><%= sale.product_service_name %></td>
-                <td><%= sale.amount_paid %></td>
-                <td><%= sale.payment_type %></td>
-                <td>
-                  <%= sale.payment_method%>
-                </td>
-                <td>
-                  <%= sale.date.strftime("%A, %d %B %Y")%>
-                </td>
-              </tr>
-              <% end %>
-            <% end %>
-            </tbody>
-          </table>
-        <% else %>
-          <p>No Sales linked to this contact</p>
-        <% end %>
-        <div>
-          <div class="d-flex justify-content-between align-items-center">
-              <h6 class="mt-5">Gallery Info</h6>
-          </div>
-          <hr>
-            <% if @appointments_with_galleries.present? %>
-              <p>View all galleries <%= link_to "here", all_galleries_customer_path(@customer), class: "black-link" %></p>
-            <% else %>
-                <p>No Gallery Found</p>
-            <% end %>
         </div>
+      <% end %>
+    </div>
+
+    <!-- Past Orders Section -->
+    <div id="past-orders" class="g-section">
+      <div class="g-section__header">
+        <h2 class="g-section__title">Past Orders</h2>
       </div>
-      <div>
-        <h6>Contact Info</h6><hr>
-        <div class="d-flex">
-          <h2><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
-          </h2>
-          <div class="ps-2">
-            <p><%= @customer.name.capitalize %></p>
-            <p><%= @customer.email %></p>
-          </div>
-        </div>
-        <div class="mt-4">
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Visit Count</p>
-            <p><%= @customer.visits_count + 1 %></p>
-          </div>
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Total Spent</p>
-            <p><%= @customer.sales.sum(:amount_paid) %></p>
-          </div>
-          <div class="mt-2">
-            <p>Email <span class="ps-5"><%= @customer.email %></span></p>
-          </div>
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Phone</p>
-            <p><%= @customer.phone_number %></p>
-          </div>
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Last Visit </p>
-            <p><%= @customer.sales.maximum(:date).strftime("%A, %d %B %Y") if @customer.sales.present?  %></p>
+
+      <% if @customer.sales.present? %>
+        <div class="g-table">
+          <div class="g-table__header">
+            <div class="g-table__col--product">PRODUCT</div>
+            <div class="g-table__col--amount">AMOUNT</div>
+            <div class="g-table__col--status">STATUS</div>
+            <div class="g-table__col--payment">METHOD</div>
+            <div class="g-table__col--date">DATE</div>
           </div>
 
+          <% @customer.sales.each do |sale| %>
+            <div class="g-table__row">
+              <div class="g-table__status <%= sale.void ? 'g-table__status--cancelled' : 'g-table__status--confirmed' %>"></div>
+              <div class="g-table__col--product g-table__cell">
+                <%= sale.product_service_name %>
+              </div>
+              <div class="g-table__col--amount g-table__cell">
+                <%= sale.amount_paid %>
+              </div>
+              <div class="g-table__col--status g-table__cell">
+                <%= sale.payment_type %>
+              </div>
+              <div class="g-table__col--payment g-table__cell">
+                <%= sale.payment_method %>
+              </div>
+              <div class="g-table__col--date g-table__cell">
+                <%= sale.date.strftime("%A, %d %B %Y") if sale.date %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No Sales linked to this contact</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Gallery Info Section -->
+    <div id="gallery-info" class="g-section">
+      <div class="g-section__header">
+        <h2 class="g-section__title">Gallery Info</h2>
+      </div>
+
+      <% if @appointments_with_galleries.present? %>
+        <div class="g-content__link-container">
+          <p>View all galleries <%= link_to "here", all_galleries_customer_path(@customer), class: "g-link" %></p>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No Gallery Found</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Contact Info Sidebar -->
+  <div class="g-content__sidebar">
+    <div class="g-section">
+      <div class="g-section__header">
+        <h2 class="g-section__title">Contact Info</h2>
+      </div>
+
+      <div class="g-contact-card">
+        <div class="g-contact-card__header">
+          <div class="g-contact-card__profile">
+            <div class="g-avatar g-avatar--yellow">
+              <%= @customer.name.split(' ').map { |n| n[0].upcase }.join('') %>
+            </div>
+            <div class="g-contact-card__name-email">
+              <div class="g-contact-card__name"><%= @customer.name.capitalize %></div>
+              <div class="g-contact-card__email"><%= @customer.email %></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="g-contact-card__info">
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Visit Count</div>
+            <div class="g-contact-card__value"><%= @customer.visits_count + 1 %></div>
+          </div>
+
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Total Spent</div>
+            <div class="g-contact-card__value">₦<%= number_to_currency(@customer.sales.sum(:amount_paid), unit: "") %></div>
+          </div>
+
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Email</div>
+            <div class="g-contact-card__value"><%= @customer.email %></div>
+          </div>
+
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Phone</div>
+            <div class="g-contact-card__value"><%= @customer.phone_number %></div>
+          </div>
+
+          <% if @customer.sales.present? %>
+            <div class="g-contact-card__row">
+              <div class="g-contact-card__label">Last Visit</div>
+              <div class="g-contact-card__value"><%= @customer.sales.maximum(:date).strftime("%A, %d %B %Y") %></div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
-  </section>
-
+  </div>
 </div>

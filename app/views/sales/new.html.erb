@@ -1,7 +1,74 @@
-<div class="container">
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <h1 class="ps-3">Add New Sale</h1>
-      <%= render "form", appointment: @appointment, sale: @sale %>
-  </section>
+<!-- app/views/sales/new.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Add New Sale</h1>
+  </div>
+</div>
+
+<div class="g-form-container">
+  <%= simple_form_for [@appointment, @sale].compact do |f| %>
+    <%= f.error_notification %>
+
+    <% if @appointment %>
+      <%= f.input :appointment_id, as: :hidden, input_html: { value: @appointment.id } %>
+    <% end %>
+
+    <div class="g-form-card">
+      <div class="g-form-grid">
+        <%= f.input :date,
+            as: :string,
+            label: false,
+            placeholder: "Date",
+            input_html: {
+              data: { controller: "datepicker" },
+              class: "g-form-input"
+            } %>
+
+        <%= f.association :staff,
+            collection: Staff.where(role: 'Customer Service', active: true).pluck(:name, :id),
+            label: false,
+            include_blank: 'Select CSO',
+            input_html: { class: 'g-form-input' } %>
+
+        <%= f.input :product_service_name,
+            label: false,
+            prompt: "Product Type",
+            collection: ["PhotoShoot", "Passport", "Frame", "Home Session", "Training",
+                         "Outdoor Event", "Prints", "Photobook", "Extra Pictures", "Product Shoots", "Others"],
+            input_html: { class: 'g-form-input' } %>
+
+        <%= f.input :amount_paid,
+            label: false,
+            placeholder: "Amount Paid",
+            input_html: { class: 'g-form-input' } %>
+
+        <%= f.input :payment_method,
+            label: false,
+            prompt: "Payment method",
+            collection: ["POS", "Cash", "Transfer"],
+            input_html: { class: 'g-form-input' } %>
+
+        <%= f.input :payment_type,
+            label: false,
+            placeholder: "Payment type",
+            prompt: "Payment type",
+            collection: ["Full Payment", "Balance Payment", "Deposit"],
+            input_html: { class: 'g-form-input' } %>
+
+        <% unless @appointment %>
+          <%= f.input :customer_name,
+              label: false,
+              placeholder: "Customer Name",
+              input_html: { class: 'g-form-input' } %>
+
+          <%= f.input :customer_phone_number,
+              label: false,
+              placeholder: "Customer Phone number",
+              input_html: { class: 'g-form-input' } %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= f.submit "Create Sale", class: "g-button g-button--action g-button--full" %>
+  <% end %>
 </div>

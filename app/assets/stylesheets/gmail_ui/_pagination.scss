@@ -1,0 +1,94 @@
+/* app/assets/stylesheets/gmail_ui/_pagination.scss */
+
+.g-pagination {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.g-pagination__list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.g-pagination__item {
+  margin: 0;
+}
+
+.g-pagination__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  background-color: white;
+  color: #202124;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #dadce0;
+  margin-left: -1px; /* Overlap borders */
+}
+
+.g-pagination__item:first-child .g-pagination__link {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.g-pagination__item:last-child .g-pagination__link {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.g-pagination__link:hover {
+  background-color: #f8f9fa;
+  z-index: 1; /* Ensure hover state is visible above neighboring borders */
+  position: relative;
+}
+
+.g-pagination__link--active {
+  background-color: #edd400;
+  color: #202124;
+  border-color: #edd400;
+  z-index: 2; /* Ensure active state is visible above neighboring borders */
+  position: relative;
+}
+
+.g-pagination__link--control {
+  font-weight: bold;
+}
+
+.g-pagination__icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.g-pagination__link--gap {
+  color: #5f6368;
+  cursor: default;
+}
+
+.g-pagination__link--gap:hover {
+  background-color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .g-pagination__link {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  /* Hide text labels on small screens */
+  .g-pagination__text {
+    display: none;
+  }
+}

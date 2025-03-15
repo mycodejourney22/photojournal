@@ -1,25 +1,41 @@
+<!-- app/views/expenses/_expense_table.html.erb -->
+<div class="g-table">
+  <div class="g-table__header">
+    <div class="g-table__col--date">Date</div>
+    <div class="g-table__col--description">Description</div>
+    <div class="g-table__col--category">Category</div>
+    <div class="g-table__col--staff">Staff</div>
+    <div class="g-table__col--amount">Amount</div>
+    <div class="g-table__col--location">Location</div>
+  </div>
 
-<table class="bordered-table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Description</th>
-      <th>Category</th>
-      <th>Staff</th>
-      <th>Amount</th>
-      <th>Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% expenses.each do |expense| %>
-      <tr>
-        <td><%= expense.date %></td>
-        <td><%= expense.description.capitalize %></td>
-        <td><%= expense.category %></td>
-        <td><%= expense.staff_name %></td>
-        <td><%= number_to_currency(expense.amount, unit: "₦") %></td>
-        <td><%= expense.location.capitalize %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <% expenses.each do |expense| %>
+    <div class="g-table__row">
+      <div class="g-table__status g-table__status--expense"></div>
+
+      <div class="g-table__col--date g-table__cell">
+        <%= expense.date %>
+      </div>
+
+      <div class="g-table__col--description g-table__cell">
+        <%= expense.description.capitalize %>
+      </div>
+
+      <div class="g-table__col--category g-table__cell">
+        <%= expense.category %>
+      </div>
+
+      <div class="g-table__col--staff g-table__cell">
+        <%= expense.staff_name %>
+      </div>
+
+      <div class="g-table__col--amount g-table__cell">
+        <%= number_to_currency(expense.amount, unit: "₦") %>
+      </div>
+
+      <div class="g-table__col--location g-table__cell">
+        <%= expense.location.capitalize %>
+      </div>
+    </div>
+  <% end %>
+</div>

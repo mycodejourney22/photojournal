@@ -3,6 +3,8 @@
 class Users::SessionsController < Devise::SessionsController
   skip_after_action :verify_authorized, raise: false
   skip_after_action :verify_policy_scoped, raise: false
+  layout "public"
+
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in

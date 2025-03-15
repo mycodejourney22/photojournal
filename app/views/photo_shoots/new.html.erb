@@ -1,34 +1,129 @@
-<section>
-  <div class="container">
-  <%= render "shared/sidebar" %>
-  <div class="content card_photoshoot form_card">
-  <h1>Add a Photoshoot</h1>
+<!-- app/views/photo_shoots/new.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1><%= @photo_shoot.persisted? ? "Edit Photoshoot" : "Add a Photoshoot" %></h1>
+  </div>
+</div>
 
-    <%= simple_form_for [@appointment, @photo_shoot] do |f| %>
-      <div >
-        <p class="fw-bold py-4">STUDIO INFORMATION</p>
-        <div class=" grid-container">
-        <%= f.input :date, as: :string, label: false, placeholder: "Shoot date",
-              input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
-          <%= f.association :photographer, collection: Staff.where(role: 'Photographer', active: true).pluck(:name, :id), label: false, include_blank: 'Select Photographer', input_html: { class: 'grid-item' } %>
-          <%= f.association :editor, collection: Staff.where(role: 'Editor', active: true).pluck(:name, :id), label: false, include_blank: 'Select Editor' , input_html: { class: 'grid-item' } %>
-          <%= f.association :customer_service, collection: Staff.where(role: 'Customer Service', active: true).pluck(:name, :id), label: false, include_blank: 'Select Customer Service' %>
-        </div>
-        <p class="fw-bold py-4">PHOTOSHOOT INFORMATION</p>
-        <div class="grid-container">
-          <%= f.input :number_of_selections, label: false, placeholder: "Number of selections" %>
-          <%= f.input :status, label: false,
-                prompt: "Status", collection: ['New', 'Pending', 'Sent']  %>
-          <%= f.input :type_of_shoot, label: false  , prompt: "Type of shoot", collection: ['Kiddies', 'Newborn', 'Personal', 'Maternity', 'Family', 'Passport', 'Extra copies', 'Frames', 'Product Shoot']%>
-          <%= f.input :number_of_outfits, label: false, placeholder: "Number of outfits" %>
-          <%= f.input :date_sent, as: :string, label: false, placeholder: "Date sent", input_html: { class: 'grid-item', data: { controller: "datepicker" } } %>
-          <%= f.input :notes, label: false, placeholder: "Handover Notes" %>
-        </div>
+<div class="g-form-container">
+  <%= simple_form_for [@appointment, @photo_shoot] do |f| %>
+    <%= f.error_notification %>
 
+    <!-- Studio Information Section -->
+    <div class="g-form-section">
+      <div class="g-form-section__header">
+        <h2 class="g-form-section__title">STUDIO INFORMATION</h2>
       </div>
-      <%= f.button :submit, "Create PhotoShoot", class: "btn btn-photoshoot" %>
-    <% end %>
-  </div>
 
-  </div>
-</section>
+      <div class="g-form-grid">
+        <!-- Shoot date -->
+        <div class="g-form-group">
+          <%= f.input :date,
+              as: :string,
+              label: "Shoot date",
+              required: true,
+              placeholder: "Shoot date",
+              input_html: {
+                data: { controller: "datepicker" },
+                class: "g-form-input"
+              } %>
+        </div>
+
+        <!-- Photographer -->
+        <div class="g-form-group">
+          <%= f.association :photographer,
+              collection: Staff.where(role: 'Photographer', active: true).pluck(:name, :id),
+              label: "Photographer",
+              include_blank: 'Select Photographer',
+              input_html: { class: 'g-form-input g-form-select' } %>
+        </div>
+
+        <!-- Editor -->
+        <div class="g-form-group">
+          <%= f.association :editor,
+              collection: Staff.where(role: 'Editor', active: true).pluck(:name, :id),
+              label: "Editor",
+              include_blank: 'Select Editor',
+              input_html: { class: 'g-form-input g-form-select' } %>
+        </div>
+
+        <!-- Customer Service -->
+        <div class="g-form-group">
+          <%= f.association :customer_service,
+              collection: Staff.where(role: 'Customer Service', active: true).pluck(:name, :id),
+              label: "Customer Service",
+              include_blank: 'Select Customer Service',
+              input_html: { class: 'g-form-input g-form-select' } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photoshoot Information Section -->
+    <div class="g-form-section">
+      <div class="g-form-section__header">
+        <h2 class="g-form-section__title">PHOTOSHOOT INFORMATION</h2>
+      </div>
+
+      <div class="g-form-grid">
+        <!-- Number of selections -->
+        <div class="g-form-group">
+          <%= f.input :number_of_selections,
+              label: "Number of selections",
+              placeholder: "Number of selections",
+              input_html: { class: 'g-form-input' } %>
+        </div>
+
+        <!-- Status -->
+        <div class="g-form-group">
+          <%= f.input :status,
+              label: "Status",
+              collection: ['New', 'Pending', 'Sent'],
+              prompt: "Status",
+              input_html: { class: 'g-form-input g-form-select' } %>
+        </div>
+
+        <!-- Type of shoot -->
+        <div class="g-form-group">
+          <%= f.input :type_of_shoot,
+              label: "Type of shoot",
+              collection: ['Kiddies', 'Newborn', 'Personal', 'Maternity', 'Family', 'Passport', 'Extra copies', 'Frames', 'Product Shoot'],
+              prompt: "Type of shoot",
+              input_html: { class: 'g-form-input g-form-select' } %>
+        </div>
+
+        <!-- Number of outfits -->
+        <div class="g-form-group">
+          <%= f.input :number_of_outfits,
+              label: "Number of outfits",
+              placeholder: "Number of outfits",
+              input_html: { class: 'g-form-input' } %>
+        </div>
+
+        <!-- Date sent -->
+        <div class="g-form-group">
+          <%= f.input :date_sent,
+              as: :string,
+              label: "Date sent",
+              placeholder: "Date sent",
+              input_html: {
+                data: { controller: "datepicker" },
+                class: "g-form-input"
+              } %>
+        </div>
+
+        <!-- Handover Notes (Full width) -->
+        <div class="g-form-group g-form-group--full">
+          <%= f.input :notes,
+              label: "Handover Notes",
+              placeholder: "Handover Notes",
+              input_html: {
+                class: 'g-form-input g-form-textarea',
+                rows: 4
+              } %>
+        </div>
+      </div>
+    </div>
+
+    <%= f.submit @photo_shoot.persisted? ? "Update Photoshoot" : "Create Photoshoot", class: "g-button g-button--action g-button--full" %>
+  <% end %>
+</div>

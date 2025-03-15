@@ -1,34 +1,61 @@
-<div class="container">
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>Sessions</h1>
-      <div class="row justify-content-center w-50">
-        <div class=" my-3">
-          <%= form_with url: dynamic_appointments_url, method: :get, class: "d-flex" do %>
-            <%= text_field_tag :query,
-                  params[:query],
-                  class: "form-control search-border",
-                  placeholder: "Customer Name or Email Address"
-              %>
-          <% end %>
+<!-- app/views/appointments/_appointment.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "Today", appointments_path, class: "g-content__tab #{current_page?(appointments_path) ? 'g-content__tab--active' : ''}" %>
+    <%= link_to "Upcoming", upcoming_appointments_path, class: "g-content__tab #{current_page?(upcoming_appointments_path) ? 'g-content__tab--active' : ''}" %>
+    <%= link_to "Past", past_appointments_path, class: "g-content__tab #{current_page?(past_appointments_path) ? 'g-content__tab--active' : ''}" %>
+  </div>
+</div>
+
+<div class="g-table__header">
+  <div class="g-table__col--name">Name</div>
+  <div class="g-table__col--type">Type</div>
+  <div class="g-table__col--location">Location</div>
+  <div class="g-table__col--phone">Phone</div>
+  <div class="g-table__col--time">Time</div>
+</div>
+
+<% if @appointments.present? %>
+  <% @appointments.each do |appointment| %>
+    <%= link_to appointment_path(appointment), class: "g-table__row" do %>
+      <div class="g-table__status <%= appointment.no_show ? 'g-table__status--pending' : (appointment.status ? 'g-table__status--confirmed' : 'g-table__status--cancelled') %>"></div>
+
+      <div class="g-table__col--name">
+        <div class="g-table__name-container">
+          <div class="g-table__name"><%= appointment.name %></div>
+          <div class="g-table__date"><%= appointment.formatted_start_time %></div>
         </div>
       </div>
-      <%= link_to 'New Booking', new_appointment_path, class: "btn-photoshoot btn" %>
-    </div>
-    <div>
-        <%= render "shared/navigation" %>
-        <% if @appointments.present? %>
-          <%= render "appointment_table", appointments: @appointments %>
-        <% else %>
-          <div class="d-flex justify-content-center align-items-center">
-            <p class="fw-bold">No bookings available for this period!</p>
-          </div>
-        <% end %>
-    </div>
-    <% if @appointments.respond_to?(:total_pages) %>
-      <%= paginate @appointments, class: "mt-4" %>
-    <% end %>
-  </section>
 
-</div>
+      <div class="g-table__col--type g-table__cell">
+        <%= find_question_answer(appointment, 'Type of shoots') %>
+      </div>
+
+      <div class="g-table__col--location g-table__cell">
+        <%= appointment.location %>
+      </div>
+
+      <div class="g-table__col--phone g-table__cell">
+        <%= find_question_answer(appointment, 'Phone number') %>
+      </div>
+
+      <div class="g-table__col--time g-table__cell">
+        <% if !appointment.status %>
+          <span class="g-table__cancelled">CANCELLED</span>
+        <% else %>
+          <%= appointment.formatted_time %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <p>No bookings available for this period!</p>
+  </div>
+<% end %>
+
+<% if @appointments.respond_to?(:total_pages) %>
+  <div class="g-content__pagination">
+    <%= paginate @appointments %>
+  </div>
+<% end %>

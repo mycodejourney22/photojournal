@@ -1,154 +1,213 @@
-<div class="container" data-controller="calendly" >
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2><%= @appointment.name.capitalize %></h2>
-      <%= link_to 'New Contact', new_appointment_path, class: "btn-photoshoot btn" %>
-    </div>
-    <div class="d-flex justify-content-between align-items-start">
-      <div>
-        <div class="d-flex justify-content-between align-items-center">
-          <h6>Photoshoot Info</h6>
-          <h6><%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(@appointment) , class: "black-link"  if @appointment.photo_shoot.nil?  %> </h6>
+<!-- app/views/appointments/show.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1><%= @appointment.name.capitalize %></h1>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to 'New Contact', new_appointment_path, class: "g-button g-button--action" %>
+  </div>
+</div>
+
+
+<div class="g-content__sections">
+  <!-- Left Section (Main Content) -->
+  <div class="g-content__main">
+    <!-- Photoshoot Info Section -->
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Photoshoot Info</div>
+        <div class="g-section__actions">
+          <% if @appointment.photo_shoot.nil? %>
+            <%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(@appointment), class: "g-section__link" %>
+          <% end %>
         </div>
-        <hr>
-        <% if @appointment.present? %>
-          <table class="bordered-table" data-calendly-target="table">
-            <thead>
-              <th>TYPE</th>
-              <th>PHOTOGRAPHER</th>
-              <th>EDITOR</th>
-              <th>CSO</th>
-              <th>STATUS</th>
-              <th>OUTFITS</th>
-            </thead>
-            <tbody>
-              <% if @appointment.photo_shoot %>
-                <tr>
-                  <td><%= @appointment.photo_shoot.type_of_shoot if @appointment.photo_shoot.type_of_shoot %></td>
-                  <td><%= @appointment.photo_shoot.photographer.name if @appointment.photo_shoot.photographer %></td>
-                  <td><%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %></td>
-                  <td><%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %></td>
-                  <td>
-                    <%= @appointment.photo_shoot.status if @appointment.photo_shoot.status%>
-                  </td>
-                  <td>
-                    <%= @appointment.photo_shoot.number_of_outfits if @appointment.photo_shoot.number_of_outfits %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% else %>
+      </div>
+
+      <% if @appointment.photo_shoot %>
+        <div class="g-table">
+          <div class="g-table__header">
+            <div class="g-table__col--type">TYPE</div>
+            <div class="g-table__col--photographer">PHOTOGRAPHER</div>
+            <div class="g-table__col--editor">EDITOR</div>
+            <div class="g-table__col--cso">CSO</div>
+            <div class="g-table__col--status">STATUS</div>
+            <div class="g-table__col--outfits">OUTFITS</div>
+          </div>
+
+          <div class="g-table__row">
+            <div class="g-table__status g-table__status--confirmed"></div>
+            <div class="g-table__col--type g-table__cell">
+              <%= @appointment.photo_shoot.type_of_shoot if @appointment.photo_shoot.type_of_shoot %>
+            </div>
+            <div class="g-table__col--photographer g-table__cell">
+              <%= @appointment.photo_shoot.photographer.name if @appointment.photo_shoot.photographer %>
+            </div>
+            <div class="g-table__col--editor g-table__cell">
+              <%= @appointment.photo_shoot.editor.name if @appointment.photo_shoot.editor %>
+            </div>
+            <div class="g-table__col--cso g-table__cell">
+              <%= @appointment.photo_shoot.customer_service.name if @appointment.photo_shoot.customer_service %>
+            </div>
+            <div class="g-table__col--status g-table__cell">
+              <%= @appointment.photo_shoot.status if @appointment.photo_shoot.status %>
+            </div>
+            <div class="g-table__col--outfits g-table__cell">
+              <%= @appointment.photo_shoot.number_of_outfits if @appointment.photo_shoot.number_of_outfits %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
           <p>No photoshoots linked to this contact</p>
-        <% end %>
-        <div class="d-flex justify-content-between align-items-center">
-          <h6 class="mt-5">Sales Info</h6>
-          <h6 class="mt-5"><%= link_to 'Add Sale', new_appointment_sale_path(@appointment), class: "black-link" %></h6>
         </div>
-        <hr>
-        <% if @appointment.sales.present? %>
-          <table class="bordered-table" data-calendly-target="table">
-            <thead>
-              <th>PRODUCT</th>
-              <th>AMOUNT</th>
-              <th>STATUS</th>
-              <th>METHOD</th>
-              <th>DATE</th>
-              <th>STATUS</th>
-            </thead>
-            <tbody>
-            <% @appointment.sales.each do |sale| %>
-              <% if sale %>
-              <tr>
-                <td><%= sale.product_service_name %></td>
-                <td><%= sale.amount_paid %></td>
-                <td><%= sale.payment_type %></td>
-                <td>
-                  <%= sale.payment_method%>
-                </td>
-                <td>
-                  <%= sale.date.strftime("%A, %d %B %Y")%>
-                </td>
-                <td><%= sale.void ? "Voided" : "Valid" %></td>
-              </tr>
-              <% end %>
-            <% end %>
-            </tbody>
-          </table>
-        <% else %>
-          <p>No Sales linked to this contact</p>
-        <% end %>
-        <div class="d-flex justify-content-between align-items-center">
-          <h6 class="mt-5">Customer Outfit </h6>
+      <% end %>
+    </div>
+
+    <!-- Sales Info Section -->
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Sales Info</div>
+        <div class="g-section__actions">
+          <%= link_to 'Add Sale', new_appointment_sale_path(@appointment), class: "g-section__link" %>
         </div>
-        <hr>
-        <% if @appointment.customer_pictures.attached? %>
-          <p>View Customer outfits <%= link_to "here", customer_pictures_appointment_path(@appointment), class: "black-link"%></p>
-        <% else %>
-          <p>No customer Outfits Pictures.</p>
-        <% end %>
-        <div class="d-flex justify-content-between align-items-center">
-          <h6 class="mt-5">Inspo Images</h6>
-        </div>
-        <hr>
-        <% if @appointment.photo_inspirations.attached? %>
-          <p>View Customer Inspiration images <%= link_to "here", photo_inspirations_appointment_path(@appointment), class: "black-link"%></p>
-        <% else %>
-          <p>No Inspo Images.</p>
-        <% end %>
       </div>
-      <div>
-        <h6>Contact Info</h6><hr>
-        <div class="d-flex">
-          <h2><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
-          </h2>
-          <div class="ps-2">
-            <p><%= @appointment.name.capitalize %></p>
-            <p><%= @appointment.email %></p>
-          </div>
-        </div>
-        <div class="mt-4">
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Type</p>
-            <% type_of_shoots = @appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
-            <% if type_of_shoots %>
-              <div>
-                <p><%= type_of_shoots.answer %></p>
-              </div>
-            <% end %>
-          </div>
-          <div class="mt-2">
-            <p>Phone <span class="ps-5"><% phone_number = @appointment.questions.find { |q| q.question == 'Phone number' || q.question == 'Type of shoot' } %>
-              <% if phone_number %>
-                  <%= phone_number.answer %>
-              <% end %>
-      </p>
-          </div>
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Time</p>
-            <p><%= @appointment.start_time.strftime("%A, %d %B %Y") %></p>
+
+      <% if @appointment.sales.present? %>
+        <div class="g-table">
+          <div class="g-table__header">
+            <div class="g-table__col--product">PRODUCT</div>
+            <div class="g-table__col--amount">AMOUNT</div>
+            <div class="g-table__col--status">STATUS</div>
+            <div class="g-table__col--payment">METHOD</div>
+            <div class="g-table__col--date">DATE</div>
+            <div class="g-table__col--status">STATUS</div>
           </div>
 
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Studio makeup artist? </p>
-            <p><% question_makeup_two = @appointment.questions.find { |q| q.question == 'Are you doing makeup in our studio?' || q.question == 'Type of shoot' } %>
-              <% if question_makeup_two %>
-                  <%= question_makeup_two.answer %>
-              <% end %>
-            </p>
+          <% @appointment.sales.each do |sale| %>
+            <div class="g-table__row">
+              <div class="g-table__status <%= sale.void ? 'g-table__status--cancelled' : 'g-table__status--confirmed' %>"></div>
+              <div class="g-table__col--product g-table__cell">
+                <%= sale.product_service_name %>
+              </div>
+              <div class="g-table__col--amount g-table__cell">
+                <%= sale.amount_paid %>
+              </div>
+              <div class="g-table__col--status g-table__cell">
+                <%= sale.payment_type %>
+              </div>
+              <div class="g-table__col--payment g-table__cell">
+                <%= sale.payment_method %>
+              </div>
+              <div class="g-table__col--date g-table__cell">
+                <%= sale.date.strftime("%A, %d %B %Y") %>
+              </div>
+              <div class="g-table__col--status g-table__cell">
+                <%= sale.void ? "Voided" : "Valid" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No Sales linked to this contact</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Customer Outfit Section -->
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Customer Outfit</div>
+      </div>
+
+      <% if @appointment.customer_pictures.attached? %>
+        <div class="g-content__link-container">
+          <p>View Customer outfits <%= link_to "here", customer_pictures_appointment_path(@appointment), class: "g-link" %></p>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No customer Outfits Pictures.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Inspo Images Section -->
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Inspo Images</div>
+      </div>
+
+      <% if @appointment.photo_inspirations.attached? %>
+        <div class="g-content__link-container">
+          <p>View Customer Inspiration images <%= link_to "here", photo_inspirations_appointment_path(@appointment), class: "g-link" %></p>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No Inspo Images.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Right Section (Contact Info Sidebar) -->
+  <div class="g-content__sidebar">
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Contact Info</div>
+      </div>
+
+      <div class="g-contact-card">
+        <div class="g-contact-card__header">
+          <div class="g-contact-card__avatar">
+            <%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "g-avatar", alt: "Profile photo" %>
           </div>
-          <div class="mt-2 d-flex justify-content-between">
-            <p>Coming with a makeup artist?</p>
-            <p><% question_makeup = @appointment.questions.find { |q| q.question == 'Are you coming with a makeup artist?' || q.question == 'Type of shoot' } %>
-              <% if question_makeup %>
-                <%= question_makeup.answer %>
-              <% end %>
-            </p>
+          <div class="g-contact-card__details">
+            <div class="g-contact-card__name"><%= @appointment.name.capitalize %></div>
+            <div class="g-contact-card__email"><%= @appointment.email %></div>
+          </div>
+        </div>
+
+        <div class="g-contact-card__info">
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Type</div>
+            <div class="g-contact-card__value">
+              <% type_of_shoots = @appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+              <%= type_of_shoots ? type_of_shoots.answer : 'N/A' %>
+            </div>
+          </div>
+
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Phone</div>
+            <div class="g-contact-card__value">
+              <% phone_number = @appointment.questions.find { |q| q.question == 'Phone number' } %>
+              <%= phone_number ? phone_number.answer : 'N/A' %>
+            </div>
+          </div>
+
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Time</div>
+            <div class="g-contact-card__value">
+              <%= @appointment.start_time.strftime("%A, %d %B %Y") %>
+            </div>
+          </div>
+
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Studio makeup artist?</div>
+            <div class="g-contact-card__value">
+              <% question_makeup_two = @appointment.questions.find { |q| q.question == 'Are you doing makeup in our studio?' } %>
+              <%= question_makeup_two ? question_makeup_two.answer : 'N/A' %>
+            </div>
+          </div>
+
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Coming with a makeup artist?</div>
+            <div class="g-contact-card__value">
+              <% question_makeup = @appointment.questions.find { |q| q.question == 'Are you coming with a makeup artist?' } %>
+              <%= question_makeup ? question_makeup.answer : 'N/A' %>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-
+  </div>
 </div>

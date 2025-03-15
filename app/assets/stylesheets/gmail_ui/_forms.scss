@@ -1,0 +1,265 @@
+/* app/assets/stylesheets/gmail_ui/_forms.scss */
+
+.g-form-container {
+  padding: 16px;
+  max-width: 100%;
+}
+
+.g-form-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.g-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.g-form-input {
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 12px;
+  color: #202124;
+}
+
+.g-form-input:focus {
+  border-color: #edd400;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(237, 212, 0, 0.2);
+}
+
+.g-form-input::placeholder {
+  color: #5f6368;
+}
+
+.g-form-label {
+  display: block;
+  font-size: 12px;
+  color: #202124;
+  margin-bottom: 8px;
+}
+
+.g-button--full {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* Fix for datepicker */
+.flatpickr-calendar {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay,
+.flatpickr-day.startRange.nextMonthDay,
+.flatpickr-day.endRange.nextMonthDay {
+  background: #edd400;
+  border-color: #edd400;
+}
+
+/* Override Simple Form styles */
+.simple_form .form-control {
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 12px;
+  color: #202124;
+}
+
+.simple_form .form-control:focus {
+  border-color: #edd400;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(237, 212, 0, 0.2);
+}
+
+.simple_form .form-select {
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 12px;
+  color: #202124;
+}
+
+.simple_form .form-select:focus {
+  border-color: #edd400;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(237, 212, 0, 0.2);
+}
+
+.g-form-group {
+  margin-bottom: 16px;
+}
+
+.g-form-group--full {
+  grid-column: 1 / -1;
+}
+
+.g-form-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.g-form-radio-group--inline {
+  flex-direction: row;
+  gap: 24px;
+}
+
+.g-form-radio-item {
+  display: flex;
+  align-items: center;
+}
+
+.g-form-radio {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  accent-color: #edd400;
+}
+
+.g-form-radio-label {
+  font-size: 12px;
+  color: #202124;
+}
+
+.g-form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px;
+  padding-right: 30px;
+}
+
+.g-form-question {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Error handling */
+.g-form-input.is-invalid {
+  border-color: #ea4335;
+  background-color: #fff8f8;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #ea4335;
+}
+
+/* Required field indicator */
+.g-form-label::after {
+  content: "";
+  margin-left: 4px;
+}
+
+.g-form-label[for*="required"]::after,
+.g-form-label:has(+ .g-form-input[required])::after {
+  content: "*";
+  color: #ea4335;
+}
+
+.g-form-section {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.g-form-section__header {
+  background-color: #f1f3f4;
+  padding: 16px 24px;
+  border-bottom: 1px solid #dadce0;
+}
+
+.g-form-section__title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #202124;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.g-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+/* Override Simple Form label styles to make them more prominent */
+.simple_form label {
+  font-weight: 500;
+  color: #202124;
+  font-size: 12px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Add a light background to the form sections */
+.g-form-grid {
+  padding: 16px 24px 24px;
+}
+
+/* Visual separation between form sections */
+.g-form-section + .g-form-section {
+  margin-top: 32px;
+}
+
+/* Better focus styling for inputs and selects */
+.g-form-input:focus,
+.g-form-select:focus,
+.g-form-textarea:focus {
+  border-color: #edd400;
+  box-shadow: 0 0 0 2px rgba(237, 212, 0, 0.2);
+  outline: none;
+}
+
+/* For full-width elements in the grid */
+.g-form-group--full {
+  grid-column: 1 / -1;
+}
+
+/* Override Simple Form help text styles */
+.form-text {
+  font-size: 12px;
+  color: #5f6368;
+  margin-top: 4px;
+}
+
+/* Adjust spacing for form actions */
+.g-form-container .form-actions {
+  margin-top: 32px;
+}

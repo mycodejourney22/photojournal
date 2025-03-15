@@ -1,103 +1,89 @@
-<div class="container form-data d-flex justify-content-center align-items-center">
-  <div>
-    <h2 class="logo_heading mb-5"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
-      <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
-    </h2>
-    <%= form_with model: @appointment,
+<%# app/views/appointments/new_customer.html.erb %>
+<div class="custom-appointment-container">
+  <div class="custom-logo-header">
+    <div class="custom-logo-circle"></div>
+    <span class="custom-logo-text">363 PHOTOGRAPHY</span>
+  </div>
+
+  <h1 class="custom-form-title">Enter Details</h1>
+
+  <%= form_with model: @appointment,
               url: @appointment.persisted? ? appointment_path(@appointment) : appointments_path(location: params[:location], date: params[:date]),
               method: @appointment.persisted? ? :patch : :post,
               local: false,
-              data: { turbo: true },
-              class: "booking_form" do |form| %>
-      <h1>Enter Details</h1>
-      <div>
-        <!-- Input fields for user details -->
-        <div class='d-flex flex-column'>
-          <%= form.label :name, "Name", class: 'fw-bold mt-4' %>
-          <%= form.text_field :name, required: true, class: "form-data__input" %>
-        </div>
+              data: { turbo: true } do |form| %>
 
-        <div class='d-flex flex-column'>
-          <%= form.label :email, "Email", class: 'fw-bold mt-4' %>
-          <%= form.email_field :email, required: true, class: "form-data__input" %>
-        </div>
+    <div class="custom-form-field">
+      <label class="custom-form-label">Name</label>
+      <%= form.text_field :name, required: true, class: "custom-form-input" %>
+    </div>
 
-        <%= form.hidden_field :location, value: params[:location], required: true %>
-        <%= form.hidden_field :start_time, value: params[:date], required: true %>
-        <%= form.hidden_field :price_id, value: params[:price_id] %>
+    <div class="custom-form-field">
+      <label class="custom-form-label">Email</label>
+      <%= form.email_field :email, required: true, class: "custom-form-input" %>
+    </div>
 
+    <%= form.hidden_field :location, value: params[:location], required: true %>
+    <%= form.hidden_field :start_time, value: params[:date], required: true %>
+    <%= form.hidden_field :price_id, value: params[:price_id] %>
 
-        <!-- Questions section -->
-      <%= form.fields_for :questions do |question_form| %>
-        <div class="nested-fields d-flex flex-column">
-          <%= question_form.label :question, question_form.object.question, class: 'fw-bold booking_label' %>
-          <%= question_form.hidden_field :question %>
+    <!-- Questions section -->
+    <%= form.fields_for :questions do |question_form| %>
+      <div class="custom-form-field">
+        <label class="custom-form-label"><%= question_form.object.question %></label>
+        <%= question_form.hidden_field :question %>
 
-          <% if question_form.object.question == "Phone number" %>
-            <%= question_form.text_field :answer, required: true, class: "form-data__input #{ 'is-invalid' if question_form.object.errors[:answer].any? }" %>
-            <% if question_form.object.errors[:answer].any? %>
-              <div class="error-message"><%= question_form.object.errors[:answer].first %></div>
-            <% end %>
+        <% if question_form.object.question == "Phone number" %>
+          <%= question_form.text_field :answer, required: true, class: "custom-form-input" %>
 
-          <% elsif question_form.object.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c)?' %>
-          <div>
-            <%= question_form.radio_button :answer, 'Yes', id: "consent_yes", class: "d-none" %>
-            <label for="consent_yes" class="#{ 'is-invalid' if question_form.object.errors[:answer].any? }">Yes</label>
+        <% elsif question_form.object.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c)?' %>
+          <div class="custom-radio-group">
+            <div class="custom-radio-item">
+              <%= question_form.radio_button :answer, 'Yes', id: "custom_consent_yes", class: "custom-radio-input" %>
+              <label for="custom_consent_yes" class="custom-radio-label">Yes</label>
+            </div>
 
-            <%= question_form.radio_button :answer, 'No', id: "consent_no", class: "d-none" %>
-            <label for="consent_no" class="#{ 'is-invalid' if question_form.object.errors[:answer].any? }">No</label>
+            <div class="custom-radio-item">
+              <%= question_form.radio_button :answer, 'No', id: "custom_consent_no", class: "custom-radio-input" %>
+              <label for="custom_consent_no" class="custom-radio-label">No</label>
+            </div>
           </div>
 
-          <% elsif question_form.object.question == 'Type of shoots' %>
-            <div class="grid_app_item">
-              <%= question_form.radio_button :answer, 'Kiddies', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Kiddies
-              <%= question_form.radio_button :answer, 'Newborn', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Newborn
-              <%= question_form.radio_button :answer, 'Family', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Family
-              <%= question_form.radio_button :answer, 'Personal', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Personal
-              <%= question_form.radio_button :answer, 'Maternity', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Maternity
-              <%= question_form.radio_button :answer, 'PreWedding', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> PreWedding
-              <% if question_form.object.errors[:answer].any? %>
-                <div class="error-message"><%= question_form.object.errors[:answer].first %></div>
-              <% end %>
+        <% elsif question_form.object.question == 'Type of shoots' %>
+          <div class="custom-shoot-types-grid">
+            <% ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'].each do |shoot_type| %>
+              <div class="custom-shoot-type-item">
+                <%= question_form.radio_button :answer, shoot_type,
+                                              id: "custom_shoot_type_#{shoot_type.downcase}",
+                                              class: "custom-shoot-type-input" %>
+                <label for="custom_shoot_type_<%= shoot_type.downcase %>" class="custom-shoot-type-label">
+                  <%= shoot_type %>
+                </label>
+              </div>
+            <% end %>
+          </div>
+
+        <% elsif question_form.object.question == 'Please share anything else that would help prepare for your shoot with us.' %>
+          <%= question_form.text_area :answer, class: "custom-form-input", rows: 4 %>
+
+        <% else %>
+          <div class="custom-radio-group">
+            <div class="custom-radio-item">
+              <%= question_form.radio_button :answer, 'Yes', id: "custom_question_#{question_form.index}_yes", class: "custom-radio-input" %>
+              <label for="custom_question_<%= question_form.index %>_yes" class="custom-radio-label">Yes</label>
             </div>
 
-          <% elsif question_form.object.question == 'Please share anything else that would help prepare for your shoot with us.' %>
-            <div>
-              <%= question_form.text_area :answer, class: "w-100 form-data__input #{ 'is-invalid' if question_form.object.errors[:answer].any? }" %>
-              <% if question_form.object.errors[:answer].any? %>
-                <div class="error-message"><%= question_form.object.errors[:answer].first %></div>
-              <% end %>
+            <div class="custom-radio-item">
+              <%= question_form.radio_button :answer, 'No', id: "custom_question_#{question_form.index}_no", class: "custom-radio-input" %>
+              <label for="custom_question_<%= question_form.index %>_no" class="custom-radio-label">No</label>
             </div>
+          </div>
+        <% end %>
 
-          <% else %>
-            <div class="grid_app_item">
-              <%= question_form.radio_button :answer, 'Yes', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> Yes
-              <%= question_form.radio_button :answer, 'No', class: "#{ 'is-invalid' if question_form.object.errors[:answer].any? }" %> No
-              <% if question_form.object.errors[:answer].any? %>
-                <div class="error-message"><%= question_form.object.errors[:answer].first %></div>
-              <% end %>
-            </div>
-          <% end %>
-
-          <%= question_form.hidden_field :_destroy %>
-        </div>
-      <% end %>
-
-      <%# <div> %>
-        <%# <%= form.label :photos, "Please upload pictures of your outfit", class: 'fw-bold mt-4' %>
-        <%# <%= form.file_field :customer_pictures, multiple: true, class: "form-control" %>
-      <%# </div> %>
-
-      <%# <div> %>
-        <%# <%= form.label :photos, "Please upload any inspirations you have for your shoots", class: 'fw-bold mt-4' %>
-        <%# <%= form.file_field :photo_inspirations, multiple: true, class: "form-control" %>
-      <%# </div> %>
-
-        <!-- Submit button -->
-        <div>
-          <%= form.submit "Book Appointment", class: "btn_new btn btn-photoshoot mt-3" %>
-        </div>
+        <%= question_form.hidden_field :_destroy %>
       </div>
     <% end %>
-  </div>
+
+    <%= form.submit "Book Appointment", class: "custom-submit-button" %>
+  <% end %>
 </div>

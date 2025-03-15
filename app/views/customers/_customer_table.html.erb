@@ -1,32 +1,36 @@
-<!-- app/views/customers/index.html.erb -->
-
-  <div class="inner-card ps-4 p-heading">
+<!-- app/views/customers/_customer_table.html.erb -->
+<div class="g-table">
+  <div class="g-table__header">
+    <div class="g-table__col--name">Name</div>
+    <div class="g-table__col--phone">Phone Number</div>
+    <div class="g-table__col--email">Email</div>
+    <div class="g-table__col--status">Status</div>
+    <div class="g-table__col--actions">Action</div>
   </div>
-  <table class="bordered-table" data-calendly-target="table">
-    <thead>
-      <th>NAME</th>
-      <th>PHONE NUMBER</th>
-      <th>EMAIL</th>
-      <th>STATUS</th>
-      <th>ACTION</th>
-    </thead>
-    <tbody>
-      <% @customers.each do |customer| %>
-        <tr>
-          <td><%= customer.name %></td>
-          <td>
-            <%= customer.phone_number if customer.phone_number %>
-          </td>
-          <td>
-            <%= customer.email if customer.email %>
-          </td>
-          <td>
-            <%= customer.visits_count > 0 ? "Repeating" : "New"%>
-          </td>
-          <td>
-            <p><%= link_to 'More Details', customer_path(customer) %></p>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+
+  <% @customers.each do |customer| %>
+    <div class="g-table__row">
+      <div class="g-table__status <%= customer.visits_count > 0 ? 'g-table__status--confirmed' : 'g-table__status--new' %>"></div>
+
+      <div class="g-table__col--name g-table__cell">
+        <%= customer.name %>
+      </div>
+
+      <div class="g-table__col--phone g-table__cell">
+        <%= customer.phone_number if customer.phone_number %>
+      </div>
+
+      <div class="g-table__col--email g-table__cell">
+        <%= customer.email if customer.email %>
+      </div>
+
+      <div class="g-table__col--status g-table__cell">
+        <%= customer.visits_count > 0 ? "Repeating" : "New" %>
+      </div>
+
+      <div class="g-table__col--actions g-table__cell">
+        <%= link_to 'More Details', customer_path(customer), class: "g-button--link" %>
+      </div>
+    </div>
+  <% end %>
+</div>

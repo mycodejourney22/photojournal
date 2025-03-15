@@ -1,24 +1,65 @@
-<div class="container" data-controller="calendly" >
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>Consent Details</h1>
-      <div class="row justify-content-center w-50">
-        <div class=" my-3">
-          <%= form_with url: photo_shoots_consent_path, method: :get, class: "d-flex" do %>
-            <%= text_field_tag :query,
-                  params[:query],
-                  class: "form-control search-border",
-                  placeholder: "Search Name or Email "
-              %>
-          <% end %>
-        </div>
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "Consent Details", photo_shoots_consent_path, class: "g-content__tab g-content__tab--active" %>
+  </div>
+</div>
+
+<div class="g-table__header">
+  <div class="g-table__col--name">Name</div>
+  <div class="g-table__col--consent">Authorize to post</div>
+  <div class="g-table__col--type">Type</div>
+  <div class="g-table__col--post-date">Post From Date</div>
+  <div class="g-table__col--branch">Branch</div>
+  <div class="g-table__col--date">Date</div>
+</div>
+
+<% if @appointments.present? %>
+  <% @appointments.each do |appointment| %>
+    <div class="g-table__row">
+      <div class="g-table__status g-table__status--confirmed"></div>
+
+      <div class="g-table__col--name g-table__cell">
+        <%= appointment.name.split(" ").map(&:capitalize).join(" ") %>
+      </div>
+
+      <div class="g-table__col--consent g-table__cell">
+        <% social_consent = appointment.questions.find { |q| q.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' } %>
+        <% if social_consent %>
+          <%= social_consent.answer %>
+        <% end %>
+      </div>
+
+      <div class="g-table__col--type g-table__cell">
+        <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+        <% if type_of_shoots %>
+          <%= type_of_shoots.answer %>
+        <% end %>
+      </div>
+
+      <div class="g-table__col--post-date g-table__cell">
+        <% dob = appointment.questions.find { |q| q.question == 'Date of birth(Month-Day): This information will be used to wish you happy birthday!' } %>
+        <% if dob %>
+          <%= dob.answer %>
+        <% end %>
+      </div>
+
+      <div class="g-table__col--branch g-table__cell">
+        <%= appointment.mapped_location %>
+      </div>
+
+      <div class="g-table__col--date g-table__cell">
+        <%= appointment.start_time.strftime("%A, %d %B %Y") %>
       </div>
     </div>
-    <div >
-        <%= render "consent", appointments: @appointments %>
-    </div>
-    <%= paginate @appointments %>
-  </section>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <p>No consent records available.</p>
+  </div>
+<% end %>
 
-</div>
+<% if @appointments.respond_to?(:total_pages) %>
+  <div class="g-content__pagination">
+    <%= paginate @appointments %>
+  </div>
+<% end %>

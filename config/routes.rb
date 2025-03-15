@@ -50,7 +50,9 @@ Rails.application.routes.draw do
   #   sessions: 'users/sessions'
   # }
 
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
   namespace :admin do
     resources :users, only: [:index, :edit, :update, :new, :create]
   end

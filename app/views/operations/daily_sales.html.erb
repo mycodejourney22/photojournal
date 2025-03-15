@@ -1,36 +1,58 @@
-<div class="container">
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <div class="d-flex justify-content-between">
-      <h1>Sales Breakdown for <%= @date.strftime("%A, %B %d, %Y") %></h1>
-      <%= link_to 'Back to Monthly Sales', operations_path %>
+<!-- app/views/operations/daily_sales.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "Sales Breakdown", daily_sales_operations_path(date: @date), class: "g-content__tab g-content__tab--active" %>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to 'Back to Monthly Sales', operations_path, class: "g-button" %>
+  </div>
+</div>
+
+<h2 class="g-content__subtitle">Sales Data for <%= Time.zone.now.strftime("%B %Y") %></h2>
+
+<div class="g-table">
+  <div class="g-table__header">
+    <div class="g-table__col--product">Product</div>
+    <div class="g-table__col--amount">Amount Paid</div>
+    <div class="g-table__col--name">Customer</div>
+    <div class="g-table__col--staff">Employee</div>
+    <div class="g-table__col--status">Status</div>
+  </div>
+
+  <% if @daily_sales.present? %>
+    <% @daily_sales.each do |sale| %>
+      <div class="g-table__row">
+        <div class="g-table__status <%= sale.void ? 'g-table__status--cancelled' : 'g-table__status--confirmed' %>"></div>
+
+        <div class="g-table__col--product g-table__cell">
+          <% if sale.appointment %>
+            <% product = sale.appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+            <%= product.answer if product %>
+          <% else %>
+            <%= sale.product_service_name %>
+          <% end %>
+        </div>
+
+        <div class="g-table__col--amount g-table__cell">
+          <%= number_to_currency(sale.amount_paid, unit: "₦") %>
+        </div>
+
+        <div class="g-table__col--name g-table__cell">
+          <%= sale.customer_name.split(" ").map(&:capitalize).join(" ") %>
+        </div>
+
+        <div class="g-table__col--staff g-table__cell">
+          <%= sale.staff.name %>
+        </div>
+
+        <div class="g-table__col--status g-table__cell">
+          <%= sale.void ? "Voided" : "Valid" %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="g-content__empty">
+      <p>No sales data available for this date.</p>
     </div>
-    <table class="bordered-table" data-calendly-target="table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Amount Paid</th>
-          <th>Customer</th>
-          <th>Employee</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @daily_sales.each do |sale| %>
-          <tr>
-            <% if sale.appointment %>
-              <% product =  sale.appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
-              <td><%= product.answer if product %></td>
-            <% else %>
-              <td><%= sale.product_service_name %></td>
-            <% end %>
-            <td><%= number_to_currency(sale.amount_paid, unit: "₦") %></td>
-            <td><%= sale.customer_name.split(" ").map(&:capitalize).join(" ") %></td>
-            <td><%= sale.staff.name %></td>
-            <td><%= sale.void ? "Voided" : "Valid" %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </section>
+  <% end %>
 </div>

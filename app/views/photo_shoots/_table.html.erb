@@ -1,28 +1,46 @@
-<table class="bordered-table" data-calendly-target="table">
-  <thead>
-    <tr>
-      <th>NAME</th>
-      <th>C.S.O</th>
-      <th>PHOTOGRAPHER</th>
-      <th>EDITOR</th>
-      <th>SELECTIONS</th>
-      <th>STATUS</th>
-      <th>DATE</th>
-      <th>UPDATE</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% photoshoots.each do |photoshoot| %>
-      <tr>
-        <td><%= photoshoot.appointment.name.split(" ").map(&:capitalize).join(" ") %></td>
-        <td><%= photoshoot.customer_service.name if photoshoot.customer_service %></td>
-        <td><%= photoshoot.photographer.name if photoshoot.photographer %></td>
-        <td><%= photoshoot.editor.name if photoshoot.editor %></td>
-        <td><%= photoshoot.number_of_selections %></td>
-        <td><%= photoshoot.status %></td>
-        <td><%= photoshoot.date.to_date %></td>
-        <td><%= link_to "Update", edit_appointment_photo_shoot_path(photoshoot.appointment, photoshoot) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<!-- app/views/photo_shoots/_table.html.erb -->
+<div class="g-table">
+  <div class="g-table__header">
+    <div class="g-table__col--name">Name</div>
+    <div class="g-table__col--photographer">Photographer</div>
+    <div class="g-table__col--editor">Editor</div>
+    <div class="g-table__col--selections">Selections</div>
+    <div class="g-table__col--status">Status</div>
+    <div class="g-table__col--date">Date</div>
+    <div class="g-table__col--actions">Actions</div>
+  </div>
+
+  <% photoshoots.each do |photoshoot| %>
+    <div class="g-table__row">
+      <div class="g-table__status <%= photoshoot.status == 'Sent' ? 'g-table__status--confirmed' : (photoshoot.status == 'Pending' ? 'g-table__status--pending' : 'g-table__status--new') %>"></div>
+
+      <div class="g-table__col--name g-table__cell">
+        <%= photoshoot.appointment.name.split(" ").map(&:capitalize).join(" ") %>
+      </div>
+
+      <div class="g-table__col--photographer g-table__cell">
+        <%= photoshoot.photographer&.name %>
+      </div>
+
+      <div class="g-table__col--editor g-table__cell">
+        <%= photoshoot.editor&.name %>
+      </div>
+
+      <div class="g-table__col--selections g-table__cell">
+        <%= photoshoot.number_of_selections %>
+      </div>
+
+      <div class="g-table__col--status g-table__cell">
+        <%= photoshoot.status %>
+      </div>
+
+      <div class="g-table__col--date g-table__cell">
+        <%= photoshoot.date&.to_date %>
+      </div>
+
+      <div class="g-table__col--actions g-table__cell">
+        <%= link_to "Update", edit_appointment_photo_shoot_path(photoshoot.appointment, photoshoot), class: "g-button--link" %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,38 +1,97 @@
-<div class="container">
-  <%= render "shared/sidebar" %>
-  <section class="content">
-    <h1 class="ps-3">Add New Appointment</h1>
-    <%= simple_form_for @appointment do |f| %>
-      <%= f.error_notification %>
+<!-- app/views/appointments/new.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Add New Appointment</h1>
+  </div>
+</div>
 
-      <div class="card card_photoshoot form_card" >
-        <div class="grid-container">
-          <%= f.input :name, label_html:{class: 'fw-bold'} %>
-          <%= f.input :email, label_html:{class: 'fw-bold'} %>
-          <%= f.input :location, label_html:{class: 'fw-bold'}, collection: ['KM 22 Lekki Epe Express way , Ilaje Bus Stop Lagos', '66 Adeniyi Jones , Ikeja Lagos', '115A bode thomas street, Surulere Lagos'] %>
-          <%= f.input :start_time ,  as: :string, required: true, label_html:{class: 'fw-bold'}, input_html: {data: { controller: "datepicker" }} %>
+<div class="g-form-container">
+  <%= simple_form_for @appointment do |f| %>
+    <%= f.error_notification %>
+
+    <div class="g-form-card">
+      <div class="g-form-grid">
+        <!-- Name & Email -->
+        <div class="g-form-group">
+          <%= f.label :name, "Name *", class: "g-form-label" %>
+          <%= f.text_field :name, required: true, class: "g-form-input" %>
         </div>
-        <%= f.simple_fields_for :questions do |question_form| %>
-          <div class="nested-fields">
-            <%= question_form.label :question, question_form.object.question, class: 'fw-bold' %>
-            <%= question_form.hidden_field :question %>
-            <% if question_form.object.question == "Phone number" %>
-              <%= question_form.input :answer, as: :string, required: true,  label: false %>
-            <% elsif question_form.object.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' %>
-              <div class="">
-                  <%= question_form.input :answer, as: :radio_buttons, required: true, collection: ['Yes', 'No'], label: false, data: {form_target: "radioGroup"} %>
-              </div>
-            <% elsif question_form.object.question == 'Type of shoots' %>
-              <div class="">
-                  <%= question_form.input :answer, as: :radio_buttons, required: true,
-                  collection: ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding'], label: false %>
-              </div>
-            <% end %>
-            <%= question_form.hidden_field :_destroy %>
-          </div>
-        <% end %>
+
+        <div class="g-form-group">
+          <%= f.label :email, "Email *", class: "g-form-label" %>
+          <%= f.email_field :email, required: true, class: "g-form-input" %>
+        </div>
+
+        <!-- Location & Date -->
+        <div class="g-form-group">
+          <%= f.label :location, "Location *", class: "g-form-label" %>
+          <%= f.select :location,
+              ['KM 22 Lekki Epe Express way, Ilaje Bus Stop Lagos',
+               '66 Adeniyi Jones, Ikeja Lagos',
+               '115A bode thomas street, Surulere Lagos'],
+              { prompt: "Select location" },
+              { class: "g-form-input g-form-select", required: true } %>
+        </div>
+
+        <div class="g-form-group">
+          <%= f.label :start_time, "Start time *", class: "g-form-label" %>
+          <%= f.text_field :start_time,
+              as: :string,
+              required: true,
+              class: "g-form-input",
+              data: { controller: "datepicker" } %>
+        </div>
       </div>
-      <%= f.submit "Schedule Event", class: "btn btn-photoshoot mt-3", data: {action: "submit->form#radioCheck"} %>
-    <% end %>
-  </section>
+
+      <!-- Questions -->
+      <%= f.simple_fields_for :questions do |question_form| %>
+        <div class="g-form-question">
+          <%= question_form.hidden_field :question %>
+
+          <% if question_form.object.question == "Phone number" %>
+            <div class="g-form-group g-form-group--full">
+              <%= question_form.label :answer, "Phone number", class: "g-form-label" %>
+              <%= question_form.text_field :answer, required: true, class: "g-form-input" %>
+            </div>
+
+          <% elsif question_form.object.question == 'Type of shoots' %>
+            <div class="g-form-group g-form-group--full">
+              <%= question_form.label :answer, "Type of shoots", class: "g-form-label" %>
+              <div class="g-form-radio-group">
+                <%= question_form.collection_radio_buttons :answer,
+                    [['Kiddies', 'Kiddies'], ['Newborn', 'Newborn'],
+                     ['Family', 'Family'], ['Personal', 'Personal'],
+                     ['Maternity', 'Maternity'], ['PreWedding', 'PreWedding']],
+                    :first, :last do |b| %>
+                  <div class="g-form-radio-item">
+                    <%= b.radio_button(class: "g-form-radio") %>
+                    <%= b.label(class: "g-form-radio-label") %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+          <% elsif question_form.object.question == 'Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c) ?' %>
+            <div class="g-form-group g-form-group--full">
+              <%= question_form.label :answer, "Do you give us consent to share your pictures on our social media platform (Instagram, Threads, TikTok e.t.c)?", class: "g-form-label" %>
+              <div class="g-form-radio-group g-form-radio-group--inline">
+                <%= question_form.collection_radio_buttons :answer,
+                    [['Yes', 'Yes'], ['No', 'No']],
+                    :first, :last do |b| %>
+                  <div class="g-form-radio-item">
+                    <%= b.radio_button(class: "g-form-radio") %>
+                    <%= b.label(class: "g-form-radio-label") %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <%= question_form.hidden_field :_destroy %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= f.submit "Schedule Event", class: "g-button g-button--action g-button--full" %>
+  <% end %>
 </div>

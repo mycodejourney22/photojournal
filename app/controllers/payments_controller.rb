@@ -3,6 +3,9 @@ class PaymentsController < ApplicationController
   require 'net/http'
   require 'uri'
   require 'json'
+  layout 'public'
+  layout :determine_layout
+
 
   def make_payment
     @appointment = Appointment.find(params[:appointment_id])
@@ -130,6 +133,16 @@ class PaymentsController < ApplicationController
 
   def extract_phone_number_from_appointment(app)
     app.questions.find { |q| q.question == 'Phone number' }.answer
+  end
+
+  def determine_layout
+    public_actions = ['make_payment', 'initiate_payment', 'verify_payment', 'success']
+
+    if public_actions.include?(action_name)
+      'public'
+    else
+      'application'
+    end
   end
 
 end

@@ -1,4 +1,5 @@
 class PhotoShootsController < ApplicationController
+  include PhoneNumberNormalizer
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
   after_action :schedule_thank_you_email, only: :create
@@ -130,21 +131,6 @@ class PhotoShootsController < ApplicationController
 
   def extract_phone_number_from_appointment(appointment)
     appointment.questions.find { |q| q.question == 'Phone number' }.answer
-  end
-
-  def normalize_phone_number(phone_number)
-    # Remove non-numeric characters
-    phone_number = phone_number.gsub(/\D/, "")
-
-    # Check if phone number starts with the country code +234 or 234
-    if phone_number.start_with?("234")
-      # Replace '234' with '0'
-      phone_number.sub("234", "0")
-    elsif phone_number.start_with?("+234")
-      # Remove the '+' and replace '234' with '0'
-      phone_number.sub("+234", "0")
-    end
-    phone_number
   end
 
   def create_customer(customer, appointment, phone_number)

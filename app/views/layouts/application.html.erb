@@ -1,12 +1,14 @@
+<!-- app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Photojournal</title>
+    <title>363 Photography</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "gmail_ui", "data-turbo-track": "reload" %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
@@ -14,11 +16,116 @@
   </head>
 
   <body>
-    <div class="container">
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-      <%= render "shared/flashes" %>
-      <%= yield %>
+    <div class="g-layout">
+      <!-- Top header with logo and search -->
+      <header class="g-header">
+        <div class="g-header__logo">
+          <div class="g-header__logo-icon"></div>
+          <div class="g-header__logo-text">363 Photography</div>
+        </div>
+        <div class="g-header__search">
+          <% if controller_name == 'appointments' %>
+            <input type="text" class="g-header__search-input" placeholder="Search appointments...">
+          <% elsif controller_name == 'sales' %>
+            <%= form_with url: sales_path, method: :get do |f| %>
+              <%= f.text_field :query, placeholder: "Search sales by name, phone, or payment type...",
+                  class: "g-header__search-input",
+                  value: params[:query] %>
+            <% end %>
+          <% elsif controller_name == 'photo_shoots' %>
+            <input type="text" class="g-header__search-input" placeholder="Search photoshoots...">
+          <% elsif controller_name == 'customers' %>
+            <%= form_with url: customers_path, method: :get do |f| %>
+              <%= f.text_field :query, placeholder: "Search contacts by name, email or phone...",
+                  class: "g-header__search-input",
+                  value: params[:query] %>
+            <% end %>
+          <% elsif controller_name == 'expenses' %>
+            <%= form_with url: expenses_path, method: :get do |f| %>
+              <%= f.text_field :query, placeholder: "Search by category, description, or staff...",
+                  class: "g-header__search-input",
+                  value: params[:query] %>
+            <% end %>
+          <% else %>
+            <input type="text" class="g-header__search-input" placeholder="Search...">
+          <% end %>
+        </div>
+        <div class="g-header__profile"></div>
+      </header>
+
+      <!-- Top separator that spans both sidebar and content -->
+      <div class="g-layout__top-separator"></div>
+
+      <div class="g-layout__main">
+        <aside class="g-sidebar">
+          <ul class="g-sidebar__nav">
+            <li>
+              <%= link_to photo_shoots_consent_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name == 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
+                <div class="g-sidebar__nav-icon"></div>
+                <span class="g-sidebar__nav-text">Consent</span>
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to appointments_path, class: "g-sidebar__nav-item #{controller_name == 'appointments' ? 'g-sidebar__nav-item--active' : ''}" do %>
+                <div class="g-sidebar__nav-icon <%= controller_name == 'appointments' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
+                <span class="g-sidebar__nav-text">Appointments</span>
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to photo_shoots_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name != 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
+                <div class="g-sidebar__nav-icon"></div>
+                <span class="g-sidebar__nav-text">Photoshoots</span>
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to sales_path, class: "g-sidebar__nav-item #{controller_name == 'sales' ? 'g-sidebar__nav-item--active' : ''}" do %>
+                <div class="g-sidebar__nav-icon"></div>
+                <span class="g-sidebar__nav-text">Sales</span>
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to expenses_path, class: "g-sidebar__nav-item #{controller_name == 'expenses' ? 'g-sidebar__nav-item--active' : ''}" do %>
+                <div class="g-sidebar__nav-icon"></div>
+                <span class="g-sidebar__nav-text">Expenses</span>
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to customers_path, class: "g-sidebar__nav-item #{controller_name == 'customers' ? 'g-sidebar__nav-item--active' : ''}" do %>
+                <div class="g-sidebar__nav-icon"></div>
+                <span class="g-sidebar__nav-text">Contacts</span>
+              <% end %>
+            </li>
+
+            <li>
+              <%= link_to operations_path, class: "g-sidebar__nav-item #{controller_name == 'operations' ? 'g-sidebar__nav-item--active' : ''}" do %>
+                <div class="g-sidebar__nav-icon"></div>
+                <span class="g-sidebar__nav-text">Reports</span>
+              <% end %>
+            </li>
+          </ul>
+
+          <div class="g-sidebar__footer">
+            <%= link_to "New Booking", new_appointment_path, class: "g-sidebar__new-booking" %>
+            <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "g-sidebar__logout" %>
+          </div>
+        </aside>
+
+        <div class="g-layout__content">
+          <% if notice %>
+            <p class="g-util__notice"><%= notice %></p>
+          <% end %>
+          <% if alert %>
+            <p class="g-util__alert"><%= alert %></p>
+          <% end %>
+
+          <%= yield %>
+        </div>
+      </div>
     </div>
   </body>
 </html>

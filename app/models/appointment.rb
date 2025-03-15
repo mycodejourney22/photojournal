@@ -13,6 +13,21 @@ class Appointment < ApplicationRecord
   belongs_to :price, optional: true # This assumes a Price model exists
   before_validation :set_defaults
 
+  scope :available_for_booking, -> { where(no_show: false, status: true) }
+  scope :for_today, -> { where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day) }
+  scope :upcoming, -> { where('start_time > ?', Time.zone.now.end_of_day).available_for_booking }
+  scope :past, -> { where(start_time: 14.days.ago.beginning_of_day..Time.zone.now.beginning_of_day)
+                         .order(start_time: :desc) }
+  scope :today, -> { for_today.available_for_booking }
+
+  def status_object
+    @status_object ||= AppointmentStatus.new(self)
+  end
+
+  def available_for_booking?
+    !no_show && status
+  end
+
 
 
   include PgSearch::Model

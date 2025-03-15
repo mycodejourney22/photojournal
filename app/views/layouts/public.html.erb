@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>363 Photography</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "public_ui", "data-turbo-track": "reload" %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="public-body">
+    <div class="public-container">
+
+
+
+      <div class="public-content">
+        <% if notice %>
+          <p class="g-util__notice"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="g-util__alert"><%= alert %></p>
+        <% end %>
+
+        <%= yield %>
+      </div>
+
+      <footer class="public-footer">
+        <p>&copy; <%= Date.today.year %> 363 Photography. All rights reserved.</p>
+      </footer>
+    </div>
+  </body>
+</html>

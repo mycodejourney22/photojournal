@@ -1,32 +1,34 @@
-<div class="container">
-  <h2 class="logo_heading mb-4">
-    <%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
-    <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
-  </h2>
-  <div class="back_link">
+<!-- app/views/appointments/select_price.html.erb -->
+<div class="public-header">
+  <div class="back-link">
     <i class="fa-solid fa-chevron-left"></i> <%= link_to "back", :back %>
   </div>
-  <h4 class="my-4 fw-bold">Choose a Package for <%= @shoot_type %></h4>
-    <div class="d-flex flex-column justify-content-center align-items-start">
-      <% @prices.each do |price| %>
-        <div class="pricing">
-          <a href="<%= booking_appointments_path(price_id: price.id) %>" style="text-decoration: none; color:black;">
-            <div class="card-trip">
-              <%= price.photo.attached? ? cl_image_tag(price.photo.key) : image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", alt: "default photo")  %>
-              <div class="card-trip-infos">
-                <div>
-                  <h2><%= price.outfit %></h2>
-                  <p><%= price.description %></p>
-                  <div class="pricing__bottom-item">
-                    <p>Edited Copies: <%= price.included %></p>
-                    <p>Unedited Copies: Available on request</p>
-                    <p>Hardcopies/Print: Not included in pricing</p>
-                  </div>
-                </div>
-                <h2 class="card-trip-pricing">₦<%= price.amount %></h2>
-              </div>
+  <div class="public-logo">
+    <div class="public-logo-icon"></div>
+    <div class="public-logo-text">363 PHOTOGRAPHY</div>
+  </div>
+</div>
+
+<h1 class="package-title">Choose a Package for <%= @shoot_type %></h1>
+
+<% @prices.each do |price| %>
+  <div class="pricing">
+    <a href="<%= booking_appointments_path(price_id: price.id) %>" style="text-decoration: none; color:black;">
+      <div class="card-trip">
+          <%= price.photo.attached? ? cl_image_tag(price.photo.key): image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop") %>
+        <div class="card-trip-infos">
+          <div>
+            <h2><%= price.outfit %> Outfit</h2>
+            <p><%= price.description %></p>
+            <div class="pricing__bottom-item">
+              <p>Edited Copies: <%= price.included %></p>
+              <p>Unedited Copies: Available on request</p>
+              <p>Hardcopies/Print: Not included in pricing</p>
             </div>
-          </a>
+          </div>
+          <h2 class="card-trip-pricing">₦<%= price.amount %></h2>
         </div>
-      <% end %>
-    </div>
+      </div>
+    </a>
+  </div>
+<% end %>

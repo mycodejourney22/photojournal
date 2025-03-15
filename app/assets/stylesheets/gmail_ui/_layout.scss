@@ -1,0 +1,36 @@
+/* app/assets/stylesheets/gmail_ui/_layout.scss */
+body {
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  color: #202124;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.g-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  &__main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &__top-separator {
+    height: 1px;
+    background-color: #e0e0e0;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    border-left: 1px solid #e0e0e0;
+  }
+}

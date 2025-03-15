@@ -1,0 +1,37 @@
+<!-- app/components/appointment_card_component.html.erb -->
+
+
+<div class="appointment-card <%= status_class %>">
+  <div class="card-body">
+    <div class="card-header-section">
+      <h3 class="card-name"><%= appointment.name %></h3>
+      <span class="card-time"><%= appointment.formatted_time %></span>
+    </div>
+
+    <div class="card-details">
+      <div class="detail-row">
+        <span class="detail-label">Date:</span>
+        <span class="detail-value"><%= appointment.formatted_start_time %></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Location:</span>
+        <span class="detail-value"><%= appointment.location %></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Type:</span>
+        <span class="detail-value"><%= find_question_answer(appointment, 'Type of shoots') %></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Phone:</span>
+        <span class="detail-value"><%= find_question_answer(appointment, 'Phone number') %></span>
+      </div>
+    </div>
+
+    <div class="card-actions">
+      <%= link_to 'View Details', appointment_path(appointment), class: "btn-view-details" %>
+    </div>
+  </div>
+</div>

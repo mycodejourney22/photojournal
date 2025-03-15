@@ -1,0 +1,525 @@
+/* app/assets/stylesheets/gmail_ui/_content.scss */
+.g-content {
+  &__toolbar {
+    padding: 0;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-actions {
+    padding-right: 16px;
+  }
+
+  &__tabs {
+    display: flex;
+  }
+
+  &__tab {
+    padding: 20px 32px;
+    font-size: 12px;
+    color: #5f6368;
+    text-decoration: none;
+    position: relative;
+
+    &--active {
+      color: #1a73e8;
+      font-weight: 500;
+
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #1a73e8;
+      }
+    }
+
+    &:hover:not(&--active) {
+      color: #202124;
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+}
+
+.g-content__subtitle {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: #202124;
+}
+
+.g-content__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.g-content__page-title h1 {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0;
+  color: #202124;
+}
+
+/* Tabs */
+.g-content__tabs {
+  display: flex;
+  border-bottom: 1px solid #dadce0;
+}
+
+.g-content__tab {
+  position: relative;
+  padding: 12px 16px;
+  color: #202124;
+  text-decoration: none;
+  margin-right: 8px;
+  font-size: 12px;
+}
+
+.g-content__tab--active {
+  color: #202124;
+  font-weight: bold;
+  border-bottom: 3px solid #edd400;
+}
+
+.g-content__tab--active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #edd400;
+  width: 100%; /* Ensure it's exactly the width of the tab */
+  z-index: 1; /* Ensure it sits above any borders */
+}
+
+/* Content sections layout */
+.g-content__sections {
+  display: flex;
+  padding: 16px;
+  gap: 24px;
+}
+
+.g-content__main {
+  flex: 1;
+}
+
+.g-content__sidebar {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+/* Section component */
+.g-section {
+  margin-bottom: 24px;
+  background-color: white;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.g-section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #dadce0;
+  background-color: #f9f9f9;
+}
+
+.g-section__title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #202124;
+}
+
+.g-section__link {
+  color: #202124;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.g-section__link:hover {
+  text-decoration: underline;
+}
+
+/* Empty state */
+.g-content__empty {
+  padding: 16px;
+  color: #5f6368;
+  text-align: left;
+}
+
+/* Link container */
+.g-content__link-container {
+  padding: 16px;
+}
+
+/* Button styling */
+.g-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #dadce0;
+  background-color: white;
+  color: #5f6368;
+}
+
+.g-button:hover {
+  background-color: #f1f3f4;
+}
+
+.g-button--action {
+  background-color: #edd400;
+  color: #202124;
+  border: none;
+}
+
+.g-button--action:hover {
+  background-color: #e6cc00;
+}
+
+/* Table component */
+.g-table__header {
+  display: flex;
+  padding: 0 16px 0 56px;
+  height: 40px;
+  align-items: center;
+  border-bottom: 1px solid #dadce0;
+  color: #202124;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+
+.g-table__row {
+  display: flex;
+  padding: 0 16px 0 16px;
+  min-height: 48px;
+  align-items: center;
+  border-bottom: 1px solid #dadce0;
+  position: relative;
+}
+
+.g-table__status {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 28px;
+  flex-shrink: 0;
+}
+
+.g-table__status--confirmed {
+  background-color: #34a853;
+}
+
+.g-table__status--cancelled {
+  background-color: #ea4335;
+}
+
+.g-table__cell {
+  padding: 8px;
+  font-size: 12px;
+}
+
+/* Table column sizing */
+.g-table__col--type,
+.g-table__col--status,
+.g-table__col--outfits {
+  flex: 1;
+}
+
+.g-table__col--photographer,
+.g-table__col--editor,
+.g-table__col--cso {
+  flex: 1.5;
+}
+
+.g-table__col--product {
+  flex: 2;
+}
+
+.g-table__col--amount,
+.g-table__col--payment,
+.g-table__col--date {
+  flex: 1;
+}
+
+/* Contact card component */
+.g-contact-card {
+  padding: 16px;
+}
+
+.g-contact-card__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.g-contact-card__avatar {
+  margin-right: 16px;
+}
+
+.g-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.g-contact-card__details {
+  display: flex;
+  flex-direction: column;
+}
+
+.g-contact-card__name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #202124;
+  margin-bottom: 4px;
+}
+
+.g-contact-card__email {
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.g-contact-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.g-contact-card__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.g-contact-card__label {
+  color: #202124;
+}
+
+.g-contact-card__value {
+  color: #202124;
+  text-align: right;
+}
+
+/* Link styling */
+.g-link {
+  color: #202124;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.g-link:hover {
+  text-decoration: underline;
+}
+
+.g-content__layout {
+  display: flex;
+  padding: 0;
+}
+
+.g-content__main {
+  flex: 1;
+  padding: 0 16px 16px 16px;
+}
+
+.g-content__sidebar {
+  width: 320px;
+  padding: 0 16px 16px 0;
+}
+
+/* Tabs */
+.g-content__tabs {
+  display: flex;
+  border-bottom: 1px solid #dadce0;
+  padding: 0 16px;
+  margin-bottom: 16px;
+  padding: 0 16px;
+  margin-bottom: 16px;
+  position: relative; /* Establish a positioning context */
+  overflow: visible;
+}
+
+.g-content__tab {
+  padding: 12px 16px;
+  color: #202124;
+  text-decoration: none;
+  position: relative;
+  margin-right: 8px;
+  font-size: 12px;
+}
+
+.g-content__tab--active {
+  color: #202124;
+  font-weight: bold;
+  border-bottom: 3px solid #edd400;
+}
+
+.g-content__tab:hover {
+  background-color: #f1f3f4;
+}
+
+/* Sections */
+.g-section {
+  margin-bottom: 24px;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #dadce0;
+  overflow: hidden;
+}
+
+.g-section__header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #dadce0;
+  background-color: #f8f9fa;
+}
+
+.g-section__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #202124;
+}
+
+/* Table */
+.g-table__header {
+  display: flex;
+  padding: 0 16px 0 56px;
+  height: 40px;
+  align-items: center;
+  border-bottom: 1px solid #dadce0;
+  color: #202124;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #f8f9fa;
+}
+
+.g-table__row {
+  display: flex;
+  padding: 0 16px 0 16px;
+  min-height: 48px;
+  align-items: center;
+  border-bottom: 1px solid #dadce0;
+  position: relative;
+}
+
+.g-table__status {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 28px;
+  flex-shrink: 0;
+}
+
+.g-table__status--confirmed {
+  background-color: #34a853; /* Green */
+}
+
+.g-table__status--new {
+  background-color: #4285f4; /* Blue */
+}
+
+.g-table__status--cancelled {
+  background-color: #ea4335; /* Red */
+}
+
+.g-table__cell {
+  padding: 8px;
+  font-size: 12px;
+}
+
+/* Contact Card */
+.g-contact-card {
+  padding: 16px;
+}
+
+.g-contact-card__header {
+  margin-bottom: 24px;
+}
+
+.g-contact-card__profile {
+  display: flex;
+  align-items: center;
+}
+
+.g-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #202124;
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 16px;
+}
+
+.g-avatar--yellow {
+  background-color: #edd400;
+}
+
+.g-contact-card__name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #202124;
+  margin-bottom: 4px;
+}
+
+.g-contact-card__email {
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.g-contact-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #f5f5f5 ;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.g-contact-card__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.g-content__empty {
+  padding: 16px;
+  color: #5f6368;
+}
+
+.g-content__link-container {
+  padding: 16px;
+}
+
+.g-link {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.g-link:hover {
+  text-decoration: underline;
+}

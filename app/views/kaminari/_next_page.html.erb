@@ -1,3 +1,8 @@
-<li class="page-item">
-  <%= link_to_unless current_page.last?, raw(t 'views.pagination.next'), url, rel: 'next', remote: remote, class: 'page-link' %>
+<li class="g-pagination__item">
+  <%= link_to_unless current_page.last?,
+                     raw('<span class="g-pagination__icon">›</span>'),
+                     url,
+                     rel: 'next',
+                     remote: remote,
+                     class: 'g-pagination__link g-pagination__link--control' %>
 </li>

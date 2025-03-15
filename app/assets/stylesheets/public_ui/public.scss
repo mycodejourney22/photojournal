@@ -1,0 +1,361 @@
+/* app/assets/stylesheets/public.scss */
+.public-body {
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  color: #202124;
+  margin: 0;
+  padding: 0;
+}
+
+.public-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.public-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.public-logo {
+  display: flex;
+  align-items: center;
+}
+
+.public-logo-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: #edd400;
+}
+
+.public-logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #202124;
+}
+
+.public-banner {
+  position: relative;
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.banner-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.banner-overlay h1 {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.public-content {
+  padding: 0 16px 24px;
+}
+
+/* Package grid styling */
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.package-item {
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  padding: 24px 16px;
+  text-align: center;
+  transition: transform 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  color: #202124;
+}
+
+.package-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.package-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: #666;
+}
+
+.package-title {
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.public-footer {
+  text-align: center;
+  color: #5f6368;
+  font-size: 14px;
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 40px;
+}
+
+
+/* Additional CSS for public pricing page */
+
+/* Header refinements */
+.public-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  position: relative;
+}
+
+.public-logo {
+  display: flex;
+  align-items: center;
+}
+
+.public-logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #edd400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.public-logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #202124;
+}
+
+/* Back button styling */
+.back-link {
+  position: absolute;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  color: #202124;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.back-link i {
+  margin-right: 6px;
+}
+
+.back-link a {
+  color: #202124;
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+/* Page title */
+.package-title {
+  margin: 30px 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #202124;
+}
+
+/* Package card improvements */
+.pricing-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.pricing-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.pricing-card-content {
+  padding: 16px;
+}
+
+.pricing-card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.pricing-card-description {
+  font-size: 14px;
+  color: #5f6368;
+  margin-bottom: 12px;
+}
+
+.pricing-card-details {
+  font-size: 12px;
+  color: #5f6368;
+  margin-bottom: 16px;
+}
+
+.pricing-card-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #202124;
+  text-align: right;
+}
+
+/* Enhanced styling for select_price page */
+.back_link {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+.back_link i {
+  margin-right: 8px;
+}
+
+.back_link a {
+  color: #333;
+  text-decoration: none;
+}
+
+.back_link a:hover {
+  text-decoration: underline;
+}
+
+/* Package title */
+h4.my-4.fw-bold {
+  font-size: 24px;
+  margin: 25px 0;
+  color: #202124;
+}
+
+/* Card styling */
+.pricing {
+  margin-bottom: 24px;
+  transition: transform 0.2s;
+}
+
+.pricing:hover {
+  transform: translateY(-5px);
+}
+
+.card-trip {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.card-trip img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.card-trip-infos {
+  padding: 16px;
+}
+
+.card-trip h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.card-trip p {
+  font-size: 14px;
+  color: #5f6368;
+  margin-bottom: 12px;
+}
+
+.pricing__bottom-item {
+  font-size: 12px;
+  color: #5f6368;
+  margin: 12px 0;
+}
+
+.pricing__bottom-item p {
+  margin: 4px 0;
+}
+
+.card-trip-pricing {
+  font-size: 20px;
+  font-weight: bold;
+  color: #202124;
+  text-align: right;
+  margin-top: 12px;
+}
+
+/* Better container styling */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Logo section */
+.logo_heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.logo_link {
+  font-size: 18px;
+  font-weight: bold;
+  color: #202124;
+  text-decoration: none;
+}

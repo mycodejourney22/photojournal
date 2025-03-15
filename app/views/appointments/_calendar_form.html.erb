@@ -11,7 +11,7 @@
     <%= form.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere']), { prompt: 'Choose your location' }, class: "w-100 form-data__input" %>
   </div>
 
-  <button type="button" id="redirect_button" class="btn_new btn btn-photoshoot mt-2" data-action="click->calendar#redirectToAvailableHours">
+  <button type="button" id="redirect_button" class="booking-action-button" data-action="click->calendar#redirectToAvailableHours">
     See Available Hours
   </button>
 </div>

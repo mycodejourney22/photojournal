@@ -1,0 +1,16 @@
+/* app/assets/stylesheets/gmail_ui/_utilities.scss */
+.g-util {
+  &__notice {
+    padding: $spacing-md;
+    background-color: #e8f4fd;
+    color: $color-active;
+    margin: 0;
+  }
+
+  &__alert {
+    padding: $spacing-md;
+    background-color: #fce8e6;
+    color: $color-status-cancelled;
+    margin: 0;
+  }
+}

@@ -22,7 +22,7 @@
             <%= f.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere']), { prompt: 'Choose your location' }, class: "form-data__input", required: true %>
           </div>
           <%= f.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
-          <%= f.submit "See Available Hours", class: "btn_new btn btn-photoshoot mt-2" %>
+          <%= f.submit "See Available Hours", class:"booking-action-button", id:"redirect_button" %>
         <% end %>
       </div>
     </noscript>
