@@ -15,6 +15,7 @@ gem "devise"
 gem "pundit"
 gem "pg_search"
 
+gem 'ffi', '< 1.17.0'
 gem 'scout_apm'
 
 gem 'puma_worker_killer'

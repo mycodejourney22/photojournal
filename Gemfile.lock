@@ -162,12 +162,7 @@ GEM
       multipart-post (~> 2)
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    ffi (1.17.0-aarch64-linux-gnu)
-    ffi (1.17.0-arm-linux-gnu)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86-linux-gnu)
-    ffi (1.17.0-x86_64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
+    ffi (1.16.3)
     font-awesome-sass (6.5.2)
       sassc (~> 2.0)
     get_process_mem (0.2.7)
@@ -400,6 +395,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   error_highlight (~> 0.7.0)
+  ffi (< 1.17.0)
   font-awesome-sass (~> 6.1)
   image_processing (~> 1.2)
   importmap-rails
