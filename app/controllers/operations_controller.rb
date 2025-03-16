@@ -1,10 +1,8 @@
 class OperationsController < ApplicationController
 
   def index
-    # Use a proper IANA timezone name for your region
-    timezone = "Africa/Lagos"  # This is the timezone for West Central Africa
-
-    date_sql = "DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '#{timezone}')"
+    timezone = timezone_for_africa
+    date_sql = date_in_timezone_sql(timezone)
 
     @sales = policy_scope(Sale)
       .where(void: false)
@@ -17,7 +15,24 @@ class OperationsController < ApplicationController
   end
 
   def daily_sales
+    timezone = timezone_for_africa
     @date = Date.parse(params[:date])
-    @daily_sales = policy_scope(Sale).where('date::date = ?', @date)
+
+    # Use a different approach that will work with bind parameters
+    @daily_sales = policy_scope(Sale).where(
+      "DATE(date AT TIME ZONE 'UTC' AT TIME ZONE ?) = ?",
+      timezone,
+      @date
+    )
+  end
+
+  private
+
+  def timezone_for_africa
+    "Africa/Lagos" # West Central Africa timezone
+  end
+
+  def date_in_timezone_sql(timezone)
+    "DATE(date AT TIME ZONE 'UTC' AT TIME ZONE '#{timezone}')"
   end
 end
