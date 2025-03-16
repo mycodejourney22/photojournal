@@ -25,7 +25,12 @@
         </div>
         <div class="g-header__search">
           <% if controller_name == 'appointments' %>
-            <input type="text" class="g-header__search-input" placeholder="Search appointments...">
+            <%= form_with url: dynamic_appointments_url, method: :get do |f| %>
+              <%= f.text_field :query,
+                  placeholder: "Search appointments...",
+                  class: "g-header__search-input",
+                  value: params[:query] %>
+            <% end %>
           <% elsif controller_name == 'sales' %>
             <%= form_with url: sales_path, method: :get do |f| %>
               <%= f.text_field :query, placeholder: "Search sales by name, phone, or payment type...",

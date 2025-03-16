@@ -296,9 +296,12 @@ class AppointmentsController < ApplicationController
   # end
 
   def past_appointment
-    appointments = policy_scope(Appointment).includes(:questions)
-                                            .past
-    appointments = policy_scope(Appointment).global_search(params[:query]) if params[:query].present?
+    appointments = policy_scope(Appointment).includes(:questions).past
+
+    if params[:query].present?
+      appointments = appointments.global_search(params[:query])
+    end
+
     appointments.page(params[:page]) if appointments.present?
   end
 
@@ -307,14 +310,20 @@ class AppointmentsController < ApplicationController
                                             .today
                                             .order(:start_time)
 
-    appointments = policy_scope(Appointment).global_search(params[:query]) if params[:query].present?
+    if params[:query].present?
+      appointments = appointments.global_search(params[:query])
+    end
+
     appointments.page(params[:page]) if appointments.present?
   end
 
   def upcoming_appointment
-    appointments = policy_scope(Appointment).includes(:questions).upcoming
-                                            .order(:start_time)
-    appointments = today_appointments.global_search(params[:query]) if params[:query].present?
+    appointments = policy_scope(Appointment).includes(:questions).upcoming.order(:start_time)
+
+    if params[:query].present?
+      appointments = appointments.global_search(params[:query])
+    end
+
     appointments.page(params[:page]) if appointments.present?
   end
 
