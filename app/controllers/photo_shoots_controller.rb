@@ -107,9 +107,10 @@ class PhotoShootsController < ApplicationController
   private
 
   def schedule_thank_you_email
-    ThankYouEmailJob.set(wait_until: @photo_shoot.created_at + 2.minutes).perform_later(@photo_shoot) if @photo_shoot.id.present?
-    ThankYouSmsJob.set(wait_until: @photo_shoot.created_at + 5.minutes).perform_later(@photo_shoot.id)
-
+    if @photo_shoot.id.present?
+      ThankYouEmailJob.set(wait_until: @photo_shoot.created_at + 48.hours).perform_later(@photo_shoot)
+      ThankYouSmsJob.set(wait_until: @photo_shoot.created_at + 48.hours).perform_later(@photo_shoot.id)
+    end
   end
 
   def set_appointment
