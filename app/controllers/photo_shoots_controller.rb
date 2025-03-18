@@ -108,6 +108,8 @@ class PhotoShootsController < ApplicationController
 
   def schedule_thank_you_email
     ThankYouEmailJob.set(wait_until: @photo_shoot.created_at + 2.minutes).perform_later(@photo_shoot) if @photo_shoot.id.present?
+    ThankYouSmsJob.set(wait_until: @photo_shoot.created_at + 5.minutes).perform_later(@photo_shoot.id)
+
   end
 
   def set_appointment
@@ -128,6 +130,7 @@ class PhotoShootsController < ApplicationController
       :date_sent
     )
   end
+
 
   def extract_phone_number_from_appointment(appointment)
     appointment.questions.find { |q| q.question == 'Phone number' }.answer

@@ -28,6 +28,12 @@ class Appointment < ApplicationRecord
     !no_show && status
   end
 
+  STUDIO_NUMBERS = {
+    'ajah' => '08144985074',
+    'surulere' => '07048891715',
+    'ikeja' => '08090151168'
+  }.freeze
+
 
 
   include PgSearch::Model
