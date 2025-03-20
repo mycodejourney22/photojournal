@@ -1,22 +1,143 @@
 <!-- app/views/appointments/type_of_shoots.html.erb -->
-<div class="public-hero">
-  <div class="public-hero__overlay">
-    <h1 class="public-hero__title">363 Photography Booking Page</h1>
+<div class="booking-container">
+  <div class="booking-header">
+    <div class="logo-container">
+      <div class="logo-circle"></div>
+      <h1 class="logo-text">363 PHOTOGRAPHY</h1>
+    </div>
+    <p class="booking-subtitle">Select the type of photoshoot you're interested in</p>
   </div>
-  <img src="<%= asset_path('booking-banner.jpg') %>" alt="363 Photography" class="public-hero__image">
-</div>
-
-<div class="public-container">
-  <h2 class="section-title">Choose Type of Shoot</h2>
 
   <div class="shoot-types-grid">
     <% @shoot_types.each do |shoot_type| %>
       <%= link_to select_price_appointments_path(shoot_type: shoot_type.shoot_type), class: "shoot-type-card" do %>
-        <div class="shoot-type-card__icon">
+        <div class="shoot-type-icon">
           <i class="fa-solid <%= shoot_type.icon %>"></i>
         </div>
-        <h3 class="shoot-type-card__title"><%= shoot_type.shoot_type %></h3>
+        <div class="shoot-type-content">
+          <h3 class="shoot-type-title mx-1"><%= shoot_type.shoot_type %></h3>
+          <div class="shoot-type-arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
       <% end %>
     <% end %>
   </div>
+
+  <% if flash[:notice].present? %>
+    <div class="booking-notice">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
 </div>
+
+<style>
+  .booking-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  .booking-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .logo-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #EDD400;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+
+  .booking-subtitle {
+    font-size: 18px;
+    color: #666;
+    margin-top: 10px;
+  }
+
+  .shoot-types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .shoot-type-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+  }
+
+  .shoot-type-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .shoot-type-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    font-size: 36px;
+    color: #EDD400;
+    margin-bottom: 20px;
+  }
+
+  .shoot-type-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .shoot-type-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .shoot-type-arrow {
+    color: #EDD400;
+    font-size: 14px;
+  }
+
+  .booking-notice {
+    text-align: center;
+    background-color: #f8f9fa;
+    border-left: 4px solid #EDD400;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .booking-container {
+      padding: 15px;
+    }
+
+    .shoot-types-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
