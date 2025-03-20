@@ -37,8 +37,18 @@
                   class: "g-header__search-input",
                   value: params[:query] %>
             <% end %>
+          <% elsif controller_name == 'photo_shoots' && action_name == 'consent'  %>
+            <%= form_with url: photo_shoots_consent_path, method: :get do |f| %>
+              <%= f.text_field :query, placeholder: "Search photoshoots by name, email, or phone...",
+                  class: "g-header__search-input",
+                  value: params[:query] %>
+            <% end %>
           <% elsif controller_name == 'photo_shoots' %>
-            <input type="text" class="g-header__search-input" placeholder="Search photoshoots...">
+            <%= form_with url: photo_shoots_path, method: :get do |f| %>
+              <%= f.text_field :query, placeholder: "Search photoshoots by name, email, or phone...",
+                  class: "g-header__search-input",
+                  value: params[:query] %>
+            <% end %>
           <% elsif controller_name == 'customers' %>
             <%= form_with url: customers_path, method: :get do |f| %>
               <%= f.text_field :query, placeholder: "Search contacts by name, email or phone...",
