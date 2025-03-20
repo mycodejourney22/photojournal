@@ -1,34 +1,284 @@
 <!-- app/views/appointments/select_price.html.erb -->
-<div class="public-header">
-  <div class="back-link">
-    <i class="fa-solid fa-chevron-left"></i> <%= link_to "back", :back %>
+<div class="pricing-container">
+  <!-- Logo and header section -->
+  <div class="logo-header">
+    <div class="logo-circle"></div>
+    <h1 class="logo-text">363 PHOTOGRAPHY</h1>
   </div>
-  <div class="public-logo">
-    <div class="public-logo-icon"></div>
-    <div class="public-logo-text">363 PHOTOGRAPHY</div>
+
+  <!-- Back navigation -->
+  <div class="back-navigation">
+    <%= link_to :back, class: "back-links" do %>
+      <i class="fa-solid fa-chevron-left"></i> Back
+    <% end %>
+  </div>
+
+  <!-- Page title -->
+  <h2 class="page-titles">Choose a Package for <%= @shoot_type %></h2>
+
+  <!-- Pricing packages -->
+  <div class="packages-grid">
+    <% @prices.each do |price| %>
+      <%= link_to booking_appointments_path(price_id: price.id), class: "package-link" do %>
+        <div class="package-card">
+          <!-- Package image with price tag -->
+          <div class="package-image">
+            <%= price.photo.attached? ? cl_image_tag(price.photo.key, class: "card-image") : image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", class: "card-image") %>
+            <div class="price-tag">
+              ₦<%= number_with_delimiter(price.amount) %>
+            </div>
+          </div>
+
+          <!-- Package information -->
+          <div class="package-content">
+            <h3 class="package-title"><%= price.outfit %> Outfit Package</h3>
+            <p class="package-description"><%= price.description %></p>
+
+            <div class="package-features">
+              <div class="feature-item">
+                <i class="fa-solid fa-check feature-icon"></i>
+                <span>Edited Copies: <%= price.included %></span>
+              </div>
+              <div class="feature-item">
+                <i class="fa-solid fa-check feature-icon"></i>
+                <span>Unedited Copies: Available on request</span>
+              </div>
+              <div class="feature-item">
+                <i class="fa-solid fa-info-circle feature-icon"></i>
+                <span>Hardcopies/Print: Not included in pricing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 </div>
 
-<h1 class="package-title">Choose a Package for <%= @shoot_type %></h1>
+<style>
+  /* Core container */
+  .pricing-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+  }
 
-<% @prices.each do |price| %>
-  <div class="pricing">
-    <a href="<%= booking_appointments_path(price_id: price.id) %>" style="text-decoration: none; color:black;">
-      <div class="card-trip">
-          <%= price.photo.attached? ? cl_image_tag(price.photo.key): image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop") %>
-        <div class="card-trip-infos">
-          <div>
-            <h2><%= price.outfit %> Outfit</h2>
-            <p><%= price.description %></p>
-            <div class="pricing__bottom-item">
-              <p>Edited Copies: <%= price.included %></p>
-              <p>Unedited Copies: Available on request</p>
-              <p>Hardcopies/Print: Not included in pricing</p>
-            </div>
-          </div>
-          <h2 class="card-trip-pricing">₦<%= price.amount %></h2>
-        </div>
-      </div>
-    </a>
-  </div>
-<% end %>
+  /* Logo styling */
+  .logo-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-top: 10px;
+  }
+
+  .logo-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #EDD400;
+    border-radius: 50%;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  /* Back button */
+  .back-navigation {
+    margin-bottom: 20px;
+  }
+
+  .back-links {
+    display: inline-flex;
+    align-items: center;
+    color: #666;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 5px 0;
+  }
+
+  .back-links i {
+    margin-right: 8px;
+  }
+
+  /* Page title */
+  .page-titles {
+    font-size: 18px;
+    color: #333;
+    margin: 0 0 40px 0;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  /* Package grid */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+  }
+
+  .package-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+
+  .package-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .package-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Package image */
+  .package-image {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Price tag */
+  .price-tag {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #EDD400;
+    color: #000;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Package content */
+  .package-content {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .package-title {
+    font-size: 22px;
+    margin: 0 0 15px 0;
+    color: #333;
+  }
+
+  .package-description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* Features list */
+  .package-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    color: #EDD400;
+    margin-right: 10px;
+    margin-top: 3px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .pricing-container {
+      padding: 15px;
+    }
+
+    .packages-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo-header {
+      margin-bottom: 20px;
+    }
+
+    .logo-circle {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .logo-text {
+      font-size: 18px;
+    }
+
+    .back-navigation {
+      margin-bottom: 15px;
+    }
+
+    .back-links {
+      font-size: 14px;
+    }
+
+    .page-titles {
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+
+    .package-image {
+      height: 180px;
+    }
+
+    .price-tag {
+      font-size: 16px;
+      padding: 8px 15px;
+      top: 15px;
+      right: 15px;
+    }
+
+    .package-content {
+      padding: 20px;
+    }
+
+    .package-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .package-description {
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .feature-item {
+      font-size: 14px;
+    }
+  }
+</style>
