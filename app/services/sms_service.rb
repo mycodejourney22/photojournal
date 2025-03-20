@@ -125,4 +125,35 @@ class SmsService
     # Ensure message is not too long (max 612 characters for SMS API)
     message.gsub(/\s+/, ' ').strip[0...612]
   end
+
+  def send_referral_invitation_sms(referral)
+    customer = referral.referrer
+    phone_number = customer.phone_number
+
+    return false unless phone_number.present?
+
+    message = build_referral_invitation_message(referral)
+    send_sms(phone_number, message)
+  end
+
+  def build_referral_invitation_message(referral)
+    customer_name = referral.referrer.name.split.first
+    referral_code = referral.code
+    base_url = ENV['BASE_URL'] || 'https://363photography.org'
+
+    message = <<~SMS
+      Hello #{customer_name},
+
+      Thanks for choosing 363 Photography! Share the love - when friends book a photoshoot with your referral code, you'll get ₦10,000 credit!
+
+      Your referral code: #{referral_code}
+
+      Share this link: #{base_url}/refer/#{referral_code}
+
+      363 Photography Team
+    SMS
+
+    # Ensure message is not too long (max 612 characters for SMS API)
+    message.gsub(/\s+/, ' ').strip[0...612]
+  end
 end

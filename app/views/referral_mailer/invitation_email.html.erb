@@ -1,0 +1,35 @@
+<!-- app/views/referral_mailer/invitation_email.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">Refer a Friend, Earn ₦10,000</h1>
+    <p style="color: #666; font-size: 16px;">Share the love and be rewarded!</p>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 10px; padding: 20px; margin-bottom: 30px;">
+    <p style="font-size: 16px;">Hi <%= @referrer.name.split(' ').first %>,</p>
+    <p style="font-size: 16px;">Thank you for choosing 363 Photography! We hope you loved your photos.</p>
+    <p style="font-size: 16px;">Share your experience with friends and family. When they book and complete a photoshoot with us, you'll receive ₦10,000 credit toward your next session!</p>
+  </div>
+
+  <div style="background-color: #EDD400; color: #000; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+    <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Your unique referral code:</p>
+    <p style="font-size: 28px; font-weight: bold; letter-spacing: 2px; margin-bottom: 15px;"><%= @referral.code %></p>
+
+    <a href="<%= @referral_url %>" style="display: inline-block; background-color: #333; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; margin-top: 10px;">Share This Link</a>
+  </div>
+
+  <div style="margin-bottom: 30px;">
+    <h2 style="color: #333; font-size: 18px;">How it works:</h2>
+    <ol style="font-size: 16px; color: #555; line-height: 1.5;">
+      <li>Share your unique code with friends and family</li>
+      <li>They get ₦5,000 off their first photoshoot</li>
+      <li>After they complete their session, you get ₦10,000 credit</li>
+      <li>Everyone looks amazing in their photos!</li>
+    </ol>
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; color: #888; font-size: 14px;">
+    <p>Thank you for being part of the 363 Photography family!</p>
+    <p>If you have any questions, contact us at info@363photography.org</p>
+  </div>
+</div>

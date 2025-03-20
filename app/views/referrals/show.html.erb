@@ -1,0 +1,157 @@
+<!-- app/views/referrals/show.html.erb -->
+<div class="public-container">
+  <div class="public-header">
+    <div class="public-logo">
+      <div class="public-logo-icon"></div>
+      <div class="public-logo-text">363 PHOTOGRAPHY</div>
+    </div>
+  </div>
+
+  <div class="referral-hero">
+    <h1 class="referral-title">You've Been Referred to 363 Photography!</h1>
+    <p class="referral-subtitle">by <%= @referral.referrer.name %></p>
+  </div>
+
+  <div class="referral-card">
+    <div class="referral-reward">
+      <div class="referral-discount-label">Your Special Discount</div>
+      <div class="referral-discount-amount">₦<%= @referral.referred_discount  %></div>
+      <div class="referral-discount-description">off your first photoshoot</div>
+    </div>
+
+    <div class="referral-message">
+      <p><%= @referral.referrer.name.split(' ').first %> thinks you'd love our photography services and has shared this exclusive offer with you.</p>
+      <p>At 363 Photography, we capture beautiful, timeless moments that you'll cherish forever.</p>
+    </div>
+
+    <div class="referral-cta">
+      <%= link_to "Claim Your Discount", apply_referral_path(@referral.code), class: "referral-button" %>
+    </div>
+  </div>
+
+  <div class="referral-showcase">
+    <h2 class="showcase-title">Our Photography</h2>
+    <div class="showcase-grid">
+      <!-- Sample images -->
+      <% 4.times do |i| %>
+        <div class="showcase-item">
+          <div class="showcase-image" style="background-image: url('https://images.unsplash.com/photo-1741230713152-244939ffbd75?q=80&w=600&auto=format&fit=crop');"></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="referral-footer">
+    <p>363 Photography - Creating beautiful memories since 2020</p>
+    <p>Questions? Contact us at info@363photography.org</p>
+  </div>
+</div>
+
+<style>
+.referral-hero {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+.referral-title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.referral-subtitle {
+  font-size: 20px;
+  color: #555;
+}
+
+.referral-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.referral-reward {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.referral-discount-label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.referral-discount-amount {
+  font-size: 48px;
+  font-weight: bold;
+  color: #EDD400;
+  margin-bottom: 5px;
+}
+
+.referral-discount-description {
+  font-size: 16px;
+  color: #555;
+}
+
+.referral-message {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.referral-cta {
+  text-align: center;
+}
+
+.referral-button {
+  display: inline-block;
+  background-color: #EDD400;
+  color: #000;
+  font-weight: bold;
+  padding: 15px 40px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.referral-button:hover {
+  background-color: #D9C000;
+  transform: translateY(-2px);
+}
+
+.referral-showcase {
+  margin-bottom: 40px;
+}
+
+.showcase-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.showcase-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px;
+}
+
+.referral-footer {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+  font-size: 14px;
+}
+</style>

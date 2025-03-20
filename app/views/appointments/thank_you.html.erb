@@ -13,5 +13,31 @@
 <p><strong>Time:</strong> <%= @appointment.start_time.strftime("%I:%M %p") %></p>
 <p><strong>Location:</strong> <%= @appointment.location %></p>
 
+<% if @appointment.referral_source.present? %>
+  <div class="referral-thanks">
+    <h3>Referral Discount Applied!</h3>
+    <p>Your booking includes a ₦5,000 discount thanks to a referral.</p>
+  </div>
+<% end %>
+
 <p class="mt-3">If you have any questions, please contact us at info@363photography.org.</p>
 </div>
+
+<style>
+.referral-thanks {
+  background-color: #EDD400;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin: 20px 0;
+}
+
+.referral-thanks h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.referral-thanks p {
+  margin-bottom: 0;
+}
+</style>

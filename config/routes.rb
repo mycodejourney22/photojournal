@@ -18,7 +18,8 @@ Rails.application.routes.draw do
   get 'sales/new'
   get 'sales/create'
   get 'sales/show'
-  # config/routes.rb
+  get '/welcome', to: 'pages#public_home', as: :public_home
+
   resources :operations, only: [:index] do
     get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
   end
@@ -39,6 +40,7 @@ Rails.application.routes.draw do
   resources :customers do
     member do
       get :all_galleries
+      post :generate_referral
     end
   end
 
@@ -116,6 +118,13 @@ Rails.application.routes.draw do
   end
   # get 'appointments/completed'
   get 'appointments/past'
+
+  resources :referrals, only: [:index]
+  get 'refer/:code', to: 'referrals#show', as: :referral
+  get 'refer/:code/apply', to: 'referrals#apply', as: :apply_referral
+
+  # Process pending rewards (admin only)
+  post 'referrals/process_rewards', to: 'referrals#process_rewards', as: :process_referral_rewards
 
   resources :prices
   resources :photo_shoots, only: [:index] do

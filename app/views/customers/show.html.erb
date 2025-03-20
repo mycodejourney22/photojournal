@@ -12,6 +12,7 @@
   <%= link_to "Past Photoshoots", "#past-photoshoots", class: "g-content__tab g-content__tab--active" %>
   <%= link_to "Past Orders", "#past-orders", class: "g-content__tab" %>
   <%= link_to "Gallery Info", "#gallery-info", class: "g-content__tab" %>
+  <%= link_to "Referrals", "#referrals", class: "g-content__tab" %>
   <%= link_to "Contact Info", "#contact-info", class: "g-content__tab" %>
 </div>
 
@@ -124,6 +125,109 @@
         </div>
       <% end %>
     </div>
+
+    <!-- Referrals Section -->
+    <div id="referrals" class="g-section">
+      <div class="g-section__header">
+        <h2 class="g-section__title">Referrals</h2>
+        <div class="g-section__actions">
+          <%= link_to 'Generate New Referral', generate_referral_customer_path(@customer), method: :post, class: "g-section__link" %>
+        </div>
+      </div>
+
+      <% if @customer.referrals_made.exists? %>
+        <% active_referral = @customer.active_referral %>
+
+        <div class="g-referral-card">
+          <div class="g-referral-card__header">
+            <h3 class="g-referral-card__title">Your Referral Code</h3>
+          </div>
+
+          <div class="g-referral-card__code">
+            <%= active_referral.code %>
+          </div>
+
+          <div class="g-referral-card__link">
+            <%= link_to referral_url(active_referral.code), referral_path(active_referral.code), target: "_blank" %>
+          </div>
+
+          <div class="g-referral-card__actions">
+            <button class="g-button g-button--secondary g-button--small" onclick="copyToClipboard('<%= referral_url(active_referral.code) %>')">
+              Copy Link
+            </button>
+
+            <%= mail_to "",
+                        subject: "I'd like to invite you to 363 Photography",
+                        body: "Hi,\n\nI wanted to share my experience with 363 Photography. They're offering you ₦5,000 off your first photoshoot if you use my referral link:\n\n#{referral_url(active_referral.code)}\n\nEnjoy!",
+                        class: "g-button g-button--secondary g-button--small",
+                        target: "_blank" do %>
+              Share via Email
+            <% end %>
+          </div>
+        </div>
+
+        <% if @customer.referrals_made.count > 1 %>
+          <div class="g-table">
+            <div class="g-table__header">
+              <div class="g-table__col--code">Code</div>
+              <div class="g-table__col--referred">Referred</div>
+              <div class="g-table__col--status">Status</div>
+              <div class="g-table__col--date">Date</div>
+              <div class="g-table__col--reward">Reward</div>
+            </div>
+
+            <% @customer.referrals_made.order(created_at: :desc).each do |referral| %>
+              <div class="g-table__row">
+                <div class="g-table__status <%=
+                  case referral.status
+                  when 'rewarded' then 'g-table__status--confirmed'
+                  when 'converted' then 'g-table__status--pending'
+                  when 'pending' then 'g-table__status--new'
+                  else 'g-table__status--cancelled'
+                  end
+                %>"></div>
+
+                <div class="g-table__col--code g-table__cell">
+                  <%= referral.code %>
+                </div>
+
+                <div class="g-table__col--referred g-table__cell">
+                  <% if referral.referred.present? %>
+                    <%= referral.referred.name %>
+                  <% else %>
+                    <span class="g-text--muted">Not used yet</span>
+                  <% end %>
+                </div>
+
+                <div class="g-table__col--status g-table__cell">
+                  <span class="g-badge g-badge--<%= referral.status %>">
+                    <%= referral.status.capitalize %>
+                  </span>
+                </div>
+
+                <div class="g-table__col--date g-table__cell">
+                  <%= referral.created_at.strftime("%B %d, %Y") %>
+                </div>
+
+                <div class="g-table__col--reward g-table__cell">
+                  <% if referral.rewarded? %>
+                    ₦<%= number_with_delimiter(referral.reward_amount) %>
+                  <% elsif referral.converted? %>
+                    <span class="g-text--pending">Pending</span>
+                  <% else %>
+                    <span class="g-text--muted">—</span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No referrals generated yet.</p>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <!-- Contact Info Sidebar -->
@@ -158,6 +262,11 @@
           </div>
 
           <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Referral Credits</div>
+            <div class="g-contact-card__value">₦<%= number_with_delimiter(@customer.credits) %></div>
+          </div>
+
+          <div class="g-contact-card__row">
             <div class="g-contact-card__label">Email</div>
             <div class="g-contact-card__value"><%= @customer.email %></div>
           </div>
@@ -178,3 +287,13 @@
     </div>
   </div>
 </div>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('Referral link copied to clipboard!');
+  }, function(err) {
+    console.error('Could not copy text: ', err);
+  });
+}
+</script>

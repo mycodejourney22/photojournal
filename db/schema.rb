@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_11_232422) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_20_045559) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_11_232422) do
     t.integer "price"
     t.bigint "price_id"
     t.boolean "payment_status", default: false
+    t.string "referral_source"
     t.index ["price_id"], name: "index_appointments_on_price_id"
     t.index ["start_time"], name: "index_appointments_on_start_time"
     t.index ["uuid"], name: "index_appointments_on_uuid", unique: true
@@ -126,6 +127,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_11_232422) do
     t.integer "visits_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "credits", default: 0, null: false
+    t.string "referral_source"
     t.index ["phone_number"], name: "index_customers_on_phone_number", unique: true
   end
 
@@ -207,6 +210,23 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_11_232422) do
     t.index ["appointment_id"], name: "index_questions_on_appointment_id"
   end
 
+  create_table "referrals", force: :cascade do |t|
+    t.bigint "referrer_id", null: false
+    t.bigint "referred_id"
+    t.string "code", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "converted_at"
+    t.datetime "rewarded_at"
+    t.datetime "expires_at"
+    t.integer "reward_amount", default: 10000
+    t.integer "referred_discount", default: 5000
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_referrals_on_code", unique: true
+    t.index ["referred_id"], name: "index_referrals_on_referred_id"
+    t.index ["referrer_id"], name: "index_referrals_on_referrer_id"
+  end
+
   create_table "sales", force: :cascade do |t|
     t.datetime "date"
     t.decimal "amount_paid"
@@ -226,6 +246,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_11_232422) do
     t.integer "customer_id"
     t.boolean "void", default: false
     t.string "void_reason"
+    t.integer "discount", default: 0
+    t.string "discount_reason"
     t.index ["appointment_id"], name: "index_sales_on_appointment_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"
     t.index ["photo_shoot_id"], name: "index_sales_on_photo_shoot_id"
@@ -260,6 +282,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_11_232422) do
   add_foreign_key "galleries", "appointments"
   add_foreign_key "photo_shoots", "appointments"
   add_foreign_key "questions", "appointments"
+  add_foreign_key "referrals", "customers", column: "referred_id"
+  add_foreign_key "referrals", "customers", column: "referrer_id"
   add_foreign_key "sales", "appointments"
   add_foreign_key "sales", "photo_shoots"
 end

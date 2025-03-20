@@ -1,16 +1,9 @@
-<div class="container" data-controller="calendly">
-  <h1>Today's Appointments</h1>
+<div class="home-container">
+  <div class="home-hero">
+    <h1>363 PHOTOGRAPHY</h1>
+    <p>Capturing your special moments</p>
+    <%= link_to "Book a Photoshoot", type_of_shoots_appointments_path, class: "cta-button" %>
+  </div>
 
-<% @appointments.each do |appointment| %>
-  <p><strong>Name:</strong> <%= appointment.name %></p>
-  <p><strong>Email:</strong> <%= appointment.email %></p>
-  <p><strong>Start Time:</strong> <%= appointment.start_time %></p>
-  <p><strong>End Time:</strong> <%= appointment.end_time %></p>
-  <p><strong>Location:</strong> <%= appointment.location %></p>
-  <hr>
-<% end %>
-
-<% if @appointments.empty? %>
-  <p>No appointments for today.</p>
-<% end %>
+  <!-- Add more content as needed -->
 </div>

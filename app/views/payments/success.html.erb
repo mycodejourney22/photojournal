@@ -1,18 +1,182 @@
+<!-- app/views/payments/success.html.erb -->
 <div class="container">
   <h2 class="logo_heading my-4"><%= image_tag "james-lee-YIy1cd3xN4w-unsplash.jpg", class: "avatar", alt: "dropdown menu" %>
     <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
   </h2>
-  <h1 class="payment_preview_heading">Payment & Booking Confirmed</h1>
-  <div class="payment-preview-card">
-    <p>Name:</p>
-    <p><%= @appointment.name %></p>
-    <p>Type of Shoot:</p>
-    <p><%= @price.shoot_type %></p>
-    <p>Total Amount Due:</p>
-    <p><%= @price.amount %></p>
-    <p>Number of outfit:</p>
-    <p><%= @price.outfit %></p>
-    <p>Appointment Time:</p>
-    <p><%= @appointment.formatted_start_time %>,  <%= @appointment.formatted_time %></p>
+
+  <div class="payment-success-card">
+    <h1 class="payment_preview_heading text-center">Payment & Booking Confirmed</h1>
+    <div class="success-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#3dae2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+
+    <h2>Thank You!</h2>
+    <p>Your payment has been processed successfully</p>
+
+    <div class="payment-details">
+      <p>Name:</p>
+      <p><%= @appointment.name %></p>
+
+      <p>Type of Shoot:</p>
+      <p><%= @price.shoot_type %></p>
+
+      <% if @appointment.referral_source.present? %>
+        <% referral = Referral.find_by(code: @appointment.referral_source) %>
+        <% discount_amount = referral&.referred_discount || 5000 %>
+
+        <p>Original Amount:</p>
+        <p class="strikethrough">₦<%= number_with_delimiter(@price.amount) %></p>
+
+        <p>Referral Discount:</p>
+        <p class="discount-amount">- ₦<%= number_with_delimiter(discount_amount) %></p>
+
+        <p><strong>Amount Paid:</strong></p>
+        <p class="final-amount"><strong>₦<%= number_with_delimiter(@price.amount - discount_amount) %></strong></p>
+      <% else %>
+        <p>Amount Paid:</p>
+        <p>₦<%= number_with_delimiter(@price.amount) %></p>
+      <% end %>
+
+      <p>Number of outfit:</p>
+      <p><%= @price.outfit %></p>
+
+      <p>Appointment Time:</p>
+      <p><%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></p>
+    </div>
+
+    <div class="next-steps">
+      <h3>What's Next?</h3>
+      <ul>
+        <li>You'll receive a confirmation email with your booking details</li>
+        <li>Please arrive 15 minutes before your scheduled time</li>
+        <li>Don't forget to bring your outfits for the shoot</li>
+      </ul>
+    </div>
+
+    <% if @appointment.referral_source.present? %>
+      <div class="referral-thanks">
+        <h3>Referral Discount Applied!</h3>
+        <p>You saved ₦<%= number_with_delimiter(discount_amount) %> on your booking. Don't forget to thank the person who referred you!</p>
+      </div>
+    <% end %>
+
+    <a href="/" class="return-home-button">Return to Home</a>
   </div>
 </div>
+
+<style>
+  .payment-success-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+
+  .success-icon {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .payment-success-card h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .payment-success-card > p {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #666;
+  }
+
+  .payment-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .payment-details p:nth-child(odd) {
+    font-weight: bold;
+    color: #555;
+  }
+
+  .strikethrough {
+    text-decoration: line-through;
+    color: #888;
+  }
+
+  .discount-amount {
+    color: #d32f2f;
+  }
+
+  .final-amount {
+    color: #2e7d32;
+  }
+
+  .next-steps {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .next-steps h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .next-steps ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .next-steps li {
+    margin-bottom: 8px;
+    color: #555;
+  }
+
+  .referral-thanks {
+    background-color: #FFF8E1;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border-left: 4px solid #EDD400;
+  }
+
+  .referral-thanks h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .referral-thanks p {
+    margin-bottom: 0;
+    color: #555;
+  }
+
+  .return-home-button {
+    display: block;
+    text-align: center;
+    background-color: #EDD400;
+    color: #000;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+  }
+
+  .return-home-button:hover {
+    background-color: #d9c000;
+  }
+</style>

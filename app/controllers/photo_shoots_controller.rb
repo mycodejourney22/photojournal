@@ -3,6 +3,7 @@ class PhotoShootsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
   after_action :schedule_thank_you_email, only: :create
+  after_action :schedule_referral_invitation, only: :create
 
   before_action :set_appointment, except: [:index, :notes, :consent]
 
@@ -111,6 +112,11 @@ class PhotoShootsController < ApplicationController
       ThankYouEmailJob.set(wait_until: @photo_shoot.created_at + 48.hours).perform_later(@photo_shoot)
       ThankYouSmsJob.set(wait_until: @photo_shoot.created_at + 48.hours).perform_later(@photo_shoot.id)
     end
+  end
+
+  def schedule_referral_invitation
+    # Schedule referral invitation to be sent 2 days after photoshoot creation
+    ReferralInvitationJob.set(wait_until: @photo_shoot.created_at + 1.minutes).perform_later(@photo_shoot.id) if @photo_shoot.id.present?
   end
 
   def set_appointment

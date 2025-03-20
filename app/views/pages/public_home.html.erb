@@ -1,0 +1,715 @@
+<!-- app/views/pages/public_home.html.erb -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>363 Photography</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="hero">
+  <div class="hero__split">
+    <div class="hero__content">
+      <div class="hero__content-wrapper">
+        <div class="hero__accent"></div>
+        <h1 class="hero__title">363 PHOTOGRAPHY</h1>
+        <p class="hero__subtitle">Professional photography services in Lagos</p>
+        <p class="hero__text">We capture your most precious moments with artistry and expertise. Visit one of our three studio locations for a premium photography experience.</p>
+        <%= link_to "Book a Session", type_of_shoots_appointments_path, class: "btn btn-primary hero__cta" %>
+      </div>
+    </div>
+
+    <div class="hero__image"></div>
+  </div>
+</div>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-warning container">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success container">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <section class="about container section">
+    <h2 class="section-title">About Us</h2>
+    <div class="about__content">
+      <div class="about__text">
+        <p>At 363 Photography, we believe in capturing authentic moments and creating stunning images that tell your story. Our talented photographers work with you to create portraits that reflect your personality and style.</p>
+        <p>With state-of-the-art equipment and years of experience, we pride ourselves on delivering exceptional quality and service for every client.</p>
+        <%= link_to "Learn More", "#", class: "btn btn-secondary" %>
+      </div>
+      <div class="about__image">
+        <div class="image-placeholder"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services section">
+    <div class="container">
+      <h2 class="section-title">Our Services</h2>
+      <div class="services__grid">
+        <div class="service-card">
+          <div class="service-card__icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <h3 class="service-card__title">Portrait Sessions</h3>
+          <p class="service-card__desc">Professional portraits that capture your unique personality and style.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__icon">
+            <i class="fas fa-baby"></i>
+          </div>
+          <h3 class="service-card__title">Newborn Photography</h3>
+          <p class="service-card__desc">Gentle, beautiful portraits of your newest family member.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="service-card__title">Family Portraits</h3>
+          <p class="service-card__desc">Capture your family's connection in timeless photographs.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__icon">
+            <i class="fas fa-female"></i>
+          </div>
+          <h3 class="service-card__title">Maternity</h3>
+          <p class="service-card__desc">Celebrate this beautiful journey with elegant maternity portraits.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-banner__content">
+        <h2 class="cta-banner__title">Ready to book your session?</h2>
+        <p class="cta-banner__text">Our photography sessions are designed to give you a relaxed, enjoyable experience and beautiful images to cherish.</p>
+        <%= link_to "Book Now", type_of_shoots_appointments_path, class: "btn btn-primary cta-banner__button" %>
+      </div>
+    </div>
+  </section>
+
+  <section class="locations container section">
+    <h2 class="section-title">Our Studios</h2>
+    <div class="locations__grid">
+      <div class="location-card">
+        <h3 class="location-card__title">Ajah</h3>
+        <address class="location-card__address">
+          KM 22 Lekki Epe Express way<br>
+          Ilaje Bus Stop Lagos
+        </address>
+        <p class="location-card__phone">
+          <i class="fas fa-phone"></i> 08144985074
+        </p>
+        <a href="#" class="location-card__directions">Get Directions</a>
+      </div>
+
+      <div class="location-card">
+        <h3 class="location-card__title">Ikeja</h3>
+        <address class="location-card__address">
+          66 Adeniyi Jones<br>
+          Ikeja Lagos
+        </address>
+        <p class="location-card__phone">
+          <i class="fas fa-phone"></i> 08090151168
+        </p>
+        <a href="#" class="location-card__directions">Get Directions</a>
+      </div>
+
+      <div class="location-card">
+        <h3 class="location-card__title">Surulere</h3>
+        <address class="location-card__address">
+          115A bode thomas street<br>
+          Surulere Lagos
+        </address>
+        <p class="location-card__phone">
+          <i class="fas fa-phone"></i> 07048891715
+        </p>
+        <a href="#" class="location-card__directions">Get Directions</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__content">
+        <div class="footer__brand">
+          <h2 class="footer__logo">363 PHOTOGRAPHY</h2>
+          <p>Capturing moments that last a lifetime</p>
+        </div>
+
+        <div class="footer__links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__contact">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-envelope"></i> info@363photography.org</p>
+          <p><i class="fas fa-phone"></i> 08144985074</p>
+        </div>
+
+        <div class="footer__social">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>&copy; <%= Date.today.year %> 363 Photography. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    /* Base styles */
+    :root {
+      --primary-color: #EDD400;
+      --primary-dark: #D9C000;
+      --secondary-color: #333333;
+      --text-color: #333333;
+      --light-text: #666666;
+      --light-bg: #f9f9f9;
+      --border-color: #e0e0e0;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background-color: var(--primary-color);
+      margin: 15px auto 0;
+    }
+
+    .alert {
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+
+    .alert-warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    /* Button styles */
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 5px;
+      font-weight: 600;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #444;
+      transform: translateY(-2px);
+    }
+
+    /* Hero section */
+  .hero {
+    height: 100vh;
+    min-height: 600px;
+    max-height: 800px;
+  }
+
+  .hero__split {
+    display: flex;
+    height: 100%;
+  }
+
+  .hero__content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 60px;
+    background-color: white;
+  }
+
+  .hero__content-wrapper {
+    max-width: 500px;
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .hero__accent {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 6px;
+    background-color: var(--primary-color);
+  }
+
+  .hero__title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    line-height: 1.2;
+  }
+
+  .hero__subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    font-weight: 600;
+  }
+
+  .hero__text {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    color: var(--light-text);
+    line-height: 1.8;
+  }
+
+  .hero__cta {
+    font-size: 1.1rem;
+    padding: 15px 35px;
+  }
+
+  .hero__image {
+    flex: 1;
+    background-image: url('https://images.unsplash.com/photo-1551316679-9c6ae9dec224?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+  }
+
+
+    /* About section */
+    .about__content {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .about__text {
+      flex: 1;
+    }
+
+    .about__text p {
+      margin-bottom: 20px;
+      color: var(--light-text);
+      font-size: 1.1rem;
+    }
+
+    .about__image {
+      flex: 1;
+    }
+
+    .image-placeholder {
+      width: 100%;
+      padding-top: 75%; /* 4:3 aspect ratio */
+      background-color: var(--light-bg);
+      border-radius: 10px;
+      background-image: url('https://images.unsplash.com/photo-1625447737081-a0fb5d72d139?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Services section */
+    .services {
+      background-color: var(--light-bg);
+    }
+
+    .services__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .service-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .service-card__icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 20px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--secondary-color);
+    }
+
+    .service-card__title {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .service-card__desc {
+      color: var(--light-text);
+    }
+
+    /* CTA Banner */
+    .cta-banner {
+      background-color: var(--primary-color);
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .cta-banner__title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--secondary-color);
+    }
+
+    .cta-banner__text {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      color: var(--secondary-color);
+    }
+
+    .cta-banner__button {
+      background-color: var(--secondary-color);
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .cta-banner__button:hover {
+      background-color: #444;
+    }
+
+    /* Locations section */
+    .locations__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .location-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .location-card__title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+
+    .location-card__address {
+      margin-bottom: 15px;
+      font-style: normal;
+      color: var(--light-text);
+      line-height: 1.8;
+    }
+
+    .location-card__phone {
+      margin-bottom: 20px;
+      color: var(--light-text);
+    }
+
+    .location-card__directions {
+      display: inline-block;
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .location-card__directions:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 80px 0 20px;
+    }
+
+    .footer__content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer__logo {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .footer__brand p {
+      opacity: 0.8;
+    }
+
+    .footer__links h3,
+    .footer__contact h3,
+    .footer__social h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .footer__links ul {
+      list-style: none;
+    }
+
+    .footer__links li {
+      margin-bottom: 10px;
+    }
+
+    .footer__links a,
+    .footer__contact a {
+      color: white;
+      opacity: 0.8;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer__links a:hover,
+    .footer__contact a:hover {
+      opacity: 1;
+    }
+
+    .footer__contact p {
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    .footer__contact i,
+    .footer__links i {
+      margin-right: 10px;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .social-icon:hover {
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+    }
+
+    .footer__bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer__bottom p {
+      opacity: 0.6;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 992px) {
+      .section {
+        padding: 60px 0;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .hero {
+        height: auto;
+        min-height: 0;
+        max-height: none;
+      }
+
+      .hero__content {
+        padding: 60px 40px;
+      }
+
+      .hero__title {
+        font-size: 2.5rem;
+      }
+
+      .about__content {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .cta-banner__title {
+        font-size: 2rem;
+      }
+
+      .locations__grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 50px 0;
+      }
+
+        .hero__split {
+      flex-direction: column;
+      }
+
+      .hero__content {
+        padding: 60px 30px;
+      }
+
+      .hero__content-wrapper {
+        max-width: 100%;
+      }
+
+      .hero__image {
+        height: 300px;
+      }
+
+      .service-card {
+        padding: 20px;
+      }
+
+      .cta-banner {
+        padding: 60px 0;
+      }
+
+      .cta-banner__title {
+        font-size: 1.8rem;
+      }
+
+      .cta-banner__text {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .section-title {
+        font-size: 1.8rem;
+      }
+
+        .hero__content {
+      padding: 40px 20px;
+      }
+
+      .hero__title {
+        font-size: 2rem;
+      }
+
+      .hero__subtitle {
+        font-size: 1.2rem;
+      }
+
+      .hero__text {
+        font-size: 1rem;
+      }
+
+      .section-title:after {
+        width: 60px;
+      }
+
+      .services__grid,
+      .locations__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer__content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+  </style>
+</body>
+</html>

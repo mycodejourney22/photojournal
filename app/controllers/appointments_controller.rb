@@ -168,11 +168,14 @@ class AppointmentsController < ApplicationController
   def create
     authorize Appointment
 
-    service = AppointmentCreationService.new(appointment_params, current_user)
+    service = AppointmentCreationService.new(appointment_params, current_user, session)
     result = service.call
 
     if result[:success]
       session.delete(:form_data)
+
+      # session.delete(:referral_code)
+
 
       if user_signed_in?
         redirect_to appointments_path, notice: 'Appointment was successfully created.'
@@ -184,7 +187,7 @@ class AppointmentsController < ApplicationController
       @appointment = result[:appointment]
 
       if user_signed_in?
-        build_questions_for(@appointment) # Rebuild questions if save fails
+        build_questions_for(@appointment)
         render :new, status: :unprocessable_entity
       else
         build_questions_for_booking(@appointment)

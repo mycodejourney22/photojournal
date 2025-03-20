@@ -9,4 +9,27 @@
 @import "gmail_ui/modal";
 @import "gmail_ui/form";
 @import "gmail_ui/forms";
-@import "gmail_ui/pagination"
+@import "gmail_ui/pagination";
+
+// @import "gmail_ui/base";
+// @import "gmail_ui/typography";
+@import "gmail_ui/variables";
+
+/* Components */
+@import "gmail_ui/buttons";
+@import "gmail_ui/forms";
+// @import "gmail_ui/tables";
+// @import "gmail_ui/navigation";
+// @import "gmail_ui/cards";
+// @import "gmail_ui/modals";
+@import "gmail_ui/referrals"; /* Our new referrals stylesheet */
+
+/* Layout */
+@import "gmail_ui/header";
+// @import "gmail_ui/footer";
+// @import "gmail_ui/grid";
+
+/* Pages */
+// @import "gmail_ui/dashboard";
+// @import "gmail_ui/appointments";
+// @import "gmail_ui/customers";
