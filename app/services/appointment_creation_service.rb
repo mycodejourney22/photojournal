@@ -1,4 +1,4 @@
-require 'pry'
+# require 'pry'
 class AppointmentCreationService
   def initialize(params, current_user = nil, session = nil)
     @params = params
