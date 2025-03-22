@@ -6,24 +6,78 @@ class PaymentsController < ApplicationController
   layout 'public'
   layout :determine_layout
 
+  # def make_payment
+  #   @appointment = Appointment.find(params[:appointment_id])
+  #   @price = Price.find(@appointment.price_id)
+  # end
+
   def make_payment
     @appointment = Appointment.find(params[:appointment_id])
     @price = Price.find(@appointment.price_id)
+
+    # Identify customer by phone number from the appointment
+    phone_number = extract_phone_number_from_appointment(@appointment)
+    @customer = Customer.find_by(phone_number: phone_number)
+
+    # Check if customer has credits
+    @available_credits = @customer&.credits.to_i
+
+    # Handle credit application if requested
+    if params[:apply_credits].present?
+      # Calculate how many credits to apply (can't apply more than available or total price)
+      requested_credits = params[:apply_credits].to_i
+      @credits_applied = [requested_credits, @available_credits, @price.amount].min
+
+      # Store in session for payment processing
+      session[:customer_id_for_credits] = @customer.id
+      session[:credits_to_apply] = @credits_applied
+    elsif session[:credits_to_apply].present?
+      # If returning to this page after previously selecting credits
+      @credits_applied = session[:credits_to_apply].to_i
+    else
+      @credits_applied = 0
+    end
+
+    # Calculate final amount
+    @final_amount = @price.amount - @credits_applied
+    @final_amount = 0 if @final_amount < 0
+
+    # Calculate price with referral discount if applicable
+    if @appointment.referral_source.present?
+      referral = Referral.find_by(code: @appointment.referral_source)
+      @referral_discount = referral&.referred_discount || 5000
+      @final_amount = @final_amount - @referral_discount
+      @final_amount = 0 if @final_amount < 0
+    end
   end
 
   def initiate_payment
     appointment = Appointment.find(params[:appointment_id])
     price = Price.find(params[:price_id])
     email = appointment.email || "default@example.com"
+    credits_applied = params[:credits_applied].to_i || 0
+
+
+    if credits_applied > 0 && credits_applied >= price.amount
+      process_credit_payment(appointment, credits_applied)
+      return
+    end
 
     # Calculate payment amount with discount if a referral was used
-    amount = price.amount.to_f
+    amount = price.amount.to_f - credits_applied
     referral_discount = 0
 
     if appointment.referral_source.present?
       referral = Referral.find_by(code: appointment.referral_source)
       referral_discount = referral&.referred_discount || 5000
       amount = [amount - referral_discount, 0].max # Make sure amount isn't negative
+    end
+
+    if amount <= 0
+      appointment.update(payment_status: true)
+      process_credit_payment(appointment, credits_applied) if credits_applied > 0
+      redirect_to success_payments_path(appointment_id: appointment.id)
+      return
     end
 
     # Convert to kobo (smallest currency unit) for Paystack

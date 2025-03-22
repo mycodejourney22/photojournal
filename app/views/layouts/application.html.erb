@@ -122,6 +122,11 @@
                 <span class="g-sidebar__nav-text">Reports</span>
               <% end %>
             </li>
+
+            <%= link_to customers_analytics_path, class: "g-sidebar__nav-item #{controller_name == 'customers_analytics' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Customer Analytics</span>
+            <% end %>
           </ul>
 
           <div class="g-sidebar__footer">

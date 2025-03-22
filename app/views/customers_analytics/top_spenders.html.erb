@@ -1,0 +1,283 @@
+<!-- app/views/customers_analytics/top_spenders.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Top Spending Customers</h1>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to customers_analytics_path, class: "g-button" do %>
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    <% end %>
+
+    <%= link_to customers_analytics_export_path(export_type: 'top_spenders', start_date: @start_date, end_date: @end_date, format: :csv), class: "g-button g-button--action" do %>
+      <i class="fas fa-download"></i> Export CSV
+    <% end %>
+  </div>
+</div>
+
+<div class="analytics-filters">
+  <%= form_with url: customers_analytics_top_spenders_path, method: :get, class: "filters-form" do |f| %>
+    <div class="filter-group">
+      <div class="filter-item">
+        <%= f.label :start_date, "Start Date", class: "filter-label" %>
+        <%= f.date_field :start_date, value: @start_date, class: "filter-input", max: Date.today %>
+      </div>
+
+      <div class="filter-item">
+        <%= f.label :end_date, "End Date", class: "filter-label" %>
+        <%= f.date_field :end_date, value: @end_date, class: "filter-input", max: Date.today %>
+      </div>
+
+      <div class="filter-item">
+        <%= f.label :limit, "Show Top", class: "filter-label" %>
+        <%= f.select :limit, [10, 25, 50, 100], { selected: @limit }, class: "filter-input" %>
+      </div>
+
+      <%= f.submit "Apply Filters", class: "filter-button" %>
+
+      <%= link_to "Reset", customers_analytics_top_spenders_path, class: "reset-button" %>
+    </div>
+  <% end %>
+
+  <div class="filter-info">
+    <p>Showing top <%= @limit %> spending customers from <strong><%= @start_date.strftime("%B %d, %Y") %></strong> to <strong><%= @end_date.strftime("%B %d, %Y") %></strong></p>
+  </div>
+</div>
+
+<div class="analytics-card full-width">
+  <div class="analytics-table-wrapper">
+    <table class="analytics-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Customer</th>
+          <th>Total Spent</th>
+          <th>Transactions</th>
+          <th>Avg. Transaction</th>
+          <th>Last Purchase</th>
+          <th>Credits</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @top_spenders.any? %>
+          <% @top_spenders.each_with_index do |customer, index| %>
+            <tr>
+              <td class="rank-cell"><%= index + 1 %></td>
+              <td>
+                <div class="customer-info">
+                  <div class="customer-avatar"><%= customer.name.split(' ').map { |n| n[0].upcase }.join('') %></div>
+                  <div class="customer-details">
+                    <div class="customer-name"><%= customer.name %></div>
+                    <div class="customer-meta">
+                      <div class="customer-email"><%= customer.email %></div>
+                      <div class="customer-phone"><%= customer.phone_number %></div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="amount-cell">₦<%= number_with_delimiter(customer.total_spent.to_i) %></td>
+              <td class="count-cell"><%= customer.transaction_count %></td>
+              <td class="amount-cell">₦<%= number_with_delimiter(customer.transaction_count > 0 ? (customer.total_spent.to_f / customer.transaction_count).round : 0) %></td>
+              <td class="date-cell"><%= customer.last_purchase.strftime("%b %d, %Y") if customer.last_purchase %></td>
+              <td class="credits-cell"><%= customer.credits > 0 ? "₦#{number_with_delimiter(customer.credits)}" : "-" %></td>
+              <td>
+                <div class="table-actions">
+                  <%= link_to customer_path(customer), class: "table-action-link" do %>
+                    <i class="fas fa-eye"></i> View
+                  <% end %>
+
+                  <%= link_to "#", class: "table-action-link", data: { action: "click->modal#open", modal_target: "customer-#{customer.id}" } do %>
+                    <i class="fas fa-chart-line"></i> Stats
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr><td colspan="8" class="empty-state">No data available for the selected period</td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="analytics-charts">
+  <div class="analytics-card chart-card">
+    <div class="analytics-card-header">
+      <h2>Top 10 Customers by Revenue</h2>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="topSpendersChart" width="100%" height="50"
+              data-controller="chart"
+              data-chart-data="<%= @top_spenders.take(10).map { |c| { name: c.name, amount: c.total_spent.to_i } }.to_json %>"></canvas>
+    </div>
+  </div>
+
+  <div class="analytics-card chart-card">
+    <div class="analytics-card-header">
+      <h2>Distribution of Spending</h2>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="spendingDistributionChart" width="100%" height="50"
+              data-controller="chart"
+              data-chart-data="<%= [
+                { label: 'Top 10% of Customers', value: @spending_distribution[:top_10_percent] },
+                { label: 'Middle 40% of Customers', value: @spending_distribution[:middle_40_percent] },
+                { label: 'Bottom 50% of Customers', value: @spending_distribution[:bottom_50_percent] }
+              ].to_json %>"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Top Spenders Chart
+    const topSpendersEl = document.getElementById('topSpendersChart');
+    if (topSpendersEl) {
+      const data = JSON.parse(topSpendersEl.dataset.chartData);
+
+      new Chart(topSpendersEl, {
+        type: 'horizontalBar',
+        data: {
+          labels: data.map(item => item.name),
+          datasets: [{
+            label: 'Revenue',
+            data: data.map(item => item.amount),
+            backgroundColor: '#EDD400',
+            borderWidth: 0
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  if (value >= 1000000) {
+                    return '₦' + (value / 1000000).toFixed(1) + 'M';
+                  } else if (value >= 1000) {
+                    return '₦' + (value / 1000).toFixed(0) + 'k';
+                  }
+                  return '₦' + value;
+                }
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return '₦' + context.raw.toLocaleString();
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Spending Distribution Chart
+    const distributionEl = document.getElementById('spendingDistributionChart');
+    if (distributionEl) {
+      const data = JSON.parse(distributionEl.dataset.chartData);
+
+      new Chart(distributionEl, {
+        type: 'pie',
+        data: {
+          labels: data.map(item => item.label),
+          datasets: [{
+            data: data.map(item => item.value),
+            backgroundColor: ['#EDD400', '#4285F4', '#0F9D58'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right'
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  let label = context.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  const value = context.raw;
+                  label += '₦' + value.toLocaleString();
+
+                  // Add percentage
+                  const total = data.reduce((a, b) => a + b.value, 0);
+                  const percentage = ((value / total) * 100).toFixed(1);
+                  label += ` (${percentage}%)`;
+
+                  return label;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  .rank-cell {
+    font-weight: 700;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .customer-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .customer-phone {
+    position: relative;
+    padding-left: 12px;
+  }
+
+  .customer-phone:before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 10px;
+    background-color: #ddd;
+  }
+
+  .credits-cell {
+    font-weight: 500;
+    color: #4285F4;
+  }
+
+  .table-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .table-action-link i {
+    margin-right: 5px;
+  }
+</style>

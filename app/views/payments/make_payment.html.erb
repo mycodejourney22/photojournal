@@ -30,12 +30,73 @@
         <div class="detail-value"><%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></div>
       </div>
 
+      <!-- Credit Section - Only Show if Credits Available -->
+      <% if @available_credits && @available_credits > 0 %>
+        <div class="credits-section">
+          <div class="detail-row credits-available">
+            <div class="detail-label">Available Credits:</div>
+            <div class="detail-value">₦<%= number_with_delimiter(@available_credits) %></div>
+          </div>
+
+          <div class="credits-form">
+            <h3>Would you like to use your credits?</h3>
+
+            <%= form_with url: make_payment_path, method: :get, class: "credits-options-form" do |form| %>
+              <%= form.hidden_field :appointment_id, value: @appointment.id %>
+
+              <div class="credit-options">
+                <% if @available_credits >= @price.amount %>
+                  <div class="credit-option">
+                    <%= form.radio_button :apply_credits, @price.amount,
+                                         id: "full_payment",
+                                         checked: (@credits_applied == @price.amount) %>
+                    <label for="full_payment">
+                      Pay entirely with credits (₦<%= number_with_delimiter(@price.amount) %>)
+                    </label>
+                  </div>
+                <% end %>
+
+                <div class="credit-option">
+                  <%= form.radio_button :apply_credits, [@available_credits, @price.amount].min,
+                                       id: "partial_payment",
+                                       checked: (@credits_applied == [@available_credits, @price.amount].min && @credits_applied > 0) %>
+                  <label for="partial_payment">
+                    Apply ₦<%= number_with_delimiter([@available_credits, @price.amount].min) %> credits
+                  </label>
+                </div>
+
+                <div class="credit-option">
+                  <%= form.radio_button :apply_credits, 0,
+                                       id: "no_credits",
+                                       checked: (@credits_applied == 0 || @credits_applied.nil?) %>
+                  <label for="no_credits">
+                    Don't use credits
+                  </label>
+                </div>
+              </div>
+
+              <%= form.submit "Apply Selected Credits", class: "btn-apply-credits" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
       <div class="payment-summary">
-        <div class="detail-row total-amount <%= @appointment.referral_source.present? ? 'has-discount' : '' %>">
+        <!-- Original Price Display -->
+        <div class="detail-row <%= (@credits_applied && @credits_applied > 0) || @appointment.referral_source.present? ? 'has-discount' : '' %>">
           <div class="detail-label">Total Amount:</div>
           <div class="detail-value">₦<%= number_with_delimiter(@price.amount) %></div>
         </div>
 
+        <!-- Credits Applied (if any) -->
+        <% if @credits_applied && @credits_applied > 0 %>
+          <div class="detail-row discount-row">
+            <div class="detail-label">Credits Applied:</div>
+            <div class="detail-value discount-value">- ₦<%= number_with_delimiter(@credits_applied) %></div>
+          </div>
+        <% end %>
+
+        <!-- Referral Discount (if any) -->
         <% if @appointment.referral_source.present? %>
           <% referral = Referral.find_by(code: @appointment.referral_source) %>
           <% discount_amount = referral&.referred_discount || 5000 %>
@@ -44,18 +105,24 @@
             <div class="detail-label">Referral Discount:</div>
             <div class="detail-value discount-value">- ₦<%= number_with_delimiter(discount_amount) %></div>
           </div>
-
-          <div class="detail-row final-amount">
-            <div class="detail-label">Final Amount Due:</div>
-            <div class="detail-value">₦<%= number_with_delimiter(@price.amount - discount_amount) %></div>
-          </div>
         <% end %>
+
+        <!-- Final Amount -->
+        <div class="detail-row final-amount">
+          <div class="detail-label">Final Amount Due:</div>
+          <div class="detail-value">₦<%= number_with_delimiter(@final_amount) %></div>
+        </div>
       </div>
     </div>
 
     <%= form_with url: paystack_payment_path(appointment_id: @appointment.id), method: :post, data: { turbo: false }, class: "payment-form" do |form| %>
       <%= hidden_field_tag :price_id, @price.id %>
-      <%= submit_tag "Proceed to Payment", class: "payment-button" %>
+      <%= hidden_field_tag :credits_applied, @credits_applied %>
+      <% if @final_amount > 0 %>
+        <%= submit_tag "Proceed to Payment", class: "payment-button" %>
+      <% else %>
+        <%= submit_tag "Complete Booking", class: "payment-button payment-button-free" %>
+      <% end %>
     <% end %>
   </div>
 </div>
@@ -142,7 +209,7 @@
     border-left: 3px solid #EDD400;
   }
 
-  .total-amount.has-discount .detail-value {
+  .detail-row.has-discount .detail-value {
     text-decoration: line-through;
     color: #888;
   }
@@ -185,6 +252,76 @@
   .payment-button:hover {
     background-color: #d9c000;
     transform: translateY(-2px);
+  }
+
+  .payment-button-free {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .payment-button-free:hover {
+    background-color: #45a049;
+  }
+
+  /* Credit section styles */
+  .credits-section {
+    background-color: #f0f8ff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 3px solid #4285F4;
+  }
+
+  .credits-available {
+    border-bottom: 1px solid #cce5ff;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .credits-available .detail-value {
+    color: #0056b3;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .credits-form h3 {
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+    color: #333;
+  }
+
+  .credit-options {
+    margin-bottom: 1.5rem;
+  }
+
+  .credit-option {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .credit-option input[type="radio"] {
+    margin-right: 0.5rem;
+  }
+
+  .credit-option label {
+    cursor: pointer;
+  }
+
+  .btn-apply-credits {
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn-apply-credits:hover {
+    background-color: #3367d6;
   }
 
   @media (max-width: 768px) {

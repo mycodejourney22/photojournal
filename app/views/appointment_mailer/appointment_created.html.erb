@@ -1,26 +1,65 @@
-<div style="font-family: Arial, sans-serif; padding: 10px;">
-  <p>Hi <%= @appointment.name %>,</p>
-  <p>Your PhotoShoot with 363 PHOTOGRAPHY at <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %> is scheduled.</p>
-  <p>Below are important informations to help with your photoshoot:</p>
-  <p><span>Location:</span> <%= @location %></p>
-  <p><span>Studio Phone number:</span> <%= @studio_phone_number %></p>
+<!-- app/views/appointment_mailer/appointment_created.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #666; font-size: 16px;">Your booking confirmation</p>
+  </div>
 
-  <p style="margin-bottom: 20px; font-weight: bold;">Studio Make up Policy</p>
-  <p>If you’re planning to have makeup done at the studio, whether by our in-house makeup artist or your own, please arrive at least one hour before your photoshoot appointment.</p>
-  <p style="margin-bottom: 20px; font-weight: bold;">Missed Appointment Policy</p>
-  <p>We suggest arriving at the studio at least 30 minutes before your session. In the event of a missed appointment, please be prepared to wait in line for the next available studio slot. Your patience and understanding are appreciated.</p>
+  <p style="font-size: 16px; margin-bottom: 20px;">Hi <%= @appointment.name %>,</p>
 
-  <p style="font-weight: bold;">Below are details you filled for your appointment:</p>
-  <% @appointment.questions.each do |question| %>
-    <div style="margin-bottom: 10px;">
-      <p><span style="font-weight: bold;"><%= question.question %></span>: <%= question.answer %></p>
+  <p style="font-size: 16px; margin-bottom: 25px;">Your PhotoShoot with 363 PHOTOGRAPHY at <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %> is scheduled.</p>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Appointment Details</h2>
+    <p style="margin-bottom: 10px;"><strong>Location:</strong> <%= @location %></p>
+    <p style="margin-bottom: 10px;"><strong>Studio Phone number:</strong> <%= @studio_phone_number %></p>
+    <p style="margin-bottom: 10px;"><strong>Date & Time:</strong> <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></p>
+  </div>
+
+  <div style="margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-bottom: 15px;">Important Studio Policies</h2>
+
+    <div style="margin-bottom: 20px;">
+      <h3 style="font-size: 16px; margin-bottom: 8px; color: #444;">Delivery Timeline</h3>
+      <p style="margin: 0; color: #555; line-height: 1.5;">We deliver edited pictures within 48 hours for photoshoots taken during weekdays. For weekend appointments, delivery will be within 72 hours.</p>
     </div>
-  <% end %>
-  <p>363 Photography Team</p>
 
-  <p>Make changes to booking:</p>
-  <p>
-    <a href="<%= edit_appointment_url(@appointment) %>" style="color: #007bff;">Reschedule Booking</a><br>
-    <a href="<%= cancel_booking_appointment_url(@appointment) %>" style="color: #dc3545;">Cancel Booking</a>
-  </p>
+    <div style="margin-bottom: 20px;">
+      <h3 style="font-size: 16px; margin-bottom: 8px; color: #444;">Studio Makeup Policy</h3>
+      <p style="margin: 0; color: #555; line-height: 1.5;">If you're planning to have makeup done at the studio, whether by our in-house makeup artist or your own, please arrive at least one hour before your photoshoot appointment.</p>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <h3 style="font-size: 16px; margin-bottom: 8px; color: #444;">Punctuality Policy</h3>
+      <p style="margin: 0; color: #555; line-height: 1.5;">Please arrive at least 15 minutes before your scheduled session. Late arrivals may result in reduced session time or cancellation with a penalty fee. If you're running late, please contact us immediately.</p>
+    </div>
+
+    <div style="margin-bottom: 0;">
+      <h3 style="font-size: 16px; margin-bottom: 8px; color: #444;">Missed Appointment Policy</h3>
+      <p style="margin: 0; color: #555; line-height: 1.5;">In the event of a missed appointment, please be prepared to wait in line for the next available studio slot. Your patience and understanding are appreciated.</p>
+    </div>
+  </div>
+
+  <div style="background-color: #EDD40022; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Your Appointment Details</h2>
+    <% @appointment.questions.each do |question| %>
+      <div style="margin-bottom: 15px;">
+        <p style="margin: 0;"><strong><%= question.question %></strong>: <%= question.answer %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 30px;">We look forward to creating beautiful photographs with you.</p>
+
+  <p style="font-weight: bold; margin-bottom: 5px;">363 Photography Team</p>
+
+  <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+    <p style="font-size: 16px; margin-bottom: 15px;">Need to make changes to your booking?</p>
+
+    <div style="text-align: center;">
+      <a href="<%= edit_appointment_url(@appointment) %>" style="display: inline-block; background-color: #EDD400; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-right: 10px; font-weight: bold;">Reschedule Booking</a>
+
+      <a href="<%= cancel_booking_appointment_url(@appointment) %>" style="display: inline-block; background-color: #f5f5f5; color: #333; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Cancel Booking</a>
+    </div>
+  </div>
 </div>

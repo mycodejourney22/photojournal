@@ -23,22 +23,44 @@
       <p>Type of Shoot:</p>
       <p><%= @price.shoot_type %></p>
 
+      <p>Original Amount:</p>
+      <p class="<%= (@credits_applied && @credits_applied > 0) || @appointment.referral_source.present? ? 'strikethrough' : '' %>">
+        ₦<%= number_with_delimiter(@price.amount) %>
+      </p>
+
+      <% if @credits_applied && @credits_applied > 0 %>
+        <p>Credits Applied:</p>
+        <p class="discount-amount">- ₦<%= number_with_delimiter(@credits_applied) %></p>
+      <% end %>
+
       <% if @appointment.referral_source.present? %>
         <% referral = Referral.find_by(code: @appointment.referral_source) %>
         <% discount_amount = referral&.referred_discount || 5000 %>
 
-        <p>Original Amount:</p>
-        <p class="strikethrough">₦<%= number_with_delimiter(@price.amount) %></p>
-
         <p>Referral Discount:</p>
         <p class="discount-amount">- ₦<%= number_with_delimiter(discount_amount) %></p>
-
-        <p><strong>Amount Paid:</strong></p>
-        <p class="final-amount"><strong>₦<%= number_with_delimiter(@price.amount - discount_amount) %></strong></p>
-      <% else %>
-        <p>Amount Paid:</p>
-        <p>₦<%= number_with_delimiter(@price.amount) %></p>
       <% end %>
+
+      <%
+        # Calculate final amount
+        final_amount = @price.amount
+        final_amount -= @credits_applied if @credits_applied && @credits_applied > 0
+
+        if @appointment.referral_source.present?
+          referral = Referral.find_by(code: @appointment.referral_source)
+          discount_amount = referral&.referred_discount || 5000
+          final_amount -= discount_amount
+        end
+
+        final_amount = 0 if final_amount < 0
+      %>
+
+      <p><strong>Amount Paid:</strong></p>
+      <p class="final-amount">
+        <strong>
+          <%= final_amount > 0 ? "₦#{number_with_delimiter(final_amount)}" : "FREE (₦0)" %>
+        </strong>
+      </p>
 
       <p>Number of outfit:</p>
       <p><%= @price.outfit %></p>
@@ -51,10 +73,17 @@
       <h3>What's Next?</h3>
       <ul>
         <li>You'll receive a confirmation email with your booking details</li>
-        <li>Please arrive 15 minutes before your scheduled time</li>
-        <li>Don't forget to bring your outfits for the shoot</li>
+        <li>We deliver pictures within 48hours for picture taken on weekdays</li>
+        <li>For pictures taken on weekends we deliver within 72hours</li>
       </ul>
     </div>
+
+    <% if @credits_applied && @credits_applied > 0 %>
+      <div class="credits-thanks">
+        <h3>Credits Applied!</h3>
+        <p>You used ₦<%= number_with_delimiter(@credits_applied) %> from your available credits for this booking.</p>
+      </div>
+    <% end %>
 
     <% if @appointment.referral_source.present? %>
       <div class="referral-thanks">
@@ -64,7 +93,6 @@
     <% end %>
 
     <%= link_to "Return to Home", public_home_path, class: "return-home-button" %>
-    <%# <a href="/" class="">Return to Home</a> %>
   </div>
 </div>
 
@@ -152,14 +180,22 @@
     border-left: 4px solid #EDD400;
   }
 
-  .referral-thanks h3 {
+  .credits-thanks {
+    background-color: #E1F5FE;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border-left: 4px solid #4285F4;
+  }
+
+  .referral-thanks h3, .credits-thanks h3 {
     margin-top: 0;
     margin-bottom: 8px;
     font-size: 18px;
     color: #333;
   }
 
-  .referral-thanks p {
+  .referral-thanks p, .credits-thanks p {
     margin-bottom: 0;
     color: #555;
   }

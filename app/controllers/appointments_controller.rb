@@ -180,8 +180,7 @@ class AppointmentsController < ApplicationController
       if user_signed_in?
         redirect_to appointments_path, notice: 'Appointment was successfully created.'
       else
-        redirect_to thank_you_appointments_path(appointment_id: result[:appointment].id),
-                    notice: "Your appointment has been booked successfully."
+        redirect_to thank_you_appointments_path(appointment_id: result[:appointment].id)
       end
     else
       @appointment = result[:appointment]

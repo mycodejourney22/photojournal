@@ -1,185 +1,293 @@
 // app/javascript/controllers/chart_controller.js
 
 import { Controller } from "@hotwired/stimulus"
-import { Chart, registerables  } from "chart.js"
-Chart.register(...registerables );
+import { Chart, registerables } from "chart.js"
+Chart.register(...registerables);
 
 export default class extends Controller {
+  static values = {
+    type: String,
+    labels: Array,
+    datasets: Array,
+    options: Object
+  }
+
   connect() {
+    this.initializeChart();
+  }
+
+  initializeChart() {
     const canvas = this.element;
     const ctx = canvas.getContext("2d");
-    canvas.width = 400; // Adjust width as needed
-    canvas.height = 400;
-    if (this.element.dataset.chartData) {
-      const data = JSON.parse(this.element.dataset.chartData);
-      this.buildchart(data, ctx, "Total Selections by Editor");
+
+    // Try to parse chart data from dataset
+    let chartData = {};
+    try {
+      if (this.element.dataset.chartData) {
+        chartData = JSON.parse(this.element.dataset.chartData);
+      }
+    } catch (e) {
+      console.error("Error parsing chart data:", e);
     }
 
-    if (this.element.dataset.photographerChartData) {
-      const data = JSON.parse(this.element.dataset.photographerChartData);
-      this.buildchart(data, ctx, "Total Shoots by Photographer");
+    // Determine chart type
+    let chartType = 'bar';
+    if (this.element.id.includes('Pie') || this.element.id.includes('Doughnut')) {
+      chartType = 'pie';
+    } else if (this.element.id.includes('Line')) {
+      chartType = 'line';
     }
 
-    if(this.element.dataset.salesChartData){
-      const data = JSON.parse(this.element.dataset.salesChartData);
-      this.buildSalesChart(data, ctx, "Total Sales by Shoot");
+    // Configure chart based on ID or parsed data
+    if (this.element.id === 'customerAcquisitionChart') {
+      this.createCustomerAcquisitionChart(ctx, chartData);
+    } else if (this.element.id === 'revenueByCustomerTypeChart') {
+      this.createRevenueByCustomerTypeChart(ctx, chartData);
+    } else if (this.element.id === 'customerRetentionChart') {
+      this.createCustomerRetentionChart(ctx, chartData);
+    } else if (this.element.id === 'salesByCategoryChart') {
+      this.createSalesByCategoryChart(ctx, chartData);
+    } else if (this.element.id === 'salesByLocationChart') {
+      this.createSalesByLocationChart(ctx, chartData);
+    } else if (chartData.labels && chartData.datasets) {
+      // Generic chart creation if data structure is complete
+      this.createGenericChart(ctx, chartType, chartData);
     }
-
-    if(this.element.dataset.salesOutfitData){
-      const data = JSON.parse(this.element.dataset.salesOutfitData);
-      this.buildSalesChart(data, ctx, "Total Sales by Shoot");
-    }
-
-
-
-    if (this.element.dataset.locationChartData) {
-      // const ctx = this.element.getContext("2d");
-      const canva = this.element;
-      const cts = canva.getContext("2d");
-      canva.width = 200; // Adjust width as needed
-      canva.height = 200;
-      const data = JSON.parse(this.element.dataset.locationChartData);
-      this.buildPieChart(data, cts, "Photoshoots Count by Location");
-    }
-
   }
 
+  createCustomerAcquisitionChart(ctx, data) {
+    const labels = data.map(item => item.month);
+    const values = data.map(item => item.count);
 
-
-
-  buildchart(data, ctx, label){
-    return new Chart(ctx, {
-      type: "bar",
+    new Chart(ctx, {
+      type: 'bar',
       data: {
-        labels: data.map(item => item.name?.name),
-        datasets: [
-          {
-            label: label,
-            data: data.map(item => item.y),
-            backgroundColor: "rgba(40,10,238,1)",
-            // borderColor: "rgba(75, 192, 192, 1)",
-            // borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        indexAxis: 'y',
-        scales: {
-          y: {
-            beginAtZero: true,
-            grid: {
-              display: false // Disable grid lines on the x-axis
-            }
-          },
-          x:{
-            grid: {
-              display: false // Disable grid lines on the y-axis
-            }
-          }
-        },
-      },
-    });
-  }
-
-  buildSalesChart(data, ctx, label){
-
-    const formattedData = data.map(item => ({
-      name: item.name,
-      y: Number(item.y)
-    }));
-
-    return new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: formattedData.map(item => item?.name),
-        datasets: [
-          {
-            label: label,
-            data: formattedData.map(item => item.y),
-            backgroundColor: "rgba(40,10,238,1)",
-            // borderColor: "rgba(75, 192, 192, 1)",
-            // borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        indexAxis: 'y',
-        scales: {
-          y: {
-            beginAtZero: true,
-            grid: {
-              display: false // Disable grid lines on the x-axis
-            }
-          },
-          x:{
-            grid: {
-              display: false // Disable grid lines on the y-axis
-            },
-            ticks: {
-              callback: function(value) {
-                if (value >= 1000000) {
-                  return (value / 1000000).toFixed(0) + 'M';
-                } else if (value >= 1000) {
-                  return (value / 1000).toFixed(0) + 'k';
-                }
-                return value;
-              }}
-          }
-        },
-      },
-    });
-  }
-
-  buildPieChart(data, ctx, label) {
-    return new Chart(ctx, {
-      type: "pie",
-      data: {
-        labels: data.map(item => item.name),
+        labels: labels,
         datasets: [{
-          label: label,
-          data: data.map(item => item.y),
-          backgroundColor: [
-            "rgba(40,10,238,1)",
-            "rgba(241, 0, 150, 1)",
-            "rgba(0, 182, 203, 1)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)"
-          ],
-          // borderColor: [
-          //   "rgba(255, 99, 132, 1)",
-          //   "rgba(54, 162, 235, 1)",
-          //   "rgba(255, 206, 86, 1)",
-          //   "rgba(75, 192, 192, 1)",
-          //   "rgba(153, 102, 255, 1)",
-          //   "rgba(255, 159, 64, 1)"
-          // ],
-          // borderWidth: 1,
-        }],
+          label: 'New Customers',
+          data: values,
+          backgroundColor: '#EDD400',
+          borderWidth: 0
+        }]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0
+            }
+          }
+        },
         plugins: {
           legend: {
-            position: 'top',
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.raw} new customers`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  createRevenueByCustomerTypeChart(ctx, data) {
+    const labels = data.map(item => item.label);
+    const values = data.map(item => item.value);
+
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: ['#4285F4', '#EDD400'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
           },
           tooltip: {
             callbacks: {
               label: function(context) {
                 let label = context.label || '';
-
                 if (label) {
                   label += ': ';
                 }
-                if (context.parsed !== null) {
-                  label += context.parsed;
-                }
+                const value = context.raw;
+                label += '₦' + value.toLocaleString();
+
+                // Add percentage
+                const total = values.reduce((a, b) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(1);
+                label += ` (${percentage}%)`;
+
                 return label;
               }
             }
           }
         }
+      }
+    });
+  }
+
+  createCustomerRetentionChart(ctx, data) {
+    const labels = data.map(item => item.month);
+    const retentionValues = data.map(item => item.retention);
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Retention Rate (%)',
+          data: retentionValues,
+          borderColor: '#4285F4',
+          backgroundColor: 'rgba(66, 133, 244, 0.1)',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2
+        }]
       },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              callback: function(value) {
+                return value + '%';
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Retention: ${context.raw}%`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  createSalesByCategoryChart(ctx, data) {
+    const labels = data.map(item => item.category);
+    const values = data.map(item => item.amount);
+
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: values,
+          backgroundColor: [
+            '#4285F4', '#EDD400', '#0F9D58', '#DB4437',
+            '#9C27B0', '#FF9800', '#00BCD4', '#795548'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right'
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                const value = context.raw;
+                label += '₦' + value.toLocaleString();
+                return label;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  createSalesByLocationChart(ctx, data) {
+    const labels = data.map(item => item.location);
+    const values = data.map(item => item.amount);
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Revenue',
+          data: values,
+          backgroundColor: [
+            '#4285F4', '#EDD400', '#0F9D58'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                if (value >= 1000000) {
+                  return '₦' + (value / 1000000).toFixed(1) + 'M';
+                } else if (value >= 1000) {
+                  return '₦' + (value / 1000).toFixed(0) + 'k';
+                }
+                return '₦' + value;
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return '₦' + context.raw.toLocaleString();
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  createGenericChart(ctx, type, data) {
+    new Chart(ctx, {
+      type: type,
+      data: {
+        labels: data.labels,
+        datasets: data.datasets
+      },
+      options: data.options || {
+        responsive: true,
+        maintainAspectRatio: false
+      }
     });
   }
 }

@@ -44,6 +44,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :customers_analytics, only: [:index]
+
+  # For detailed analytics, you might want to add these specific routes too:
+  get 'customers_analytics/top_spenders', to: 'customers_analytics#top_spenders'
+  get 'customers_analytics/frequent_visitors', to: 'customers_analytics#frequent_visitors'
+  get 'customers_analytics/export', to: 'customers_analytics#export'
+
   resources :expenses , only: [:index, :create, :new]
 
   post '/webhooks/calendly', to: 'webhooks#calendly'
