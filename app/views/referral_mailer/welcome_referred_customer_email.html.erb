@@ -1,0 +1,33 @@
+<!-- app/views/referral_mailer/welcome_referred_customer_email.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">Welcome to 363 Photography!</h1>
+    <p style="color: #666; font-size: 16px;">You've been referred by <%= @referrer.name %></p>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 10px; padding: 20px; margin-bottom: 30px;">
+    <p style="font-size: 16px;">Hi <%= @referred.name.split(' ').first %>,</p>
+    <p style="font-size: 16px;">Thanks for booking with 363 Photography using <%= @referrer.name %>'s referral!</p>
+    <p style="font-size: 16px;">As a special thank you, you'll receive <strong>₦<%= @discount_amount %> off</strong> your first photoshoot.</p>
+  </div>
+
+  <div style="background-color: #EDD400; color: #000; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+    <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Your Discount</p>
+    <p style="font-size: 32px; font-weight: bold; margin-bottom: 0;">₦<%= @discount_amount %></p>
+  </div>
+
+  <div style="margin-bottom: 30px;">
+    <h2 style="color: #333; font-size: 18px;">What's Next?</h2>
+    <p style="font-size: 16px; color: #555; line-height: 1.5;">
+      Your discount has been automatically applied to your booking. After your session, you'll be able to view your photos through our online gallery.
+    </p>
+    <p style="font-size: 16px; color: #555; line-height: 1.5;">
+      Please arrive 15 minutes before your scheduled time. Don't forget to bring your outfits for the shoot!
+    </p>
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; color: #888; font-size: 14px;">
+    <p>Thank you for choosing 363 Photography!</p>
+    <p>If you have any questions, contact us at info@363photography.org</p>
+  </div>
+</div>

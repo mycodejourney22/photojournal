@@ -25,7 +25,12 @@ class Customer < ApplicationRecord
   end
 
   def generate_referral
-    referrals_made.create!(status: Referral::PENDING)
+    referrals_made.create!(status: Referral::ACTIVE)
+  end
+
+  def referral_code
+    # Find an active referral or create one if none exists
+    Referral.active_code_for_customer(self)
   end
 
   # Get the active referral code for this customer
@@ -37,6 +42,7 @@ class Customer < ApplicationRecord
     referrals_made.where(status: Referral::CONVERTED)
   end
 
+  # Process all pending rewards for this customer
   def apply_referral_rewards
     # Find conversions that have referred customers with sales
     successful_referrals = pending_rewards.select(&:referred_has_purchase?)
@@ -53,17 +59,32 @@ class Customer < ApplicationRecord
 
       # Mark referral as rewarded
       referral.mark_as_rewarded
+
+      # Send success email
+      ReferralMailer.referral_success_email(referral).deliver_later
     end
 
     self.save
     total_reward
   end
 
+  # Add a specific amount of referral credits
+  def add_referral_credit(amount)
+    self.credits += amount
+    save
+  end
+
+  # Use credits for a purchase (optional, for future use)
+  def use_credits(amount)
+    return false if credits < amount
+
+    self.credits -= amount
+    save
+  end
 
   private
 
   def normalize_phone_number_field
     self.phone_number = normalize_phone_number(phone_number) if phone_number.present?
   end
-
 end

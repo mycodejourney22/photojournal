@@ -102,7 +102,6 @@ group :development, :test do
   gem "dotenv-rails"
   gem 'bullet'
 
-
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
 end
@@ -112,6 +111,9 @@ group :development do
   gem "web-console"
 
   # gem 'letter_opener'
+
+  gem 'pry'
+  gem 'pry-byebug'
 
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_20_045559) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_21_164433) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -214,7 +214,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_20_045559) do
     t.bigint "referrer_id", null: false
     t.bigint "referred_id"
     t.string "code", null: false
-    t.string "status", default: "pending", null: false
+    t.string "status", default: "active", null: false
     t.datetime "converted_at"
     t.datetime "rewarded_at"
     t.datetime "expires_at"
@@ -222,7 +222,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_20_045559) do
     t.integer "referred_discount", default: 5000
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "parent_code"
     t.index ["code"], name: "index_referrals_on_code", unique: true
+    t.index ["parent_code"], name: "index_referrals_on_parent_code"
     t.index ["referred_id"], name: "index_referrals_on_referred_id"
     t.index ["referrer_id"], name: "index_referrals_on_referrer_id"
   end

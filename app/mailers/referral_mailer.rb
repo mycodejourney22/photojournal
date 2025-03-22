@@ -31,7 +31,7 @@ class ReferralMailer < ApplicationMailer
 
     mail(
       to: @referred.email,
-      subject: "Welcome to 363 Photography! You've received a ₦#{@discount_amount/100} discount!"
+      subject: "Welcome to 363 Photography! You've received a ₦#{@discount_amount} discount!"
     )
   end
 end

@@ -19,7 +19,7 @@
 <% if @customers.present? %>
   <% @customers.each do |customer| %>
     <div class="g-table__row">
-      <div class="g-table__status <%= customer.visits_count > 0 ? 'g-table__status--confirmed' : 'g-table__status--new' %>"></div>
+      <div class="g-table__status <%= customer.visits_count > 1 ? 'g-table__status--confirmed' : 'g-table__status--new' %>"></div>
 
       <div class="g-table__col--name g-table__cell">
         <%= customer.name %>
@@ -34,7 +34,7 @@
       </div>
 
       <div class="g-table__col--status g-table__cell">
-        <%= customer.visits_count > 0 ? "Repeating" : "New" %>
+        <%= customer.visits_count > 1 ? "Repeating" : "New" %>
       </div>
 
       <div class="g-table__col--actions g-table__cell">
