@@ -20,6 +20,11 @@ Rails.application.routes.draw do
   get 'sales/show'
   get '/welcome', to: 'pages#public_home', as: :public_home
 
+  get 'smugmug_dashboard', to: 'smugmug_dashboard#index'
+  post 'smugmug_dashboard/retry_upload/:id', to: 'smugmug_dashboard#retry_upload', as: 'retry_upload_smugmug_dashboard'
+  post 'smugmug_dashboard/refresh_token/:id', to: 'smugmug_dashboard#refresh_token', as: 'refresh_token_smugmug_dashboard'
+
+
   resources :operations, only: [:index] do
     get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
   end
@@ -94,6 +99,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get 'galleries/:id/stream_photo/:photo_id', to: 'galleries#stream_photo', as: 'stream_photo_gallery'
+
   resources :appointments do
     collection do
       get :upcoming
@@ -120,7 +127,18 @@ Rails.application.routes.draw do
 
     end
     resources :photo_shoots, except: [:index, :destroy]
-    resources :galleries, only: [:new, :create, :show, :update, :edit]
+    resources :galleries, only: [:new, :create, :show, :update, :edit] do
+      member do
+        post 'upload_to_smugmug'
+        get 'stream_photo/:photo_id', to: 'galleries#stream_photo', as: 'stream_photo'
+
+      end
+
+      collection do
+        get 'public/:share_token', to: 'galleries#public_show', as: 'public'
+        get 'smugmug/:id', to: 'galleries#smugmug_redirect', as: 'smugmug'
+      end
+    end
     resources :sales, only: [:index, :new, :create]
   end
   # get 'appointments/completed'
@@ -139,14 +157,20 @@ Rails.application.routes.draw do
       get :notes
     end
   end
-  resources :galleries, only: [:index] do
-    member do
-      get 'download/:id', to: 'galleries#download', as: 'download'
-      get 'stream_photo/:photo_id', to: 'galleries#stream_photo', as: :stream_photo
-    end
-  end
-  post 'appointments/:appointment_id/galleries/:gallery_id', to: 'galleries#send_gallery', as: 'send_gallery'
-  get 'galleries/public/:share_token', to: 'galleries#public_show', as: 'gallery_public'
+  # resources :galleries, only: [:index] do
+  #   member do
+  #     get 'download/:id', to: 'galleries#download', as: 'download'
+  #     get 'stream_photo/:photo_id', to: 'galleries#stream_photo', as: :stream_photo
+  #   end
+  # end
+
+  # This route is for the download handler
+  get 'galleries/download/:id', to: 'galleries#download', as: 'download_gallery'
+
+  # This route is for sending gallery links to customers
+  post 'appointments/:appointment_id/galleries/:gallery_id/send', to: 'galleries#send_gallery', as: 'send_gallery'
+  # post 'appointments/:appointment_id/galleries/:gallery_id', to: 'galleries#send_gallery', as: 'send_gallery'
+  # get 'galleries/public/:share_token', to: 'galleries#public_show', as: 'gallery_public'
   resources :gadgets
 
 end

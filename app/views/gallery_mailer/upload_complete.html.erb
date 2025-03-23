@@ -1,0 +1,43 @@
+<!-- app/views/gallery_mailer/upload_complete.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #666; font-size: 16px;">Gallery Upload Complete</p>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 20px;">
+    The gallery "<strong><%= @gallery.title %></strong>" has been successfully uploaded to Smugmug.
+  </p>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Gallery Details</h2>
+
+    <p style="margin-bottom: 10px;"><strong>Gallery Title:</strong> <%= @gallery.title %></p>
+    <p style="margin-bottom: 10px;"><strong>Customer:</strong> <%= @appointment&.name || "N/A" %></p>
+    <p style="margin-bottom: 10px;"><strong>Upload Date:</strong> <%= Time.current.strftime("%B %d, %Y at %I:%M %p") %></p>
+    <p style="margin-bottom: 10px;"><strong>Total Photos:</strong> <%= @mapping.metadata["successful_uploads"] %> uploaded successfully</p>
+
+    <% if @mapping.metadata["failed_uploads"] > 0 %>
+      <p style="margin-bottom: 10px; color: #c62828;"><strong>Failed Photos:</strong> <%= @mapping.metadata["failed_uploads"] %></p>
+    <% end %>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <a href="<%= @mapping.smugmug_url %>" style="display: inline-block; background-color: #EDD400; color: #000; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold;">
+      View on Smugmug
+    </a>
+
+    <% if @mapping.share_url.present? %>
+      <p style="margin-top: 20px; margin-bottom: 5px;">Customer Share Link:</p>
+      <a href="<%= @mapping.share_url %>" style="color: #4285F4; word-break: break-all;"><%= @mapping.share_url %></a>
+      <p style="margin-top: 5px; color: #666; font-size: 14px;">
+        This share link expires on <%= @mapping.share_token_expires_at.strftime("%B %d, %Y") %>
+      </p>
+    <% end %>
+  </div>
+
+  <p style="font-size: 14px; color: #666; text-align: center; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
+    This is an automated notification from the 363 Photography System.<br>
+    Please do not reply to this email.
+  </p>
+</div>

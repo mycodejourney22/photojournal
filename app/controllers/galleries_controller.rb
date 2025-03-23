@@ -1,5 +1,8 @@
+# app/controllers/galleries_controller.rb
 class GalleriesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:public_show, :download]
+  skip_before_action :authenticate_user!, only: [:public_show, :download, :smugmug_redirect]
+  before_action :set_gallery, except: [:new, :create, :index, :public_show, :smugmug_redirect]
+  before_action :set_appointment, only: [:new, :create, :show, :edit, :update]
 
   def new
     @appointment = Appointment.find(params[:appointment_id])
@@ -7,33 +10,31 @@ class GalleriesController < ApplicationController
   end
 
   def show
-    # @appointment = Appointment.find(params[:appointment_id])
-    # @editor_name = @appointment.photo_shoot.editor.name if @appointment.photo_shoot
-    # @photographer_name = @appointment.photo_shoot.photographer.name if @appointment.photo_shoot
-    # @gallery = Gallery.includes(photos_attachments: :blob).find(params[:id])
     @appointment = Appointment.find(params[:appointment_id])
     @editor_name = @appointment.photo_shoot.editor.name if @appointment.photo_shoot
     @photographer_name = @appointment.photo_shoot.photographer.name if @appointment.photo_shoot
     @gallery = Gallery.includes(photos_attachments: :blob).find(params[:id])
 
-    # Stream each photo from the gallery in the view
-    @photos = @gallery.photos
+    # Register a view of this gallery
+    @gallery.gallery_mapping&.register_view! if @gallery.gallery_mapping.present?
   end
 
   def stream_photo
-      @gallery = Gallery.find(params[:id])
-      @photo = @gallery.photos.find(params[:photo_id])
+    @gallery = Gallery.find(params[:id])
+    @photo = @gallery.photos.find(params[:photo_id])
 
-      # Stream the photo using `send_data`
-      photo_blob = @photo.download
+    # Stream the photo using `send_data`
+    photo_blob = @photo.download
 
-      send_data photo_blob, type: @photo.content_type, disposition: 'inline', buffer_size: 64.kilobytes, cache_control: 'public, max-age=31536000'
+    send_data photo_blob, type: @photo.content_type, disposition: 'inline', buffer_size: 64.kilobytes, cache_control: 'public, max-age=31536000'
   end
 
   def public_show
     @gallery = Gallery.includes(photos_attachments: :blob).find_by(share_token: params[:share_token])
     @appointment = @gallery.appointment if @gallery
     if @gallery
+      # Register a view of this gallery
+      @gallery.gallery_mapping&.register_view! if @gallery.gallery_mapping.present?
       render :public_show # This will use a different view for the public gallery
     else
       redirect_to root_path, alert: 'Gallery not found'
@@ -51,8 +52,12 @@ class GalleriesController < ApplicationController
     if params[:gallery][:photos].present?
       @gallery.photos.attach(params[:gallery][:photos])
     end
+
     if @gallery.save
-      redirect_to appointment_gallery_path(appointment_id: @appointment.id, id: @gallery.id), notice: 'Photos were sucessfully added'
+      # Queue Smugmug upload if photos were added
+      @gallery.enqueue_smugmug_upload if params[:gallery][:photos].present?
+
+      redirect_to appointment_gallery_path(appointment_id: @appointment.id, id: @gallery.id), notice: 'Photos were successfully added'
     else
       render :edit
     end
@@ -66,8 +71,20 @@ class GalleriesController < ApplicationController
   def send_gallery
     @appointment = Appointment.find(params[:appointment_id])
     @gallery = Gallery.find(params[:gallery_id])
-    # @gallery_url = "http://localhost:3000/galleries/public/#{@gallery.share_token}"
-    @gallery_url = gallery_public_url(@gallery.share_token, host: request.base_url)
+
+    # Try to use Smugmug URL if available
+    if @gallery.smugmug_uploaded? && @gallery.smugmug_share_url.present?
+      @gallery_url = @gallery.smugmug_share_url
+    else
+      # Fall back to the application's gallery URL
+      @gallery_url = gallery_public_url(@gallery.share_token, host: request.base_url)
+
+      # Optionally, we could queue Smugmug upload if it hasn't been done yet
+      unless @gallery.smugmug_uploaded?
+        @gallery.enqueue_smugmug_upload
+        flash[:notice] = "Gallery is being uploaded to Smugmug. An email with the updated link will be sent when processing is complete."
+      end
+    end
 
     # Send the email
     PhotoMailer.send_gallery(@appointment, @gallery_url, @gallery).deliver_later
@@ -82,21 +99,45 @@ class GalleriesController < ApplicationController
     @appointment = Appointment.find(params[:appointment_id])
     @gallery = Gallery.new(gallery_params)
     @gallery.appointment = @appointment
+
     if @gallery.save
+      # Queue Smugmug upload if photos were attached
+      @gallery.enqueue_smugmug_upload if @gallery.photos.attached?
+
       redirect_to appointment_gallery_path(appointment_id: @appointment.id, id: @gallery.id)
     else
       render :new, status: :unprocessable_entity
     end
   end
 
+  # Handle Smugmug upload manually
+  def upload_to_smugmug
+    @gallery.enqueue_smugmug_upload
+    redirect_to appointment_gallery_path(@appointment, @gallery), notice: 'Gallery upload to Smugmug has been queued. You will be notified when complete.'
+  end
 
+  # Redirect to Smugmug gallery view
+  def smugmug_redirect
+    @gallery = Gallery.find(params[:id])
 
+    if @gallery.smugmug_uploaded? && @gallery.gallery_mapping.smugmug_url.present?
+      redirect_to @gallery.gallery_mapping.smugmug_url, allow_other_host: true
+    else
+      redirect_to appointment_gallery_path(@gallery.appointment, @gallery), alert: 'Smugmug gallery not available yet'
+    end
+  end
 
   private
+
+  def set_gallery
+    @gallery = Gallery.find(params[:id])
+  end
+
+  def set_appointment
+    @appointment = Appointment.find(params[:appointment_id])
+  end
 
   def gallery_params
     params.require(:gallery).permit(:title, photos:[])
   end
-
-
 end

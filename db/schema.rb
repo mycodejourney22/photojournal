@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_22_153433) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_23_121853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -173,7 +173,34 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_22_153433) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "share_token"
+    t.string "smugmug_status", default: "pending"
+    t.string "smugmug_url"
+    t.string "smugmug_key"
+    t.datetime "last_sync_at"
     t.index ["appointment_id"], name: "index_galleries_on_appointment_id"
+    t.index ["smugmug_key"], name: "index_galleries_on_smugmug_key", unique: true, where: "(smugmug_key IS NOT NULL)"
+    t.index ["smugmug_status"], name: "index_galleries_on_smugmug_status"
+  end
+
+  create_table "gallery_mappings", force: :cascade do |t|
+    t.bigint "gallery_id", null: false
+    t.bigint "customer_id"
+    t.string "smugmug_key"
+    t.string "smugmug_url"
+    t.string "folder_path"
+    t.integer "status", default: 0
+    t.text "error_message"
+    t.string "share_token"
+    t.string "share_url"
+    t.datetime "share_token_expires_at"
+    t.integer "views_count", default: 0
+    t.datetime "last_accessed_at"
+    t.jsonb "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_gallery_mappings_on_customer_id"
+    t.index ["gallery_id"], name: "index_gallery_mappings_on_gallery_id"
+    t.index ["status"], name: "index_gallery_mappings_on_status"
   end
 
   create_table "photo_shoots", force: :cascade do |t|
@@ -297,6 +324,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_22_153433) do
   add_foreign_key "credit_usages", "appointments"
   add_foreign_key "credit_usages", "customers"
   add_foreign_key "galleries", "appointments"
+  add_foreign_key "gallery_mappings", "customers"
+  add_foreign_key "gallery_mappings", "galleries"
   add_foreign_key "photo_shoots", "appointments"
   add_foreign_key "questions", "appointments"
   add_foreign_key "referrals", "customers", column: "referred_id"

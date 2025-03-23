@@ -1,0 +1,490 @@
+<!-- app/views/smugmug_dashboard/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Smugmug Integration Dashboard</h1>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <a href="<%= smugmug_dashboard_path(format: :csv) %>" class="g-button">
+      <i class="fas fa-download"></i> Export Data
+    </a>
+  </div>
+</div>
+
+<!-- Summary statistics cards -->
+<div class="dashboard-stats">
+  <div class="stat-card">
+    <div class="stat-value"><%= @total_galleries %></div>
+    <div class="stat-label">Total Galleries</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-value"><%= @total_uploaded %></div>
+    <div class="stat-label">Galleries on Smugmug</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-value"><%= @upload_percentage %>%</div>
+    <div class="stat-label">Upload Percentage</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-value"><%= @total_photos %></div>
+    <div class="stat-label">Total Photos</div>
+  </div>
+</div>
+
+<!-- Failed Uploads Section -->
+<% if @failed_uploads.any? %>
+  <div class="section-heading">
+    <h2>Failed Uploads</h2>
+    <div class="badge badge-error"><%= @failed_uploads.count %></div>
+  </div>
+
+  <div class="g-table__wrapper">
+    <table class="g-table">
+      <thead>
+        <tr>
+          <th>Gallery</th>
+          <th>Customer</th>
+          <th>Photos</th>
+          <th>Failed At</th>
+          <th>Error</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @failed_uploads.each do |mapping| %>
+          <tr>
+            <td>
+              <% if mapping.gallery.present? %>
+                <%= link_to mapping.gallery.title, appointment_gallery_path(mapping.gallery.appointment, mapping.gallery), class: "table-link" %>
+              <% else %>
+                <span class="text-muted">Gallery deleted</span>
+              <% end %>
+            </td>
+            <td>
+              <% if mapping.gallery&.appointment.present? %>
+                <%= mapping.gallery.appointment.name %>
+              <% else %>
+                <span class="text-muted">N/A</span>
+              <% end %>
+            </td>
+            <td>
+              <%= mapping.gallery&.photos&.count || 0 %>
+            </td>
+            <td>
+              <%= mapping.updated_at.strftime("%b %d, %Y %I:%M %p") %>
+            </td>
+            <td class="error-message">
+              <%= mapping.error_message %>
+            </td>
+            <td>
+              <%= link_to "Retry Upload", retry_upload_smugmug_dashboard_path(id: mapping.id), method: :post, class: "g-button g-button--small" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<!-- Processing Uploads Section -->
+<% if @processing_uploads.any? %>
+  <div class="section-heading">
+    <h2>Processing Uploads</h2>
+    <div class="badge badge-processing"><%= @processing_uploads.count %></div>
+  </div>
+
+  <div class="g-table__wrapper">
+    <table class="g-table">
+      <thead>
+        <tr>
+          <th>Gallery</th>
+          <th>Customer</th>
+          <th>Photos</th>
+          <th>Started At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @processing_uploads.each do |mapping| %>
+          <tr>
+            <td>
+              <% if mapping.gallery.present? %>
+                <%= link_to mapping.gallery.title, appointment_gallery_path(mapping.gallery.appointment, mapping.gallery), class: "table-link" %>
+              <% else %>
+                <span class="text-muted">Gallery deleted</span>
+              <% end %>
+            </td>
+            <td>
+              <% if mapping.gallery&.appointment.present? %>
+                <%= mapping.gallery.appointment.name %>
+              <% else %>
+                <span class="text-muted">N/A</span>
+              <% end %>
+            </td>
+            <td>
+              <%= mapping.gallery&.photos&.count || 0 %>
+            </td>
+            <td>
+              <%= mapping.updated_at.strftime("%b %d, %Y %I:%M %p") %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<!-- Pending Uploads Section -->
+<% if @pending_uploads.any? %>
+  <div class="section-heading">
+    <h2>Pending Uploads</h2>
+    <div class="badge badge-pending"><%= @pending_uploads.count %></div>
+  </div>
+
+  <div class="g-table__wrapper">
+    <table class="g-table">
+      <thead>
+        <tr>
+          <th>Gallery</th>
+          <th>Customer</th>
+          <th>Photos</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pending_uploads.each do |mapping| %>
+          <tr>
+            <td>
+              <% if mapping.gallery.present? %>
+                <%= link_to mapping.gallery.title, appointment_gallery_path(mapping.gallery.appointment, mapping.gallery), class: "table-link" %>
+              <% else %>
+                <span class="text-muted">Gallery deleted</span>
+              <% end %>
+            </td>
+            <td>
+              <% if mapping.gallery&.appointment.present? %>
+                <%= mapping.gallery.appointment.name %>
+              <% else %>
+                <span class="text-muted">N/A</span>
+              <% end %>
+            </td>
+            <td>
+              <%= mapping.gallery&.photos&.count || 0 %>
+            </td>
+            <td>
+              <%= mapping.created_at.strftime("%b %d, %Y %I:%M %p") %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<!-- Recent Successful Uploads Section -->
+<div class="section-heading">
+  <h2>Recent Successful Uploads</h2>
+</div>
+
+<% if @recent_uploads.any? %>
+  <div class="g-table__wrapper">
+    <table class="g-table">
+      <thead>
+        <tr>
+          <th>Gallery</th>
+          <th>Customer</th>
+          <th>Photos</th>
+          <th>Uploaded At</th>
+          <th>Views</th>
+          <th>Share Link</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_uploads.each do |mapping| %>
+          <tr>
+            <td>
+              <% if mapping.gallery.present? %>
+                <%= link_to mapping.gallery.title, appointment_gallery_path(mapping.gallery.appointment, mapping.gallery), class: "table-link" %>
+              <% else %>
+                <span class="text-muted">Gallery deleted</span>
+              <% end %>
+            </td>
+            <td>
+              <% if mapping.gallery&.appointment.present? %>
+                <%= mapping.gallery.appointment.name %>
+              <% else %>
+                <span class="text-muted">N/A</span>
+              <% end %>
+            </td>
+            <td>
+              <%= mapping.gallery&.photos&.count || 0 %>
+            </td>
+            <td>
+              <%= mapping.updated_at.strftime("%b %d, %Y %I:%M %p") %>
+            </td>
+            <td>
+              <%= mapping.views_count %>
+            </td>
+            <td>
+              <% if mapping.share_url.present? %>
+                <a href="<%= mapping.share_url %>" target="_blank" class="table-link">
+                  Share Link
+                  <% if mapping.share_token_expires_at.present? && mapping.share_token_expires_at < 7.days.from_now %>
+                    <span class="expiring-badge">Expiring Soon</span>
+                  <% end %>
+                </a>
+              <% else %>
+                <span class="text-muted">No share link</span>
+              <% end %>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <a href="<%= mapping.smugmug_url %>" target="_blank" class="g-button g-button--small">
+                  View on Smugmug
+                </a>
+                <% if mapping.share_token_expires_at.present? && mapping.share_token_expires_at < 30.days.from_now %>
+                  <%= link_to "Refresh Token", refresh_token_smugmug_dashboard_path(id: mapping.id), method: :post, class: "g-button g-button--small g-button--secondary" %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="empty-state">
+    <p>No successful uploads yet</p>
+  </div>
+<% end %>
+
+<% if @most_viewed.any? %>
+  <!-- Most Viewed Galleries Section -->
+  <div class="section-heading">
+    <h2>Most Viewed Galleries</h2>
+  </div>
+
+  <div class="analytics-cards">
+    <% @most_viewed.each do |mapping| %>
+      <div class="analytic-card">
+        <h3 class="analytic-card-title">
+          <% if mapping.gallery.present? %>
+            <%= link_to mapping.gallery.title, appointment_gallery_path(mapping.gallery.appointment, mapping.gallery) %>
+          <% else %>
+            <span class="text-muted">Gallery deleted</span>
+          <% end %>
+        </h3>
+        <div class="analytic-card-value"><%= mapping.views_count %> views</div>
+        <div class="analytic-card-detail">
+          <% if mapping.last_accessed_at.present? %>
+            Last viewed <%= time_ago_in_words(mapping.last_accessed_at) %> ago
+          <% end %>
+        </div>
+        <div class="analytic-card-footer">
+          <a href="<%= mapping.smugmug_url %>" target="_blank" class="g-button g-button--small">
+            View on Smugmug
+          </a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<style>
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .stat-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .stat-label {
+    color: #666;
+    font-size: 14px;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: center;
+    margin: 30px 0 15px;
+  }
+
+  .section-heading h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    margin-right: 15px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-error {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+
+  .badge-processing {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+
+  .badge-pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+  }
+
+  .g-table__wrapper {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 30px;
+  }
+
+  .g-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .g-table th {
+    background-color: #f5f5f5;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .g-table td {
+    padding: 12px 15px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+  }
+
+  .table-link {
+    color: #1976d2;
+    text-decoration: none;
+  }
+
+  .table-link:hover {
+    text-decoration: underline;
+  }
+
+  .text-muted {
+    color: #888;
+  }
+
+  .error-message {
+    font-family: monospace;
+    color: #c62828;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .g-button--small {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .expiring-badge {
+    display: inline-block;
+    background-color: #ffebee;
+    color: #c62828;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 5px;
+  }
+
+  .empty-state {
+    background-color: white;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    color: #666;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+  }
+
+  .analytics-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .analytic-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .analytic-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .analytic-card-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .analytic-card-detail {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  .analytic-card-footer {
+    margin-top: 15px;
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dashboard-stats {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

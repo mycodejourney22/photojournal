@@ -420,7 +420,7 @@ DEPENDENCIES
   sassc-rails
   scout_apm
   selenium-webdriver
-  sidekiq (~> 7.3)
+  sidekiq
   simple_form!
   sprockets-rails
   stimulus-rails

@@ -1,0 +1,45 @@
+<!-- app/views/gallery_mailer/upload_failed.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #c62828; font-size: 16px; font-weight: bold;">Gallery Upload Failed</p>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 20px;">
+    The gallery "<strong><%= @gallery.title %></strong>" failed to upload to Smugmug.
+  </p>
+
+  <div style="background-color: #ffebee; border-radius: 8px; padding: 20px; margin-bottom: 30px; border-left: 4px solid #c62828;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px; color: #c62828;">Error Details</h2>
+
+    <p style="margin-bottom: 10px;"><strong>Error Message:</strong></p>
+    <pre style="background-color: #fff; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 14px;"><%= @error_message %></pre>
+
+    <p style="margin-top: 20px; margin-bottom: 0px; font-weight: bold;">Gallery Details:</p>
+    <p style="margin-bottom: 5px;"><strong>Gallery Title:</strong> <%= @gallery.title %></p>
+    <p style="margin-bottom: 5px;"><strong>Customer:</strong> <%= @appointment&.name || "N/A" %></p>
+    <p style="margin-bottom: 5px;"><strong>Total Photos:</strong> <%= @gallery.photos.count %></p>
+    <p style="margin-bottom: 5px;"><strong>Attempted Upload At:</strong> <%= Time.current.strftime("%B %d, %Y at %I:%M %p") %></p>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">What to do</h2>
+
+    <ol style="margin: 0; padding-left: 20px;">
+      <li style="margin-bottom: 10px;">Check that the Smugmug API credentials are valid</li>
+      <li style="margin-bottom: 10px;">Verify the gallery photos are accessible and not corrupted</li>
+      <li style="margin-bottom: 10px;">Try manually uploading the gallery</li>
+      <li style="margin-bottom: 0;">Contact technical support if the issue persists</li>
+    </ol>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <a href="<%= edit_appointment_gallery_url(@appointment, @gallery) %>" style="display: inline-block; background-color: #EDD400; color: #000; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold;">
+      View Gallery in Admin
+    </a>
+  </div>
+
+  <p style="font-size: 14px; color: #666; text-align: center; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
+    This is an automated notification from the 363 Photography System.<br>
+    Please do not reply to this email.
+  </p>

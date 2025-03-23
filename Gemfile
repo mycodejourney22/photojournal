@@ -23,7 +23,7 @@ gem 'puma_worker_killer'
 gem "cloudinary"
 
 
-# gem 'sidekiq'
+gem 'sidekiq'
 # gem 'redis'
 
 
@@ -131,4 +131,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "sidekiq", "~> 7.3"
+# gem "sidekiq", "~> 7.3"
