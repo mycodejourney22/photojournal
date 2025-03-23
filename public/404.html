@@ -1,67 +1,207 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>The page you were looking for doesn't exist (404)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found - 363 Photography</title>
   <style>
-  .rails-default-error-page {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
-  }
+    :root {
+      --primary-color: #EDD400;
+      --primary-dark: #D9C000;
+      --secondary-color: #333333;
+      --text-color: #333333;
+      --light-text: #666666;
+      --light-bg: #f9f9f9;
+      --border-color: #e0e0e0;
+    }
 
-  .rails-default-error-page div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-  }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  .rails-default-error-page div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--light-bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-  .rails-default-error-page h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
-  }
+    .error-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-  .rails-default-error-page div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
+    .logo-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+
+    .error-code {
+      font-size: 120px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      line-height: 1;
+    }
+
+    .error-title {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--secondary-color);
+    }
+
+    .error-message {
+      font-size: 18px;
+      color: var(--light-text);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .error-image {
+      max-width: 350px;
+      margin: 0 auto 50px;
+    }
+
+    .error-image img {
+      width: 100%;
+      height: auto;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: #f5f5f5;
+      color: var(--secondary-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: #e5e5e5;
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background-color: white;
+      color: var(--light-text);
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 80px;
+      }
+
+      .error-title {
+        font-size: 24px;
+      }
+
+      .error-message {
+        font-size: 16px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
 </head>
-
-<body class="rails-default-error-page">
-  <!-- This file lives in public/404.html -->
-  <div class="dialog">
-    <div>
-      <h1>Testing.</h1>
-      <p>You may have mistyped the address or the page may have moved.</p>
+<body>
+  <div class="error-container">
+    <div class="logo-header">
+      <div class="logo-circle"></div>
+      <div class="logo-text">363 Photography</div>
     </div>
-    <p>If you are the application owner check the logs for more information.</p>
+
+    <div class="error-code">404</div>
+    <h1 class="error-title">Page Not Found</h1>
+    <p class="error-message">
+      We can't seem to find the page you're looking for. It might have been moved, deleted, or maybe it never existed.
+    </p>
+
+    <div class="error-image">
+      <!-- Camera SVG illustration -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path fill="#EDD400" d="M324.3,256c0,37.8-30.5,68.3-68.3,68.3s-68.3-30.5-68.3-68.3s30.5-68.3,68.3-68.3S324.3,218.2,324.3,256z"/>
+        <path fill="#333333" d="M170.7,128l-18.1-35.8c-3.9-7.6-11.8-12.5-20.5-12.5H64c-17.7,0-32,14.3-32,32v256c0,17.7,14.3,32,32,32h384
+          c17.7,0,32-14.3,32-32V149.3c0-17.7-14.3-32-32-32H245.3l-18.1-35.8c-3.9-7.6-11.8-12.5-20.5-12.5h-74.7c-8.7,0-16.6,4.9-20.5,12.5
+          L93.5,117.3H64v-21.3h32c3.5,0,6.9,2.1,8.3,5.3l22.1,44.3c3.5,7.1,10.9,11.7,19.2,11.7h192.9c8.3,0,15.7-4.6,19.2-11.7l22.1-44.3
+          c1.5-3.2,4.8-5.3,8.3-5.3h64c8.8,0,16.9,7.2,16.9,16v214.6c0,8.8-8,16-16.9,16H61c-8.8,0-16.9-7.2-16.9-16V170.7
+          c0-8.8,8-16,16.9-16h92.8L170.7,128z"/>
+        <path fill="#333333" d="M256,170.7c-47.1,0-85.3,38.2-85.3,85.3s38.2,85.3,85.3,85.3s85.3-38.2,85.3-85.3S303.1,170.7,256,170.7z M256,320
+          c-35.3,0-64-28.7-64-64s28.7-64,64-64s64,28.7,64,64S291.3,320,256,320z"/>
+      </svg>
+    </div>
+
+    <div class="action-buttons">
+      <a href="/public_home" class="btn btn-primary">Go to Homepage</a>
+      <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+    </div>
   </div>
+
+  <footer class="footer">
+    <p>&copy; 363 Photography. All rights reserved.</p>
+  </footer>
 </body>
 </html>
