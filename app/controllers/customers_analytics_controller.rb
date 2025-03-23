@@ -112,15 +112,10 @@ class CustomersAnalyticsController < ApplicationController
                                     .select('customers.*, SUM(sales.amount_paid) as total_spent')
                                     .group('customers.id')
                                     .order('total_spent DESC')
-                                    .limit(10)
+                                    .limit(20)
 
     # Top customers by visit count
-    @top_customers_by_visits = Customer.joins(:sales)
-                                      .merge(base_sales_query)
-                                      .select('customers.*, COUNT(sales.id) as visit_count')
-                                      .group('customers.id')
-                                      .order('visit_count DESC')
-                                      .limit(10)
+    @top_customers_by_visits = Customer.order(visits_count: :desc).limit(20)
 
     # Recent customers
     @recent_customers = Customer.joins(:sales)
