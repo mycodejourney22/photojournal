@@ -93,6 +93,8 @@ gem "sassc-rails"
 gem 'view_component'
 
 
+gem 'oauth'
+
 
 # gem 'view_component', require: 'view_component/engine'
 

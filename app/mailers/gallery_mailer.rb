@@ -36,13 +36,13 @@ class GalleryMailer < ApplicationMailer
 
   def find_staff_email(gallery)
     # Try to find the most appropriate staff member to notify
-    if gallery.appointment&.photo_shoot&.editor&.email.present?
-      gallery.appointment.photo_shoot.editor.email
-    elsif gallery.appointment&.photo_shoot&.photographer&.email.present?
-      gallery.appointment.photo_shoot.photographer.email
-    else
+    # if gallery.appointment&.photo_shoot&.editor&.email.present?
+    #   gallery.appointment.photo_shoot.editor.email
+    # elsif gallery.appointment&.photo_shoot&.photographer&.email.present?
+    #   gallery.appointment.photo_shoot.photographer.email
+    # else
       # Default to a system admin or manager
-      User.where(role: ['admin', 'manager', 'super_admin']).first&.email
-    end
+    User.where(role: ['admin', 'manager', 'super_admin']).first&.email
+    # end
   end
 end

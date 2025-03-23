@@ -3,8 +3,9 @@ class GalleryMapping < ApplicationRecord
   belongs_to :gallery
   belongs_to :customer, optional: true
 
-  # Only validate smugmug_key when status is completed
-  validates :smugmug_key, presence: true, uniqueness: true, if: -> { completed? }
+  # Only validate smugmug_key when status is completed AND it's a new record or the key changed
+  validates :smugmug_key, presence: true, if: -> { completed? }
+  validates :smugmug_key, uniqueness: true, if: -> { completed? && (new_record? || smugmug_key_changed?) }
   validates :gallery_id, presence: true
 
   enum status: {
@@ -17,6 +18,16 @@ class GalleryMapping < ApplicationRecord
   scope :completed, -> { where(status: :completed) }
   scope :for_customer, ->(customer) { where(customer_id: customer.id) }
   scope :recent, -> { order(created_at: :desc) }
+
+  # Check if the gallery has already been uploaded to the same smugmug location
+  def self.exists_for_gallery_at_location?(gallery_id, smugmug_url)
+    where(gallery_id: gallery_id, smugmug_url: smugmug_url).exists?
+  end
+
+  # Find existing mapping by gallery and URL
+  def self.find_by_gallery_and_url(gallery_id, smugmug_url)
+    where(gallery_id: gallery_id, smugmug_url: smugmug_url).first
+  end
 
   # Generate and save a share token for this gallery
   def generate_share_token(expires_in = 30.days)

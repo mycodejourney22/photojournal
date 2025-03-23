@@ -28,7 +28,7 @@ class GalleryUploadJob < ApplicationJob
 
     # Attach to customer if available from appointment
     if gallery.appointment && customer_for_appointment(gallery.appointment)
-      customer =  customer_for_appointment(gallery.appointment)
+      customer = customer_for_appointment(gallery.appointment)
       mapping.customer = customer
       mapping.save(validate: false) # Skip validation
     end
@@ -42,6 +42,16 @@ class GalleryUploadJob < ApplicationJob
       result = SmugmugService.new.upload_gallery(gallery.appointment, files)
 
       if result[:success]
+        # Check if a gallery mapping already exists with this smugmug_key
+        existing_mapping = GalleryMapping.where(smugmug_key: result[:gallery_key]).where.not(id: mapping.id).first
+
+        if existing_mapping
+          Rails.logger.warn("A gallery mapping with smugmug_key #{result[:gallery_key]} already exists. Using new key.")
+          # Generate a unique suffix
+          unique_suffix = Time.now.to_i.to_s
+          result[:gallery_key] = "#{result[:gallery_key]}-#{unique_suffix}"
+        end
+
         # Update mapping with Smugmug details
         mapping.assign_attributes(
           smugmug_key: result[:gallery_key],
@@ -112,11 +122,23 @@ class GalleryUploadJob < ApplicationJob
   def prepare_photos(photos)
     photos.map do |photo|
       # Create a file-like object that SmugmugService can work with
-      OpenStruct.new(
-        original_filename: photo.filename.to_s,
-        content_type: photo.content_type,
-        read: -> { photo.download }
-      )
+      PhotoWrapper.new(photo)
+    end
+  end
+
+  # Custom wrapper class to properly handle photo data
+  class PhotoWrapper
+    attr_reader :original_filename, :content_type
+
+    def initialize(photo)
+      @photo = photo
+      @original_filename = photo.filename.to_s
+      @content_type = photo.content_type
+    end
+
+    # Return the actual file data when read is called
+    def read
+      @photo.download
     end
   end
 
