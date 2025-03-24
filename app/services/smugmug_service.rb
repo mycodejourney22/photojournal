@@ -23,23 +23,19 @@ class SmugmugService
     begin
       # 1. Get the user's root node ID
       user_response = make_api_request("user/#{@user}")
-      Rails.logger.info("User response success: #{user_response[:success]}")
+      # Rails.logger.info("User response success: #{user_response[:success]}")
 
       return { success: false, error: user_response[:error] || "Failed to get user info" } unless user_response[:success]
 
       # Extract the Node URI from the response
       root_node_id = nil
-      if user_response[:data] &&
-         user_response[:data][:Response] &&
-         user_response[:data][:Response][:User] &&
-         user_response[:data][:Response][:User][:Uris] &&
-         user_response[:data][:Response][:User][:Uris][:Node]
+      if user_response[:data]
         node_uri = user_response[:data][:Response][:User][:Uris][:Node][:Uri]
         # Extract node ID from URI properly
         root_node_id = extract_node_id_from_uri(node_uri)
-        Rails.logger.info("Root node ID: #{root_node_id}")
+        # Rails.logger.info("Root node ID: #{root_node_id}")
       else
-        Rails.logger.error("Expected keys not found in response: #{user_response[:data].inspect}")
+        # Rails.logger.error("Expected keys not found in response: #{user_response[:data].inspect}")
         return { success: false, error: "Unable to find root Node URI in user response" }
       end
 
@@ -53,7 +49,7 @@ class SmugmugService
 
       # If we found an existing gallery but with no uploads yet, we can use it
       if gallery[:existing] && files.present?
-        Rails.logger.info("Found existing gallery: #{gallery[:url]}")
+        # Rails.logger.info("Found existing gallery: #{gallery[:url]}")
       end
 
       # 4. Upload each file
@@ -62,13 +58,12 @@ class SmugmugService
         failed: []
       }
 
-      Rails.logger.info("Uploading #{files.size} files to album #{gallery[:key]}")
+      # Rails.logger.info("Uploading #{files.size} files to album #{gallery[:key]}")
 
       # Log the first few characters of the content type to help debug
       if files.first
         first_file = files.first
         content_type = first_file.content_type || "unknown"
-        Rails.logger.debug("First file content type: #{content_type}")
       end
 
       files.each do |file|
@@ -80,9 +75,6 @@ class SmugmugService
           results[:failed] << { filename: file.original_filename, error: result[:error] }
         end
       end
-
-      # Log the results
-      Rails.logger.info("Upload results: #{results[:success].size} successful, #{results[:failed].size} failed")
 
       # Return the result
       return {
@@ -108,7 +100,6 @@ class SmugmugService
 
     # Use SmugMug's upload URL directly
     upload_url = "https://upload.smugmug.com/"
-    Rails.logger.info("Using SmugMug upload URL: #{upload_url}")
 
     # Get the file data by calling file.read() - make sure it's not a Proc
     file_data = file.read
@@ -173,7 +164,7 @@ class SmugmugService
           parsed_response = JSON.parse(response.body, symbolize_names: true)
 
           # Log all the response data for debugging
-          Rails.logger.debug("Full response body: #{response.body}")
+          # Rails.logger.debug("Full response body: #{response.body}")
 
           # Check for API success indicator (could be either style of response)
           if (parsed_response[:stat] == "ok" && parsed_response[:Image]) ||
@@ -191,8 +182,8 @@ class SmugmugService
 
             image_url = image_data[:URL] || image_data[:Url] || image_data[:WebUri] || "unknown"
 
-            Rails.logger.info("Successfully uploaded image: #{file.original_filename}")
-            Rails.logger.info("Image key: #{image_key}, URL: #{image_url}")
+            # Rails.logger.info("Successfully uploaded image: #{file.original_filename}")
+            # Rails.logger.info("Image key: #{image_key}, URL: #{image_url}")
 
             return {
               success: true,
@@ -216,13 +207,13 @@ class SmugmugService
             }
           end
         rescue JSON::ParserError => e
-          Rails.logger.error("Failed to parse JSON response: #{e.message}")
-          Rails.logger.error("Raw response body: #{response.body}")
+          # Rails.logger.error("Failed to parse JSON response: #{e.message}")
+          # Rails.logger.error("Raw response body: #{response.body}")
           return { success: false, error: "Failed to parse response: #{e.message}" }
         end
       elsif response.code.to_i >= 200 && response.code.to_i < 300
         # Empty body with 200 status - assume success but without details
-        Rails.logger.warn("Received empty response body with successful HTTP status #{response.code}")
+        # Rails.logger.warn("Received empty response body with successful HTTP status #{response.code}")
         return { success: true, image_key: "unknown", image_url: "unknown" }
       else
         # HTTP error without body
@@ -239,12 +230,11 @@ class SmugmugService
 
   # Helper method to make upload requests
   def make_upload_request(access_token, url, data, headers)
-    Rails.logger.debug("Making upload request to #{url} with headers: #{headers.inspect}")
+    # Rails.logger.debug("Making upload request to #{url} with headers: #{headers.inspect}")
     # Clone the data to avoid modifying the original
-    response = access_token.post(url, data.dup, headers.dup)
-    Rails.logger.debug("Upload response status: #{response.code}")
-    Rails.logger.debug("Response body (first 100 chars): #{response.body ? response.body[0..100] : 'nil'}")
-    response
+    access_token.post(url, data.dup, headers.dup)
+    # Rails.logger.debug("Upload response status: #{response.code}")
+    # Rails.logger.debug("Response body (first 100 chars): #{response.body ? response.body[0..100] : 'nil'}")
   end
 
   # Helper to extract key from URI path
@@ -265,7 +255,7 @@ class SmugmugService
     uri = normalize_api_url(uri)
     # Pattern: "/api/v2/node/Xn8D2q" -> "Xn8D2q"
     node_id = uri.split('/').last
-    Rails.logger.debug("Extracted node ID: #{node_id}")
+    # Rails.logger.debug("Extracted node ID: #{node_id}")
     node_id
   end
 
@@ -283,53 +273,87 @@ class SmugmugService
   end
 
   # Create share token for a gallery (for customer access)
-  def create_share_token(gallery_key, expires_in = 30.days)
-    # Skip in mock mode
-    if Rails.env.development? && ENV['SMUGMUG_MOCK'] == 'true'
-      return mock_create_share_token(gallery_key, expires_in)
-    end
+  # Fix for the create_share_token method in SmugmugService
+# def create_share_token(gallery_key, expires_in = 30.days)
+#   # Skip in mock mode
+#   if Rails.env.development? && ENV['SMUGMUG_MOCK'] == 'true'
+#     return mock_create_share_token(gallery_key, expires_in)
+#   end
 
-    Rails.logger.info("Creating share token for gallery: #{gallery_key}")
-    response = make_api_request(
-      "album/#{gallery_key}!sharetokens",
-      method: :post,
-      data: {
-        ShareToken: {
-          Password: "",
-          Expires: expires_in.from_now.to_i,
-          Access: "Full"
-        }
-      }
-    )
+#   Rails.logger.info("Creating share token for gallery: #{gallery_key}")
 
-    Rails.logger.debug("Share token response: #{response.inspect}")
+#   # FIX: Ensure proper endpoint format by using the correct path
+#   # Problem was: the build_endpoint method was duplicating "/api/v2/"
+#   endpoint = "album/#{gallery_key}!sharetokens"
 
-    if response[:success]
-      # Explore the response to find the ShareToken
-      if response[:data] && response[:data][:Response] && response[:data][:Response][:ShareToken]
-        token_data = response[:data][:Response][:ShareToken]
-        return {
-          success: true,
-          token: token_data[:Token],
-          url: token_data[:Url],
-          expires_at: Time.at(token_data[:Expires])
-        }
-      elsif response[:data] && response[:data][:ShareToken]
-        token_data = response[:data][:ShareToken]
-        return {
-          success: true,
-          token: token_data[:Token],
-          url: token_data[:Url],
-          expires_at: Time.at(token_data[:Expires])
-        }
-      else
-        Rails.logger.error("ShareToken not found in response: #{response[:data].inspect}")
-        return { success: false, error: "ShareToken data structure not found in response" }
-      end
-    else
-      return { success: false, error: response[:error] || "Failed to create share token" }
-    end
+#   response = make_api_request(
+#     endpoint,
+#     method: :post,
+#     data: {
+#       ShareToken: {
+#         Password: "",
+#         Expires: expires_in.from_now.to_i,
+#         Access: "Full"
+#       }
+#     }
+#   )
+
+#   Rails.logger.debug("Share token response: #{response.inspect}")
+
+#   if response[:success]
+#     # Explore the response to find the ShareToken
+#     if response[:data] && response[:data][:Response] && response[:data][:Response][:ShareToken]
+#       token_data = response[:data][:Response][:ShareToken]
+#       return {
+#         success: true,
+#         token: token_data[:Token],
+#         url: token_data[:Url],
+#         expires_at: Time.at(token_data[:Expires])
+#       }
+#     elsif response[:data] && response[:data][:ShareToken]
+#       token_data = response[:data][:ShareToken]
+#       return {
+#         success: true,
+#         token: token_data[:Token],
+#         url: token_data[:Url],
+#         expires_at: Time.at(token_data[:Expires])
+#       }
+#     else
+#       Rails.logger.error("ShareToken not found in response: #{response[:data].inspect}")
+#       return { success: false, error: "ShareToken data structure not found in response" }
+#     end
+#   else
+#     return { success: false, error: response[:error] || "Failed to create share token" }
+#   end
+# end
+
+# Also fix the build_endpoint method to prevent duplication
+def build_endpoint(endpoint, base_url)
+  # Handle already-complete URLs
+  return endpoint if endpoint.start_with?('http')
+
+  # FIX: Prevent duplication of the API version in the URL
+  # Check for duplicate api/v2 segments
+  if base_url.include?('/api/v2') && endpoint.start_with?('/api/v2/')
+    # Remove the duplicate /api/v2/ from the endpoint
+    endpoint = endpoint.sub(/^\/api\/v2\//, '')
+    Rails.logger.debug("Removed duplicate API version from endpoint, now: #{endpoint}")
   end
+
+  # Handle URLs with API version already included
+  if endpoint.start_with?('/api/v2/')
+    return "#{base_url.sub(/\/api\/v2\/?$/, '')}#{endpoint}"
+  end
+
+  # Handle exclamation mark format for methods (e.g., "node/ABC123!children")
+  if endpoint.include?('!')
+    base, method = endpoint.split('!')
+    return "#{base_url}/#{base.sub(/^\//, '')}/!#{method.sub(/^\//, '')}"
+  end
+
+  # Regular endpoint
+  "#{base_url}/#{endpoint.sub(/^\//, '')}"
+end
 
   # Retrieve a list of galleries for a specific customer
   def get_customer_galleries(customer)
@@ -492,9 +516,9 @@ class SmugmugService
       end
 
       if existing_album
-        Rails.logger.info("Found existing album: #{album_name} with ID: #{existing_album[:Uris][:Album][:Uri]}")
+        # Rails.logger.info("Found existing album: #{album_name} with ID: #{existing_album[:Uris][:Album][:Uri]}")
         album_id = existing_album[:Uris][:Album][:Uri].split('/').last
-        Rails.logger.info("Found existing album: #{album_name} with ID: #{album_id}")
+        # Rails.logger.info("Found existing album: #{album_name} with ID: #{album_id}")
         return {
           key: album_id,
           url: existing_album[:WebUri],
@@ -505,7 +529,7 @@ class SmugmugService
     end
 
     # Create album with minimal required attributes
-    Rails.logger.info("Creating new album: '#{album_name}' with url_name: '#{url_name}' in folder: #{folder_node_id}")
+    # Rails.logger.info("Creating new album: '#{album_name}' with url_name: '#{url_name}' in folder: #{folder_node_id}")
 
     # Start with the minimal required attributes
     album_data = {
@@ -515,7 +539,7 @@ class SmugmugService
       Privacy: "Unlisted"  # Add privacy setting
     }
 
-    Rails.logger.debug("Album creation data: #{album_data.inspect}")
+    # Rails.logger.debug("Album creation data: #{album_data.inspect}")
 
     album_response = make_api_request(
       "node/#{folder_node_id}!children",
@@ -527,7 +551,7 @@ class SmugmugService
        album_response[:data][:Response] &&
        album_response[:data][:Response][:Node]
       album = album_response[:data][:Response][:Node]
-      album_id = extract_node_id_from_uri(album[:Uri])
+      album_id = album[:Uris][:Album][:Uri].split('/').last
       Rails.logger.info("Created album: #{album_name} with ID: #{album_id}")
 
       return {
@@ -542,11 +566,11 @@ class SmugmugService
 
       # Log the full response for debugging
       if album_response[:response]
-        Rails.logger.error("Full HTTP Response: #{album_response[:response].code} #{album_response[:response].message}")
-        Rails.logger.error("Response Body: #{album_response[:response].body}") if album_response[:response].body
+        # Rails.logger.error("Full HTTP Response: #{album_response[:response].code} #{album_response[:response].message}")
+        # Rails.logger.error("Response Body: #{album_response[:response].body}") if album_response[:response].body
       end
 
-      Rails.logger.error("Response data: #{album_response[:data].inspect}") if album_response[:data]
+      # Rails.logger.error("Response data: #{album_response[:data].inspect}") if album_response[:data]
       return { error: error_msg }
     end
   end
@@ -571,9 +595,9 @@ class SmugmugService
     headers["Content-Type"] = content_type unless method == :get
 
     begin
-      Rails.logger.debug("Making #{method.upcase} request to: #{url}")
+      # Rails.logger.debug("Making #{method.upcase} request to: #{url}")
       if data && method != :get && content_type == "application/json"
-        Rails.logger.debug("Request body: #{data.to_json}")
+        # Rails.logger.debug("Request body: #{data.to_json}")
       end
 
       response = case method
@@ -596,7 +620,7 @@ class SmugmugService
           raise "Unsupported HTTP method: #{method}"
       end
 
-      Rails.logger.debug("Response code: #{response.code}")
+      # Rails.logger.debug("Response code: #{response.code}")
 
       # Parse the response
       if response.code.to_i >= 200 && response.code.to_i < 300
@@ -610,12 +634,12 @@ class SmugmugService
         error_message = "API error: #{response.code}"
         begin
           if response.body.present?
-            Rails.logger.debug("Error response body: #{response.body}")
+            # Rails.logger.debug("Error response body: #{response.body}")
             error_data = JSON.parse(response.body, symbolize_names: true)
             error_message = error_data[:Message] if error_data[:Message]
           end
         rescue JSON::ParserError => e
-          Rails.logger.error("Failed to parse error response: #{e.message}")
+          # Rails.logger.error("Failed to parse error response: #{e.message}")
           error_message = response.body if response.body.present?
         end
 
@@ -629,24 +653,24 @@ class SmugmugService
   end
 
   # Build a properly formatted API endpoint URL
-  def build_endpoint(endpoint, base_url)
-    # Handle already-complete URLs
-    return endpoint if endpoint.start_with?('http')
+  # def build_endpoint(endpoint, base_url)
+  #   # Handle already-complete URLs
+  #   return endpoint if endpoint.start_with?('http')
 
-    # Handle URLs with API version already included
-    if endpoint.start_with?('/api/v2/')
-      return "#{base_url.sub(/\/api\/v2\/?$/, '')}#{endpoint}"
-    end
+  #   # Handle URLs with API version already included
+  #   if endpoint.start_with?('/api/v2/')
+  #     return "#{base_url.sub(/\/api\/v2\/?$/, '')}#{endpoint}"
+  #   end
 
-    # Handle exclamation mark format for methods (e.g., "node/ABC123!children")
-    if endpoint.include?('!')
-      base, method = endpoint.split('!')
-      return "#{base_url}/#{base.sub(/^\//, '')}/!#{method.sub(/^\//, '')}"
-    end
+  #   # Handle exclamation mark format for methods (e.g., "node/ABC123!children")
+  #   if endpoint.include?('!')
+  #     base, method = endpoint.split('!')
+  #     return "#{base_url}/#{base.sub(/^\//, '')}/!#{method.sub(/^\//, '')}"
+  #   end
 
-    # Regular endpoint
-    "#{base_url}/#{endpoint.sub(/^\//, '')}"
-  end
+  #   # Regular endpoint
+  #   "#{base_url}/#{endpoint.sub(/^\//, '')}"
+  # end
 
   def folder_path_for_appointment(appointment)
     # Create a consistent folder structure: /YYYY/MM/Location
@@ -655,7 +679,7 @@ class SmugmugService
     location = sanitize_folder_name(appointment.location)
 
     folder_path = "/#{date.year}/#{date.month.to_s.rjust(2, '0')}/#{location}"
-    Rails.logger.info("Generated folder path: #{folder_path}")
+    # Rails.logger.info("Generated folder path: #{folder_path}")
     folder_path
   end
 
@@ -674,7 +698,7 @@ class SmugmugService
     # Make sure we don't have extremely long names
     sanitized = sanitized[0..49] if sanitized.length > 50
 
-    Rails.logger.info("Sanitized folder name: '#{name}' -> '#{sanitized}'")
+    # Rails.logger.info("Sanitized folder name: '#{name}' -> '#{sanitized}'")
     sanitized
   end
 

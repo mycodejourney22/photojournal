@@ -30,24 +30,24 @@ class GalleryMapping < ApplicationRecord
   end
 
   # Generate and save a share token for this gallery
-  def generate_share_token(expires_in = 30.days)
-    # Skip if we already have a valid token
-    return self if share_token.present? && share_token_expires_at.present? && share_token_expires_at > Time.current
+  # def generate_share_token(expires_in = 30.days)
+  #   # Skip if we already have a valid token
+  #   return self if share_token.present? && share_token_expires_at.present? && share_token_expires_at > Time.current
 
-    result = SmugmugService.new.create_share_token(smugmug_key, expires_in)
+  #   result = SmugmugService.new.create_share_token(smugmug_key, expires_in)
 
-    if result[:success]
-      update(
-        share_token: result[:token],
-        share_url: result[:url],
-        share_token_expires_at: result[:expires_at]
-      )
-    else
-      Rails.logger.error("Failed to generate share token: #{result[:error]}")
-    end
+  #   if result[:success]
+  #     update(
+  #       share_token: result[:token],
+  #       share_url: result[:url],
+  #       share_token_expires_at: result[:expires_at]
+  #     )
+  #   else
+  #     Rails.logger.error("Failed to generate share token: #{result[:error]}")
+  #   end
 
-    self
-  end
+  #   self
+  # end
 
   # Check if share token is valid (not expired)
   def share_token_valid?
