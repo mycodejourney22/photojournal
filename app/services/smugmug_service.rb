@@ -401,6 +401,150 @@ end
     return { success: true, galleries: galleries }
   end
 
+  # Fetch all photos from a specific gallery with their URLs
+  def get_gallery_photos(gallery_key)
+    # Skip in mock mode
+    if Rails.env.development? && ENV['SMUGMUG_MOCK'] == 'true'
+      return mock_get_gallery_photos(gallery_key)
+    end
+
+    Rails.logger.info("Fetching photos for gallery: #{gallery_key}")
+
+    # Use proper endpoint to get images
+    endpoint = "album/#{gallery_key}!images"
+
+    response = make_api_request(endpoint)
+
+    if response[:success] && response[:data] && response[:data][:Response]
+      # Extract images from the response
+      if response[:data][:Response][:AlbumImage]
+        images = response[:data][:Response][:AlbumImage]
+        # Ensure images is an array even if only one image was returned
+        images = [images] unless images.is_a?(Array)
+
+        # Format image data for easy use
+        return images.map do |image|
+          # Get the thumbnail URL
+          thumbnail_url = image[:ThumbnailUrl]
+
+          # Generate better quality URLs from the thumbnail URL
+          medium_url = get_better_quality_url(thumbnail_url, "L")
+          large_url = get_better_quality_url(thumbnail_url, "XL")
+          largest_url = image[:ArchivedUri] || get_better_quality_url(thumbnail_url, "X3L")
+
+          # For display on the grid, use Large size
+          display_url = medium_url || image[:WebUri]
+
+          {
+            id: image[:ImageKey] || image[:id] || extract_key_from_uri(image[:Uri]),
+            title: image[:Title] || image[:FileName],
+            caption: image[:Caption],
+            url: image[:WebUri],
+            thumbnail_url: medium_url || thumbnail_url, # Use medium instead of thumbnail for better quality
+            largest_url: largest_url,
+            medium_url: large_url || medium_url || display_url,
+            width: image[:Width] || image[:OriginalWidth] || 0,
+            height: image[:Height] || image[:OriginalHeight] || 0,
+            created_at: image[:DateTimeCreated] || image[:DateTimeUploaded]
+          }
+        end
+      else
+        Rails.logger.warn("No images found in response for gallery: #{gallery_key}")
+        return []
+      end
+    else
+      error = response[:error] || "Unknown error fetching gallery photos"
+      Rails.logger.error("Error fetching gallery photos: #{error}")
+      return []
+    end
+  end
+
+  def get_better_quality_url(thumbnail_url, size_code = "L")
+    return nil unless thumbnail_url.present?
+
+    # Smugmug thumbnail URLs follow this pattern:
+    # https://photos.smugmug.com/photos/i[ImageKey]/0/[Hash]/Th/i[ImageKey]-Th.jpg
+
+    # The last part contains size code: -Th.jpg (Th = thumbnail)
+    # We can replace it with other size codes:
+    # - X3L = Extra 3 Large
+    # - X2L = Extra 2 Large
+    # - XL = Extra Large
+    # - L = Large
+    # - M = Medium
+    # - S = Small
+    # - Th = Thumbnail
+
+    # Replace the size code in both places (path and filename)
+    better_url = thumbnail_url.gsub(/-Th\./, "-#{size_code}.")
+    better_url = better_url.gsub(/\/Th\//, "/#{size_code}/")
+
+    better_url
+  end
+
+  # Get a direct shareable URL for a specific image
+  def get_image_download_url(image_key)
+    # Skip in mock mode
+    if Rails.env.development? && ENV['SMUGMUG_MOCK'] == 'true'
+      return mock_get_image_download_url(image_key)
+    end
+
+    # Get the specific image details
+    endpoint = "image/#{image_key}"
+
+    response = make_api_request(endpoint)
+
+    if response[:success] && response[:data] && response[:data][:Response] && response[:data][:Response][:Image]
+      image = response[:data][:Response][:Image]
+
+      # Return the largest available image URL
+      return image[:OriginalUrl] || image[:LargestUrl] || image[:ArchivedUri] || image[:WebUri]
+    else
+      error = response[:error] || "Unknown error fetching image download URL"
+      Rails.logger.error("Error fetching image download URL: #{error}")
+      return nil
+    end
+  end
+
+  # Get a signed URL that allows temporary access to an image
+  def get_image_signed_url(image_key, expires_in = 1.hour)
+    # This would require Smugmug API support for signed URLs
+    # Implementation depends on Smugmug's capabilities
+    # For now, return the regular URL
+    get_image_download_url(image_key)
+  end
+
+    # Mock implementations for development without API credentials
+    def mock_get_gallery_photos(gallery_key)
+      # Generate random number of mock images
+      image_count = rand(5..15)
+
+      images = []
+      image_count.times do |i|
+        width = [800, 1200, 1600].sample
+        height = [600, 800, 1200].sample
+
+        images << {
+          id: "IMG-#{SecureRandom.hex(6)}",
+          title: "Photo #{i + 1}",
+          caption: "This is a mock photo caption",
+          url: "https://mocksmugmug.com/gallery/#{gallery_key}/photo-#{i + 1}",
+          thumbnail_url: "https://via.placeholder.com/300x300?text=Photo+#{i + 1}",
+          largest_url: "https://via.placeholder.com/#{width}x#{height}?text=Photo+#{i + 1}",
+          medium_url: "https://via.placeholder.com/800x600?text=Photo+#{i + 1}",
+          width: width,
+          height: height,
+          created_at: (rand(1..30).days.ago).to_s
+        }
+      end
+
+      images
+    end
+
+    def mock_get_image_download_url(image_key)
+      "https://mocksmugmug.com/download/#{image_key}"
+    end
+
   private
 
   def create_folder_structure_with_nodes(root_node_id, appointment)
@@ -682,6 +826,10 @@ end
     # Rails.logger.info("Generated folder path: #{folder_path}")
     folder_path
   end
+
+  # Add these methods to your existing app/services/smugmug_service.rb file
+
+
 
 
   def sanitize_folder_name(name)

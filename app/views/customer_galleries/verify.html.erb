@@ -1,0 +1,179 @@
+<!-- app/views/customer_galleries/verify.html.erb -->
+<div class="gallery-verify-container">
+  <div class="logo-header">
+    <div class="logo-circle"></div>
+    <h1 class="logo-text">363 PHOTOGRAPHY</h1>
+  </div>
+
+  <div class="verify-card">
+    <h2>Enter Verification Code</h2>
+
+    <p class="verify-intro">
+      We've sent a 6-digit verification code to your contact information.
+      Enter the code below to access your galleries.
+    </p>
+
+    <%= form_with url: process_verification_customer_galleries_path, method: :post, local: true, class: "verify-form" do |f| %>
+      <div class="form-group">
+        <%= f.label :code, "Verification Code", class: "form-label" %>
+        <div class="code-input-container">
+          <%= f.text_field :code, required: true, class: "code-input",
+                          placeholder: "Enter 6-digit code",
+                          maxlength: 6,
+                          autocomplete: "one-time-code",
+                          pattern: "[0-9]{6}" %>
+        </div>
+      </div>
+
+      <%= f.submit "Verify", class: "verify-button" %>
+    <% end %>
+
+    <div class="verify-footer">
+      <p>
+        Didn't receive a code? <a href="<%= access_customer_galleries_path %>">Try again</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gallery-verify-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  .logo-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .logo-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #EDD400;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .logo-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+
+  .verify-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+  }
+
+  .verify-card h2 {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .verify-intro {
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+
+  .verify-form {
+    margin-bottom: 25px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #444;
+  }
+
+  .code-input-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .code-input {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    letter-spacing: 8px;
+    font-size: 24px;
+    font-weight: 600;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+  }
+
+  .code-input:focus {
+    border-color: #EDD400;
+    outline: none;
+  }
+
+  .verify-button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background-color: #EDD400;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .verify-button:hover {
+    background-color: #d9c000;
+    transform: translateY(-2px);
+  }
+
+  .verify-footer {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .verify-footer a {
+    color: #EDD400;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .verify-footer a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 576px) {
+    .gallery-verify-container {
+      padding: 15px;
+      margin: 20px auto;
+    }
+
+    .verify-card {
+      padding: 20px;
+    }
+  }
+</style>
+
+<script>
+  // Automatically focus the code input field
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.code-input').focus();
+  });
+</script>

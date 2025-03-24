@@ -1,0 +1,158 @@
+<!-- app/views/customer_galleries/access.html.erb -->
+<div class="gallery-access-container">
+  <div class="logo-header">
+    <div class="logo-circle"></div>
+    <h1 class="logo-text">363 PHOTOGRAPHY</h1>
+  </div>
+
+  <div class="access-card">
+    <h2>Access Your Photo Galleries</h2>
+
+    <p class="access-intro">
+      Enter your email address or phone number associated with your photoshoot to access your galleries.
+    </p>
+
+    <%= form_with url: authenticate_customer_galleries_path, method: :post, local: true, class: "access-form" do |f| %>
+      <div class="form-group">
+        <%= f.label :identifier, "Email or Phone Number", class: "form-label" %>
+        <%= f.text_field :identifier, required: true, class: "form-input",
+                        placeholder: "e.g. your@email.com or 080XXXXXXXX" %>
+      </div>
+
+      <%= f.submit "Get Access Code", class: "access-button" %>
+    <% end %>
+
+    <div class="access-help">
+      <p>
+        Having trouble accessing your photos? Contact us at <a href="mailto:info@363photography.org">info@363photography.org</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gallery-access-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  .logo-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .logo-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #EDD400;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .logo-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+
+  .access-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+  }
+
+  .access-card h2 {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .access-intro {
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+
+  .access-form {
+    margin-bottom: 25px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #444;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus {
+    border-color: #EDD400;
+    outline: none;
+  }
+
+  .access-button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background-color: #EDD400;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .access-button:hover {
+    background-color: #d9c000;
+    transform: translateY(-2px);
+  }
+
+  .access-help {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .access-help a {
+    color: #EDD400;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .access-help a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 576px) {
+    .gallery-access-container {
+      padding: 15px;
+      margin: 20px auto;
+    }
+
+    .access-card {
+      padding: 20px;
+    }
+  }
+</style>

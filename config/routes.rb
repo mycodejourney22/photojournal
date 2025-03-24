@@ -167,6 +167,25 @@ Rails.application.routes.draw do
   # This route is for the download handler
   get 'galleries/download/:id', to: 'galleries#download', as: 'download_gallery'
 
+  # Customer gallery access
+  resources :customer_galleries, only: [:index, :show] do
+
+    member do
+      get 'download/:photo_id', action: :download_photo, as: :download_photo
+    end
+
+    collection do
+      get :access
+      post :authenticate
+      get :verify
+      post :process_verification
+      get :logout
+    end
+  end
+
+  # For direct access to public gallery URLs
+  get 'gallery/:share_token', to: 'galleries#public_show', as: :gallery_public
+
   # This route is for sending gallery links to customers
   post 'appointments/:appointment_id/galleries/:gallery_id/send', to: 'galleries#send_gallery', as: 'send_gallery'
   # post 'appointments/:appointment_id/galleries/:gallery_id', to: 'galleries#send_gallery', as: 'send_gallery'

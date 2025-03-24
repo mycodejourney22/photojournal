@@ -1,0 +1,354 @@
+<!-- app/views/customer_galleries/index.html.erb -->
+<div class="gallery-list-container">
+  <div class="gallery-header">
+    <div class="logo-header">
+      <div class="logo-circle"></div>
+      <h1 class="logo-text">363 PHOTOGRAPHY</h1>
+    </div>
+
+    <div class="user-info">
+      <div class="user-greeting">
+        Hello, <%= @customer.name %>
+      </div>
+
+      <div class="action-links">
+        <%= link_to "Logout", logout_customer_galleries_path, class: "logout-link" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-content">
+    <h2 class="page-title">Your Photo Galleries</h2>
+
+    <% if @galleries.empty? %>
+      <div class="empty-galleries">
+        <div class="empty-icon">📷</div>
+        <h3>No galleries found</h3>
+        <p>
+          We couldn't find any photo galleries associated with your account.
+          If you believe this is an error, please contact us at <a href="mailto:info@363photography.org">info@363photography.org</a>.
+        </p>
+      </div>
+    <% else %>
+      <div class="galleries-grid">
+        <% @galleries.each do |gallery| %>
+          <% next unless gallery.photos.attached? %>
+          <% gallery_date = gallery.appointment&.start_time || gallery.created_at %>
+          <%
+            # Try to find Smugmug thumbnail first, fall back to local
+            gallery_mapping = GalleryMapping.find_by(gallery_id: gallery.id)
+            thumbnail_url = nil
+            thumbnail = nil
+
+            # Check if we can use Smugmug
+            if gallery_mapping&.completed? && gallery_mapping&.smugmug_key.present?
+              begin
+                # Get just one photo to use as thumbnail
+                smugmug_photos = SmugmugService.new.get_gallery_photos(gallery_mapping.smugmug_key)
+                if smugmug_photos.present?
+                  thumbnail_url = smugmug_photos.first[:medium_url] || smugmug_photos.first[:large_url] || smugmug_photos.first[:thumbnail_url]
+
+                end
+              rescue => e
+                Rails.logger.error("Error fetching Smugmug thumbnail: #{e.message}")
+              end
+            end
+
+            # Fall back to local thumbnail if needed
+            thumbnail = gallery.photos.first if thumbnail_url.nil?
+          %>
+
+          <div class="gallery-card">
+            <a href="<%= customer_gallery_path(gallery) %>" class="gallery-link">
+              <div class="gallery-thumbnail">
+                <% if thumbnail_url.present? %>
+                  <img src="<%= thumbnail_url %>" class="thumbnail-img" alt="Gallery thumbnail">
+                <% elsif thumbnail.present? %>
+                  <%= image_tag thumbnail.variant(resize_to_fill: [400, 300]), class: "thumbnail-img" %>
+                <% else %>
+                  <div class="no-thumbnail">
+                    <span>No Preview</span>
+                  </div>
+                <% end %>
+              </div>
+            </a>
+
+            <div class="gallery-info">
+              <h3 class="gallery-title">
+                <%= gallery.title.present? ? gallery.title : "Photo Gallery" %>
+              </h3>
+
+              <div class="gallery-meta">
+                <div class="meta-item">
+                  <span class="meta-label">Date:</span>
+                  <span class="meta-value"><%= gallery_date.strftime("%B %d, %Y") %></span>
+                </div>
+
+                <div class="meta-item">
+                  <span class="meta-label">Photos:</span>
+                  <span class="meta-value"><%= gallery.photos.count %></span>
+                </div>
+
+                <% if gallery.appointment&.questions.present? %>
+                  <% type_question = gallery.appointment.questions.find { |q| q.question.include?('Type of shoot') } %>
+                  <% if type_question&.answer.present? %>
+                    <div class="meta-item">
+                      <span class="meta-label">Type:</span>
+                      <span class="meta-value"><%= type_question.answer %></span>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+
+              <div class="gallery-actions">
+                <a href="<%= customer_gallery_path(gallery) %>" class="view-gallery-btn">View Gallery</a>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  .gallery-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .logo-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #EDD400;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .logo-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .user-greeting {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .action-links {
+    display: flex;
+    gap: 10px;
+  }
+
+  .logout-link {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #f5f5f5;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .logout-link:hover {
+    background-color: #e5e5e5;
+  }
+
+  .gallery-content {
+    margin-bottom: 60px;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+  }
+
+  .empty-galleries {
+    background-color: white;
+    border-radius: 12px;
+    padding: 50px 30px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+
+  .empty-galleries h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  .empty-galleries p {
+    max-width: 400px;
+    margin: 0 auto;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .empty-galleries a {
+    color: #EDD400;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .empty-galleries a:hover {
+    text-decoration: underline;
+  }
+
+  .galleries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+  }
+
+  .gallery-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .gallery-thumbnail {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .gallery-card:hover .thumbnail-img {
+    transform: scale(1.05);
+  }
+
+  .no-thumbnail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #f5f5f5;
+    color: #888;
+    font-size: 14px;
+  }
+
+  .gallery-info {
+    padding: 20px;
+  }
+
+  .gallery-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 15px 0;
+  }
+
+  .gallery-meta {
+    margin-bottom: 20px;
+  }
+
+  .meta-item {
+    margin-bottom: 8px;
+    font-size: 14px;
+    display: flex;
+  }
+
+  .meta-label {
+    color: #666;
+    width: 50px;
+    flex-shrink: 0;
+  }
+
+  .meta-value {
+    color: #333;
+    font-weight: 500;
+  }
+
+  .gallery-actions {
+    margin-top: 20px;
+  }
+
+  .view-gallery-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #EDD400;
+    color: #000;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .view-gallery-btn:hover {
+    background-color: #d9c000;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .user-info {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .galleries-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+
+  @media (max-width: 576px) {
+    .gallery-list-container {
+      padding: 15px;
+    }
+
+    .galleries-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery-card {
+      max-width: 100%;
+    }
+  }
