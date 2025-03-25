@@ -563,7 +563,7 @@ end
       children_response = make_api_request("node/#{current_node_id}!children")
 
       if children_response[:success]
-        # Look for existing folder with this name
+        # Look for existing folder with this name (CASE INSENSITIVE)
         existing_folder = nil
 
         if children_response[:data][:Response] &&
@@ -573,9 +573,10 @@ end
 
           Rails.logger.debug("Found #{children.size} children")
 
+          # Modified to be case-insensitive comparison
           existing_folder = children.find do |child|
             Rails.logger.debug("Child type: #{child[:Type]}, name: #{child[:Name]}")
-            child[:Type] == "Folder" && child[:Name] == folder_name
+            child[:Type] == "Folder" && child[:Name].downcase == folder_name.downcase
           end
         end
 
@@ -614,6 +615,34 @@ end
             Rails.logger.info("Created folder: '#{folder_name}' with ID: #{current_node_id}")
           else
             error_msg = folder_response[:error] || "Unknown error"
+
+            # Check if it's a conflict error (folder already exists)
+            if error_msg.include?("Conflict")
+              # Try to find the folder by name again, it might have been created concurrently
+              # or case sensitivity issues
+              retry_response = make_api_request("node/#{current_node_id}!children")
+
+              if retry_response[:success] && retry_response[:data][:Response] && retry_response[:data][:Response][:Node]
+                retry_children = retry_response[:data][:Response][:Node]
+                retry_children = [retry_children] unless retry_children.is_a?(Array)
+
+                # Look again with even more relaxed comparison
+                retry_folder = retry_children.find do |child|
+                  child[:Type] == "Folder" &&
+                  (child[:Name].downcase == folder_name.downcase ||
+                   child[:UrlName].downcase == url_name.downcase)
+                end
+
+                if retry_folder
+                  folder_uri = retry_folder[:Uri]
+                  current_node_id = extract_node_id_from_uri(folder_uri)
+                  Rails.logger.info("After conflict, found existing folder: '#{retry_folder[:Name]}' with ID: #{current_node_id}")
+                  next # continue to next folder part
+                end
+              end
+            end
+
+            # If we couldn't recover from the conflict
             Rails.logger.error("Failed to create folder: '#{folder_name}', Error: #{error_msg}")
             if folder_response[:data]
               Rails.logger.error("Response data: #{folder_response[:data].inspect}")

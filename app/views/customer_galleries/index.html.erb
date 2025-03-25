@@ -32,7 +32,7 @@
     <% else %>
       <div class="galleries-grid">
         <% @galleries.each do |gallery| %>
-          <% next unless gallery.photos.attached? %>
+          <% next unless gallery.gallery_mapping&.completed? %>
           <% gallery_date = gallery.appointment&.start_time || gallery.created_at %>
           <%
             # Try to find Smugmug thumbnail first, fall back to local
@@ -86,7 +86,15 @@
 
                 <div class="meta-item">
                   <span class="meta-label">Photos:</span>
-                  <span class="meta-value"><%= gallery.photos.count %></span>
+                  <span class="meta-value">
+                    <% if gallery.gallery_mapping&.completed? && gallery.gallery_mapping&.metadata&.dig("successful_uploads") %>
+                      <%= gallery.gallery_mapping.metadata["successful_uploads"] %>
+                    <% elsif gallery.photos.attached? %>
+                      <%= gallery.photos.count %>
+                    <% else %>
+                      0
+                    <% end %>
+                  </span>
                 </div>
 
                 <% if gallery.appointment&.questions.present? %>

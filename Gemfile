@@ -114,8 +114,8 @@ group :development do
 
   # gem 'letter_opener'
 
-  gem 'pry'
-  gem 'pry-byebug'
+  # gem 'pry'
+  # gem 'pry-byebug'
 
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]

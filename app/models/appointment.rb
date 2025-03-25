@@ -12,6 +12,8 @@ class Appointment < ApplicationRecord
   after_commit :process_images, on: :create
   belongs_to :price, optional: true # This assumes a Price model exists
   before_validation :set_defaults
+  before_validation :normalize_location
+
 
   scope :available_for_booking, -> { where(no_show: false, status: true) }
   scope :for_today, -> { where(start_time: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day) }
@@ -107,6 +109,19 @@ class Appointment < ApplicationRecord
     end
   end
 
+  def normalize_location
+    return unless location.present?
 
-
+    case location.downcase
+    when /ikeja/
+      self.location = "Ikeja"
+    when /surulere/
+      self.location = "Surulere"
+    when /ajah/, /ilaje/
+      self.location = "Ajah"
+    else
+      # Keep the original location
+      self.location = location
+    end
+  end
 end
