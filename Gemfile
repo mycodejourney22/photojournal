@@ -24,7 +24,7 @@ gem "cloudinary"
 
 
 gem 'sidekiq'
-# gem 'redis'
+gem 'redis', '~> 4.0'
 
 
 
