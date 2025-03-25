@@ -5,6 +5,7 @@ class GalleryUploadJob < ApplicationJob
   retry_on StandardError, attempts: 3, wait: 5.minutes
 
   def perform(gallery_id)
+    return if ENV['DISABLE_SMUGMUG_UPLOADS'] == 'true'
     gallery = Gallery.find_by(id: gallery_id)
 
     # Skip if gallery doesn't exist or has no photos
@@ -35,72 +36,76 @@ class GalleryUploadJob < ApplicationJob
 
     begin
       # Prepare files for upload
-      files = prepare_photos(gallery.photos)
+      if gallery && gallery.photos.attached?
+        gallery.photos.in_batches(of: 5) do |batch|
+          files = prepare_photos(gallery.photos)
 
-      # Upload to SmugMug
-      Rails.logger.info("Starting upload for Gallery ##{gallery_id} to SmugMug")
-      result = SmugmugService.new.upload_gallery(gallery.appointment, files)
+          # Upload to SmugMug
+          Rails.logger.info("Starting upload for Gallery ##{gallery_id} to SmugMug")
+          result = SmugmugService.new.upload_gallery(gallery.appointment, files)
 
-      if result[:success]
-        # Check if a gallery mapping already exists with this smugmug_key
-        existing_mapping = GalleryMapping.where(smugmug_key: result[:gallery_key]).where.not(id: mapping.id).first
+          if result[:success]
+            # Check if a gallery mapping already exists with this smugmug_key
+            existing_mapping = GalleryMapping.where(smugmug_key: result[:gallery_key]).where.not(id: mapping.id).first
 
-        if existing_mapping
-          Rails.logger.warn("A gallery mapping with smugmug_key #{result[:gallery_key]} already exists. Using new key.")
-          # Generate a unique suffix
-          unique_suffix = Time.now.to_i.to_s
-          result[:gallery_key] = "#{result[:gallery_key]}-#{unique_suffix}"
+            if existing_mapping
+              Rails.logger.warn("A gallery mapping with smugmug_key #{result[:gallery_key]} already exists. Using new key.")
+              # Generate a unique suffix
+              unique_suffix = Time.now.to_i.to_s
+              result[:gallery_key] = "#{result[:gallery_key]}-#{unique_suffix}"
+            end
+
+            # Update mapping with SmugMug details
+            mapping.assign_attributes(
+              smugmug_key: result[:gallery_key],
+              smugmug_url: result[:gallery_url],
+              status: :completed,
+              error_message: nil,
+              metadata: {
+                successful_uploads: result[:results][:success].size,
+                failed_uploads: result[:results][:failed].size,
+                photo_filenames: gallery.photos.map { |p| p.filename.to_s },
+                upload_details: result[:results]
+              }
+            )
+
+            # Now save with validation
+            if mapping.save
+              Rails.logger.info("Successfully uploaded Gallery ##{gallery_id} to SmugMug")
+
+              # Notify staff of successful upload if mailer exists
+              GalleryMailer.upload_complete(gallery).deliver_later if defined?(GalleryMailer)
+
+              # Purge the ActiveStorage attachments to save Cloudinary costs
+              # Use purge_later to handle this in the background
+              gallery.photos.purge_later
+              Rails.logger.info("Queued Gallery ##{gallery_id} photos for purging from ActiveStorage")
+            else
+              error_message = "Failed to save gallery mapping: #{mapping.errors.full_messages.join(', ')}"
+              Rails.logger.error(error_message)
+
+              # Mark as failed but ensure it saves
+              mapping.status = :failed
+              mapping.error_message = error_message
+              mapping.save(validate: false)
+
+              raise StandardError, error_message
+            end
+          else
+            # Handle failure
+            error_message = "SmugMug upload failed: #{result[:error]}"
+            Rails.logger.error(error_message)
+
+            mapping.status = :failed
+            mapping.error_message = error_message
+            mapping.save(validate: false)
+
+            # Notify staff of failure if mailer exists
+            GalleryMailer.upload_failed(gallery, error_message).deliver_later if defined?(GalleryMailer)
+
+            raise StandardError, error_message
+          end
         end
-
-        # Update mapping with SmugMug details
-        mapping.assign_attributes(
-          smugmug_key: result[:gallery_key],
-          smugmug_url: result[:gallery_url],
-          status: :completed,
-          error_message: nil,
-          metadata: {
-            successful_uploads: result[:results][:success].size,
-            failed_uploads: result[:results][:failed].size,
-            photo_filenames: gallery.photos.map { |p| p.filename.to_s },
-            upload_details: result[:results]
-          }
-        )
-
-        # Now save with validation
-        if mapping.save
-          Rails.logger.info("Successfully uploaded Gallery ##{gallery_id} to SmugMug")
-
-          # Notify staff of successful upload if mailer exists
-          GalleryMailer.upload_complete(gallery).deliver_later if defined?(GalleryMailer)
-
-          # Purge the ActiveStorage attachments to save Cloudinary costs
-          # Use purge_later to handle this in the background
-          gallery.photos.purge_later
-          Rails.logger.info("Queued Gallery ##{gallery_id} photos for purging from ActiveStorage")
-        else
-          error_message = "Failed to save gallery mapping: #{mapping.errors.full_messages.join(', ')}"
-          Rails.logger.error(error_message)
-
-          # Mark as failed but ensure it saves
-          mapping.status = :failed
-          mapping.error_message = error_message
-          mapping.save(validate: false)
-
-          raise StandardError, error_message
-        end
-      else
-        # Handle failure
-        error_message = "SmugMug upload failed: #{result[:error]}"
-        Rails.logger.error(error_message)
-
-        mapping.status = :failed
-        mapping.error_message = error_message
-        mapping.save(validate: false)
-
-        # Notify staff of failure if mailer exists
-        GalleryMailer.upload_failed(gallery, error_message).deliver_later if defined?(GalleryMailer)
-
-        raise StandardError, error_message
       end
     rescue StandardError => e
       # Handle unexpected errors

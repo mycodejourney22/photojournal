@@ -1,6 +1,17 @@
 ---
-:concurrency: 5
+:concurrency: 5  # Number of threads (adjust based on your server RAM)
+:timeout: 30     # Timeout in seconds for jobs
+
 :queues:
-  - default
-  - [smugmug_uploads, 2]
-  - mailers
+  - [critical, 3]
+  - [mailers, 2]
+  - [default, 2]
+  - [smugmug_uploads, 1]
+
+# Production-specific settings
+production:
+  :concurrency: 10
+
+# Development-specific settings
+development:
+  :concurrency: 2
