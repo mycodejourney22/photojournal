@@ -2,19 +2,28 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["lightbox", "slide", "counter"]
+  static targets = ["lightbox", "slide", "counter", "photoWrapper"]
 
   connect() {
     // Initialize current slide index
     this.currentIndex = 0
 
-    // Add keydown event listener for keyboard navigation
-    document.addEventListener('keydown', this.handleKeydown.bind(this))
+    // Add click events to photo wrappers
+    this.photoWrapperTargets.forEach((wrapper, index) => {
+      wrapper.addEventListener('click', (e) => {
+        // Only open lightbox if clicking directly on the wrapper or the image
+        // (not on buttons inside the overlay)
+        if (e.target === wrapper ||
+            e.target.classList.contains('gallery-photo') ||
+            e.target === wrapper.querySelector('.photo-overlay')) {
+          this.openLightbox({ currentTarget: { dataset: { index: index } } })
+        }
+      })
+    })
   }
 
   disconnect() {
-    // Remove keydown event listener when controller disconnects
-    document.removeEventListener('keydown', this.handleKeydown.bind(this))
+    // Remove any additional event listeners if needed
   }
 
   openLightbox(event) {
@@ -84,7 +93,7 @@ export default class extends Controller {
 
   // Handle click outside content to close
   backgroundClick(event) {
-    if (event.target === this.lightboxTarget) {
+    if (event.target === this.lightboxTarget || event.target.classList.contains('lightbox-container')) {
       this.closeLightbox()
     }
   }

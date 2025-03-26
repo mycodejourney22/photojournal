@@ -72,6 +72,8 @@ class GalleryUploadJob < ApplicationJob
             # Now save with validation
             if mapping.save
               Rails.logger.info("Successfully uploaded Gallery ##{gallery_id} to SmugMug")
+              mapping.sync_photo_count_with_gallery!
+
 
               # Notify staff of successful upload if mailer exists
               GalleryMailer.upload_complete(gallery).deliver_later if defined?(GalleryMailer)

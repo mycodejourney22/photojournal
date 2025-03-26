@@ -1,6 +1,6 @@
 require 'sidekiq'
 
-redis_url = ENV['REDIS_URL']
+redis_url = ENV['REDIS_URL'] || 'redis://localhost:6379/0'
 
 Sidekiq.configure_server do |config|
   if redis_url.start_with?('rediss://')

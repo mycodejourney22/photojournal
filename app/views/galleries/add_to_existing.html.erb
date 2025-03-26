@@ -1,0 +1,524 @@
+<!-- app/views/galleries/add_to_existing.html.erb -->
+<div class="container">
+  <section class="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><%= @gallery.persisted? ? "Add Photos to Gallery" : "Create New Gallery" %></h1>
+    </div>
+
+    <%= form_with url: upload_to_existing_appointment_gallery_path(@appointment, @gallery), method: :post, local: true, multipart: true do |f| %>
+      <div class="card mb-4">
+        <div class="card-body">
+
+          <% if @gallery.present? %>
+            <div class="gallery-selection-card">
+              <div class="gallery-info">
+                <h3 class="gallery-title"><%= @gallery.title.present? ? @gallery.title : "Photo Gallery" %></h3>
+                <div class="gallery-meta">
+                  <% if @gallery.gallery_mapping&.metadata && @gallery.gallery_mapping.metadata["successful_uploads"] %>
+                    <span class="meta-item"><%= @gallery.gallery_mapping.metadata["successful_uploads"] %> photos</span>
+                    <span class="meta-separator">•</span>
+                  <% elsif @gallery.photos.attached? %>
+                    <span class="meta-item"><%= @gallery.photos.count %> photos</span>
+                    <span class="meta-separator">•</span>
+                  <% end %>
+                  <span class="meta-item"><%= @gallery.created_at.strftime("%B %d, %Y") %></span>
+                </div>
+
+                <% if @gallery.gallery_mapping.present? %>
+                  <div class="gallery-status mt-2">
+                    <% if @gallery.gallery_mapping.completed? %>
+                      <span class="status-badge status-success">Uploaded to SmugMug</span>
+                    <% elsif @gallery.gallery_mapping.processing? %>
+                      <span class="status-badge status-processing">Processing</span>
+                    <% elsif @gallery.gallery_mapping.failed? %>
+                      <span class="status-badge status-error">Upload Failed</span>
+                    <% else %>
+                      <span class="status-badge status-pending">Pending</span>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% else %>
+            <div class="alert alert-warning">
+              No gallery selected. Please go back and select a gallery.
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @gallery.present? %>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Upload Photos</h5>
+
+
+          <div class="dropzone dropzone-default dz-clickable"
+            data-controller="dropzone"
+            data-dropzone-max-file-size="100"
+            data-dropzone-max-files="50"
+            data-dropzone-accepted-files="image/*">
+
+            <div class="upload-drop-area">
+              <div class="upload-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <h3 class="upload-title">Drop photos here or click to upload</h3>
+              <p class="upload-subtitle">Accepted file types: JPG, PNG, GIF</p>
+              <div class="dropzone-wrapper">
+              <label for="photos" class="browse-files-btn">Browse File</label>
+              <%= f.file_field :photos,
+                                multiple: true,
+                                direct_upload: true,
+                                data: { dropzone_target: 'input' },
+                                class: 'hidden-file-input',
+                                id: 'photos' %>
+            </div>
+            </div>
+            </div>
+                    <div class="upload-tips">
+              <h3>Upload Tips</h3>
+              <ul>
+                <li><strong>Accepted formats:</strong> JPG, PNG, GIF</li>
+                <li><strong>Maximum file size:</strong> 100MB per file</li>
+                <li>Large files may take longer to upload</li>
+                <li>Don't refresh the page during upload</li>
+                <li>Photos will be automatically added to SmugMug after upload</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <div class="form-actions">
+        <%= f.submit "Add to Gallery", class: "g-button g-button--action g-button--full" %>
+        <%= link_to "Cancel", appointment_path(@appointment), class: "g-button g-button--secondary g-button--full" %>
+      </div>
+    <% end %>
+  </section>
+</div>
+
+<style>
+  .g-existing-galleries {
+    margin-bottom: 30px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+
+  .g-gallery-card {
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: all 0.2s;
+  }
+
+  .g-gallery-card:hover {
+    border-color: #EDD400;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .g-gallery-card--selected {
+    border-color: #EDD400;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: #fffceb;
+  }
+
+  .g-gallery-select-label {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+    margin: 0;
+  }
+
+  .g-gallery-radio {
+    margin-right: 15px;
+  }
+
+  .g-gallery-info {
+    flex-grow: 1;
+  }
+
+  .g-gallery-title {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .g-gallery-meta {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .g-meta-separator {
+    margin: 0 8px;
+  }
+
+  .g-gallery-status {
+    margin-left: 10px;
+  }
+
+  .g-status-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .g-status-tag--success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .g-status-tag--processing {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+
+  .g-status-tag--error {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+
+  .g-status-tag--pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+  }
+
+  .g-form-actions {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Make the first gallery radio button checked by default */
+  input[type="radio"].g-gallery-radio:first-of-type {
+    checked: true;
+  }
+
+    .gallery-selection-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+    border-left: 3px solid #EDD400;
+  }
+
+  .gallery-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: #333;
+  }
+
+  .gallery-meta {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .meta-item {
+    display: inline-block;
+  }
+
+  .meta-separator {
+    margin: 0 8px;
+    color: #ddd;
+  }
+
+  .gallery-status {
+    margin-top: 8px;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .status-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .status-processing {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+
+  .status-error {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+
+  .status-pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+  }
+
+  /* Hide the actual file input */
+  .hidden-file-input {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+  /* Custom upload area */
+  .upload-area {
+    padding: 40px 20px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .upload-area:hover {
+    border-color: #EDD400;
+    background-color: #fffceb;
+  }
+
+  .upload-area.highlight {
+    border-color: #EDD400;
+    background-color: #fffceb;
+  }
+
+  .upload-icon {
+    font-size: 48px;
+    color: #ccc;
+    margin-bottom: 15px;
+  }
+
+  .upload-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .upload-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  .browse-files-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #EDD400;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .browse-files-btn:hover {
+    background-color: #d9c000;
+  }
+
+  /* Progress tracking */
+  .total-progress {
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .total-progress-bar {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0;
+    transition: width 0.3s ease;
+  }
+
+  .total-progress-text {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+  }
+
+  /* No files message */
+  .no-files-message {
+    padding: 20px;
+    text-align: center;
+    color: #aaa;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+
+  /* File item styles */
+  .files-list {
+    margin-top: 20px;
+  }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .file-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .file-thumbnail {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #f5f5f5;
+  }
+
+  .file-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .file-info {
+    flex-grow: 1;
+  }
+
+  .file-name {
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: #333;
+    word-break: break-word;
+  }
+
+  .file-size {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .file-progress {
+    width: 100%;
+    height: 4px;
+    background-color: #f5f5f5;
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .file-progress-bar {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0;
+    transition: width 0.3s;
+  }
+
+  .file-remove {
+    margin-left: 10px;
+    color: #999;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.2s;
+  }
+
+  .file-remove:hover {
+    color: #f44336;
+  }
+
+  /* Upload tips */
+  .upload-tips {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+  }
+
+  .upload-tips h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .upload-tips ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+  }
+
+  .upload-tips li {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+
+  /* Form actions */
+  .form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+  }
+
+  /* Success and error states */
+  .file-item.upload-success .file-progress {
+    display: none;
+  }
+
+  .file-item.upload-success .file-name:after {
+    content: " ✓";
+    color: #4CAF50;
+  }
+
+  .file-item.upload-error .file-progress {
+    display: none;
+  }
+
+  .file-item.upload-error .file-name {
+    color: #f44336;
+  }
+
+  .file-item.upload-error .file-name:after {
+    content: " ✗";
+    color: #f44336;
+  }
+
+  .file-error-message {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+</style>
+
+<script>
+  // When a gallery card is clicked, check its radio button and add selected class
+  document.addEventListener('DOMContentLoaded', function() {
+    const galleryCards = document.querySelectorAll('.g-gallery-card');
+
+    galleryCards.forEach(card => {
+      card.addEventListener('click', function() {
+        // Remove selected class from all cards
+        galleryCards.forEach(c => c.classList.remove('g-gallery-card--selected'));
+
+        // Add selected class to clicked card
+        this.classList.add('g-gallery-card--selected');
+
+        // Check the radio button
+        const radioButton = this.querySelector('input[type="radio"]');
+        radioButton.checked = true;
+      });
+    });
+  });
+</script>

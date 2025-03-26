@@ -59,4 +59,19 @@ class GalleryMapping < ApplicationRecord
     increment!(:views_count)
     touch(:last_accessed_at)
   end
+
+  def sync_photo_count_with_gallery!
+    if gallery.present? && completed?
+      actual_photo_count = gallery.photos.count
+      current_metadata = self.metadata || {}
+
+      # Update metadata with the correct photo count
+      updated_metadata = current_metadata.merge({
+        "photo_count" => actual_photo_count,
+        "successful_uploads" => actual_photo_count
+      })
+
+      self.update(metadata: updated_metadata)
+    end
+  end
 end

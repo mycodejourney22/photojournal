@@ -147,7 +147,66 @@
         </div>
       <% end %>
     </div>
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Photo Galleries</div>
+        <div class="g-section__actions">
+          <%= link_to 'Upload Photos', @appointment.galleries.exists? ? add_to_existing_appointment_gallery_path(@appointment, @appointment.galleries.first) :
+                                        new_appointment_gallery_path(@appointment), class: "g-button g-button--action" %>
+        </div>
+      </div>
+
+      <% if @appointment.galleries.exists? %>
+        <div class="gallery-table-container">
+          <table class="gallery-table">
+            <thead>
+              <tr>
+                <th style="width: 5%;"></th>
+                <th style="width: 25%;">Gallery</th>
+                <th style="width: 25%;">SmugMug Status</th>
+                <th style="width: 25%;">Last Updated</th>
+                <th style="width: 25%;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @appointment.galleries.each do |gallery| %>
+                <tr>
+                  <td>
+                    <div class="status-dot status-dot--<%= gallery.gallery_mapping&.completed? ? 'success' : (gallery.gallery_mapping&.failed? ? 'error' : (gallery.gallery_mapping&.processing? ? 'processing' : 'pending')) %>"></div>
+                  </td>
+                  <td><%=  gallery.title.present? ? gallery.title : "Photo Gallery" %></td>
+                  <td>
+                    <% if gallery.gallery_mapping&.completed? %>
+                      <span class="status-tag status-tag--success">Uploaded</span>
+                    <% elsif gallery.gallery_mapping&.processing? %>
+                      <span class="status-tag status-tag--processing">Processing</span>
+                    <% elsif gallery.gallery_mapping&.failed? %>
+                      <span class="status-tag status-tag--error">Failed</span>
+                    <% else %>
+                      <span class="status-tag status-tag--pending">Pending</span>
+                    <% end %>
+                  </td>
+                  <td><%= gallery.updated_at.strftime("%B %d, %Y %I:%M %p") %></td>
+                  <td class="action-cell">
+                    <% if gallery.gallery_mapping&.smugmug_url.present? %>
+                      <%= link_to "View On Smugmug", gallery.gallery_mapping.smugmug_url, target: "_blank", class: "g-button g-button--small" %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No photo galleries have been uploaded for this appointment yet.</p>
+        </div>
+      <% end %>
+    </div>
+
   </div>
+  <!-- In app/views/appointments/show.html.erb -->
+<!-- Add this within your gallery section -->
 
   <!-- Right Section (Contact Info Sidebar) -->
   <div class="g-content__sidebar">
@@ -211,3 +270,160 @@
     </div>
   </div>
 </div>
+
+<style>
+/* Status tags */
+.status-tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-tag--success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-tag--processing {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-tag--error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-tag--pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* Action buttons container */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.g-button--warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.g-button--warning:hover {
+  background-color: #ffeeba;
+}
+
+ .gallery-table-container {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+
+  .gallery-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .gallery-table thead {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+  }
+
+  .gallery-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+  }
+
+  .gallery-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .gallery-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .status-dot--success {
+    background-color: #4CAF50;
+  }
+
+  .status-dot--pending {
+    background-color: #FFC107;
+  }
+
+  .status-dot--processing {
+    background-color: #2196F3;
+  }
+
+  .status-dot--error {
+    background-color: #F44336;
+  }
+
+  .status-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .status-tag--success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .status-tag--processing {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+
+  .status-tag--error {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+
+  .status-tag--pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+  }
+
+  .action-cell {
+    display: flex;
+    gap: 8px;
+  }
+
+  .g-button--small {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    background-color: #f5f5f5;
+    color: #333;
+    border: none;
+    cursor: pointer;
+  }
+
+  .g-button--small:hover {
+    background-color: #e0e0e0;
+  }
+</style>

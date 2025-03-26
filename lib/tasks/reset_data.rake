@@ -26,6 +26,12 @@ namespace :db do
     puts "✓ Destroyed #{counts[:sales]} Sales"
 
     # 4. Destroy all Appointments
+    puts "Destroying PhotoShoots..."
+    counts[:photo_shoots] = PhotoShoot.count
+    PhotoShoot.destroy_all
+    puts "✓ Destroyed #{counts[:photo_shoots]} PhotoShoots"
+
+    # 4. Destroy all Appointments
     puts "Destroying Appointments..."
     counts[:appointments] = Appointment.count
     Appointment.destroy_all

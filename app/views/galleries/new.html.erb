@@ -1,31 +1,268 @@
-<div class="container" data-controller="calendly" >
+<!-- app/views/galleries/new.html.erb or edit.html.erb -->
+<div class="container" data-controller="calendly">
   <section class="content">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2><%= @appointment.name.capitalize %></h2>
+      <h1><%= @gallery.persisted? ? "Add Photos to Gallery" : "Create New Gallery" %></h1>
     </div>
+
     <%= simple_form_for [@appointment, @gallery] do |f| %>
-      <%= f.input :title %>
-      <div class="dropzone dropzone-default dz-clickable"
-        data-controller="dropzone"
-        data-dropzone-max-file-size="20"
-        data-dropzone-accepted-files="image/*"
-        data-dropzone-max-files="20"
-        data-upload-multiple="true">
-
-        <%= f.input :photos, as: :file,
-            input_html: {
-              multiple: true,
-              direct_upload: true,
-              data: { dropzone_target: 'input' }
-            },
-            wrapper_html: { class: 'dropzone' } %>
-
-        <div class="dropzone-msg dz-message needsclick">
-          <h3 class="dropzone-msg-title grey"><i class="fa-solid fa-cloud-arrow-up"></i></h3>
-          <p >Drag photo here or <span class="browse">browse to</span> upload</p>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Gallery Information</h5>
+          <%= f.input :title,
+                      label: "Gallery Title",
+                      placeholder: "Enter a descriptive name for this gallery" %>
         </div>
       </div>
-      <%= f.button :submit %>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Upload Photos</h5>
+
+          <!-- Dropzone upload area -->
+          <div class="dropzone dropzone-default dz-clickable"
+            data-controller="dropzone"
+            data-dropzone-max-file-size="100"
+            data-dropzone-max-files="50"
+            data-dropzone-accepted-files="image/*">
+
+            <%= f.input :photos, as: :file,
+                label: false,
+                input_html: {
+                  multiple: true,
+                  direct_upload: true,
+                  data: { dropzone_target: 'input' }
+                },
+                wrapper_html: { class: 'dropzone-wrapper' } %>
+
+            <div class="upload-drop-area">
+              <div class="upload-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <h3 class="upload-title">Drop photos here or click to upload</h3>
+              <p class="upload-subtitle">Accepted file types: JPG, PNG, GIF</p>
+              <div class="browse-files-btn">Browse Files</div>
+            </div>
+          </div>
+
+          <!-- Progress tracking -->
+          <div class="total-progress-container">
+            <div class="total-progress">
+              <div class="total-progress-bar" id="total-progress-bar"></div>
+            </div>
+            <div class="total-progress-text" id="upload-status">No files uploaded yet</div>
+          </div>
+
+          <!-- Scrollable uploads container -->
+          <div class="uploads-container" id="uploads-list">
+            <!-- Upload items will be added here by Dropzone -->
+          </div>
+
+          <!-- Upload tips section -->
+          <div class="upload-tips">
+            <h3>Upload Tips</h3>
+            <ul>
+              <li><strong>Accepted formats:</strong> JPG, PNG, GIF</li>
+              <li><strong>Maximum file size:</strong> 100MB per file</li>
+              <li>Large files may take longer to upload</li>
+              <li>Don't refresh the page during upload</li>
+              <li>Photos will be automatically added to SmugMug after upload</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= f.button :submit, @gallery.persisted? ? "Add Photos" : "Create Gallery",
+                      class: "g-button g-button--action g-button--full",
+                      id: "submit-gallery-button" %>
+        <%= link_to "Cancel", appointment_gallery_path(@appointment, @gallery),
+                      class: "g-button g-button--secondary g-button--full" if @gallery.persisted? %>
+        <%= link_to "Cancel", appointment_path(@appointment),
+                      class: "g-button g-button--secondary g-button--full" unless @gallery.persisted? %>
+      </div>
     <% end %>
   </section>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Make sure Dropzone doesn't auto discover
+    if (typeof Dropzone !== 'undefined') {
+      Dropzone.autoDiscover = false;
+    }
+
+    // Configure server-side file size limits
+    const maxFileSize = 100; // MB
+
+    // Upload tracking
+    let totalFiles = 0;
+    let uploadedFiles = 0;
+    let failedFiles = 0;
+    const uploadStatus = document.getElementById('upload-status');
+    const totalProgressBar = document.getElementById('total-progress-bar');
+    const submitButton = document.getElementById('submit-gallery-button');
+    const uploadsList = document.getElementById('uploads-list');
+
+    // Find the dropzone controller instance
+    const checkForController = setInterval(function() {
+      const dropzoneElement = document.querySelector('[data-controller="dropzone"]');
+      if (dropzoneElement && window.Stimulus) {
+        try {
+          const controller = window.Stimulus.getControllerForElementAndIdentifier(
+            dropzoneElement, 'dropzone'
+          );
+
+          if (controller && controller.dropZone) {
+            clearInterval(checkForController);
+            initializeDropzoneListeners(controller.dropZone);
+          }
+        } catch (e) {
+          console.log("Waiting for Dropzone controller to initialize...");
+        }
+      }
+    }, 100);
+
+    function initializeDropzoneListeners(dropzone) {
+      // Move uploaded files to the scrollable container
+      if (uploadsList) {
+        dropzone.previewsContainer = uploadsList;
+      }
+
+      // File added event
+      dropzone.on("addedfile", (file) => {
+        totalFiles++;
+        updateUploadStatus();
+
+        // Disable submit button during uploads
+        if (submitButton) {
+          submitButton.disabled = true;
+        }
+
+        // Add uploading class for animation
+        file.previewElement.classList.add('is-uploading');
+
+        // Check for file size over limit before upload begins
+        if (file.size > maxFileSize * 1024 * 1024) {
+          setTimeout(() => {
+            const errorElement = file.previewElement.querySelector('.upload-error-message');
+            if (errorElement) {
+              errorElement.textContent = `File too large! Max: ${maxFileSize}MB`;
+              errorElement.style.display = 'block';
+            }
+            file.previewElement.classList.add('upload-error');
+            file.previewElement.classList.remove('is-uploading');
+          }, 10);
+        }
+      });
+
+      // File upload success
+      dropzone.on("success", (file) => {
+        uploadedFiles++;
+        updateUploadStatus();
+
+        // Show success state
+        file.previewElement.classList.add('upload-success');
+        file.previewElement.classList.remove('is-uploading');
+
+        // Scroll to show the latest upload
+        if (uploadsList) {
+          uploadsList.scrollTop = uploadsList.scrollHeight;
+        }
+
+        // Enable submit if all complete
+        checkIfAllComplete();
+      });
+
+      // File upload error
+      dropzone.on("error", (file, errorMessage) => {
+        failedFiles++;
+        updateUploadStatus();
+
+        // Show error state
+        setTimeout(() => {
+          const errorElement = file.previewElement.querySelector('.upload-error-message');
+          if (errorElement) {
+            errorElement.textContent = typeof errorMessage === 'string' ?
+              errorMessage : 'Upload failed';
+            errorElement.style.display = 'block';
+          }
+          file.previewElement.classList.add('upload-error');
+          file.previewElement.classList.remove('is-uploading');
+        }, 10);
+
+        // Enable submit if all complete
+        checkIfAllComplete();
+      });
+
+      // File removed
+      dropzone.on("removedfile", (file) => {
+        if (file.status === 'success') {
+          uploadedFiles--;
+        } else if (file.status === 'error') {
+          failedFiles--;
+        }
+        totalFiles--;
+        updateUploadStatus();
+        checkIfAllComplete();
+      });
+
+      // Overall upload progress
+      dropzone.on("totaluploadprogress", (progress) => {
+        if (totalProgressBar) {
+          totalProgressBar.style.width = `${progress}%`;
+        }
+      });
+
+      // Fix the file browser button functionality
+      const browseBtn = document.querySelector('.browse-files-btn');
+      if (browseBtn) {
+        browseBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          dropzone.hiddenFileInput.click();
+        });
+      }
+
+      // Prevent form submission if uploads are in progress
+      const form = dropzone.element.closest('form');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          const hasActiveUploads = dropzone.getActiveFiles().length > 0;
+          if (hasActiveUploads) {
+            e.preventDefault();
+            alert("Please wait for all uploads to complete before submitting.");
+          }
+        });
+      }
+    }
+
+    // Check if all uploads are complete
+    function checkIfAllComplete() {
+      if (submitButton) {
+        const pendingFiles = totalFiles - uploadedFiles - failedFiles;
+        submitButton.disabled = pendingFiles > 0;
+      }
+    }
+
+    // Update status text
+    function updateUploadStatus() {
+      if (!uploadStatus) return;
+
+      if (totalFiles === 0) {
+        uploadStatus.textContent = 'No files uploaded yet';
+      } else {
+        const pendingFiles = totalFiles - uploadedFiles - failedFiles;
+
+        if (pendingFiles > 0) {
+          uploadStatus.textContent = `Uploading ${uploadedFiles + failedFiles} of ${totalFiles} files...`;
+        } else {
+          if (failedFiles > 0) {
+            uploadStatus.textContent = `Completed with ${failedFiles} errors. ${uploadedFiles} of ${totalFiles} files uploaded.`;
+          } else {
+            uploadStatus.textContent = `All ${uploadedFiles} files uploaded successfully!`;
+          }
+        }
+      }
+    }
+  });
+</script>

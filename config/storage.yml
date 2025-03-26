@@ -10,6 +10,7 @@ local:
 cloudinary:
   service: Cloudinary
   folder: <%= Rails.env %>
+  # Add this line for larger uploads:
 
 
 wasabi:

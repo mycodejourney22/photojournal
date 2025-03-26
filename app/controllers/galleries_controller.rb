@@ -1,8 +1,8 @@
 # app/controllers/galleries_controller.rb
 class GalleriesController < ApplicationController
   skip_before_action :authenticate_user!, only: [:public_show, :download, :smugmug_redirect]
-  before_action :set_gallery, except: [:new, :create, :index, :public_show, :smugmug_redirect]
-  before_action :set_appointment, only: [:new, :create, :show, :edit, :update]
+  before_action :set_gallery, except: [:new, :create, :index, :public_show, :smugmug_redirect, :add_to_existing, :upload_to_existing]
+  before_action :set_appointment, only: [:new, :create, :show, :edit, :update , :add_to_existing, :upload_to_existing]
 
   def new
     @appointment = Appointment.find(params[:appointment_id])
@@ -57,7 +57,7 @@ class GalleriesController < ApplicationController
       # Queue Smugmug upload if photos were added
       @gallery.enqueue_smugmug_upload if params[:gallery][:photos].present?
 
-      redirect_to appointment_gallery_path(appointment_id: @appointment.id, id: @gallery.id), notice: 'Photos were successfully added'
+      redirect_to appointment_path(@appointment), notice: 'Photos were successfully added'
     else
       render :edit
     end
@@ -95,6 +95,64 @@ class GalleriesController < ApplicationController
   def index
   end
 
+  def add_to_existing
+    # @galleries = @appointment.galleries.order(created_at: :desc)
+    @appointment = Appointment.find(params[:appointment_id])
+    @gallery = @appointment.galleries.find(params[:id])
+    # raise
+  end
+
+  # Add this action to handle uploading to an existing gallery
+  def upload_to_existing
+
+    if params[:id].present?
+      # Add to existing gallery
+      @gallery = Gallery.find(params[:id])
+
+      if params[:photos].present?
+        @gallery.photos.attach(params[:photos])
+
+        # Update metadata to reflect the new photos
+        if @gallery.gallery_mapping&.present?
+          current_metadata = @gallery.gallery_mapping.metadata || {}
+          newly_attached_count = params[:photos].is_a?(Array) ?
+                                 params[:photos].size :
+                                 (params[:photos].respond_to?(:count) ? params[:photos].count : 1)
+          updated_metadata = current_metadata.merge({
+            "photo_count" => (current_metadata["photo_count"].to_i + newly_attached_count),
+            "last_upload" => Time.current,
+            "failed_uploads" => (current_metadata["failed_uploads"].to_i || 0),
+            "successful_uploads" => (current_metadata["successful_uploads"].to_i + newly_attached_count),
+            "upload_details" => {
+              "failed" => current_metadata.dig("upload_details", "failed") || [],
+              # Append to existing success entries rather than replacing
+              "success" => (current_metadata.dig("upload_details", "success") || [])
+            },
+            "photo_filenames" => (current_metadata["photo_filenames"] || []) +
+                                 @gallery.photos.attachments.last(newly_attached_count).map { |a| a.blob.filename.to_s }
+          })
+
+          @gallery.gallery_mapping.update(
+            status: :pending,
+            error_message: nil,
+            metadata: updated_metadata
+          )
+        end
+
+        # Queue SmugMug upload
+        @gallery.enqueue_smugmug_upload
+
+        redirect_to appointment_path(@appointment), notice: "Photos were successfully added to the gallery."
+      else
+        redirect_to add_to_existing_appointment_gallery_path(@appointment, @appointment.galleries.first), alert: "No photos were selected."
+      end
+    else
+      # No gallery selected
+      redirect_to add_to_existing_appointment_galleries_path(@appointment), alert: "Please select a gallery to add photos to."
+    end
+  end
+
+
   def create
     @appointment = Appointment.find(params[:appointment_id])
     @gallery = Gallery.new(gallery_params)
@@ -104,7 +162,7 @@ class GalleriesController < ApplicationController
       # Queue Smugmug upload if photos were attached
       @gallery.enqueue_smugmug_upload if @gallery.photos.attached?
 
-      redirect_to appointment_gallery_path(appointment_id: @appointment.id, id: @gallery.id)
+      redirect_to appointment_path(@appointment), notice: "Gallery was successfully created."
     else
       render :new, status: :unprocessable_entity
     end

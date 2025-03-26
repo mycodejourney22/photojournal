@@ -131,12 +131,15 @@ Rails.application.routes.draw do
       member do
         post 'upload_to_smugmug'
         get 'stream_photo/:photo_id', to: 'galleries#stream_photo', as: 'stream_photo'
-
+        get 'add_to_existing', action: :add_to_existing, as: :add_to_existing
+        post 'upload_to_existing', action: :upload_to_existing, as: :upload_to_existing
       end
 
       collection do
         get 'public/:share_token', to: 'galleries#public_show', as: 'public'
         get 'smugmug/:id', to: 'galleries#smugmug_redirect', as: 'smugmug'
+
+
       end
     end
     resources :sales, only: [:index, :new, :create]
