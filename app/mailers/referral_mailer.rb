@@ -8,7 +8,7 @@ class ReferralMailer < ApplicationMailer
 
     mail(
       to: @referrer.email,
-      subject: 'Refer friends to 363 Photography and earn ₦10,000 credit!'
+      subject: 'Refer friends to 363 Photography and earn ₦5,000 credit!'
     )
   end
 
@@ -19,7 +19,7 @@ class ReferralMailer < ApplicationMailer
 
     mail(
       to: @referrer.email,
-      subject: 'You earned ₦10,000 credit for your referral!'
+      subject: 'You earned ₦5,000 credit for your referral!'
     )
   end
 

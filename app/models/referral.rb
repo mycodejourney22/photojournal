@@ -138,7 +138,7 @@ class Referral < ApplicationRecord
     return false unless converted? && referred_has_purchase? && !rewarded?
 
     # Add the reward amount to the referrer's credits
-    amount = reward_amount || 10000
+    amount = reward_amount || 5000
     referrer.credits += amount
     referrer.save
 
@@ -164,7 +164,7 @@ class Referral < ApplicationRecord
   end
 
   def set_default_amounts
-    self.reward_amount ||= 10000  # ₦10,000 reward for referrer
+    self.reward_amount = 5000  # ₦5,000 reward for referrer
     self.referred_discount ||= 5000  # ₦5,000 discount for referred customer
   end
 end
