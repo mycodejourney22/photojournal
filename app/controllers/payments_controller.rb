@@ -5,6 +5,8 @@ class PaymentsController < ApplicationController
   require 'json'
   layout 'public'
   layout :determine_layout
+  include PaymentProcessor
+  include PhoneNumberNormalizer
 
   # def make_payment
   #   @appointment = Appointment.find(params[:appointment_id])
@@ -132,55 +134,87 @@ class PaymentsController < ApplicationController
 
   def verify_payment
     reference = params[:reference]
+    begin
+      uri = URI("https://api.paystack.co/transaction/verify/#{reference}")
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = 10
+      http.read_timeout = 15
 
-    uri = URI("https://api.paystack.co/transaction/verify/#{reference}")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.open_timeout = 10
-    http.read_timeout = 15
+      # Use GET request instead of POST
+      request = Net::HTTP::Get.new(uri)
+      request['Authorization'] = "Bearer #{ENV['PAYSTACK_SECRET_KEY']}"
+      request['Content-Type'] = "application/json"
 
-    # Use GET request instead of POST
-    request = Net::HTTP::Get.new(uri)
-    request['Authorization'] = "Bearer #{ENV['PAYSTACK_SECRET_KEY']}"
-    request['Content-Type'] = "application/json"
+      response = http.request(request)
 
-    response = http.request(request)
+      if response.is_a?(Net::HTTPSuccess)
+        response_body = JSON.parse(response.body)
 
-    if response.is_a?(Net::HTTPSuccess)
-      response_body = JSON.parse(response.body)
+        if response_body['status'] && response_body['data']['status'] == "success"
+          # Handle successful payment
+          appointment_uuid = response_body['data']['metadata']['appointment_uuid'] rescue nil
 
-      if response_body['status'] && response_body['data']['status'] == "success"
-        # Handle successful payment
-        appointment = Appointment.find_by(uuid: response_body['data']['metadata']['appointment_uuid'])
-        appointment.update(payment_status: true)
-
-        # Create customer and sale
-        customer = create_or_update_customer(appointment)
-
-        # binding.pry
-        # Process referral if present
-        if appointment.referral_source.present?
-          # Double-check customer is still eligible
-          if Referral.customer_eligible_for_referral?(customer)
-            process_referral_conversion(appointment, customer)
-          else
-            # If no longer eligible, clear the referral source
-            appointment.update(referral_source: nil)
+          if appointment_uuid.blank?
+            Rails.logger.error("Transaction #{reference} has no appointment UUID in metadata")
+            redirect_to failure_payments_path, alert: "Could not find booking information"
+            return
           end
+
+          # Find appointment
+          appointment = Appointment.find_by(uuid: appointment_uuid)
+
+          if appointment.nil?
+            Rails.logger.error("Appointment with UUID #{appointment_uuid} not found")
+            redirect_to failure_payments_path, alert: "Booking information not found"
+            return
+          end
+
+          if appointment.payment_status
+            Rails.logger.info("Payment for appointment #{appointment.id} already processed")
+            redirect_to success_payments_path(appointment_id: appointment.id)
+            return
+          end
+
+          # Process payment
+          appointment.update(payment_status: true)
+
+
+          # Create customer and sale
+          customer = create_or_update_customer(appointment)
+
+          # binding.pry
+          # Process referral if present
+          if appointment.referral_source.present?
+            # Double-check customer is still eligible
+            if Referral.customer_eligible_for_referral?(customer)
+              process_referral_conversion(appointment, customer)
+            else
+              # If no longer eligible, clear the referral source
+              appointment.update(referral_source: nil)
+            end
+          end
+
+          create_sale(appointment, customer, response_body['data']['metadata'])
+
+
+          # Clear the referral code from session since payment is confirmed
+          session.delete(:referral_code)
+          Rails.logger.info("Payment successfully verified and processed for appointment #{appointment.id}")
+          redirect_to success_payments_path(appointment_id: appointment.id)
+        else
+          error_message = response_body['message'] || "Verification failed"
+          Rails.logger.error("Payment verification failed: #{error_message}")
+          redirect_to failure_payments_path, alert: "Payment verification failed."
         end
-
-        create_sale(appointment, customer, response_body['data']['metadata'])
-
-
-        # Clear the referral code from session since payment is confirmed
-        session.delete(:referral_code)
-
-        redirect_to success_payments_path(appointment_id: appointment.id)
       else
-        redirect_to failure_payments_path, alert: "Payment verification failed."
+        Rails.logger.error("Failed to verify payment: HTTP #{response.code}")
+        redirect_to failure_payments_path, alert: "Failed to communicate with payment gateway."
       end
-    else
-      redirect_to failure_payments_path, alert: "Failed to communicate with payment gateway."
+    rescue => e
+      Rails.logger.error("Exception during payment verification: #{e.class} - #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
+      redirect_to failure_payments_path, alert: "An error occurred during payment verification. Please contact support."
     end
   end
 
@@ -194,53 +228,53 @@ class PaymentsController < ApplicationController
 
   private
 
-  def create_sale(app, customer, metadata = {})
-    phone_number = extract_phone_number_from_appointment(app)
-    staff = Staff.find_by(name: "Digital")
-    price = Price.find(app.price_id)
+  # def create_sale(app, customer, metadata = {})
+  #   phone_number = extract_phone_number_from_appointment(app)
+  #   staff = Staff.find_by(name: "Digital")
+  #   price = Price.find(app.price_id)
 
-    # Get the actual amount paid (with discount applied if any)
-    original_amount = metadata['original_amount'].to_f rescue price.amount
-    discount_amount = metadata['discount_amount'].to_f rescue 0
-    final_amount = original_amount - discount_amount
+  #   # Get the actual amount paid (with discount applied if any)
+  #   original_amount = metadata['original_amount'].to_f rescue price.amount
+  #   discount_amount = metadata['discount_amount'].to_f rescue 0
+  #   final_amount = original_amount - discount_amount
 
-    sale = Sale.new(
-      date: app.created_at,
-      amount_paid: final_amount,
-      customer_name: app.name,
-      location: app.location,
-      payment_method: "Digital",
-      payment_type: "Full Payment",
-      customer_phone_number: phone_number,
-      customer_service_officer_name: "Digital",
-      product_service_name: price.shoot_type,
-      customer_id: customer.id,
-      staff_id: staff.id
-    )
+  #   sale = Sale.new(
+  #     date: app.created_at,
+  #     amount_paid: final_amount,
+  #     customer_name: app.name,
+  #     location: app.location,
+  #     payment_method: "Digital",
+  #     payment_type: "Full Payment",
+  #     customer_phone_number: phone_number,
+  #     customer_service_officer_name: "Digital",
+  #     product_service_name: price.shoot_type,
+  #     customer_id: customer.id,
+  #     staff_id: staff.id
+  #   )
 
-    if discount_amount > 0
-      sale.discount = discount_amount
-      sale.discount_reason = "Referral discount (#{metadata['referral_code']})"
-    end
+  #   if discount_amount > 0
+  #     sale.discount = discount_amount
+  #     sale.discount_reason = "Referral discount (#{metadata['referral_code']})"
+  #   end
 
-    sale.appointment = app
-    sale.save
-  end
+  #   sale.appointment = app
+  #   sale.save
+  # end
 
-  def create_or_update_customer(app)
-    phone_number = extract_phone_number_from_appointment(app)
-    customer = Customer.find_by(phone_number: phone_number)
-    if customer
-      customer.increment!(:visits_count)
-    else
-      customer = Customer.create!(name: app.name, email: app.email, phone_number: phone_number, visits_count: 0)
-    end
-    customer
-  end
+  # def create_or_update_customer(app)
+  #   phone_number = extract_phone_number_from_appointment(app)
+  #   customer = Customer.find_by(phone_number: phone_number)
+  #   if customer
+  #     customer.increment!(:visits_count)
+  #   else
+  #     customer = Customer.create!(name: app.name, email: app.email, phone_number: phone_number, visits_count: 0)
+  #   end
+  #   customer
+  # end
 
-  def extract_phone_number_from_appointment(app)
-    app.questions.find { |q| q.question == 'Phone number' }.answer
-  end
+  # def extract_phone_number_from_appointment(app)
+  #   app.questions.find { |q| q.question == 'Phone number' }.answer
+  # end
 
   # def process_referral_conversion(appointment)
   #   referral_code = appointment.referral_source

@@ -3,7 +3,7 @@ class PhotoShootsController < ApplicationController
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
   after_action :schedule_thank_you_email, only: :create
-  after_action :schedule_referral_invitation, only: :create
+  # after_action :schedule_referral_invitation, only: :create
 
   before_action :set_appointment, except: [:index, :notes, :consent]
 

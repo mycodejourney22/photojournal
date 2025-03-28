@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
   end
 
-  post 'webhooks/paystack', to: 'paystackwebhooks#paystack'
+  post '/webhooks/paystack', to: 'paystack_webhooks#paystack'
   get 'make_payment', to: 'payments#make_payment'
   post 'paystack_payment', to: 'payments#initiate_payment'
   resources :payments, only: [] do
