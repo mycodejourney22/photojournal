@@ -19,10 +19,17 @@ wasabi:
   secret_access_key: <%= ENV['WASABI_SECRET_ACCESS'] %>
   region: <%= ENV['WASABI_REGION'] %>
   bucket: <%= ENV['WASABI_BUCKET'] %>
+  public: true
   endpoint: 'https://s3.eu-west-1.wasabisys.com'
   force_path_style: true
   upload:
     cache_control: 'max-age=31557600'
+    acl: 'bucket-owner-full-control'
+
+
+
+
+
 
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:

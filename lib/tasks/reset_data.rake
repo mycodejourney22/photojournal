@@ -13,6 +13,11 @@ namespace :db do
     GalleryMapping.destroy_all
     puts "✓ Destroyed #{counts[:gallery_mappings]} GalleryMappings"
 
+    puts "Destroying GalleryMappings..."
+    counts[:referrals] = Referral.count
+    Referral.destroy_all
+    puts "✓ Destroyed #{counts[:referrals]} Referrals"
+
     # 2. Destroy all Galleries
     puts "Destroying Galleries..."
     counts[:galleries] = Gallery.count
