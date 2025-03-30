@@ -127,6 +127,7 @@ Rails.application.routes.draw do
 
     end
     resources :photo_shoots, except: [:index, :destroy]
+    resources :refund_requests, only: [:new, :create]
     resources :galleries, only: [:new, :create, :show, :update, :edit] do
       member do
         post 'upload_to_smugmug'
@@ -150,6 +151,20 @@ Rails.application.routes.draw do
   resources :referrals, only: [:index]
   get 'refer/:code', to: 'referrals#show', as: :referral
   get 'refer/:code/apply', to: 'referrals#apply', as: :apply_referral
+
+  get 'refund/:appointment_uuid/request', to: 'refund_requests#new', as: 'appointment_refund_request_public'
+
+  resources :refund_requests, only: [:index, :show] do
+    member do
+      patch :approve
+      patch :decline
+      patch :process_refund
+    end
+
+    collection do
+      get :confirmation
+    end
+  end
 
   # Process pending rewards (admin only)
   post 'referrals/process_rewards', to: 'referrals#process_rewards', as: :process_referral_rewards

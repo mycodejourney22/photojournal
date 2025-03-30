@@ -1,0 +1,35 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #666; font-size: 16px;">Update on Your Refund Request</p>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 20px;">Dear <%= @appointment.name %>,</p>
+
+  <p style="font-size: 16px; margin-bottom: 25px;">Thank you for your patience while we reviewed your refund request <strong>#<%= @refund_request.id %></strong>. After careful consideration, we regret to inform you that we were unable to approve your refund request at this time.</p>
+
+  <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 30px; border-left: 4px solid #6c757d;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Request Details</h2>
+    <p style="margin-bottom: 10px;"><strong>Request Date:</strong> <%= @refund_request.created_at.strftime("%B %d, %Y") %></p>
+    <p style="margin-bottom: 10px;"><strong>Amount Requested:</strong> ₦<%= number_with_delimiter(@refund_request.refund_amount) %></p>
+    <p style="margin-bottom: 10px;"><strong>Reason:</strong> <%= @refund_request.reason %></p>
+    <p style="margin-bottom: 10px;"><strong>Status:</strong> <span style="color: #721c24;">Declined</span></p>
+  </div>
+
+  <% if @refund_request.admin_notes.present? %>
+    <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+      <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Reason for Decline</h2>
+      <p style="margin-bottom: 0; line-height: 1.6;"><%= @refund_request.admin_notes %></p>
+    </div>
+  <% end %>
+
+  <p style="font-size: 16px; margin-bottom: 30px;">If you have any questions or would like to discuss this further, please don't hesitate to contact our customer service team by replying to this email or calling us at <%= Appointment::STUDIO_NUMBERS[@appointment.location.downcase] || '08144985074' %>.</p>
+
+  <p style="font-weight: bold; margin-bottom: 5px;">Thank you for your understanding,</p>
+  <p style="margin-top: 0;">363 Photography Team</p>
+
+  <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; font-size: 12px; color: #888;">
+    <p>This is an automated email from 363 Photography.</p>
+    <p>© <%= Date.today.year %> 363 Photography. All rights reserved.</p>
+  </div>
+</div>

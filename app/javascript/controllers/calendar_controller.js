@@ -156,12 +156,31 @@ export default class extends Controller {
     const selectedLocation = document.querySelector('select[name="appointment[location]"]').value;
     const priceId = document.getElementById('appointment_price_id').value || null;
 
-    console.log(selectedDate)
-    console.log(selectedLocation)
-    console.log(priceId)
+    // Check if we're editing an existing appointment
+    const appointmentIdField = document.getElementById('appointment_id');
+    const appointmentId = appointmentIdField ? appointmentIdField.value : null;
+
+    console.log('Selected Date:', selectedDate);
+    console.log('Selected Location:', selectedLocation);
+    console.log('Price ID:', priceId);
+    console.log('Appointment ID:', appointmentId);
 
     if (selectedDate && selectedLocation) {
-      window.location.href = `available_hours?date=${selectedDate}&location=${selectedLocation}&price_id=${priceId}`;
+      let url = `available_hours?date=${selectedDate}&location=${selectedLocation}`;
+
+      if (priceId && priceId !== 'null') {
+        url += `&price_id=${priceId}`;
+      }
+
+      // Include appointment ID if we're editing
+      if (appointmentId) {
+        url += `&id=${appointmentId}`;
+      }
+
+      console.log('Redirecting to:', url);
+      window.location.href = url;
+    } else {
+      console.log('Missing required fields for redirection');
     }
   }
 

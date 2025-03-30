@@ -29,7 +29,11 @@ class AppointmentsController < ApplicationController
 
   def booking
     authorize Appointment
-    if params[:price_id].present?
+
+    if params[:id].present?
+      @appointment = Appointment.find(params[:id])
+      build_questions_for_booking(@appointment)
+    elsif params[:price_id].present?
       @appointment = Appointment.new(price: Price.find_by(id: params[:price_id]))
       build_questions_for_booking(@appointment)
     else
@@ -40,34 +44,96 @@ class AppointmentsController < ApplicationController
   def edit
     authorize Appointment
     @appointment = Appointment.find(params[:id])
+
+    # For public users, redirect to the booking flow with the appointment ID
+    unless user_signed_in?
+      redirect_to booking_appointments_path(id: @appointment.id)
+      return
+    end
+
+    # For authenticated users, use the regular edit form
     build_questions_for_booking(@appointment)
+
+    # Render the appropriate layout
+    render layout: user_signed_in? ? 'application' : 'public'
   end
+
 
   def new_customer
     authorize Appointment
-    @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new(price: Price.find_by(id: params[:price_id]))
+
+    if params[:id].present?
+      # Editing an existing appointment
+      @appointment = Appointment.find(params[:id])
+
+      # If date parameter is provided, update the start_time
+      if params[:date].present?
+        @appointment.start_time = params[:date]
+      end
+    else
+      # Creating a new appointment
+      @appointment = Appointment.new(price: Price.find_by(id: params[:price_id]))
+
+      # Set start_time for new appointments
+      if params[:date].present?
+        @appointment.start_time = params[:date]
+      end
+    end
+
+    # Set location from params if provided
+    if params[:location].present?
+      @appointment.location = params[:location]
+    end
+
+    # Build the questions
     build_questions_for_booking(@appointment)
   end
 
   def available_hours
     authorize Appointment
     @available_hours = available_slots(params[:location])
-    @appointment = params[:id] ? Appointment.find(params[:id]) : Appointment.new(price: Price.find_by(id: params[:price_id]))
+
+    # Set up the appointment (either existing or new)
+    if params[:id].present?
+      @appointment = Appointment.find(params[:id])
+    else
+      @appointment = Appointment.new(price: Price.find_by(id: params[:price_id]))
+    end
+
     build_questions_for_booking(@appointment)
   end
 
   def update
     authorize Appointment
     @appointment = Appointment.find(params[:id])
+
+    # Keep track of original status for potential notifications
+    original_status = @appointment.status
+    has_existing_sales = @appointment.sales.exists?
+
     if @appointment.update(appointment_params)
-      if user_signed_in?
-        redirect_to @appointment, notice: 'Appointment was successfully updated.'
+      # Only send notification if a public user is updating
+      unless user_signed_in?
+        # Only send 'edited' notification if the appointment was previously active
+        if original_status
+          AppointmentNotificationJob.perform_later(@appointment, 'edited')
+        end
+
+        # Redirect to thank you page with a flag indicating if payment is needed
+        redirect_to thank_you_appointments_path(
+          appointment_id: @appointment.id,
+          payment_needed: (!@appointment.payment_status && @appointment.price_id.present? && !has_existing_sales)
+        ), notice: "Your appointment has been updated successfully."
       else
-        AppointmentNotificationJob.perform_later(@appointment, 'edited')
-        redirect_to thank_you_appointments_path(appointment_id: @appointment.id), notice: "Your appointment has been updated successfully."
+        redirect_to @appointment
       end
     else
-      render :edit, status: :unprocessable_entity
+      if user_signed_in?
+        render :edit, status: :unprocessable_entity
+      else
+        build_questions_for_booking(@appointment)
+        render :new_customer, status: :unprocessable_entity
+      end
     end
   end
 
@@ -88,14 +154,24 @@ class AppointmentsController < ApplicationController
   end
 
   def available_slots(location)
-    # You can adjust logic here to return different time slots based on the day
-    # date = params[:date].to_date
     utc_date = Time.zone.parse(params[:date])
     date = utc_date.in_time_zone(Time.zone)
-    # Fetch all bookings for the selected date
-    booked_slots = Appointment.where(location: location, status: true, start_time: date.beginning_of_day..date.end_of_day).pluck(:start_time)
+
+    # Fetch all bookings for the selected date, excluding the current appointment if editing
+    booked_slots_query = Appointment.where(location: location, status: true, start_time: date.beginning_of_day..date.end_of_day)
+
+    # If we're editing an appointment, exclude its current slot from the booked slots
+    if params[:id].present?
+      current_appointment = Appointment.find(params[:id])
+      booked_slots_query = booked_slots_query.where.not(id: current_appointment.id)
+    end
+
+    booked_slots = booked_slots_query.pluck(:start_time)
+
     # Define your available slots (e.g., from 9am to 6pm)
     available_slots = generate_time_slots.reject { |slot| booked_slots.include?(slot) }
+
+    # For today, filter out past times
     if date.to_date == Time.zone.today
       current_time = Time.zone.now
       available_slots = available_slots.reject { |slot| slot < current_time }
@@ -104,7 +180,6 @@ class AppointmentsController < ApplicationController
     available_slots.map do |slot|
       format_time(slot)
     end
-    # raise
   end
 
 

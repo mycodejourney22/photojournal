@@ -1,0 +1,120 @@
+<!-- app/views/refund_requests/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Refund Requests</h1>
+  </div>
+  <div class="g-content__tabs">
+    <%= link_to "All Requests", refund_requests_path, class: "g-content__tab #{params[:status].blank? ? 'g-content__tab--active' : ''}" %>
+    <%= link_to "Pending", refund_requests_path(status: 'pending'), class: "g-content__tab #{params[:status] == 'pending' ? 'g-content__tab--active' : ''}" %>
+    <%= link_to "Approved", refund_requests_path(status: 'approved'), class: "g-content__tab #{params[:status] == 'approved' ? 'g-content__tab--active' : ''}" %>
+    <%= link_to "Declined", refund_requests_path(status: 'declined'), class: "g-content__tab #{params[:status] == 'declined' ? 'g-content__tab--active' : ''}" %>
+    <%= link_to "Processed", refund_requests_path(status: 'processed'), class: "g-content__tab #{params[:status] == 'processed' ? 'g-content__tab--active' : ''}" %>
+  </div>
+</div>
+
+<div class="g-table__header">
+  <div class="g-table__col--date">Date</div>
+  <div class="g-table__col--name">Customer</div>
+  <div class="g-table__col--amount">Amount</div>
+  <div class="g-table__col--reason">Reason</div>
+  <div class="g-table__col--status">Status</div>
+  <div class="g-table__col--location">Location</div>
+  <div class="g-table__col--actions">Actions</div>
+</div>
+
+<% if @refund_requests.present? %>
+  <% @refund_requests.each do |request| %>
+    <div class="g-table__row">
+      <div class="g-table__status g-table__status--<%= request.status == 'approved' ? 'confirmed' : (request.status == 'pending' ? 'pending' : (request.status == 'processed' ? 'success' : 'cancelled')) %>"></div>
+
+      <div class="g-table__col--date g-table__cell">
+        <%= request.created_at.strftime("%B %d, %Y") %>
+      </div>
+
+      <div class="g-table__col--name g-table__cell">
+        <%= request.appointment.name %>
+      </div>
+
+      <div class="g-table__col--amount g-table__cell">
+        ₦<%= number_with_delimiter(request.refund_amount) %>
+      </div>
+
+      <div class="g-table__col--reason g-table__cell">
+        <%= request.reason %>
+      </div>
+
+      <div class="g-table__col--status g-table__cell">
+        <span class="g-badge g-badge--<%= request.status %>">
+          <%= request.status.capitalize %>
+        </span>
+      </div>
+
+      <div class="g-table__col--location g-table__cell">
+        <%= request.appointment.location %>
+      </div>
+
+      <div class="g-table__col--actions g-table__cell">
+        <%= link_to 'View', refund_request_path(request), class: "g-button--link" %>
+        <% if request.pending? %>
+          <%= link_to 'Approve', refund_request_path(request), class: "g-button--link g-button--success" %>
+          <%= link_to 'Decline', refund_request_path(request), class: "g-button--link g-button--danger" %>
+        <% elsif request.approved? %>
+          <%= link_to 'Process', refund_request_path(request), class: "g-button--link g-button--primary" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <p>No refund requests found.</p>
+  </div>
+<% end %>
+
+<% if @refund_requests.respond_to?(:total_pages) %>
+  <div class="g-content__pagination">
+    <%= paginate @refund_requests %>
+  </div>
+<% end %>
+
+<style>
+  .g-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .g-badge--pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .g-badge--approved {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .g-badge--declined {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .g-badge--processed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
+
+  .g-button--success {
+    color: #155724;
+  }
+
+  .g-button--danger {
+    color: #721c24;
+  }
+
+  .g-button--primary {
+    color: #0c5460;
+  }
+</style>

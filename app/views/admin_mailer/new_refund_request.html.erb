@@ -1,0 +1,56 @@
+<!-- app/views/admin_mailer/new_refund_request.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #721c24; font-size: 16px; font-weight: bold;">New Refund Request - Action Required</p>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 20px;">Hello Administrator,</p>
+
+  <p style="font-size: 16px; margin-bottom: 25px;">A new refund request has been submitted by <strong><%= @appointment.name %></strong> that requires your review.</p>
+
+  <div style="background-color: #f8d7da; border-radius: 8px; padding: 20px; margin-bottom: 30px; border-left: 4px solid #721c24;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px; color: #721c24;">Refund Request Summary</h2>
+    <p style="margin-bottom: 10px; color: #721c24;"><strong>Request ID:</strong> #<%= @refund_request.id %></p>
+    <p style="margin-bottom: 10px; color: #721c24;"><strong>Amount:</strong> ₦<%= number_with_delimiter(@refund_request.refund_amount) %></p>
+    <p style="margin-bottom: 0; color: #721c24;"><strong>Status:</strong> Pending Review</p>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Customer Details</h2>
+    <p style="margin-bottom: 10px;"><strong>Name:</strong> <%= @appointment.name %></p>
+    <p style="margin-bottom: 10px;"><strong>Email:</strong> <%= @appointment.email %></p>
+    <% phone_number = @appointment.questions.find { |q| q.question == 'Phone number' } %>
+    <p style="margin-bottom: 10px;"><strong>Phone:</strong> <%= phone_number ? phone_number.answer : 'N/A' %></p>
+    <p style="margin-bottom: 10px;"><strong>Booking Date:</strong> <%= @appointment.formatted_start_time %></p>
+    <p style="margin-bottom: 0;"><strong>Location:</strong> <%= @appointment.location %></p>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Refund Request Details</h2>
+    <p style="margin-bottom: 10px;"><strong>Request Date:</strong> <%= @refund_request.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+    <p style="margin-bottom: 10px;"><strong>Reason:</strong> <%= @refund_request.reason %></p>
+    <% if @refund_request.customer_notes.present? %>
+      <p style="margin-bottom: 10px;"><strong>Customer Notes:</strong> <%= @refund_request.customer_notes %></p>
+    <% end %>
+    <p style="margin-bottom: 10px;"><strong>Bank Account:</strong> <%= @refund_request.account_name %> - <%= @refund_request.bank_name %></p>
+    <p style="margin-bottom: 0;"><strong>Account Number:</strong> <%= @refund_request.account_number %></p>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <a href="<%= refund_request_url(@refund_request) %>" style="display: inline-block; background-color: #EDD400; color: #000; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold;">
+      Review Refund Request
+    </a>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 10px;">Please review this refund request and take appropriate action as soon as possible.</p>
+  <p style="font-size: 16px; margin-bottom: 30px;">The customer has been notified that their request is under review and will receive an update once you process it.</p>
+
+  <p style="font-weight: bold; margin-bottom: 5px;">Thank you,</p>
+  <p style="margin-top: 0;">363 Photography System</p>
+
+  <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; font-size: 12px; color: #888;">
+    <p>This is an automated email from 363 Photography.</p>
+    <p>© <%= Date.today.year %> 363 Photography. All rights reserved.</p>
+  </div>
+</div>

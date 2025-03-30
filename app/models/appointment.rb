@@ -7,6 +7,7 @@ class Appointment < ApplicationRecord
   validates :email, presence: true
   validates :location, presence: true
   has_many :galleries
+  has_many :refund_requests
   has_many_attached :customer_pictures
   has_many_attached :photo_inspirations
   after_commit :process_images, on: :create

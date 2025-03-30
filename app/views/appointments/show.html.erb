@@ -4,7 +4,7 @@
     <h1><%= @appointment.name.capitalize %></h1>
   </div>
   <div class="g-content__toolbar-actions">
-    <%= link_to 'New Contact', new_appointment_path, class: "g-button g-button--action" %>
+    <%= link_to 'Edit Appointment', edit_appointment_path(@appointment), class: "g-button g-button--action" %>
   </div>
 </div>
 
@@ -107,6 +107,24 @@
             </div>
           <% end %>
         </div>
+        <% if @appointment.sales.where(void: false).where("amount_paid > 0").exists? %>
+          <div class="refund-action-container">
+            <div class="refund-action-message">
+              <p>Customer wants a refund? Generate a refund request link to send to them.</p>
+            </div>
+
+            <div class="refund-action-button">
+              <% refund_url = appointment_refund_request_public_url(appointment_uuid: @appointment.uuid) %>
+              <div data-controller="clipboard">
+                <input type="hidden" data-clipboard-target="source" value="<%= refund_url %>">
+                <button class="g-button g-button--secondary" data-action="clipboard#copy">
+                  <i class="far fa-copy"></i> Generate Refund Link
+                </button>
+                <span data-clipboard-target="feedback" class="clipboard-feedback">Link copied!</span>
+              </div>
+            </div>
+          </div>
+        <% end %>
       <% else %>
         <div class="g-content__empty">
           <p>No Sales linked to this contact</p>

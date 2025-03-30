@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_23_121853) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_30_112627) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -269,6 +269,25 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_23_121853) do
     t.index ["referrer_id"], name: "index_referrals_on_referrer_id"
   end
 
+  create_table "refund_requests", force: :cascade do |t|
+    t.bigint "appointment_id", null: false
+    t.integer "status", default: 0, null: false
+    t.string "reason", null: false
+    t.decimal "refund_amount", precision: 10, scale: 2, null: false
+    t.text "customer_notes"
+    t.text "admin_notes"
+    t.string "account_name", null: false
+    t.string "account_number", null: false
+    t.string "bank_name", null: false
+    t.bigint "processed_by_id"
+    t.datetime "processed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["appointment_id"], name: "index_refund_requests_on_appointment_id"
+    t.index ["processed_by_id"], name: "index_refund_requests_on_processed_by_id"
+    t.index ["status"], name: "index_refund_requests_on_status"
+  end
+
   create_table "sales", force: :cascade do |t|
     t.datetime "date"
     t.decimal "amount_paid"
@@ -330,6 +349,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_23_121853) do
   add_foreign_key "questions", "appointments"
   add_foreign_key "referrals", "customers", column: "referred_id"
   add_foreign_key "referrals", "customers", column: "referrer_id"
+  add_foreign_key "refund_requests", "appointments"
+  add_foreign_key "refund_requests", "users", column: "processed_by_id"
   add_foreign_key "sales", "appointments"
   add_foreign_key "sales", "photo_shoots"
 end

@@ -11,6 +11,7 @@
     <%= stylesheet_link_tag "gmail_ui", "data-turbo-track": "reload" %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
     <%= javascript_importmap_tags %>
   </head>
@@ -72,68 +73,77 @@
       <div class="g-layout__top-separator"></div>
 
       <div class="g-layout__main">
-        <aside class="g-sidebar">
-          <ul class="g-sidebar__nav">
-            <li>
-              <%= link_to photo_shoots_consent_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name == 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
-                <div class="g-sidebar__nav-icon"></div>
-                <span class="g-sidebar__nav-text">Consent</span>
-              <% end %>
-            </li>
+      <aside class="g-sidebar">
+        <ul class="g-sidebar__nav">
+          <li>
+            <%= link_to photo_shoots_consent_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name == 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Consent</span>
+            <% end %>
+          </li>
 
-            <li>
-              <%= link_to appointments_path, class: "g-sidebar__nav-item #{controller_name == 'appointments' ? 'g-sidebar__nav-item--active' : ''}" do %>
-                <div class="g-sidebar__nav-icon <%= controller_name == 'appointments' ? 'g-sidebar__nav-icon--active' : '' %>"></div>
-                <span class="g-sidebar__nav-text">Appointments</span>
-              <% end %>
-            </li>
+          <li>
+            <%= link_to appointments_path, class: "g-sidebar__nav-item #{controller_name == 'appointments' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Appointments</span>
+            <% end %>
+          </li>
 
-            <li>
-              <%= link_to photo_shoots_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name != 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
-                <div class="g-sidebar__nav-icon"></div>
-                <span class="g-sidebar__nav-text">Photoshoots</span>
-              <% end %>
-            </li>
+          <li>
+            <%= link_to photo_shoots_path, class: "g-sidebar__nav-item #{controller_name == 'photo_shoots' && action_name != 'consent' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Photoshoots</span>
+            <% end %>
+          </li>
 
-            <li>
-              <%= link_to sales_path, class: "g-sidebar__nav-item #{controller_name == 'sales' ? 'g-sidebar__nav-item--active' : ''}" do %>
-                <div class="g-sidebar__nav-icon"></div>
-                <span class="g-sidebar__nav-text">Sales</span>
-              <% end %>
-            </li>
+          <li>
+            <%= link_to sales_path, class: "g-sidebar__nav-item #{controller_name == 'sales' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Sales</span>
+            <% end %>
+          </li>
 
-            <li>
-              <%= link_to expenses_path, class: "g-sidebar__nav-item #{controller_name == 'expenses' ? 'g-sidebar__nav-item--active' : ''}" do %>
-                <div class="g-sidebar__nav-icon"></div>
-                <span class="g-sidebar__nav-text">Expenses</span>
-              <% end %>
-            </li>
+          <li>
+            <%= link_to refund_requests_path, class: "g-sidebar__nav-item #{controller_name == 'refund_requests' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Refunds</span>
+            <% end %>
+          </li>
 
-            <li>
-              <%= link_to customers_path, class: "g-sidebar__nav-item #{controller_name == 'customers' ? 'g-sidebar__nav-item--active' : ''}" do %>
-                <div class="g-sidebar__nav-icon"></div>
-                <span class="g-sidebar__nav-text">Contacts</span>
-              <% end %>
-            </li>
+          <li>
+            <%= link_to expenses_path, class: "g-sidebar__nav-item #{controller_name == 'expenses' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Expenses</span>
+            <% end %>
+          </li>
 
-            <li>
-              <%= link_to operations_path, class: "g-sidebar__nav-item #{controller_name == 'operations' ? 'g-sidebar__nav-item--active' : ''}" do %>
-                <div class="g-sidebar__nav-icon"></div>
-                <span class="g-sidebar__nav-text">Reports</span>
-              <% end %>
-            </li>
+          <li>
+            <%= link_to customers_path, class: "g-sidebar__nav-item #{controller_name == 'customers' ? 'g-sidebar__nav-item--active' : ''}" do %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Contacts</span>
+            <% end %>
+          </li>
 
+          <li>
             <%= link_to customers_analytics_path, class: "g-sidebar__nav-item #{controller_name == 'customers_analytics' ? 'g-sidebar__nav-item--active' : ''}" do %>
               <div class="g-sidebar__nav-icon"></div>
               <span class="g-sidebar__nav-text">Customer Analytics</span>
             <% end %>
-          </ul>
+          </li>
 
-          <div class="g-sidebar__footer">
-            <%= link_to "New Booking", new_appointment_path, class: "g-sidebar__new-booking" %>
-            <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "g-sidebar__logout" %>
-          </div>
-        </aside>
+          <li>
+            <%= link_to operations_path, class: "g-sidebar__nav-item #{controller_name == 'operations' ? 'g-sidebar__nav-item--active' : ''}" do  %>
+              <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Reports</span>
+            <% end %>
+          </li>
+        </ul>
+
+        <div class="g-sidebar__footer">
+          <%= link_to "New Booking", new_appointment_path, class: "g-sidebar__new-booking" %>
+          <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "g-sidebar__logout" %>
+        </div>
+      </aside>
 
         <div class="g-layout__content">
           <% if notice %>

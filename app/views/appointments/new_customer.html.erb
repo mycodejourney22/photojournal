@@ -5,13 +5,13 @@
     <span class="custom-logo-text">363 PHOTOGRAPHY</span>
   </div>
 
-  <h1 class="custom-form-title">Enter Details</h1>
+  <h1 class="custom-form-title"><%= @appointment.persisted? ? 'Update Details' : 'Enter Details' %></h1>
 
   <%= form_with model: @appointment,
               url: @appointment.persisted? ? appointment_path(@appointment) : appointments_path(location: params[:location], date: params[:date]),
               method: @appointment.persisted? ? :patch : :post,
-              local: false,
-              data: { turbo: true } do |form| %>
+              local: true,
+              data: { turbo: false } do |form| %>
 
     <div class="custom-form-field">
       <label class="custom-form-label">Name</label>
@@ -23,15 +23,16 @@
       <%= form.email_field :email, required: true, class: "custom-form-input" %>
     </div>
 
-    <%= form.hidden_field :location, value: params[:location], required: true %>
-    <%= form.hidden_field :start_time, value: params[:date], required: true %>
-    <%= form.hidden_field :price_id, value: params[:price_id] %>
+    <%= form.hidden_field :location, value: params[:location] || @appointment.location, required: true %>
+    <%= form.hidden_field :start_time, value: params[:date] || @appointment.start_time, required: true %>
+    <%= form.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
 
     <!-- Questions section -->
     <%= form.fields_for :questions do |question_form| %>
       <div class="custom-form-field">
         <label class="custom-form-label"><%= question_form.object.question %></label>
         <%= question_form.hidden_field :question %>
+        <%= question_form.hidden_field :id if question_form.object.persisted? %>
 
         <% if question_form.object.question == "Phone number" %>
           <%= question_form.text_field :answer, required: true, class: "custom-form-input" %>
@@ -84,6 +85,6 @@
       </div>
     <% end %>
 
-    <%= form.submit "Book Appointment", class: "custom-submit-button" %>
+    <%= form.submit @appointment.persisted? ? "Update Appointment" : "Book Appointment", class: "custom-submit-button" %>
   <% end %>
 </div>

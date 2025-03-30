@@ -22,8 +22,15 @@
     <input type="hidden" name="location" value="<%= params[:location] %>">
     <input type="hidden" name="price_id" value="<%= params[:price_id] || 'null' %>">
 
+    <!-- Include appointment ID if editing -->
+    <% if @appointment.persisted? %>
+      <input type="hidden" name="id" value="<%= @appointment.id %>">
+    <% end %>
+
     <div class="action-buttons">
-      <button type="submit" class="booking-action-button">Next</button>
+      <button type="submit" class="booking-action-button">
+        <%= @appointment.persisted? ? "Continue Editing" : "Next" %>
+      </button>
     </div>
   </form>
 </div>

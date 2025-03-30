@@ -16,7 +16,7 @@
     <h1>Thank You <%= @appointment.name.split(" ").first %>!</h1>
     <p class="confirmation">Your appointment has been scheduled.</p>
 
-    <% if !@appointment.payment_status && @appointment.price_id.present? %>
+    <% if !@appointment.payment_status && @appointment.price_id.present? && !@appointment.sales.exists? %>
       <div class="payment-alert">
         <p>Complete your booking by using the link below to make payment.</p>
         <%= link_to "Make Payment Now", make_payment_path(appointment_id: @appointment.id), class: "action-button payment-button" %>

@@ -84,3 +84,65 @@
     }
   }
 }
+/* app/assets/stylesheets/sidebar_dropdown.css */
+
+/* Dropdown styling */
+.g-sidebar__dropdown {
+  position: relative;
+}
+
+.g-sidebar__dropdown-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.g-sidebar__dropdown-arrow {
+  width: 10px;
+  height: 10px;
+  margin-left: 8px;
+  border-right: 2px solid #666;
+  border-bottom: 2px solid #666;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.g-sidebar__dropdown-toggle.open .g-sidebar__dropdown-arrow {
+  transform: rotate(-135deg);
+}
+
+.g-sidebar__dropdown-menu {
+  max-height: 0;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  transition: max-height 0.3s ease;
+}
+
+.g-sidebar__dropdown-menu.open {
+  max-height: 200px; /* Adjust this value based on your needs */
+}
+
+.g-sidebar__dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 15px 8px 35px;
+  color: #555;
+  text-decoration: none;
+  font-size: 14px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.g-sidebar__dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+.g-sidebar__dropdown-item--active {
+  background-color: rgba(237, 212, 0, 0.1);
+  color: #333;
+  border-left-color: #EDD400;
+}

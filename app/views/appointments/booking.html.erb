@@ -5,7 +5,7 @@
       <a href="#" class="logo_link">363 PHOTOGRAPHY</a>
     </h2>
 
-    <p class="py-2">Please kindly complete the form below to schedule your photoshoot.</p>
+    <p class="py-2">Please kindly complete the form below to <%= @appointment.persisted? ? 'reschedule' : 'schedule' %> your photoshoot.</p>
     <p class="text-center fw-bold my-3">Select a Day</p>
 
     <!-- Placeholder for JS Form -->
@@ -19,10 +19,15 @@
           <%= f.date_field :date, class: "form-control", required: true %>
           <div class="d-flex flex-column py-3">
             <%= f.label :location, "Studio Location:" %>
-            <%= f.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere']), { prompt: 'Choose your location' }, class: "form-data__input", required: true %>
+            <%= f.select :location, options_for_select(['Ajah', 'Ikeja', 'Surulere'], @appointment.location), { prompt: 'Choose your location' }, class: "form-data__input", required: true %>
           </div>
           <%= f.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
-          <%= f.submit "See Available Hours", class:"booking-action-button", id:"redirect_button" %>
+          <% if @appointment.persisted? %>
+            <%= f.hidden_field :id, value: @appointment.id %>
+          <% end %>
+          <div class="action-buttons">
+            <%= f.submit "See Available Hours", class:"booking-action-button", id:"redirect_button" %>
+          </div>
         <% end %>
       </div>
     </noscript>
@@ -36,7 +41,11 @@
     if (jsFormContainer) {
       jsFormContainer.innerHTML = `
         <%= escape_javascript(
-          form_with(model: @appointment, url: selected_date_appointments_path, method: :post, local: true, data: { turbo: false }) do |form|
+          form_with(model: @appointment,
+                   url: @appointment.persisted? ? selected_date_appointments_path(id: @appointment.id) : selected_date_appointments_path,
+                   method: :post,
+                   local: true,
+                   data: { turbo: false }) do |form|
             render(partial: 'calendar_form', locals: { form: form })
           end
         ) %>

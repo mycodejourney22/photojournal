@@ -10,4 +10,5 @@ class CustomerGalleryMailer < ApplicationMailer
       subject: "Your 363 Photography Gallery Access Code"
     )
   end
+
 end
