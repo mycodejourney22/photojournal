@@ -23,7 +23,9 @@
         <div class="package-card">
           <!-- Package image with price tag -->
           <div class="package-image">
-            <%= price.photo.attached? ? cl_image_tag(price.photo.key, class: "card-image") : image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", class: "card-image") %>
+            <%# <%= price.photo.attached? ? cl_image_tag(price.photo.key, class: "card-image") : image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", class: "card-image") %>
+            <%=  image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", class: "card-image") %>
+
             <div class="price-tag">
               ₦<%= number_with_delimiter(price.amount) %>
             </div>
