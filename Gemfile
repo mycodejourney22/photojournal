@@ -97,6 +97,9 @@ gem 'view_component'
 
 gem 'oauth'
 
+gem 'addressable', '~> 2.8.7'
+
+
 
 # gem 'view_component', require: 'view_component/engine'
 
