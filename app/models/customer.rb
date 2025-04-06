@@ -84,6 +84,31 @@ class Customer < ApplicationRecord
     save
   end
 
+  def referral_code
+    # First, check if an active referral already exists
+    active_referral = referrals_made.active.first
+
+    # If no active referral exists, generate a new one
+    if active_referral.nil?
+      active_referral = referrals_made.create!(
+        status: Referral::ACTIVE
+      )
+    end
+
+    # Return the code of the active referral
+    active_referral.code
+  end
+
+  # Optional: Method to regenerate referral code if needed
+  def regenerate_referral_code
+    # Mark any existing active referrals as expired
+    referrals_made.active.update_all(status: Referral::EXPIRED)
+
+    # Create a new active referral
+    new_referral = referrals_made.create!(status: Referral::ACTIVE)
+    new_referral.code
+  end
+
   private
 
   def normalize_phone_number_field

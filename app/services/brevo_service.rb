@@ -53,7 +53,8 @@ class BrevoService
         CREDITS: customer.credits.to_f,
         CUSTOMER_TYPE: customer.visits_count > 1 ? 'Returning' : 'New',
         FIRST_PURCHASE_DATE: customer.sales.where(void: false).order(date: :asc).first&.date&.strftime("%Y-%m-%d"),
-        SOCIAL_MEDIA_CONSENT: get_social_media_consent(customer)
+        SOCIAL_MEDIA_CONSENT: get_social_media_consent(customer),
+        REFERRAL_CODE: customer.referral_code
       },
       listIds: [ENV['BREVO_LIST_ID'].to_i],
       updateEnabled: true
