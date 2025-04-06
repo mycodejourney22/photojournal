@@ -7,6 +7,9 @@
   - [mailers, 2]
   - [default, 2]
   - [smugmug_uploads, 1]
+  - default
+  - mailers
+  - emails
 
 # Production-specific settings
 production:

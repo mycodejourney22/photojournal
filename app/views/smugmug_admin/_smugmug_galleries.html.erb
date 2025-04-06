@@ -1,0 +1,25 @@
+<!-- app/views/smugmug_admin/_smugmug_galleries.html.erb -->
+<% if galleries.present? %>
+  <div class="g-result-list">
+    <% galleries.each do |gallery| %>
+      <div class="g-result-item" data-gallery-key="<%= gallery[:key] %>" data-gallery-url="<%= gallery[:url] %>">
+        <div class="g-result-item__header">
+          <div class="g-result-item__title"><%= gallery[:title] %></div>
+          <div class="g-result-item__date"><%= gallery[:date] %></div>
+        </div>
+        <div class="g-result-item__details">
+          <div class="g-result-item__count"><%= gallery[:image_count] %> photos</div>
+          <div class="g-result-item__key">Key: <%= gallery[:key] %></div>
+        </div>
+        <div class="g-result-item__actions">
+          <button type="button" class="g-button g-button--small select-gallery-btn">Select</button>
+          <a href="<%= gallery[:url] %>" target="_blank" class="g-button g-button--small">View</a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="g-content__empty">
+    <p>No galleries found.</p>
+  </div>
+<% end %>

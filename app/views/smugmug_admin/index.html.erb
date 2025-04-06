@@ -1,0 +1,131 @@
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Smugmug Gallery Mapping</h1>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <div class="g-search-form">
+      <%= form_with url: search_appointments_smugmug_admin_index_path, method: :get, data: { turbo_frame: "search_results" } do |f| %>
+        <%= f.text_field :query, placeholder: "Search by name, email, or phone...", class: "g-search-input" %>
+        <%= f.submit "Search", class: "g-button g-button--action" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="g-content__layout">
+  <!-- Main Column -->
+  <div class="g-content__main">
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Unmapped Appointments (<%= @unmapped_count %>)</div>
+      </div>
+
+      <% if @unmapped_appointments.present? %>
+        <div class="g-table">
+          <div class="g-table__header">
+            <div class="g-table__col--date">Date</div>
+            <div class="g-table__col--name">Name</div>
+            <div class="g-table__col--type">Type</div>
+            <div class="g-table__col--location">Location</div>
+            <div class="g-table__col--galleries">Galleries</div>
+            <div class="g-table__col--actions">Actions</div>
+          </div>
+
+          <% @unmapped_appointments.each do |appointment| %>
+            <div class="g-table__row">
+              <div class="g-table__col--date g-table__cell">
+                <%= appointment.formatted_start_time %>
+              </div>
+              <div class="g-table__col--name g-table__cell">
+                <%= appointment.name %>
+              </div>
+              <div class="g-table__col--type g-table__cell">
+                <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' } %>
+                <%= type_of_shoots ? type_of_shoots.answer : 'N/A' %>
+              </div>
+              <div class="g-table__col--location g-table__cell">
+                <%= appointment.location %>
+              </div>
+              <div class="g-table__col--galleries g-table__cell">
+                <%= appointment.galleries.count %>
+              </div>
+              <div class="g-table__col--actions g-table__cell">
+                <%= link_to "Map Gallery", map_gallery_smugmug_admin_path(appointment), class: "g-button--link" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="g-pagination">
+          <%= paginate @unmapped_appointments %>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No unmapped appointments found.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Turbo Frame for search results -->
+    <%= turbo_frame_tag "search_results" %>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="g-content__sidebar">
+    <div class="g-section">
+      <div class="g-section__header">
+        <div class="g-section__title">Recent Mappings</div>
+      </div>
+
+      <% if @recent_mappings.present? %>
+        <div class="g-recent-list">
+          <% @recent_mappings.each do |mapping| %>
+            <div class="g-recent-item">
+              <div class="g-recent-item__header">
+                <div class="g-recent-item__title">
+                  <%= mapping.gallery.appointment.name %>
+                </div>
+                <div class="g-recent-item__date">
+                  <%= mapping.created_at.strftime("%b %d, %Y") %>
+                </div>
+              </div>
+              <div class="g-recent-item__details">
+                <div class="g-recent-item__label">Smugmug Key:</div>
+                <div class="g-recent-item__value"><%= mapping.smugmug_key %></div>
+              </div>
+              <div class="g-recent-item__details">
+                <div class="g-recent-item__label">Status:</div>
+                <div class="g-recent-item__value">
+                  <span class="g-badge g-badge--<%= mapping.status %>">
+                    <%= mapping.status.capitalize %>
+                  </span>
+                </div>
+              </div>
+              <div class="g-recent-item__actions">
+                <a href="<%= mapping.smugmug_url %>" target="_blank" class="g-button g-button--small">View on Smugmug</a>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No recent mappings found.</p>
+        </div>
+      <% end %>
+
+      <div class="g-help-card">
+        <h3 class="g-help-card__title">Mapping Instructions</h3>
+        <div class="g-help-card__content">
+          <p>To map a Smugmug gallery to an appointment:</p>
+          <ol>
+            <li>Find the appointment using the search or from the unmapped list</li>
+            <li>Click "Map Gallery" to open the mapping form</li>
+            <li>Enter the Smugmug Gallery Key and URL</li>
+            <li>Save the mapping</li>
+          </ol>
+          <p><strong>Note:</strong> The Smugmug Gallery Key is found in the URL as the last segment after /album/ or can be found in the gallery info panel.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

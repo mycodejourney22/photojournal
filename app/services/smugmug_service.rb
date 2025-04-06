@@ -545,6 +545,76 @@ end
       "https://mocksmugmug.com/download/#{image_key}"
     end
 
+    def search_galleries(query, options = {})
+      # Skip in mock mode
+      if Rails.env.development? && ENV['SMUGMUG_MOCK'] == 'true'
+        return mock_search_galleries(query)
+      end
+
+      begin
+        # Normalize the query
+        normalized_query = query.to_s.strip
+        case_insensitive_query = normalized_query.downcase
+        Rails.logger.info("Searching for galleries with query: '#{normalized_query}'")
+
+        # Get user albums
+        user_albums_endpoint = "user/#{@user}!albums"
+        albums_response = make_api_request(user_albums_endpoint)
+
+        if albums_response[:success] && albums_response[:data] && albums_response[:data][:Response]
+          albums = albums_response[:data][:Response][:Album] || []
+          albums = [albums] unless albums.is_a?(Array)
+
+          # Filter albums by name (case insensitive)
+          matching_albums = albums.select do |album|
+            album_name = album[:Keywords]
+            album_name == case_insensitive_query
+          end
+
+          Rails.logger.info("Found #{matching_albums.size} matching albums for query '#{normalized_query}'")
+
+          # Format results
+          results = matching_albums.map do |album|
+            {
+              key: album[:AlbumKey],
+              title: album[:Name],
+              url: album[:WebUri],
+              date: album[:LastUpdated],
+              image_count: album[:ImageCount] || 0
+            }
+          end
+
+          return { success: true, galleries: results }
+        else
+          error = albums_response[:error] || "Unknown error fetching albums"
+          Rails.logger.error("Error searching galleries: #{error}")
+          return { success: false, error: error }
+        end
+      rescue StandardError => e
+        Rails.logger.error("Error in search_galleries: #{e.message}")
+        Rails.logger.error(e.backtrace.join("\n"))
+        return { success: false, error: e.message }
+      end
+    end
+
+    # Mock implementation for development
+    def mock_search_galleries(query)
+      # Generate random gallery data that matches the query
+      random_count = rand(1..5)
+
+      galleries = random_count.times.map do |i|
+        {
+          key: "GALLERY-#{SecureRandom.hex(4)}",
+          title: "#{query.capitalize} Gallery #{i+1}",
+          url: "https://mocksmugmug.com/gallery/#{query.parameterize}-#{i+1}",
+          date: (rand(1..365).days.ago).strftime("%Y-%m-%d"),
+          image_count: rand(10..100)
+        }
+      end
+
+      { success: true, galleries: galleries }
+    end
+
   private
 
   def create_folder_structure_with_nodes(root_node_id, appointment)

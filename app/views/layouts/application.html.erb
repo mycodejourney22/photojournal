@@ -137,6 +137,13 @@
               <span class="g-sidebar__nav-text">Reports</span>
             <% end %>
           </li>
+
+          <li>
+            <%= link_to smugmug_admin_index_path, class: "g-sidebar__nav-item #{controller_name == 'smugmug_admin' ? 'g-sidebar__nav-item--active' : ''}" do %>
+            <div class="g-sidebar__nav-icon"></div>
+              <span class="g-sidebar__nav-text">Gallery Mapping</span>
+            <% end %>
+          </li>
         </ul>
 
         <div class="g-sidebar__footer">

@@ -47,6 +47,11 @@ Rails.application.routes.draw do
       get :all_galleries
       post :generate_referral
     end
+
+    collection do
+      get 'export'
+      post 'sync_all_to_brevo'
+    end
   end
 
   resources :customers_analytics, only: [:index]
@@ -69,6 +74,15 @@ Rails.application.routes.draw do
   }
   namespace :admin do
     resources :users, only: [:index, :edit, :update, :new, :create]
+    resources :special_emails, only: [:index, :new, :create] do
+      collection do
+        get :mothers_day
+        get :eid_celebration
+        get :christmas
+        get :new_year
+        post :send_special_email
+      end
+    end
   end
 
   get 'password_setup/:token', to: 'password_setups#edit', as: :password_setup
@@ -165,6 +179,20 @@ Rails.application.routes.draw do
       get :confirmation
     end
   end
+
+  # Routes for bulk mapping
+  resources :smugmug_admin, only: [:index] do
+    collection do
+      get :search_appointments
+      get :search_smugmug
+    end
+
+    member do
+      get :map_gallery
+      post :create_mapping
+    end
+  end
+
 
   # Process pending rewards (admin only)
   post 'referrals/process_rewards', to: 'referrals#process_rewards', as: :process_referral_rewards

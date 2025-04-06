@@ -1,0 +1,14 @@
+<%- headers = ['Name', 'Email', 'Phone Number', 'Total Visits', 'Total Spent', 'Referral Credits', 'Last Visit', 'Created At'] -%>
+<%= CSV.generate_line headers %>
+<% @customers.each do |customer| %>
+  <%= CSV.generate_line([
+    customer.name,
+    customer.email,
+    customer.phone_number,
+    customer.visits_count,
+    customer.sales.sum(:amount_paid),
+    customer.credits,
+    customer.sales.maximum(:date)&.strftime("%Y-%m-%d"),
+    customer.created_at.strftime("%Y-%m-%d")
+  ]) %>
+<% end %>

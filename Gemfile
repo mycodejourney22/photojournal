@@ -5,6 +5,8 @@ ruby "3.1.2"
 gem 'aws-sdk-s3', '~> 1.0'
 gem 'kaminari'
 
+gem 'sib-api-v3-sdk', '~> 7.5.0'
+
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.3", ">= 7.1.3.2"

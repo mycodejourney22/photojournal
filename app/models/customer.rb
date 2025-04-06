@@ -5,6 +5,8 @@ class Customer < ApplicationRecord
   validates :phone_number, presence: true
   has_many :referrals_made, class_name: 'Referral', foreign_key: 'referrer_id', dependent: :nullify
   has_many :referrals_received, class_name: 'Referral', foreign_key: 'referred_id', dependent: :nullify
+  after_commit :sync_with_brevo, on: [:create, :update]
+
 
   attribute :credits, :integer, default: 0
 

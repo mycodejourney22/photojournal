@@ -151,6 +151,8 @@ GEM
     drb (2.2.1)
     error_highlight (0.7.0)
     erubi (1.13.0)
+    ethon (0.16.0)
+      ffi (>= 1.15.0)
     execjs (2.9.1)
     faraday (2.12.1)
       faraday-net_http (>= 2.0, < 3.5)
@@ -337,6 +339,9 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sib-api-v3-sdk (7.5.0)
+      json (~> 2.1, >= 2.1.0)
+      typhoeus (~> 1.0, >= 1.0.1)
     sidekiq (7.3.6)
       connection_pool (>= 2.3.0)
       logger
@@ -362,6 +367,8 @@ GEM
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
+    typhoeus (1.4.1)
+      ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uniform_notifier (1.16.0)
@@ -424,6 +431,7 @@ DEPENDENCIES
   sassc-rails
   scout_apm
   selenium-webdriver
+  sib-api-v3-sdk (~> 7.5.0)
   sidekiq
   simple_form!
   sprockets-rails

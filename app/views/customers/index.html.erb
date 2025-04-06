@@ -5,6 +5,11 @@
   </div>
   <div class="g-content__toolbar-actions">
     <%= link_to "New Contact", new_customer_path, class: "g-button g-button--action" %>
+    <%= link_to "Export CSV", export_customers_path(format: :csv), class: "g-button g-button--secondary" %>
+    <%= button_to "Sync All to Brevo", sync_all_to_brevo_customers_path,
+        method: :post,
+        data: { confirm: "This will sync all customers to Brevo. This operation might take some time. Continue?" },
+        class: "g-button g-button--warning" %>
   </div>
 </div>
 

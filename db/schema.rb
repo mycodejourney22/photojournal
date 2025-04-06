@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_30_112627) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_30_213102) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -119,6 +119,46 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_30_112627) do
     t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
   end
 
+  create_table "campaign_customers", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.bigint "customer_id", null: false
+    t.string "status", default: "pending"
+    t.datetime "sent_at"
+    t.datetime "opened_at"
+    t.datetime "clicked_at"
+    t.integer "open_count", default: 0
+    t.integer "click_count", default: 0
+    t.json "clicked_links", default: []
+    t.text "error_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id", "customer_id"], name: "index_campaign_customers_on_campaign_id_and_customer_id", unique: true
+    t.index ["campaign_id"], name: "index_campaign_customers_on_campaign_id"
+    t.index ["customer_id"], name: "index_campaign_customers_on_customer_id"
+    t.index ["status"], name: "index_campaign_customers_on_status"
+  end
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "subject", null: false
+    t.text "preheader"
+    t.text "body", null: false
+    t.string "campaign_type", default: "greeting", null: false
+    t.string "template"
+    t.string "sender_name", default: "363 Photography"
+    t.string "sender_email", default: "noreply@363photography.org"
+    t.integer "status", default: 0
+    t.datetime "scheduled_at"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.json "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_type"], name: "index_campaigns_on_campaign_type"
+    t.index ["name"], name: "index_campaigns_on_name"
+    t.index ["status"], name: "index_campaigns_on_status"
+  end
+
   create_table "credit_usages", force: :cascade do |t|
     t.bigint "customer_id", null: false
     t.bigint "appointment_id", null: false
@@ -142,6 +182,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_30_112627) do
     t.datetime "updated_at", null: false
     t.integer "credits", default: 0, null: false
     t.string "referral_source"
+    t.boolean "email_opt_out", default: false
+    t.datetime "email_opt_out_date"
+    t.json "email_preferences"
     t.index ["phone_number"], name: "index_customers_on_phone_number", unique: true
   end
 
@@ -340,6 +383,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_30_112627) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "prices"
+  add_foreign_key "campaign_customers", "campaigns"
+  add_foreign_key "campaign_customers", "customers"
   add_foreign_key "credit_usages", "appointments"
   add_foreign_key "credit_usages", "customers"
   add_foreign_key "galleries", "appointments"

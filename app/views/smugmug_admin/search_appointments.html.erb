@@ -1,0 +1,63 @@
+<!-- app/views/smugmug_admin/search_appointments.html.erb -->
+<%= turbo_frame_tag "search_results" do %>
+  <div class="g-section">
+    <div class="g-section__header">
+      <div class="g-section__title">Search Results (<%= @appointments.try(:total_count) || 0 %>)</div>
+    </div>
+
+    <% if @appointments.present? %>
+      <div class="g-table">
+        <div class="g-table__header">
+          <div class="g-table__col--date">Date</div>
+          <div class="g-table__col--name">Name</div>
+          <div class="g-table__col--type">Type</div>
+          <div class="g-table__col--location">Location</div>
+          <div class="g-table__col--galleries">Galleries</div>
+          <div class="g-table__col--status">Status</div>
+          <div class="g-table__col--actions">Actions</div>
+        </div>
+
+        <% @appointments.each do |appointment| %>
+          <div class="g-table__row">
+            <div class="g-table__col--date g-table__cell">
+              <%= appointment.formatted_start_time %>
+            </div>
+            <div class="g-table__col--name g-table__cell">
+              <%= appointment.name %>
+            </div>
+            <div class="g-table__col--type g-table__cell">
+              <% type_of_shoots = appointment.questions.find { |q| q.question == 'Type of shoots' } %>
+              <%= type_of_shoots ? type_of_shoots.answer : 'N/A' %>
+            </div>
+            <div class="g-table__col--location g-table__cell">
+              <%= appointment.location %>
+            </div>
+            <div class="g-table__col--galleries g-table__cell">
+              <%= appointment.galleries.count %>
+            </div>
+            <div class="g-table__col--status g-table__cell">
+              <% if appointment.galleries.any? && appointment.galleries.all? { |g| g.gallery_mapping&.completed? } %>
+                <span class="g-badge g-badge--completed">Mapped</span>
+              <% elsif appointment.galleries.any? && appointment.galleries.any? { |g| g.gallery_mapping.present? } %>
+                <span class="g-badge g-badge--processing">Partial</span>
+              <% else %>
+                <span class="g-badge g-badge--pending">Unmapped</span>
+              <% end %>
+            </div>
+            <div class="g-table__col--actions g-table__cell">
+              <%= link_to "Map Gallery", map_gallery_smugmug_admin_path(appointment), class: "g-button--link" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="g-pagination">
+        <%= paginate @appointments %>
+      </div>
+    <% else %>
+      <div class="g-content__empty">
+        <p>No appointments found matching your search criteria.</p>
+      </div>
+    <% end %>
+  </div>
+<% end %>
