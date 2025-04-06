@@ -239,21 +239,15 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.7-aarch64-linux-gnu)
+    nokogiri (1.17.2-aarch64-linux)
       racc (~> 1.4)
-    nokogiri (1.18.7-aarch64-linux-musl)
+    nokogiri (1.17.2-arm-linux)
       racc (~> 1.4)
-    nokogiri (1.18.7-arm-linux-gnu)
+    nokogiri (1.17.2-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.7-arm-linux-musl)
+    nokogiri (1.17.2-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.7-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.7-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.7-x86_64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.7-x86_64-linux-musl)
+    nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
     oauth (1.1.0)
       oauth-tty (~> 1.0, >= 1.0.1)
@@ -441,6 +435,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   kaminari
+  nokogiri (~> 1.17.0)
   oauth
   pg (~> 1.1)
   pg_search

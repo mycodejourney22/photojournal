@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 ruby "3.1.2"
 
+gem 'nokogiri', '~> 1.17.0'
 gem 'aws-sdk-s3', '~> 1.0'
 gem 'kaminari'
 
