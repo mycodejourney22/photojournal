@@ -10,6 +10,8 @@ class BrevoService
 
   def create_or_update_contact(customer)
     # Get the customer's purchases - group by product type
+
+
     product_types = customer.sales.where(void: false)
                             .pluck(:product_service_name)
                             .uniq
@@ -66,6 +68,7 @@ class BrevoService
       true
     rescue SibApiV3Sdk::ApiError => e
       Rails.logger.error("Brevo API error: #{e.message}")
+      Rails.logger.error "Brevo API Error: #{e.message}"
       false
     end
   end

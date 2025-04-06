@@ -107,7 +107,7 @@ class SalesController < ApplicationController
 
     unless customer && customer.phone_number.present?
       if @appointment.present?
-        customer = Customer.new(name: @appointment.name, phone_number: normalized_phone_number)
+        customer = Customer.new(name: @appointment.name, phone_number: normalized_phone_number, email: @appointment.email)
       else
         customer = Customer.new(name: @sale.customer_name, phone_number: @sale.customer_phone_number)
       end

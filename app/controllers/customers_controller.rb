@@ -108,7 +108,7 @@ class CustomersController < ApplicationController
 
   def sync_with_brevo
     # Skip if no email provided or in test environment
-    return unless email.present? && !Rails.env.test?
+    return unless self.email.present? && !Rails.env.test?
 
     # Sync in background to avoid slowing down the request
     BrevoSyncJob.perform_later(self.id)

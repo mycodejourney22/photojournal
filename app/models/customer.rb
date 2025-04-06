@@ -5,7 +5,7 @@ class Customer < ApplicationRecord
   validates :phone_number, presence: true
   has_many :referrals_made, class_name: 'Referral', foreign_key: 'referrer_id', dependent: :nullify
   has_many :referrals_received, class_name: 'Referral', foreign_key: 'referred_id', dependent: :nullify
-  after_commit :sync_with_brevo, on: [:create, :update]
+  after_commit :sync_with_brevo, on: [:create, :update], if: :email_present?
 
 
   attribute :credits, :integer, default: 0
@@ -113,5 +113,16 @@ class Customer < ApplicationRecord
 
   def normalize_phone_number_field
     self.phone_number = normalize_phone_number(phone_number) if phone_number.present?
+  end
+
+  def email_present?
+    email.present?
+  end
+
+  def sync_with_brevo
+    BrevoSyncJob.perform_later(self.id)
+  rescue => e
+    Rails.logger.error "Brevo sync failed: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
   end
 end
