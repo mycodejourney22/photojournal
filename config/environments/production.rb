@@ -39,8 +39,16 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :wasabi
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: 'https://photologger-0d07f7db019d.herokuapp.com/' }
+  config.action_controller.default_url_options = {
+    host: ENV['APPLICATION_HOST'] || "photologger-0d07f7db019d.herokuapp.com",
+    protocol: "https"
+  }
 
+  # Also set for mailers if you use them
+  config.action_mailer.default_url_options = {
+    host: ENV['APPLICATION_HOST'] || "photologger-0d07f7db019d.herokuapp.com",
+    protocol: "https"
+  }
   # SMTP settings for Gmail
   config.action_mailer.smtp_settings = {
     address: "smtp.gmail.com",
