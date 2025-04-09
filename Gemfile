@@ -18,6 +18,8 @@ gem "devise"
 gem "pundit"
 gem "pg_search"
 
+gem 'active_model_serializers', '~> 0.10.13'
+
 gem 'ffi', '< 1.17.0'
 gem 'scout_apm'
 
