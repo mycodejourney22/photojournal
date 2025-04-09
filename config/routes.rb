@@ -29,6 +29,38 @@ Rails.application.routes.draw do
     get 'daily_sales/:date', to: 'operations#daily_sales', as: :daily_sales, on: :collection
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :prices, only: [:index, :show]
+      resources :available_slots, only: [:index]
+
+      resources :appointments, only: [:create, :show] do
+        member do
+          post :cancel
+        end
+      end
+
+      resources :referrals, only: [] do
+        collection do
+          get :validate
+        end
+      end
+
+      resources :credits, only: [] do
+        collection do
+          get :check
+        end
+      end
+
+      resources :payments, only: [] do
+        collection do
+          post :initiate
+          get :verify
+        end
+      end
+    end
+  end
+
   post '/webhooks/paystack', to: 'paystack_webhooks#paystack'
   get 'make_payment', to: 'payments#make_payment'
   post 'paystack_payment', to: 'payments#initiate_payment'
