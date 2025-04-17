@@ -6,13 +6,17 @@ class SmugmugAdminController < ApplicationController
 
   def index
     # List appointments that don't have galleries or mappings
-    @unmapped_appointments = Appointment.left_joins(galleries: :gallery_mapping)
-                                      .where(galleries: { id: nil })
-                                      .or(Appointment.left_joins(galleries: :gallery_mapping)
-                                           .where(gallery_mappings: { id: nil }))
-                                      .order(start_time: :desc)
-                                      .page(params[:page])
-                                      .per(20)
+    @unmapped_appointments = Appointment.joins(:photo_shoot)
+                                        .left_joins(galleries: :gallery_mapping)
+                                        .where(galleries: { id: nil })
+                                        .or(
+                                          Appointment.joins(:photo_shoot)
+                                                  .left_joins(galleries: :gallery_mapping)
+                                                  .where(gallery_mappings: { id: nil })
+                                        )
+                                        .order(start_time: :desc)
+                                        .page(params[:page])
+                                        .per(20)
 
     # Count of unmapped appointments
     @unmapped_count = @unmapped_appointments.total_count
