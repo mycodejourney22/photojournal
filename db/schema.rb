@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_25_142251) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_25_174033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -354,9 +354,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_25_142251) do
     t.string "void_reason"
     t.integer "discount", default: 0
     t.string "discount_reason"
+    t.bigint "studio_id"
     t.index ["appointment_id"], name: "index_sales_on_appointment_id"
     t.index ["customer_id"], name: "index_sales_on_customer_id"
     t.index ["photo_shoot_id"], name: "index_sales_on_photo_shoot_id"
+    t.index ["studio_id"], name: "index_sales_on_studio_id"
   end
 
   create_table "staffs", force: :cascade do |t|
@@ -414,4 +416,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_25_142251) do
   add_foreign_key "refund_requests", "users", column: "processed_by_id"
   add_foreign_key "sales", "appointments"
   add_foreign_key "sales", "photo_shoots"
+  add_foreign_key "sales", "studios"
 end

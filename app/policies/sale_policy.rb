@@ -7,20 +7,36 @@ class SalePolicy < ApplicationPolicy
 
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
+    # def resolve
+    #   if user.admin? || user.manager? || user.super_admin?
+    #     scope.all
+    #   else
+    #     case user.role
+    #     when 'ikeja'
+    #       scope.where("location ILIKE ?", '%ikeja%')
+    #       .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%ikeja%")))
+    #     when 'surulere'
+    #       scope.where("location ILIKE ?", '%surulere%')
+    #       .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%surulere%")))
+    #     when 'ajah'
+    #       scope.where("location ILIKE ? OR location ILIKE ?", '%Ajah%', '%Ilaje%')
+    #            .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%Ajah%")))
+    #     else
+    #       scope.none
+    #     end
+    #   end
+    # end
     def resolve
       if user.admin? || user.manager? || user.super_admin?
         scope.all
       else
         case user.role
         when 'ikeja'
-          scope.where("location ILIKE ?", '%ikeja%')
-          .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%ikeja%")))
+          scope.joins(:studio).where(studios: { location: 'Ikeja' })
         when 'surulere'
-          scope.where("location ILIKE ?", '%surulere%')
-          .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%surulere%")))
+          scope.joins(:studio).where(studios: { location: 'Surulere' })
         when 'ajah'
-          scope.where("location ILIKE ? OR location ILIKE ?", '%Ajah%', '%Ilaje%')
-               .or(Sale.where(id: Sale.joins(:appointment).select(:id).where("appointments.location ILIKE ?", "%Ajah%")))
+          scope.joins(:studio).where(studios: { location: 'Ajah' })
         else
           scope.none
         end

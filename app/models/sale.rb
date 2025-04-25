@@ -11,6 +11,8 @@ class Sale < ApplicationRecord
   # belongs_to :photo_shoot, optional: true
   include PgSearch::Model
   belongs_to :appointment, optional: true
+  belongs_to :studio, optional: true
+  before_validation :determine_studio
   pg_search_scope :global_search,
   against: [ :customer_name, :customer_phone_number , :payment_type],
     using: {
@@ -31,5 +33,15 @@ class Sale < ApplicationRecord
     if customer_name.blank? && appointment_id.blank?
       errors.add(:base, "Either customer name or appointment must be provided")
     end
+  end
+
+  def determine_studio
+    self.studio_id ||= 
+      if location.present?
+        studio = Studio.find_by_location_from_text(location)
+        studio&.id
+      elsif appointment&.studio_id.present?
+        appointment.studio_id
+      end
   end
 end

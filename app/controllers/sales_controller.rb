@@ -15,6 +15,7 @@ class SalesController < ApplicationController
   def new
     authorize Sale
     @sale = @appointment ? @appointment.sales.build : Sale.new
+    @studios = Studio.active
   end
 
   def create
@@ -22,11 +23,18 @@ class SalesController < ApplicationController
     @sale = build_sale
     assign_customer_to_sale(@sale)
 
-    @sale.location = determine_location(current_user)
+    @sale.studio_id ||= determine_studio_for_user(current_user)
+
+    if @sale.studio_id.present? && @sale.location.blank?
+      studio = Studio.find_by(id: @sale.studio_id)
+      @sale.location = studio&.location
+    end
+    
 
     if @sale.save
       redirect_to_success
     else
+      @studios = Studio.active
       render :new, status: :unprocessable_entity
     end
   end
@@ -34,6 +42,7 @@ class SalesController < ApplicationController
   def edit
     authorize Sale
     @sale = Sale.find(params[:id])
+    @studios = Studio.active
   end
 
   def update
@@ -42,6 +51,7 @@ class SalesController < ApplicationController
     if @sale.update(sale_params)
       redirect_to sales_path, notice: 'Sale was successfully updated.'
     else
+      @studios = Studio.active
       render :edit
     end
   end
@@ -69,18 +79,39 @@ class SalesController < ApplicationController
       :customer_name, :customer_phone_number, :customer_service_officer_name, :product_service_name)
   end
 
-  def determine_location(user)
+  # def determine_location(user)
+  #   case user.role
+  #   when 'admin'
+  #     'general'
+  #   when 'ajah'
+  #     'ajah'
+  #   when 'ikeja'
+  #     'ikeja'
+  #   when 'surulere'
+  #     'surulere'
+  #   else
+  #     'unknown'
+  #   end
+  # end
+
+  def determine_studio_for_user(user)
     case user.role
     when 'admin'
-      'general'
+      # For admin users, you might want to:
+      # 1. Let them select a studio (return nil and handle in the view)
+      # 2. Use a default studio
+      # 3. Use the studio from the appointment if available
+      # Here's option 2 as an example:
+      Studio.find_by(name: "Admin Studio")&.id
     when 'ajah'
-      'ajah'
+      Studio.find_by("location ILIKE ?", "%ajah%")&.id
     when 'ikeja'
-      'ikeja'
+      Studio.find_by("location ILIKE ?", "%ikeja%")&.id
     when 'surulere'
-      'surulere'
+      Studio.find_by("location ILIKE ?", "%surulere%")&.id
     else
-      'unknown'
+      # Could return nil or a default studio
+      nil
     end
   end
 
