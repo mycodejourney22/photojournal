@@ -16,7 +16,7 @@ class Appointment < ApplicationRecord
   before_validation :normalize_location
   belongs_to :studio, optional: true
   before_validation :set_location_from_studio
-
+  before_validation :set_studio_from_location
 
 
   scope :available_for_booking, -> { where(no_show: false, status: true) }
@@ -148,6 +148,13 @@ class Appointment < ApplicationRecord
   def set_location_from_studio
     if studio_id.present? && location.blank?
       self.location = Studio.find_by(id: studio_id)&.location
+    end
+  end
+
+  def set_studio_from_location
+    if location.present? && studio_id.blank?
+      studio = Studio.find_by("location ILIKE ?", "%#{location}%")
+      self.studio_id = studio&.id
     end
   end
 
