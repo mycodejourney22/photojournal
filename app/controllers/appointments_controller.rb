@@ -29,7 +29,7 @@ class AppointmentsController < ApplicationController
 
   def booking
     authorize Appointment
-
+    @studios = Studio.active
     if params[:id].present?
       @appointment = Appointment.find(params[:id])
       build_questions_for_booking(@appointment)
@@ -293,26 +293,27 @@ class AppointmentsController < ApplicationController
 
   private
 
-  # def appointment_params
-  #   params.require(:appointment).permit(
-  #     :name,
-  #     :email,
-  #     :start_time,
-  #     :end_time,
-  #     :location,
-  #     :price_id,
-  #     customer_pictures: [],
-  #     photo_inspirations: [],
-  #     questions_attributes: [:id, :question, :answer, :_destroy]
-  #   )
-  # end
-
   def appointment_params
     params.require(:appointment).permit(
-      :name, :email, :start_time, :studio_id,
+      :name,
+      :email,
+      :start_time,
+      :end_time,
+      :location,
+      :price_id,
+      :studio_id,
+      customer_pictures: [],
+      photo_inspirations: [],
       questions_attributes: [:id, :question, :answer, :_destroy]
     )
   end
+
+  # def appointment_params
+  #   params.require(:appointment).permit(
+  #     :name, :email, :start_time, :studio_id,
+  #     questions_attributes: [:id, :question, :answer, :_destroy]
+  #   )
+  # end
 
 
   def render_photos(photo_type)
