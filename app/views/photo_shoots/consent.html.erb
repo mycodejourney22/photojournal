@@ -48,7 +48,7 @@
       </div>
 
       <div class="g-table__col--date g-table__cell">
-        <%= appointment.start_time.strftime("%A, %d %B %Y") %>
+        <%= appointment.start_time.strftime("%A, %d %B %Y") if appointment.start_time.present? %>
       </div>
     </div>
   <% end %>
