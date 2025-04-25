@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_30_213102) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_25_142251) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,8 +58,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_30_213102) do
     t.bigint "price_id"
     t.boolean "payment_status", default: false
     t.string "referral_source"
+    t.bigint "studio_id"
     t.index ["price_id"], name: "index_appointments_on_price_id"
     t.index ["start_time"], name: "index_appointments_on_start_time"
+    t.index ["studio_id"], name: "index_appointments_on_studio_id"
     t.index ["uuid"], name: "index_appointments_on_uuid", unique: true
   end
 
@@ -365,6 +367,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_30_213102) do
     t.boolean "active", default: true
   end
 
+  create_table "studios", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "location", null: false
+    t.string "address", null: false
+    t.string "phone", null: false
+    t.string "email", null: false
+    t.boolean "active", default: true
+    t.text "description"
+    t.jsonb "settings", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -383,6 +398,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_30_213102) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "prices"
+  add_foreign_key "appointments", "studios"
   add_foreign_key "campaign_customers", "campaigns"
   add_foreign_key "campaign_customers", "customers"
   add_foreign_key "credit_usages", "appointments"

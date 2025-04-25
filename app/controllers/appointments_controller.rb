@@ -198,6 +198,7 @@ class AppointmentsController < ApplicationController
   def new
     authorize Appointment
     @appointment = Appointment.new
+    @studios = Studio.active
     build_questions_for(@appointment)
   end
 
@@ -262,9 +263,11 @@ class AppointmentsController < ApplicationController
 
       if user_signed_in?
         build_questions_for(@appointment)
+        @studios = Studio.active
         render :new, status: :unprocessable_entity
       else
         build_questions_for_booking(@appointment)
+        @studios = Studio.active
         render :new_customer, status: :unprocessable_entity
       end
     end
@@ -306,13 +309,9 @@ class AppointmentsController < ApplicationController
 
   def appointment_params
     params.require(:appointment).permit(
-      :name, :email, :location, :start_time, :price_id,
-      questions_attributes: [:id, :question, :answer, :_destroy],
-      customer_pictures: [],
-      photo_inspirations: []
-    ).tap do |whitelisted|
-      whitelisted[:price_id] = nil if whitelisted[:price_id] == "null"
-    end
+      :name, :email, :start_time, :studio_id,
+      questions_attributes: [:id, :question, :answer, :_destroy]
+    )
   end
 
 

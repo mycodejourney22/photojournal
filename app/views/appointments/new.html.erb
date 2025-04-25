@@ -24,11 +24,11 @@
 
         <!-- Location & Date -->
         <div class="g-form-group">
-          <%= f.label :location, "Location *", class: "g-form-label" %>
-          <%= f.select :location,
-              ['KM 22 Lekki Epe Express way, Ilaje Bus Stop Lagos',
-               '66 Adeniyi Jones, Ikeja Lagos',
-               '115A bode thomas street, Surulere Lagos'],
+          <%= f.label :studio_id, "Location *", class: "g-form-label" %>
+          <%= f.collection_select :studio_id,
+              @studios,
+              :id,
+              :location,
               { prompt: "Select location" },
               { class: "g-form-input g-form-select", required: true } %>
         </div>

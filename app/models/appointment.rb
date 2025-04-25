@@ -14,6 +14,9 @@ class Appointment < ApplicationRecord
   belongs_to :price, optional: true # This assumes a Price model exists
   before_validation :set_defaults
   before_validation :normalize_location
+  belongs_to :studio, optional: true
+  before_validation :set_location_from_studio
+
 
 
   scope :available_for_booking, -> { where(no_show: false, status: true) }
@@ -36,6 +39,22 @@ class Appointment < ApplicationRecord
     'surulere' => '07048891715',
     'ikeja' => '08090151168'
   }.freeze
+
+  def studio
+    @studio ||= super || Studio.find_by_location_name(location)
+  end
+  
+  def studio_phone
+    studio&.phone || STUDIO_NUMBERS[location.downcase]
+  end
+  
+  def studio_address
+    studio&.address || legacy_studio_address
+  end
+  
+  def studio_email
+    studio&.email || 'info@363photography.org'
+  end
 
 
 
@@ -123,6 +142,23 @@ class Appointment < ApplicationRecord
     else
       # Keep the original location
       self.location = location
+    end
+  end
+
+  def set_location_from_studio
+    if studio_id.present? && location.blank?
+      self.location = Studio.find_by(id: studio_id)&.location
+    end
+  end
+
+  def legacy_studio_address
+    case location.downcase
+    when "ajah"
+      "KM 22 Lekki Epe Express way, Ilaje bus stop ajah"
+    when "surulere"
+      "115A Bode Thomas Street, Surulere, Lagos"
+    when "ikeja"
+      "66 Adeniyi Jones, Ikeja, Lagos"
     end
   end
 end
