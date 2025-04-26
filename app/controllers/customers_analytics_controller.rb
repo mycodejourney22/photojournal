@@ -101,6 +101,9 @@ class CustomersAnalyticsController < ApplicationController
       base_sales_query = base_sales_query.where(location: params[:location])
     end
 
+    # Calculate total revenue from the filtered query
+    @total_revenue = base_sales_query.sum(:amount_paid)
+
     # Total customer count with any activity in period
     @total_customers = Customer.joins(:sales)
                               .merge(base_sales_query)

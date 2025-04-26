@@ -59,7 +59,7 @@
   </div>
 
   <div class="metric-card">
-    <div class="metric-value">₦<%= number_with_delimiter(Sale.where(date: @start_date..@end_date, void: false).sum(:amount_paid)) %></div>
+    <div class="metric-value">₦<%= number_with_delimiter(@total_revenue || 0) %></div>
     <div class="metric-label">Total Revenue</div>
   </div>
 
