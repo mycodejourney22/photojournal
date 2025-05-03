@@ -10,6 +10,7 @@
 <div class="g-table__header">
   <div class="g-table__col--name">Name</div>
   <div class="g-table__col--type">Type</div>
+  <div class="g-table__col--outfit">No of outfits</div>
   <div class="g-table__col--location">Location</div>
   <div class="g-table__col--phone">Phone</div>
   <div class="g-table__col--time">Time</div>
@@ -29,6 +30,10 @@
 
       <div class="g-table__col--type g-table__cell">
         <%= find_question_answer(appointment, 'Type of shoots') %>
+      </div>
+
+      <div class="g-table__col--outfit g-table__cell">
+        <%= Price.find(appointment.price_id).outfit if appointment.price_id.present? %>
       </div>
 
       <div class="g-table__col--location g-table__cell">

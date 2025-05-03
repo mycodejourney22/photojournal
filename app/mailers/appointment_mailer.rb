@@ -5,30 +5,56 @@ class AppointmentMailer < ApplicationMailer
     @appointment = appointment
     @location = studio_address
     @studio_phone_number = studio_number
-    mail(to: @appointment.email, subject: '363 Photography Booking Confirmation')
-
+    mail_from_studio(
+      {
+        to: @appointment.email,
+        subject: '363 Photography Booking Confirmation'
+      },
+      @appointment.location
+    )
   end
 
   def appointment_edited(appointment)
     @appointment = appointment
-    mail(to: @appointment.email, subject: '363 Photography Booking Update')
+    mail_from_studio(
+      {
+        to: @appointment.email,
+        subject: '363 Photography Booking Update'
+      },
+      @appointment.location
+    )
   end
 
   def appointment_canceled(appointment)
     @appointment = appointment
-    mail(to: @appointment.email, subject: '363 Photography Booking Cancellation')
+    mail_from_studio(
+      {
+        to: @appointment.email,
+        subject: '363 Photography Booking Cancellation'
+      },
+      @appointment.location
+    )
   end
 
   def reminder_email(appointment)
     @appointment = appointment
-    mail(to: @appointment.email, subject: 'Your Upcoming Appointment Reminder')
+    mail_from_studio(
+      {
+        to: @appointment.email,
+        subject: 'Your Upcoming Appointment Reminder'
+      },
+      @appointment.location
+    )
   end
 
   def policy_email(appointment)
     @appointment = appointment
-    mail(
-      to: @appointment.email,
-      subject: "363 Photography Studio Policy"
+    mail_from_studio(
+      {
+        to: @appointment.email,
+        subject: "363 Photography Studio Policy"
+      },
+      @appointment.location
     )
   end
 

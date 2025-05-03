@@ -7,7 +7,13 @@ class BookingMailer < ApplicationMailer
   #
   def reminder_email
     @booking = booking
-    mail(to: @booking.email, subject: 'Your Upcoming Appointment Reminder')
+    mail_from_studio(
+      {
+        to: @booking.email,
+        subject: 'Your Upcoming Appointment Reminder'
+      },
+      @booking.location
+    )
   end
 
 end
