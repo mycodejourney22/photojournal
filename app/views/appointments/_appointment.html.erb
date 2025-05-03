@@ -33,7 +33,7 @@
       </div>
 
       <div class="g-table__col--outfit g-table__cell">
-        <%= Price.find(appointment.price_id).outfit if appointment.price_id.present? %>
+        <%= Price.find(appointment.price_id).outfit.split(" ").first if appointment.price_id.present? %>
       </div>
 
       <div class="g-table__col--location g-table__cell">
