@@ -258,7 +258,7 @@
           <% if @sales_by_location.any? %>
             <% @sales_by_location.each do |location_data| %>
               <tr>
-                <td><%= location_data.location.capitalize %></td>
+                <td><%= location_data.location.capitalize if location_data.location.present? %></td>
                 <td class="count-cell"><%= location_data.customer_count %></td>
                 <td class="amount-cell">₦<%= number_with_delimiter(location_data.total_sales.to_i) %></td>
               </tr>
