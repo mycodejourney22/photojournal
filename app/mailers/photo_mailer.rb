@@ -11,6 +11,6 @@ class PhotoMailer < ApplicationMailer
 
   def thank_you_email(photoshoot)
     @photoshoot = photoshoot
-    mail(to: @photoshoot.appointment.email, subject: 'Thank you for trusting 363 Photography')
+    mail_from_studio(to: @photoshoot.appointment.email, subject: 'Thank you for trusting 363 Photography')
   end
 end

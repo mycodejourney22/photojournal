@@ -1,3 +1,6 @@
+require 'sidekiq/web'
+require 'sidekiq-scheduler/web'
+
 Rails.application.routes.draw do
   get 'prices/new'
   get 'prices/index'
@@ -72,6 +75,9 @@ Rails.application.routes.draw do
     end
   end
 
+  authenticate :user, lambda { |u| u.admin? || u.super_admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   get 'photo_shoots/consent'
   resources :customers do

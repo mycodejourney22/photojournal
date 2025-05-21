@@ -1,0 +1,48 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #666; font-size: 16px;">Payment Reminder</p>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 20px;">Hi <%= @appointment.name %>,</p>
+
+  <p style="font-size: 16px; margin-bottom: 25px;">
+    <% if @attempt_number == 1 %>
+      Thank you for booking a photoshoot with 363 Photography. We noticed that you haven't completed your payment yet.
+    <% elsif @appointment.start_time < 24.hours.from_now %>
+      Your photoshoot with 363 Photography is scheduled for <strong><%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></strong>, which is less than 24 hours away. To secure your slot, please complete your payment as soon as possible.
+    <% elsif @attempt_number > 3 %>
+      This is a reminder that your photoshoot booking with 363 Photography remains unpaid. We've been trying to reach you about completing your payment.
+    <% else %>
+      This is a friendly reminder to complete the payment for your upcoming photoshoot with 363 Photography.
+    <% end %>
+  </p>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Appointment Details</h2>
+    <p style="margin-bottom: 10px;"><strong>Date & Time:</strong> <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></p>
+    <p style="margin-bottom: 10px;"><strong>Location:</strong> <%= @appointment.location %></p>
+    <% type_of_shoots = @appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+    <% if type_of_shoots %>
+      <p style="margin-bottom: 10px;"><strong>Type of Shoot:</strong> <%= type_of_shoots.answer %></p>
+    <% end %>
+    <p style="margin-bottom: 10px;"><strong>Package Price:</strong> ₦<%= number_with_delimiter(@appointment.price.amount) if @appointment.price %></p>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <p style="margin-bottom: 15px; font-weight: bold;">To secure your booking, please complete your payment:</p>
+    <a href="<%= @payment_url %>" style="display: inline-block; background-color: #EDD400; color: #000; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; font-size: 16px;">Complete Payment Now</a>
+  </div>
+
+
+  <p style="font-size: 16px; margin-bottom: 30px;">If you've already made payment, please disregard this email. If you're experiencing any difficulties with payment or need to reschedule, please don't hesitate to contact us.</p>
+
+  <p style="font-weight: bold; margin-bottom: 5px;">363 Photography Team</p>
+
+  <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; font-size: 14px; color: #888; text-align: center;">
+    <p style="margin-bottom: 10px;">Studio Locations:</p>
+    <p style="margin-bottom: 5px;">Ajah: KM 22 Lekki Epe Express way, Ilaje bus stop | 08144985074</p>
+    <p style="margin-bottom: 5px;">Ikeja: 66 Adeniyi Jones, Ikeja | 08090151168</p>
+    <p style="margin-bottom: 5px;">Surulere: 115A Bode Thomas Street, Surulere | 07048891715</p>
+  </div>
+</div>

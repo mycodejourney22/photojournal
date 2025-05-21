@@ -1,0 +1,74 @@
+<!-- app/views/missed_appointment_mailer/missed_appointment_email.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #000; margin-bottom: 5px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #666; font-size: 16px;">We missed you!</p>
+  </div>
+
+  <p style="font-size: 16px; margin-bottom: 20px;">Hi <%= @appointment.name %>,</p>
+
+  <% if @attempt_number == 1 %>
+    <p style="font-size: 16px; margin-bottom: 25px;">
+      We noticed you weren't able to make it to your scheduled photoshoot at 363 Photography yesterday. We hope everything is okay!
+    </p>
+  <% elsif @attempt_number == 2 %>
+    <p style="font-size: 16px; margin-bottom: 25px;">
+      We're following up regarding your missed appointment with 363 Photography. We're still holding space for you and would love to reschedule your session.
+    </p>
+  <% else %>
+    <p style="font-size: 16px; margin-bottom: 25px;">
+      We've been trying to reach you regarding your missed appointment with 363 Photography. We'd still love to capture your special moments!
+    </p>
+  <% end %>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+    <h2 style="font-size: 18px; margin-top: 0; margin-bottom: 15px;">Your Missed Appointment Details</h2>
+    <p style="margin-bottom: 10px;"><strong>Date & Time:</strong> <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></p>
+    <p style="margin-bottom: 10px;"><strong>Location:</strong> <%= @appointment.location %></p>
+    <% type_of_shoots = @appointment.questions.find { |q| q.question == 'Type of shoots' || q.question == 'Type of shoot' } %>
+    <% if type_of_shoots %>
+      <p style="margin-bottom: 10px;"><strong>Type of Shoot:</strong> <%= type_of_shoots.answer %></p>
+    <% end %>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <p style="margin-bottom: 15px; font-weight: bold;">Would you like to reschedule your photoshoot?</p>
+    <a href="<%= @reschedule_url %>" style="display: inline-block; background-color: #EDD400; color: #000; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; font-size: 16px;">Reschedule Now</a>
+  </div>
+
+  <% if @attempt_number == 1 %>
+    <p style="font-size: 16px; margin-bottom: 25px;">
+      We understand that things come up and schedules change. We'd be happy to help you reschedule your session at a time that works better for you. Simply click the button above to select a new date and time, or reply to this email if you have any questions.
+    </p>
+  <% elsif @attempt_number == 2 %>
+    <p style="font-size: 16px; margin-bottom: 25px;">
+      We value you as a customer and want to ensure you have the opportunity to enjoy our photography services. Please click the button above to reschedule, or contact us directly to discuss options.
+    </p>
+  <% else %>
+    <p style="font-size: 16px; margin-bottom: 25px;">
+      This is our final follow-up regarding your missed appointment. We'd still love to serve you! Please reschedule soon to ensure slot availability for your preferred date and time.
+    </p>
+  <% end %>
+  
+  <p style="font-size: 16px; margin-bottom: 10px;">If you have any questions or need assistance, please don't hesitate to contact us:</p>
+  
+  <p style="font-size: 16px; margin-bottom: 30px;">
+    <% case @appointment.location.downcase %>
+    <% when "ajah" %>
+      Phone: 08144985074
+    <% when "ikeja" %>
+      Phone: 08090151168
+    <% when "surulere" %>
+      Phone: 07048891715
+    <% end %>
+  </p>
+
+  <p style="font-weight: bold; margin-bottom: 5px;">363 Photography Team</p>
+
+  <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; font-size: 14px; color: #888; text-align: center;">
+    <p style="margin-bottom: 10px;">Studio Locations:</p>
+    <p style="margin-bottom: 5px;">Ajah: KM 22 Lekki Epe Express way, Ilaje bus stop | 08144985074</p>
+    <p style="margin-bottom: 5px;">Ikeja: 66 Adeniyi Jones, Ikeja | 08090151168</p>
+    <p style="margin-bottom: 5px;">Surulere: 115A Bode Thomas Street, Surulere | 07048891715</p>
+  </div>
+</div>

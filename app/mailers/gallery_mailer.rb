@@ -11,7 +11,7 @@ class GalleryMailer < ApplicationMailer
     staff_email = find_staff_email(gallery)
     return if staff_email.blank?
 
-    mail(
+    mail_from_studio(
       to: staff_email,
       subject: "Gallery uploaded to Smugmug: #{gallery.title}"
     )
@@ -26,7 +26,7 @@ class GalleryMailer < ApplicationMailer
     staff_email = find_staff_email(gallery)
     return if staff_email.blank?
 
-    mail(
+    mail_from_studio(
       to: staff_email,
       subject: "FAILED: Gallery upload to Smugmug: #{gallery.title}"
     )

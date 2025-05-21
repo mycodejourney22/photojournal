@@ -1,0 +1,5 @@
+check_missed_appointments:
+  cron: '0 9 * * *'
+  class: CheckMissedAppointmentsJob
+  queue: default
+  description: "Check for appointments that were missed yesterday"

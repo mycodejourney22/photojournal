@@ -30,6 +30,7 @@ gem "cloudinary"
 
 gem 'sidekiq'
 gem 'redis', '~> 4.0'
+gem 'sidekiq-scheduler', '>= 5.0'
 
 
 

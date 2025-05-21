@@ -6,7 +6,7 @@ class CustomerMailer < ApplicationMailer
     @refund_request = refund_request
     @appointment = @refund_request.appointment
 
-    mail(
+    mail_from_studio(
       to: @appointment.email,
       subject: "Your refund request has been received - Request ##{@refund_request.id}"
     )
@@ -16,7 +16,7 @@ class CustomerMailer < ApplicationMailer
     @refund_request = refund_request
     @appointment = @refund_request.appointment
 
-    mail(
+    mail_from_studio(
       to: @appointment.email,
       subject: "Your refund request has been approved - Request ##{@refund_request.id}"
     )
@@ -26,7 +26,7 @@ class CustomerMailer < ApplicationMailer
     @refund_request = refund_request
     @appointment = @refund_request.appointment
 
-    mail(
+    mail_from_studio(
       to: @appointment.email,
       subject: "Update on your refund request - Request ##{@refund_request.id}"
     )
@@ -36,7 +36,7 @@ class CustomerMailer < ApplicationMailer
     @refund_request = refund_request
     @appointment = @refund_request.appointment
 
-    mail(
+    mail_from_studio(
       to: @appointment.email,
       subject: "Your refund has been processed - Request ##{@refund_request.id}"
     )

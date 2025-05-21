@@ -19,6 +19,7 @@ class AppointmentCreationService
     if appointment.save
       schedule_notifications(appointment)
       process_referral(appointment) if appointment.referral_source.present?
+      schedule_payment_reminder(appointment) if requires_payment?(appointment)
       return { success: true, appointment: appointment }
     else
       return { success: false, appointment: appointment }
@@ -89,6 +90,16 @@ class AppointmentCreationService
       appointment.update(referral_source: nil)
     end
 
+  end
+
+  def requires_payment?(appointment)
+    # Check if this appointment requires payment
+    appointment.price_id.present? && !appointment.payment_status
+  end
+
+  def schedule_payment_reminder(appointment)
+    # Schedule first payment reminder to be sent 20 minutes after booking
+    UnpaidBookingReminderJob.set(wait: 2.minutes).perform_later(appointment.id)
   end
 
   def extract_phone_number_from_appointment(appointment)

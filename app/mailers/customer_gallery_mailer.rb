@@ -5,7 +5,7 @@ class CustomerGalleryMailer < ApplicationMailer
     @code = code
     @expires_at = 30.minutes.from_now.strftime("%I:%M %p")
 
-    mail(
+    mail_from_studio(
       to: email,
       subject: "Your 363 Photography Gallery Access Code"
     )
