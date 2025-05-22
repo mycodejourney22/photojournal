@@ -34,17 +34,20 @@ module StudioEmailSender
     
     def mail_from_studio(options = {}, location = nil)
       if location.present?
-        from_email = studio_email_for(location)
+        from_email = location.present? ? studio_email_for(location) : studio_email_for(nil)
+        from_password = location.present? ? studio_email_password(location) : studio_email_password(nil)
+
         options[:from] ||= "363 Photography <#{from_email}>"
         
         mail(options).tap do |message|
           message.delivery_method.settings.merge!(
             user_name: from_email,
-            password: studio_email_password(location)
+            password: from_password
           )
         end
       else
         mail(options)
-    end
+
+      end
     end
 end

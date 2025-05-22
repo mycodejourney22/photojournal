@@ -4,33 +4,45 @@
 
   <p class="time-selection-subtitle">Available Hours for <%= format_date_string(params[:date]) %></p>
 
-  <form action="<%= new_customer_appointments_path %>" method="get" class="time-slots-form">
-    <div class="time-slots-grid">
-      <% @available_hours.each do |slot| %>
-        <% combined_date_time = Time.zone.parse("#{Date.parse(params[:date])} #{slot}") %>
-        <div class="time-slot-item">
-          <input type="radio" name="date" value="<%= combined_date_time %>"
-                id="slot_<%= slot.gsub(':', '_') %>" required class="time-slot-input">
-          <label for="slot_<%= slot.gsub(':', '_') %>" class="time-slot-label">
-            <%= slot %>
-          </label>
-        </div>
+  <% if @available_hours.present?%>
+    <form action="<%= new_customer_appointments_path %>" method="get" class="time-slots-form">
+      <div class="time-slots-grid">
+        <% @available_hours.each do |slot| %>
+          <% combined_date_time = Time.zone.parse("#{Date.parse(params[:date])} #{slot}") %>
+          <div class="time-slot-item">
+            <input type="radio" name="date" value="<%= combined_date_time %>"
+                  id="slot_<%= slot.gsub(':', '_') %>" required class="time-slot-input">
+            <label for="slot_<%= slot.gsub(':', '_') %>" class="time-slot-label">
+              <%= slot %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Hidden fields -->
+      <input type="hidden" name="location" value="<%= params[:location] %>">
+      <input type="hidden" name="price_id" value="<%= params[:price_id] || 'null' %>">
+
+      <!-- Include appointment ID if editing -->
+      <% if @appointment.persisted? %>
+        <input type="hidden" name="id" value="<%= @appointment.id %>">
       <% end %>
+
+      <div class="action-buttons">
+        <button type="submit" class="booking-action-button">
+          <%= @appointment.persisted? ? "Continue Editing" : "Next" %>
+        </button>
+      </div>
+    </form>
+  <% else %>
+    <div class="text-center">
+      <p class="mb-2">
+        Unfortunately, there are no available time slots for <%= format_date_string(params[:date]) %>.<br></p>
+      <p class="mb-2">
+        We allow only 50% of our studio's capacity to be booked online. If you need to schedule a shoot for this date,
+        please contact the studio directly — we may still be able to accommodate you.
+      </p>
+      <%= link_to "Choose Another Date", booking_appointments_path(price_id: params[:price_id]), class: "back-button" %>
     </div>
-
-    <!-- Hidden fields -->
-    <input type="hidden" name="location" value="<%= params[:location] %>">
-    <input type="hidden" name="price_id" value="<%= params[:price_id] || 'null' %>">
-
-    <!-- Include appointment ID if editing -->
-    <% if @appointment.persisted? %>
-      <input type="hidden" name="id" value="<%= @appointment.id %>">
-    <% end %>
-
-    <div class="action-buttons">
-      <button type="submit" class="booking-action-button">
-        <%= @appointment.persisted? ? "Continue Editing" : "Next" %>
-      </button>
-    </div>
-  </form>
+  <%end%>
 </div>
