@@ -14,7 +14,6 @@ class PaymentReminderMailer < ApplicationMailer
       else
         "Reminder: Complete Your 363 Photography Booking Payment"
       end
-      Rails.logger.info "SMTP username: #{ENV['SMTP_USERNAME']}"
 
       mail_from_studio(
         to: @appointment.email,

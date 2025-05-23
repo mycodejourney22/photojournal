@@ -11,10 +11,10 @@ class GalleryMailer < ApplicationMailer
     staff_email = find_staff_email(gallery)
     return if staff_email.blank?
 
-    mail_from_studio(
-      to: staff_email,
-      subject: "Gallery uploaded to Smugmug: #{gallery.title}"
-    )
+    # mail_from_studio(
+    #   to: staff_email,
+    #   subject: "Gallery uploaded to Smugmug: #{gallery.title}"
+    # )
   end
 
   def upload_failed(gallery, error_message)
@@ -26,10 +26,10 @@ class GalleryMailer < ApplicationMailer
     staff_email = find_staff_email(gallery)
     return if staff_email.blank?
 
-    mail_from_studio(
-      to: staff_email,
-      subject: "FAILED: Gallery upload to Smugmug: #{gallery.title}"
-    )
+    # mail_from_studio(
+    #   to: staff_email,
+    #   subject: "FAILED: Gallery upload to Smugmug: #{gallery.title}"
+    # )
   end
 
   private
