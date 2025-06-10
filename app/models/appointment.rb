@@ -43,15 +43,15 @@ class Appointment < ApplicationRecord
   def studio
     @studio ||= super || Studio.find_by_location_name(location)
   end
-  
+
   def studio_phone
     studio&.phone || STUDIO_NUMBERS[location.downcase]
   end
-  
+
   def studio_address
     studio&.address || legacy_studio_address
   end
-  
+
   def studio_email
     studio&.email || 'info@363photography.org'
   end

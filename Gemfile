@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
-ruby "3.1.2"
+ruby "3.3.5"
+
 
 gem 'nokogiri', '~> 1.17.0'
 gem 'aws-sdk-s3', '~> 1.0'

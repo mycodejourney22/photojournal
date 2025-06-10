@@ -17,7 +17,7 @@ wasabi:
   service: S3
   access_key_id: <%= ENV['WASABI_ACCESS_KEY'] %>
   secret_access_key: <%= ENV['WASABI_SECRET_ACCESS'] %>
-  region: <%= ENV['WASABI_REGION'] %>
+  region: 'eu-west-1'
   bucket: <%= ENV['WASABI_BUCKET'] %>
   public: true
   endpoint: 'https://s3.eu-west-1.wasabisys.com'
