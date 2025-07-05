@@ -4,7 +4,7 @@
     <h1>Appointment Reports</h1>
   </div>
   <div class="g-content__toolbar-actions">
-    <%= link_to appointment_reports_path(format: :csv, start_date: @start_date, end_date: @end_date, location: params[:location], channel: params[:channel]), 
+    <%= link_to appointment_reports_path(format: :csv, start_date: @start_date, end_date: @end_date, location: params[:location], channel: params[:channel]),
                 class: "g-button g-button--action" do %>
       <i class="fas fa-download"></i> Export CSV
     <% end %>
@@ -78,17 +78,24 @@
     <div class="metric-description">Total bookings made during this period</div>
   </div>
 
-  <!-- NEW: Appointments by Date Card -->
-  <div class="metric-card">
-    <div class="metric-value"><%= @appointments_by_date %></div>
-    <div class="metric-label">Appointments by Date</div>
-    <div class="metric-description">Appointments scheduled for this period</div>
-  </div>
-
   <div class="metric-card">
     <div class="metric-value"><%= @online_bookings %></div>
     <div class="metric-label">Online Bookings</div>
     <div class="metric-description">Total bookings made online during this period</div>
+  </div>
+
+  <!-- NEW: Walk-in Bookings Card (Changed from Appointments Created) -->
+  <div class="metric-card">
+    <div class="metric-value"><%= @walk_in_bookings %></div>
+    <div class="metric-label">Walk-in Bookings</div>
+    <div class="metric-description">Total walk-in bookings during this period</div>
+  </div>
+
+  <!-- NEW: Cancelled Bookings Card -->
+  <div class="metric-card metric-card--warning">
+    <div class="metric-value"><%= @cancelled_bookings %></div>
+    <div class="metric-label">Cancelled Bookings</div>
+    <div class="metric-description">Appointments that were cancelled</div>
   </div>
 
   <div class="metric-card">
@@ -110,6 +117,14 @@
     <div class="metric-label">Conversion Rate</div>
     <div class="metric-description">Appointments → Completed sessions</div>
   </div>
+
+  <div class="metric-card">
+    <div class="metric-value">
+      <%= @appointments_created > 0 ? "#{((@online_bookings.to_f / @appointments_created) * 100).round(1)}%" : "0%" %>
+    </div>
+    <div class="metric-label">Online Booking Rate</div>
+    <div class="metric-description">Online bookings / Total appointments</div>
+  </div>
 </div>
 
 <!-- Charts Section -->
@@ -124,14 +139,35 @@
     </div>
   </div>
 
-  <!-- NEW: Appointments by Date Chart -->
   <div class="analytics-card chart-card">
     <div class="analytics-card-header">
-      <h2>Daily Appointments by Date</h2>
+      <h2>Daily Online Bookings</h2>
     </div>
     <div class="chart-container">
-      <canvas data-appointment-reports-chart-target="appointmentsByDateChart"
-              data-chart-data="<%= @appointments_by_date_chart_data.to_json %>"></canvas>
+      <canvas data-appointment-reports-chart-target="onlineBookingsChart"
+              data-chart-data="<%= @online_bookings_chart_data.to_json %>"></canvas>
+    </div>
+  </div>
+
+  <!-- NEW: Walk-in Bookings Chart -->
+  <div class="analytics-card chart-card">
+    <div class="analytics-card-header">
+      <h2>Daily Walk-in Bookings</h2>
+    </div>
+    <div class="chart-container">
+      <canvas data-appointment-reports-chart-target="walkInBookingsChart"
+              data-chart-data="<%= @walk_in_bookings_chart_data.to_json %>"></canvas>
+    </div>
+  </div>
+
+  <!-- NEW: Cancelled Bookings Chart -->
+  <div class="analytics-card chart-card">
+    <div class="analytics-card-header">
+      <h2>Daily Cancelled Bookings</h2>
+    </div>
+    <div class="chart-container">
+      <canvas data-appointment-reports-chart-target="cancelledBookingsChart"
+              data-chart-data="<%= @cancelled_bookings_chart_data.to_json %>"></canvas>
     </div>
   </div>
 
@@ -142,16 +178,6 @@
     <div class="chart-container">
       <canvas data-appointment-reports-chart-target="photoshootsChart"
               data-chart-data="<%= @photoshoots_chart_data.to_json %>"></canvas>
-    </div>
-  </div>
-
-  <div class="analytics-card chart-card">
-    <div class="analytics-card-header">
-      <h2>Daily Online Bookings</h2>
-    </div>
-    <div class="chart-container">
-      <canvas data-appointment-reports-chart-target="onlineBookingsChart"
-              data-chart-data="<%= @online_bookings_chart_data.to_json %>"></canvas>
     </div>
   </div>
 
@@ -189,6 +215,8 @@
           <th>Location</th>
           <th>Appointments Created</th>
           <th>Online Bookings</th>
+          <th>Walk-in Bookings</th>
+          <th>Cancelled Bookings</th>
           <th>Photoshoots Completed</th>
           <th>Missed Sessions</th>
           <th>Online Rate</th>
@@ -202,35 +230,43 @@
             <td class="location-cell">
               <div class="location-name"><%= location_data[:location] %></div>
             </td>
-            
+
             <td class="count-cell">
               <%= location_data[:appointments_created] %>
             </td>
-            
+
             <td class="count-cell">
               <%= location_data[:online_bookings] %>
             </td>
-            
+
+            <td class="count-cell">
+              <%= location_data[:walk_in_bookings] %>
+            </td>
+
+            <td class="count-cell warning-cell">
+              <%= location_data[:cancelled_bookings] %>
+            </td>
+
             <td class="count-cell success-cell">
               <%= location_data[:photoshoots_completed] %>
             </td>
-            
+
             <td class="count-cell warning-cell">
               <%= location_data[:missed_sessions] %>
             </td>
-            
+
             <td class="percentage-cell">
               <div class="conversion-rate">
                 <%= location_data[:online_booking_rate] %>%
               </div>
             </td>
-            
+
             <td class="percentage-cell">
               <div class="conversion-rate">
                 <%= location_data[:conversion_rate] %>%
               </div>
             </td>
-            
+
             <td class="performance-cell">
               <% if location_data[:conversion_rate] >= 80 %>
                 <span class="performance-badge performance-badge--excellent">Excellent</span>
@@ -274,11 +310,11 @@
                 <td class="shoot-type-cell">
                   <div class="shoot-type-name"><%= shoot_data[:shoot_type] %></div>
                 </td>
-                
+
                 <td class="count-cell">
                   <%= shoot_data[:count] %>
                 </td>
-                
+
                 <td class="percentage-cell">
                   <div class="popularity-bar">
                     <div class="popularity-fill" style="width: <%= total_popular > 0 ? (shoot_data[:count].to_f / total_popular * 100).round(1) : 0 %>%"></div>
@@ -297,7 +333,7 @@
     </div>
   </div>
 
-  <!-- NEW: Shoot Types Pie Chart -->
+  <!-- Shoot Types Pie Chart -->
   <div class="analytics-card">
     <div class="analytics-card-header">
       <h2>Shoot Types Distribution</h2>
@@ -313,10 +349,10 @@
   </div>
 </div>
 
-<!-- ENHANCED: Detailed Shoot Type Performance with Online Booking Analytics -->
+<!-- Detailed Shoot Type Performance -->
 <div class="analytics-card">
   <div class="analytics-card-header">
-    <h2>Performance by Shoot Type - Enhanced with Online Booking Analytics</h2>
+    <h2>Performance by Shoot Type</h2>
   </div>
 
   <div class="analytics-table-wrapper">
@@ -339,31 +375,31 @@
               <td class="shoot-type-cell">
                 <div class="shoot-type-name"><%= shoot_data[:shoot_type] %></div>
               </td>
-              
+
               <td class="count-cell">
                 <%= shoot_data[:appointments_created] %>
               </td>
-              
+
               <td class="count-cell">
                 <%= shoot_data[:online_bookings] %>
               </td>
-              
+
               <td class="count-cell success-cell">
                 <%= shoot_data[:photoshoots_completed] %>
               </td>
-              
+
               <td class="percentage-cell">
                 <div class="conversion-rate">
                   <%= shoot_data[:online_booking_rate] %>%
                 </div>
               </td>
-              
+
               <td class="percentage-cell">
                 <div class="conversion-rate">
                   <%= shoot_data[:conversion_rate] %>%
                 </div>
               </td>
-              
+
               <td class="performance-cell">
                 <% if shoot_data[:conversion_rate] >= 80 %>
                   <span class="performance-badge performance-badge--excellent">Excellent</span>
@@ -393,7 +429,7 @@
     <div class="analytics-card-header">
       <h2>Key Insights</h2>
     </div>
-    
+
     <div class="insights-content">
       <div class="insight-item">
         <div class="insight-icon insight-icon--info">
@@ -402,7 +438,7 @@
         <div class="insight-text">
           <strong>Overall Performance:</strong>
           <% overall_conversion = @appointments_created > 0 ? ((@photoshoots_completed.to_f / @appointments_created) * 100).round(1) : 0 %>
-          Your overall conversion rate is <%= overall_conversion %>%. 
+          Your overall conversion rate is <%= overall_conversion %>%.
           <% if overall_conversion >= 70 %>
             This is excellent performance!
           <% elsif overall_conversion >= 50 %>
@@ -413,15 +449,15 @@
         </div>
       </div>
 
-      <!-- NEW: Online Booking Insight -->
+      <!-- NEW: Online vs Walk-in Booking Analysis -->
       <div class="insight-item">
         <div class="insight-icon insight-icon--info">
           <i class="fas fa-globe"></i>
         </div>
         <div class="insight-text">
-          <strong>Online Booking Performance:</strong>
+          <strong>Booking Channel Performance:</strong>
           <% online_rate = @appointments_created > 0 ? ((@online_bookings.to_f / @appointments_created) * 100).round(1) : 0 %>
-          <%= online_rate %>% of your appointments come from online bookings.
+          <%= online_rate %>% of your appointments (<%= @online_bookings %>) come from online bookings, while <%= 100 - online_rate %>% (<%= @walk_in_bookings %>) are walk-in bookings.
           <% if online_rate >= 60 %>
             Excellent digital presence!
           <% elsif online_rate >= 40 %>
@@ -432,23 +468,27 @@
         </div>
       </div>
 
-      <!-- NEW: Appointment Load vs Creation Insight -->
-      <div class="insight-item">
-        <div class="insight-icon insight-icon--info">
-          <i class="fas fa-calendar"></i>
+      <!-- NEW: Cancelled Bookings Insight -->
+      <% if @cancelled_bookings > 0 %>
+        <div class="insight-item">
+          <div class="insight-icon insight-icon--warning">
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <div class="insight-text">
+            <strong>Cancelled Bookings Alert:</strong>
+            You have <%= @cancelled_bookings %> cancelled bookings in this period
+            (<%= @appointments_created > 0 ? ((@cancelled_bookings.to_f / (@appointments_created + @cancelled_bookings)) * 100).round(1) : 0 %>% cancellation rate).
+            <% cancellation_rate = @appointments_created > 0 ? ((@cancelled_bookings.to_f / (@appointments_created + @cancelled_bookings)) * 100).round(1) : 0 %>
+            <% if cancellation_rate > 20 %>
+              This is quite high - consider improving your booking confirmation process or customer communication.
+            <% elsif cancellation_rate > 10 %>
+              This is moderate - monitor trends and consider implementing cancellation policies.
+            <% else %>
+              This is within normal ranges.
+            <% end %>
+          </div>
         </div>
-        <div class="insight-text">
-          <strong>Appointment Scheduling Pattern:</strong>
-          You created <%= @appointments_created %> appointments but have <%= @appointments_by_date %> appointments scheduled for this period.
-          <% if @appointments_by_date > @appointments_created %>
-            This means some appointments were booked for future dates, showing good advance booking.
-          <% elsif @appointments_by_date < @appointments_created %>
-            This suggests customers are booking for dates outside this period - consider longer-term capacity planning.
-          <% else %>
-            Your booking and scheduling pattern aligns perfectly.
-          <% end %>
-        </div>
-      </div>
+      <% end %>
 
       <% if @missed_sessions > 0 %>
         <div class="insight-item">
@@ -457,7 +497,7 @@
           </div>
           <div class="insight-text">
             <strong>Missed Sessions Alert:</strong>
-            You have <%= @missed_sessions %> missed sessions in this period. 
+            You have <%= @missed_sessions %> missed sessions in this period.
             Consider implementing reminder calls or SMS to reduce no-shows.
           </div>
         </div>
@@ -471,7 +511,9 @@
           </div>
           <div class="insight-text">
             <strong>Top Performing Location:</strong>
-            <%= best_location[:location] %> has the highest conversion rate at <%= best_location[:conversion_rate] %>%.
+            <%= best_location[:location] %> has the highest conversion rate at <%= best_location[:conversion_rate] %>%
+            with <%= best_location[:appointments_created] %> appointments created
+            (<%= best_location[:online_bookings] %> online, <%= best_location[:walk_in_bookings] %> walk-in).
             Consider applying their best practices to other locations.
           </div>
         </div>
@@ -485,7 +527,7 @@
           </div>
           <div class="insight-text">
             <strong>Most Popular Shoot Type:</strong>
-            <%= top_shoot_type[:shoot_type] %> sessions are your most popular with <%= top_shoot_type[:count] %> bookings 
+            <%= top_shoot_type[:shoot_type] %> sessions are your most popular with <%= top_shoot_type[:count] %> bookings
             (<%= @popular_shoot_types.sum { |s| s[:count] } > 0 ? ((top_shoot_type[:count].to_f / @popular_shoot_types.sum { |s| s[:count] }) * 100).round(1) : 0 %>% of all bookings).
           </div>
         </div>
@@ -517,6 +559,22 @@
               <strong>Best Online Booking Type:</strong>
               <%= best_online_shoot[:shoot_type] %> has the highest online booking rate at <%= best_online_shoot[:online_booking_rate] %>%.
               This shoot type performs well in digital channels.
+            </div>
+          </div>
+        <% end %>
+
+        <!-- NEW: Walk-in Favorite Insight -->
+        <% best_walkin_shoot = @shoot_type_breakdown.min_by { |shoot| shoot[:online_booking_rate] } %>
+        <% if best_walkin_shoot && best_walkin_shoot[:appointments_created] > 0 && best_walkin_shoot[:online_booking_rate] < 30 %>
+          <div class="insight-item">
+            <div class="insight-icon insight-icon--info">
+              <i class="fas fa-walking"></i>
+            </div>
+            <div class="insight-text">
+              <strong>Walk-in Favorite:</strong>
+              <%= best_walkin_shoot[:shoot_type] %> sessions rely heavily on walk-in customers
+              (only <%= best_walkin_shoot[:online_booking_rate] %>% book online).
+              Consider if this service needs better online marketing or if walk-in preference is intentional.
             </div>
           </div>
         <% end %>
@@ -628,7 +686,7 @@
 
   .analytics-overview {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-bottom: 20px;
   }

@@ -6,12 +6,14 @@ Chart.register(...registerables);
 
 export default class extends Controller {
   static targets = [
-    "appointmentsChart", 
-    "appointmentsByDateChart",  // NEW TARGET
-    "photoshootsChart", 
-    "missedChart", 
-    "onlineBookingsChart", 
-    "locationChart", 
+    "appointmentsChart",
+    "appointmentsByDateChart",
+    "photoshootsChart",
+    "missedChart",
+    "onlineBookingsChart",
+    "cancelledBookingsChart",    // NEW TARGET
+    "walkInBookingsChart",       // NEW TARGET
+    "locationChart",
     "shootTypesChart"
   ]
 
@@ -34,7 +36,6 @@ export default class extends Controller {
       this.charts.push(this.createAppointmentsChart());
     }
 
-    // NEW: Initialize appointments by date chart
     if (this.hasAppointmentsByDateChartTarget) {
       this.charts.push(this.createAppointmentsByDateChart());
     }
@@ -58,11 +59,21 @@ export default class extends Controller {
     if (this.hasOnlineBookingsChartTarget) {
       this.charts.push(this.createOnlineBookingsChart());
     }
+
+    // NEW: Initialize cancelled bookings chart
+    if (this.hasCancelledBookingsChartTarget) {
+      this.charts.push(this.createCancelledBookingsChart());
+    }
+
+    // NEW: Initialize walk-in bookings chart
+    if (this.hasWalkInBookingsChartTarget) {
+      this.charts.push(this.createWalkInBookingsChart());
+    }
   }
 
   createAppointmentsChart() {
     const data = JSON.parse(this.appointmentsChartTarget.dataset.chartData);
-    
+
     return new Chart(this.appointmentsChartTarget, {
       type: 'line',
       data: {
@@ -90,7 +101,7 @@ export default class extends Controller {
         scales: {
           y: {
             beginAtZero: true,
-            ticks: { 
+            ticks: {
               precision: 0,
               font: { size: 12 }
             },
@@ -127,10 +138,9 @@ export default class extends Controller {
     });
   }
 
-  // NEW: Create chart for appointments by actual appointment date
   createAppointmentsByDateChart() {
     const data = JSON.parse(this.appointmentsByDateChartTarget.dataset.chartData);
-    
+
     return new Chart(this.appointmentsByDateChartTarget, {
       type: 'bar',
       data: {
@@ -155,7 +165,7 @@ export default class extends Controller {
         scales: {
           y: {
             beginAtZero: true,
-            ticks: { 
+            ticks: {
               precision: 0,
               font: { size: 12 }
             },
@@ -194,7 +204,7 @@ export default class extends Controller {
 
   createOnlineBookingsChart() {
     const data = JSON.parse(this.onlineBookingsChartTarget.dataset.chartData);
-    
+
     return new Chart(this.onlineBookingsChartTarget, {
       type: 'line',
       data: {
@@ -220,7 +230,138 @@ export default class extends Controller {
         scales: {
           y: {
             beginAtZero: true,
-            ticks: { 
+            ticks: {
+              precision: 0,
+              font: { size: 12 }
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            cornerRadius: 6,
+            callbacks: {
+              title: function(context) {
+                return `Date: ${context[0].label}`;
+              },
+              label: function(context) {
+                return `${context.dataset.label}: ${context.raw} bookings`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // NEW: Create cancelled bookings chart
+  createCancelledBookingsChart() {
+    const data = JSON.parse(this.cancelledBookingsChartTarget.dataset.chartData);
+
+    return new Chart(this.cancelledBookingsChartTarget, {
+      type: 'bar',
+      data: {
+        labels: data.map(item => item.date),
+        datasets: [{
+          label: 'Cancelled Bookings',
+          data: data.map(item => item.count),
+          backgroundColor: '#F44336',
+          borderColor: '#D32F2F',
+          borderWidth: 1,
+          borderRadius: 4,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0,
+              font: { size: 12 }
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            cornerRadius: 6,
+            callbacks: {
+              title: function(context) {
+                return `Date: ${context[0].label}`;
+              },
+              label: function(context) {
+                return `${context.dataset.label}: ${context.raw} cancelled`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // NEW: Create walk-in bookings chart
+  createWalkInBookingsChart() {
+    const data = JSON.parse(this.walkInBookingsChartTarget.dataset.chartData);
+
+    return new Chart(this.walkInBookingsChartTarget, {
+      type: 'line',
+      data: {
+        labels: data.map(item => item.date),
+        datasets: [{
+          label: 'Walk-in Bookings',
+          data: data.map(item => item.count),
+          backgroundColor: 'rgba(76, 175, 80, 0.1)',
+          borderColor: '#4CAF50',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#4CAF50',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
               precision: 0,
               font: { size: 12 }
             },
@@ -259,7 +400,7 @@ export default class extends Controller {
 
   createPhotoshootsChart() {
     const data = JSON.parse(this.photoshootsChartTarget.dataset.chartData);
-    
+
     return new Chart(this.photoshootsChartTarget, {
       type: 'line',
       data: {
@@ -287,7 +428,7 @@ export default class extends Controller {
         scales: {
           y: {
             beginAtZero: true,
-            ticks: { 
+            ticks: {
               precision: 0,
               font: { size: 12 }
             },
@@ -326,7 +467,7 @@ export default class extends Controller {
 
   createMissedChart() {
     const data = JSON.parse(this.missedChartTarget.dataset.chartData);
-    
+
     return new Chart(this.missedChartTarget, {
       type: 'bar',
       data: {
@@ -347,7 +488,7 @@ export default class extends Controller {
         scales: {
           y: {
             beginAtZero: true,
-            ticks: { 
+            ticks: {
               precision: 0,
               font: { size: 12 }
             },
@@ -386,7 +527,7 @@ export default class extends Controller {
 
   createLocationChart() {
     const data = JSON.parse(this.locationChartTarget.dataset.chartData);
-    
+
     return new Chart(this.locationChartTarget, {
       type: 'bar',
       data: {
@@ -425,7 +566,7 @@ export default class extends Controller {
         scales: {
           y: {
             beginAtZero: true,
-            ticks: { 
+            ticks: {
               precision: 0,
               font: { size: 12 }
             },
@@ -442,25 +583,13 @@ export default class extends Controller {
         plugins: {
           legend: {
             position: 'top',
-            labels: {
-              usePointStyle: true,
-              padding: 20,
-              font: { size: 12 }
-            }
+            align: 'end'
           },
           tooltip: {
             backgroundColor: 'rgba(0,0,0,0.8)',
             titleColor: '#fff',
             bodyColor: '#fff',
-            cornerRadius: 6,
-            callbacks: {
-              title: function(context) {
-                return `${context[0].label} Location`;
-              },
-              label: function(context) {
-                return `${context.dataset.label}: ${context.raw}`;
-              }
-            }
+            cornerRadius: 6
           }
         }
       }
@@ -469,25 +598,22 @@ export default class extends Controller {
 
   createShootTypesChart() {
     const data = JSON.parse(this.shootTypesChartTarget.dataset.chartData);
-    
-    // Check if we have data
-    if (!data || data.length === 0) {
-      return null;
-    }
-    
-    // Generate colors for each shoot type
-    const colors = [
-      '#4285F4', '#EDD400', '#0F9D58', '#DB4437', 
-      '#9C27B0', '#FF9800', '#00BCD4', '#795548'
-    ];
-    
+
     return new Chart(this.shootTypesChartTarget, {
-      type: 'doughnut',
+      type: 'pie',
       data: {
         labels: data.map(item => item.shoot_type),
         datasets: [{
           data: data.map(item => item.count),
-          backgroundColor: colors.slice(0, data.length),
+          backgroundColor: [
+            '#4285F4',
+            '#0F9D58',
+            '#F4B400',
+            '#DB4437',
+            '#9C27B0',
+            '#FF9800',
+            '#795548'
+          ],
           borderWidth: 2,
           borderColor: '#fff'
         }]
@@ -499,9 +625,11 @@ export default class extends Controller {
           legend: {
             position: 'right',
             labels: {
+              padding: 20,
               usePointStyle: true,
-              padding: 15,
-              font: { size: 12 }
+              font: {
+                size: 12
+              }
             }
           },
           tooltip: {
@@ -510,13 +638,10 @@ export default class extends Controller {
             bodyColor: '#fff',
             cornerRadius: 6,
             callbacks: {
-              title: function(context) {
-                return context[0].label;
-              },
               label: function(context) {
-                const total = data.reduce((sum, item) => sum + item.count, 0);
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
                 const percentage = ((context.raw / total) * 100).toFixed(1);
-                return `${context.raw} bookings (${percentage}%)`;
+                return `${context.label}: ${context.raw} (${percentage}%)`;
               }
             }
           }
