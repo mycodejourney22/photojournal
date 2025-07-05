@@ -2,6 +2,7 @@
 class AppointmentReportsController < ApplicationController
   before_action :set_date_range
   before_action :set_location_filter
+  before_action :set_channel_filter  # NEW: Add channel filter
 
   def index
     authorize :appointment_report, :index?
@@ -12,12 +13,14 @@ class AppointmentReportsController < ApplicationController
 
     # Calculate metrics
     @appointments_created = calculate_appointments_created
+    @appointments_by_date = calculate_appointments_by_date  # NEW METRIC
     @photoshoots_completed = calculate_photoshoots_completed
     @missed_sessions = calculate_missed_sessions
-    @online_bookings = calculate_online_bookings  # NEW METRIC
+    @online_bookings = calculate_online_bookings
     
     # Chart data for daily trends
     @appointments_chart_data = appointments_chart_data
+    @appointments_by_date_chart_data = appointments_by_date_chart_data  # NEW CHART DATA
     @photoshoots_chart_data = photoshoots_chart_data
     @missed_sessions_chart_data = missed_sessions_chart_data
     @online_bookings_chart_data = online_bookings_chart_data
@@ -25,7 +28,7 @@ class AppointmentReportsController < ApplicationController
     # Location breakdown
     @location_breakdown = location_breakdown
 
-    # Shoot type analytics
+    # Shoot type analytics with enhanced filtering
     @shoot_type_breakdown = shoot_type_breakdown
     @popular_shoot_types = popular_shoot_types
     
@@ -53,6 +56,11 @@ class AppointmentReportsController < ApplicationController
     @selected_location = params[:location].present? && params[:location] != 'All Locations' ? params[:location] : nil
   end
 
+  # NEW: Add channel filter for online/offline bookings
+  def set_channel_filter
+    @selected_channel = params[:channel].present? && params[:channel] != 'All Channels' ? params[:channel] : nil
+  end
+
   def filter_by_location(scope)
     return scope unless @selected_location
     
@@ -64,6 +72,19 @@ class AppointmentReportsController < ApplicationController
     end
   end
 
+  # NEW: Add channel filtering
+  def filter_by_channel(scope)
+    return scope unless @selected_channel
+    scope.where(channel: @selected_channel)
+  end
+
+  # Apply all filters to appointments
+  def filtered_appointments
+    appointments = filter_by_location(Appointment.all)
+    appointments = filter_by_channel(appointments)
+    appointments
+  end
+
   def filter_by_location_photoshoots(scope)
     return scope unless @selected_location
     
@@ -71,7 +92,12 @@ class AppointmentReportsController < ApplicationController
   end
 
   def calculate_appointments_created
-    @appointments.where(created_at: @start_date.beginning_of_day..@end_date.end_of_day).count
+    filtered_appointments.where(created_at: @start_date.beginning_of_day..@end_date.end_of_day).count
+  end
+
+  # NEW: Calculate appointments by actual appointment date (start_time)
+  def calculate_appointments_by_date
+    filtered_appointments.where(start_time: @start_date.beginning_of_day..@end_date.end_of_day).count
   end
 
   def calculate_photoshoots_completed
@@ -79,7 +105,7 @@ class AppointmentReportsController < ApplicationController
   end
 
   def calculate_online_bookings
-    @appointments.where(
+    filtered_appointments.where(
       created_at: @start_date.beginning_of_day..@end_date.end_of_day,
       channel: 'online'
     ).count
@@ -90,112 +116,20 @@ class AppointmentReportsController < ApplicationController
     # 1. Had a scheduled start_time before today
     # 2. Don't have an associated photoshoot
     # 3. Were active (status = true)
-    # 4. Had payment completed or no payment required
-    
-    past_appointments = @appointments.where(
+    # 4. Fall within our date range
+    past_appointments = filtered_appointments.where(
       start_time: @start_date.beginning_of_day..[@end_date.end_of_day, Time.current].min,
       status: true
     ).where('start_time < ?', Time.current)
 
     missed_count = 0
     past_appointments.find_each do |appointment|
-      # Check if appointment doesn't have a photoshoot
-      if appointment.photo_shoot.nil?
-        # Only count as missed if payment was completed or no payment was required
+      if appointment.photo_shoot.nil? 
         missed_count += 1
       end
     end
 
     missed_count
-  end
-
-  def shoot_type_breakdown
-    # Use base appointments without additional location filtering since @appointments is already filtered
-    appointments_scope = @selected_location ? 
-      Appointment.where(location: @selected_location) : 
-      Appointment.all
-    
-    photoshoots_scope = @selected_location ?
-      PhotoShoot.joins(:appointment).where(appointments: { location: @selected_location }) :
-      PhotoShoot.all
-
-    # Get appointments with prices to analyze shoot types
-    appointments_with_prices = appointments_scope
-      .joins(:price)
-      .where(start_time: @start_date.beginning_of_day..@end_date.end_of_day)
-      .group('prices.shoot_type')
-      .count
-
-    # Get completed photoshoots by shoot type
-    completed_by_type = photoshoots_scope
-      .joins(appointment: :price)
-      .where(date: @start_date..@end_date)
-      .group('prices.shoot_type')
-      .count
-
-    # Get missed sessions by shoot type
-    missed_by_type = {}
-    
-    appointments_scope
-      .joins(:price)
-      .where(
-        start_time: @start_date.beginning_of_day..[@end_date.end_of_day, Time.current].min,
-        status: true
-      )
-      .where('start_time < ?', Time.current)
-      .includes(:photo_shoot, :price)
-      .find_each do |appointment|
-        if appointment.photo_shoot.nil?
-          shoot_type = appointment.price.shoot_type
-          missed_by_type[shoot_type] ||= 0
-          missed_by_type[shoot_type] += 1
-        end
-      end
-
-    # Combine data
-    all_shoot_types = (appointments_with_prices.keys + completed_by_type.keys + missed_by_type.keys).uniq
-
-    result = all_shoot_types.map do |shoot_type|
-      appointments_count = appointments_with_prices[shoot_type] || 0
-      completed_count = completed_by_type[shoot_type] || 0
-      missed_count = missed_by_type[shoot_type] || 0
-
-      {
-        shoot_type: shoot_type,
-        appointments_created: appointments_count,
-        photoshoots_completed: completed_count,
-        missed_sessions: missed_count,
-        conversion_rate: appointments_count > 0 ? ((completed_count.to_f / appointments_count) * 100).round(1) : 0
-      }
-    end.sort_by { |data| -data[:appointments_created] }
-
-    Rails.logger.debug "Shoot type breakdown result: #{result.inspect}"
-    result
-  end
-
-  def popular_shoot_types
-    # Use base appointments without additional location filtering here since @appointments is already filtered
-    appointments_scope = @selected_location ? 
-      Appointment.where(location: @selected_location) : 
-      Appointment.all
-      
-    result = appointments_scope
-      .joins(:price)
-      .where(start_time: @start_date.beginning_of_day..@end_date.end_of_day)
-      .group('prices.shoot_type')
-      .count('appointments.id')
-      .sort_by { |shoot_type, count| -count }
-      .take(5)
-      .to_h
-    
-    mapped_result = result.map { |shoot_type, count| { shoot_type: shoot_type, count: count } }
-    
-    # Debug logging
-    Rails.logger.debug "Popular shoot types raw result: #{result.inspect}"
-    Rails.logger.debug "Popular shoot types mapped result: #{mapped_result.inspect}"
-    
-    # Return empty array if no results
-    mapped_result.present? ? mapped_result : []
   end
 
   def appointments_chart_data
@@ -205,13 +139,35 @@ class AppointmentReportsController < ApplicationController
       daily_data[date.strftime("%b %d")] = 0
     end
 
-    appointments_by_day = @appointments
+    appointments_by_day = filtered_appointments
       .where(created_at: @start_date.beginning_of_day..@end_date.end_of_day)
       .group('DATE(created_at)')
       .count
 
     appointments_by_day.each do |date_obj, count|
-      # Handle both Date objects and date strings
+      date = date_obj.is_a?(Date) ? date_obj : Date.parse(date_obj.to_s)
+      if date >= @start_date && date <= @end_date
+        daily_data[date.strftime("%b %d")] = count
+      end
+    end
+
+    daily_data.map { |date, count| { date: date, count: count } }
+  end
+
+  # NEW: Chart data for appointments by actual appointment date
+  def appointments_by_date_chart_data
+    daily_data = {}
+    
+    (@start_date..@end_date).each do |date|
+      daily_data[date.strftime("%b %d")] = 0
+    end
+
+    appointments_by_day = filtered_appointments
+      .where(start_time: @start_date.beginning_of_day..@end_date.end_of_day)
+      .group('DATE(start_time)')
+      .count
+
+    appointments_by_day.each do |date_obj, count|
       date = date_obj.is_a?(Date) ? date_obj : Date.parse(date_obj.to_s)
       if date >= @start_date && date <= @end_date
         daily_data[date.strftime("%b %d")] = count
@@ -234,7 +190,6 @@ class AppointmentReportsController < ApplicationController
       .count
 
     photoshoots_by_day.each do |date_obj, count|
-      # Handle both Date objects and date strings
       date = date_obj.is_a?(Date) ? date_obj : Date.parse(date_obj.to_s)
       if date >= @start_date && date <= @end_date
         daily_data[date.strftime("%b %d")] = count
@@ -251,7 +206,7 @@ class AppointmentReportsController < ApplicationController
       daily_data[date.strftime("%b %d")] = 0
     end
 
-    online_bookings_by_day = @appointments
+    online_bookings_by_day = filtered_appointments
       .where(
         created_at: @start_date.beginning_of_day..@end_date.end_of_day,
         channel: 'online'
@@ -260,7 +215,6 @@ class AppointmentReportsController < ApplicationController
       .count
 
     online_bookings_by_day.each do |date_obj, count|
-      # Handle both Date objects and date strings
       date = date_obj.is_a?(Date) ? date_obj : Date.parse(date_obj.to_s)
       if date >= @start_date && date <= @end_date
         daily_data[date.strftime("%b %d")] = count
@@ -281,7 +235,7 @@ class AppointmentReportsController < ApplicationController
     (@start_date..@end_date).each do |date|
       next if date >= Date.today # Can't have missed sessions for future dates
       
-      day_appointments = @appointments.where(
+      day_appointments = filtered_appointments.where(
         start_time: date.beginning_of_day..date.end_of_day,
         status: true
       )
@@ -303,7 +257,10 @@ class AppointmentReportsController < ApplicationController
     locations = @selected_location ? [@selected_location] : ['Ajah', 'Ikeja', 'Surulere']
     
     locations.map do |location|
+      # Apply channel filter along with location filter
       location_appointments = Appointment.where(location: location)
+      location_appointments = filter_by_channel(location_appointments)
+      
       location_photoshoots = PhotoShoot.joins(:appointment).where(appointments: { location: location })
 
       appointments_count = location_appointments
@@ -346,11 +303,81 @@ class AppointmentReportsController < ApplicationController
     end
   end
 
+  # ENHANCED: Shoot type breakdown with channel filtering
+  def shoot_type_breakdown
+    # Use filtered appointments scope
+    appointments_scope = filtered_appointments
+      
+    shoot_types = appointments_scope
+      .joins(:price)
+      .where(start_time: @start_date.beginning_of_day..@end_date.end_of_day)
+      .distinct
+      .pluck('prices.shoot_type')
+      .compact
+
+    result = shoot_types.map do |shoot_type|
+      # Get appointments for this shoot type
+      type_appointments = appointments_scope
+        .joins(:price)
+        .where(
+          start_time: @start_date.beginning_of_day..@end_date.end_of_day,
+          prices: { shoot_type: shoot_type }
+        )
+
+      appointments_count = type_appointments.count
+
+      # Count online bookings for this shoot type
+      online_bookings_count = type_appointments.where(channel: 'online').count
+
+      # Count completed photoshoots for this shoot type
+      completed_count = type_appointments
+        .joins(:photo_shoot)
+        .where(photo_shoots: { date: @start_date..@end_date })
+        .count
+
+      {
+        shoot_type: shoot_type,
+        appointments_created: appointments_count,
+        online_bookings: online_bookings_count,
+        photoshoots_completed: completed_count,
+        online_booking_rate: appointments_count > 0 ? ((online_bookings_count.to_f / appointments_count) * 100).round(1) : 0,
+        conversion_rate: appointments_count > 0 ? ((completed_count.to_f / appointments_count) * 100).round(1) : 0
+      }
+    end.sort_by { |data| -data[:appointments_created] }
+
+    Rails.logger.debug "Shoot type breakdown result: #{result.inspect}"
+    result
+  end
+
+  def popular_shoot_types
+    # Use filtered appointments scope
+    appointments_scope = filtered_appointments
+      
+    result = appointments_scope
+      .joins(:price)
+      .where(start_time: @start_date.beginning_of_day..@end_date.end_of_day)
+      .group('prices.shoot_type')
+      .count('appointments.id')
+      .sort_by { |shoot_type, count| -count }
+      .take(5)
+      .to_h
+    
+    mapped_result = result.map { |shoot_type, count| { shoot_type: shoot_type, count: count } }
+    
+    # Debug logging
+    Rails.logger.debug "Popular shoot types raw result: #{result.inspect}"
+    Rails.logger.debug "Popular shoot types mapped result: #{mapped_result.inspect}"
+    
+    # Return empty array if no results
+    mapped_result.present? ? mapped_result : []
+  end
+
   def send_csv_export
     csv_data = generate_csv_data
     
     filename = "appointment_reports_#{@start_date.strftime('%Y%m%d')}_#{@end_date.strftime('%Y%m%d')}"
     filename += "_#{@selected_location.downcase}" if @selected_location
+    filename += "_#{@selected_channel.downcase}" if @selected_channel
     filename += ".csv"
 
     send_data csv_data, 
@@ -373,6 +400,7 @@ class AppointmentReportsController < ApplicationController
       # Summary metrics
       csv << ["Summary Metrics"]
       csv << ["Total Appointments Created", @appointments_created]
+      csv << ["Total Appointments by Date", @appointments_by_date]  # NEW
       csv << ["Online Bookings", @online_bookings]
       csv << ["Total Photoshoots Completed", @photoshoots_completed]
       csv << ["Total Missed Sessions", @missed_sessions]
@@ -380,65 +408,33 @@ class AppointmentReportsController < ApplicationController
       csv << ["Online Booking Rate", @appointments_created > 0 ? "#{((@online_bookings.to_f / @appointments_created) * 100).round(1)}%" : "0%"]
       csv << []
 
-      # Location breakdown
-      csv << ["Location Breakdown"]
-      csv << ["Location", "Appointments Created", "Online Bookings", "Photoshoots Completed", "Missed Sessions", "Conversion Rate", "Online Booking Rate"]
-      
-      @location_breakdown.each do |location_data|
+      # Shoot type breakdown with online booking details
+      csv << ["Shoot Type Breakdown"]
+      csv << ["Shoot Type", "Appointments", "Online Bookings", "Completed", "Online Rate %", "Conversion Rate %"]
+      @shoot_type_breakdown.each do |data|
         csv << [
-          location_data[:location],
-          location_data[:appointments_created],
-          location_data[:online_bookings],
-          location_data[:photoshoots_completed],
-          location_data[:missed_sessions],
-          "#{location_data[:conversion_rate]}%",
-          "#{location_data[:online_booking_rate]}%"
+          data[:shoot_type],
+          data[:appointments_created],
+          data[:online_bookings],
+          data[:photoshoots_completed],
+          data[:online_booking_rate],
+          data[:conversion_rate]
         ]
       end
-      
       csv << []
 
-      # Daily breakdown
-      csv << ["Daily Breakdown"]
-      csv << ["Date", "Appointments Created", "Online Bookings", "Photoshoots Completed", "Missed Sessions"]
-      
-      (@start_date..@end_date).each do |date|
-        appointments_count = @appointments
-          .where(created_at: date.beginning_of_day..date.end_of_day)
-          .count
-
-        online_bookings_count = @appointments
-          .where(
-            created_at: date.beginning_of_day..date.end_of_day,
-            channel: 'online'
-          )
-          .count
-
-        photoshoots_count = @photoshoots
-          .where(date: date)
-          .count
-
-        # Calculate missed sessions for this specific date
-        missed_count = 0
-        if date < Date.today
-          day_appointments = @appointments.where(
-            start_time: date.beginning_of_day..date.end_of_day,
-            status: true
-          )
-
-          day_appointments.find_each do |appointment|
-            if appointment.photo_shoot.nil? 
-              missed_count += 1
-            end
-          end
-        end
-
+      # Location breakdown
+      csv << ["Location Breakdown"]
+      csv << ["Location", "Appointments", "Online Bookings", "Completed", "Missed", "Conversion Rate %", "Online Rate %"]
+      @location_breakdown.each do |data|
         csv << [
-          date.strftime('%B %d, %Y'),
-          appointments_count,
-          online_bookings_count,
-          photoshoots_count,
-          missed_count
+          data[:location],
+          data[:appointments_created],
+          data[:online_bookings],
+          data[:photoshoots_completed],
+          data[:missed_sessions],
+          data[:conversion_rate],
+          data[:online_booking_rate]
         ]
       end
     end

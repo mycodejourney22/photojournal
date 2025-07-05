@@ -5,7 +5,15 @@ import { Chart, registerables } from "chart.js"
 Chart.register(...registerables);
 
 export default class extends Controller {
-  static targets = ["appointmentsChart", "photoshootsChart", "missedChart", "onlineBookingsChart", "locationChart", "shootTypesChart"]
+  static targets = [
+    "appointmentsChart", 
+    "appointmentsByDateChart",  // NEW TARGET
+    "photoshootsChart", 
+    "missedChart", 
+    "onlineBookingsChart", 
+    "locationChart", 
+    "shootTypesChart"
+  ]
 
   connect() {
     this.initializeCharts();
@@ -24,6 +32,11 @@ export default class extends Controller {
     // Initialize each chart
     if (this.hasAppointmentsChartTarget) {
       this.charts.push(this.createAppointmentsChart());
+    }
+
+    // NEW: Initialize appointments by date chart
+    if (this.hasAppointmentsByDateChartTarget) {
+      this.charts.push(this.createAppointmentsByDateChart());
     }
 
     if (this.hasPhotoshootsChartTarget) {
@@ -65,6 +78,71 @@ export default class extends Controller {
           pointBorderColor: '#fff',
           pointBorderWidth: 2,
           pointRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { 
+              precision: 0,
+              font: { size: 12 }
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            cornerRadius: 6,
+            callbacks: {
+              title: function(context) {
+                return `Date: ${context[0].label}`;
+              },
+              label: function(context) {
+                return `${context.dataset.label}: ${context.raw} appointments`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // NEW: Create chart for appointments by actual appointment date
+  createAppointmentsByDateChart() {
+    const data = JSON.parse(this.appointmentsByDateChartTarget.dataset.chartData);
+    
+    return new Chart(this.appointmentsByDateChartTarget, {
+      type: 'bar',
+      data: {
+        labels: data.map(item => item.date),
+        datasets: [{
+          label: 'Appointments by Date',
+          data: data.map(item => item.count),
+          backgroundColor: '#FF9800',
+          borderColor: '#F57C00',
+          borderWidth: 1,
+          borderRadius: 4,
+          borderSkipped: false
         }]
       },
       options: {
@@ -171,64 +249,6 @@ export default class extends Controller {
               },
               label: function(context) {
                 return `${context.dataset.label}: ${context.raw} bookings`;
-              }
-            }
-          }
-        }
-      }
-    });
-  }
-
-  createShootTypesChart() {
-    const data = JSON.parse(this.shootTypesChartTarget.dataset.chartData);
-    
-    // Check if we have data
-    if (!data || data.length === 0) {
-      return null;
-    }
-    
-    // Generate colors for each shoot type
-    const colors = [
-      '#4285F4', '#EDD400', '#0F9D58', '#DB4437', 
-      '#9C27B0', '#FF9800', '#00BCD4', '#795548'
-    ];
-    
-    return new Chart(this.shootTypesChartTarget, {
-      type: 'doughnut',
-      data: {
-        labels: data.map(item => item.shoot_type),
-        datasets: [{
-          data: data.map(item => item.count),
-          backgroundColor: colors.slice(0, data.length),
-          borderWidth: 2,
-          borderColor: '#fff'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'right',
-            labels: {
-              usePointStyle: true,
-              padding: 15,
-              font: { size: 12 }
-            }
-          },
-          tooltip: {
-            backgroundColor: 'rgba(0,0,0,0.8)',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            cornerRadius: 6,
-            callbacks: {
-              title: function(context) {
-                return context[0].label;
-              },
-              label: function(context) {
-                const total = data.reduce((sum, item) => sum + item.count, 0);
-                const percentage = ((context.raw / total) * 100).toFixed(1);
-                return `${context.raw} bookings (${percentage}%)`;
               }
             }
           }
@@ -439,6 +459,64 @@ export default class extends Controller {
               },
               label: function(context) {
                 return `${context.dataset.label}: ${context.raw}`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  createShootTypesChart() {
+    const data = JSON.parse(this.shootTypesChartTarget.dataset.chartData);
+    
+    // Check if we have data
+    if (!data || data.length === 0) {
+      return null;
+    }
+    
+    // Generate colors for each shoot type
+    const colors = [
+      '#4285F4', '#EDD400', '#0F9D58', '#DB4437', 
+      '#9C27B0', '#FF9800', '#00BCD4', '#795548'
+    ];
+    
+    return new Chart(this.shootTypesChartTarget, {
+      type: 'doughnut',
+      data: {
+        labels: data.map(item => item.shoot_type),
+        datasets: [{
+          data: data.map(item => item.count),
+          backgroundColor: colors.slice(0, data.length),
+          borderWidth: 2,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              usePointStyle: true,
+              padding: 15,
+              font: { size: 12 }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            cornerRadius: 6,
+            callbacks: {
+              title: function(context) {
+                return context[0].label;
+              },
+              label: function(context) {
+                const total = data.reduce((sum, item) => sum + item.count, 0);
+                const percentage = ((context.raw / total) * 100).toFixed(1);
+                return `${context.raw} bookings (${percentage}%)`;
               }
             }
           }

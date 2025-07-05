@@ -4,7 +4,7 @@
     <h1>Appointment Reports</h1>
   </div>
   <div class="g-content__toolbar-actions">
-    <%= link_to appointment_reports_path(format: :csv, start_date: @start_date, end_date: @end_date, location: params[:location]), 
+    <%= link_to appointment_reports_path(format: :csv, start_date: @start_date, end_date: @end_date, location: params[:location], channel: params[:channel]), 
                 class: "g-button g-button--action" do %>
       <i class="fas fa-download"></i> Export CSV
     <% end %>
@@ -33,6 +33,15 @@
                     class: "filter-input" %>
       </div>
 
+      <!-- NEW: Channel Filter -->
+      <div class="filter-item">
+        <%= f.label :channel, "Booking Channel", class: "filter-label" %>
+        <%= f.select :channel,
+                    ['All Channels', 'online', 'offline'],
+                    { selected: params[:channel] || 'All Channels' },
+                    class: "filter-input" %>
+      </div>
+
       <%= f.submit "Apply Filters", class: "filter-button" %>
 
       <%= link_to "Reset", appointment_reports_path, class: "reset-button" %>
@@ -54,6 +63,9 @@
       <% else %>
         for <strong>all locations</strong>
       <% end %>
+      <% if @selected_channel %>
+        • <strong><%= @selected_channel.humanize %></strong> bookings only
+      <% end %>
     </p>
   </div>
 </div>
@@ -64,6 +76,13 @@
     <div class="metric-value"><%= @appointments_created %></div>
     <div class="metric-label">Appointments Created</div>
     <div class="metric-description">Total bookings made during this period</div>
+  </div>
+
+  <!-- NEW: Appointments by Date Card -->
+  <div class="metric-card">
+    <div class="metric-value"><%= @appointments_by_date %></div>
+    <div class="metric-label">Appointments by Date</div>
+    <div class="metric-description">Appointments scheduled for this period</div>
   </div>
 
   <div class="metric-card">
@@ -105,6 +124,17 @@
     </div>
   </div>
 
+  <!-- NEW: Appointments by Date Chart -->
+  <div class="analytics-card chart-card">
+    <div class="analytics-card-header">
+      <h2>Daily Appointments by Date</h2>
+    </div>
+    <div class="chart-container">
+      <canvas data-appointment-reports-chart-target="appointmentsByDateChart"
+              data-chart-data="<%= @appointments_by_date_chart_data.to_json %>"></canvas>
+    </div>
+  </div>
+
   <div class="analytics-card chart-card">
     <div class="analytics-card-header">
       <h2>Daily Photoshoots Completed</h2>
@@ -112,6 +142,16 @@
     <div class="chart-container">
       <canvas data-appointment-reports-chart-target="photoshootsChart"
               data-chart-data="<%= @photoshoots_chart_data.to_json %>"></canvas>
+    </div>
+  </div>
+
+  <div class="analytics-card chart-card">
+    <div class="analytics-card-header">
+      <h2>Daily Online Bookings</h2>
+    </div>
+    <div class="chart-container">
+      <canvas data-appointment-reports-chart-target="onlineBookingsChart"
+              data-chart-data="<%= @online_bookings_chart_data.to_json %>"></canvas>
     </div>
   </div>
 
@@ -148,8 +188,10 @@
         <tr>
           <th>Location</th>
           <th>Appointments Created</th>
+          <th>Online Bookings</th>
           <th>Photoshoots Completed</th>
           <th>Missed Sessions</th>
+          <th>Online Rate</th>
           <th>Conversion Rate</th>
           <th>Performance</th>
         </tr>
@@ -165,12 +207,22 @@
               <%= location_data[:appointments_created] %>
             </td>
             
+            <td class="count-cell">
+              <%= location_data[:online_bookings] %>
+            </td>
+            
             <td class="count-cell success-cell">
               <%= location_data[:photoshoots_completed] %>
             </td>
             
             <td class="count-cell warning-cell">
               <%= location_data[:missed_sessions] %>
+            </td>
+            
+            <td class="percentage-cell">
+              <div class="conversion-rate">
+                <%= location_data[:online_booking_rate] %>%
+              </div>
             </td>
             
             <td class="percentage-cell">
@@ -245,12 +297,26 @@
     </div>
   </div>
 
+  <!-- NEW: Shoot Types Pie Chart -->
+  <div class="analytics-card">
+    <div class="analytics-card-header">
+      <h2>Shoot Types Distribution</h2>
+    </div>
+    <div class="chart-container">
+      <% if @popular_shoot_types&.any? %>
+        <canvas data-appointment-reports-chart-target="shootTypesChart"
+                data-chart-data="<%= @popular_shoot_types.to_json %>"></canvas>
+      <% else %>
+        <div class="empty-chart-state">No data available for chart</div>
+      <% end %>
+    </div>
+  </div>
 </div>
 
-<!-- Detailed Shoot Type Performance -->
+<!-- ENHANCED: Detailed Shoot Type Performance with Online Booking Analytics -->
 <div class="analytics-card">
   <div class="analytics-card-header">
-    <h2>Performance by Shoot Type</h2>
+    <h2>Performance by Shoot Type - Enhanced with Online Booking Analytics</h2>
   </div>
 
   <div class="analytics-table-wrapper">
@@ -259,8 +325,9 @@
         <tr>
           <th>Shoot Type</th>
           <th>Appointments Created</th>
+          <th>Online Bookings</th>
           <th>Photoshoots Completed</th>
-          <th>Missed Sessions</th>
+          <th>Online Booking Rate</th>
           <th>Conversion Rate</th>
           <th>Performance</th>
         </tr>
@@ -277,12 +344,18 @@
                 <%= shoot_data[:appointments_created] %>
               </td>
               
+              <td class="count-cell">
+                <%= shoot_data[:online_bookings] %>
+              </td>
+              
               <td class="count-cell success-cell">
                 <%= shoot_data[:photoshoots_completed] %>
               </td>
               
-              <td class="count-cell warning-cell">
-                <%= shoot_data[:missed_sessions] %>
+              <td class="percentage-cell">
+                <div class="conversion-rate">
+                  <%= shoot_data[:online_booking_rate] %>%
+                </div>
               </td>
               
               <td class="percentage-cell">
@@ -306,7 +379,7 @@
           <% end %>
         <% else %>
           <tr>
-            <td colspan="6" class="empty-state">No shoot type performance data available for the selected period</td>
+            <td colspan="7" class="empty-state">No shoot type performance data available for the selected period</td>
           </tr>
         <% end %>
       </tbody>
@@ -336,6 +409,43 @@
             This is good, but there's room for improvement.
           <% else %>
             Consider following up with customers who book but don't show up.
+          <% end %>
+        </div>
+      </div>
+
+      <!-- NEW: Online Booking Insight -->
+      <div class="insight-item">
+        <div class="insight-icon insight-icon--info">
+          <i class="fas fa-globe"></i>
+        </div>
+        <div class="insight-text">
+          <strong>Online Booking Performance:</strong>
+          <% online_rate = @appointments_created > 0 ? ((@online_bookings.to_f / @appointments_created) * 100).round(1) : 0 %>
+          <%= online_rate %>% of your appointments come from online bookings.
+          <% if online_rate >= 60 %>
+            Excellent digital presence!
+          <% elsif online_rate >= 40 %>
+            Good online conversion. Consider optimizing your booking flow.
+          <% else %>
+            Consider improving your online booking system to capture more digital customers.
+          <% end %>
+        </div>
+      </div>
+
+      <!-- NEW: Appointment Load vs Creation Insight -->
+      <div class="insight-item">
+        <div class="insight-icon insight-icon--info">
+          <i class="fas fa-calendar"></i>
+        </div>
+        <div class="insight-text">
+          <strong>Appointment Scheduling Pattern:</strong>
+          You created <%= @appointments_created %> appointments but have <%= @appointments_by_date %> appointments scheduled for this period.
+          <% if @appointments_by_date > @appointments_created %>
+            This means some appointments were booked for future dates, showing good advance booking.
+          <% elsif @appointments_by_date < @appointments_created %>
+            This suggests customers are booking for dates outside this period - consider longer-term capacity planning.
+          <% else %>
+            Your booking and scheduling pattern aligns perfectly.
           <% end %>
         </div>
       </div>
@@ -395,12 +505,25 @@
             </div>
           </div>
         <% end %>
+
+        <!-- NEW: Best Online Booking Shoot Type Insight -->
+        <% best_online_shoot = @shoot_type_breakdown.max_by { |shoot| shoot[:online_booking_rate] } %>
+        <% if best_online_shoot && best_online_shoot[:online_booking_rate] > 0 %>
+          <div class="insight-item">
+            <div class="insight-icon insight-icon--success">
+              <i class="fas fa-laptop"></i>
+            </div>
+            <div class="insight-text">
+              <strong>Best Online Booking Type:</strong>
+              <%= best_online_shoot[:shoot_type] %> has the highest online booking rate at <%= best_online_shoot[:online_booking_rate] %>%.
+              This shoot type performs well in digital channels.
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
 </div>
-
-
 
 <style>
   .analytics-filters {
@@ -505,7 +628,7 @@
 
   .analytics-overview {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 20px;
     margin-bottom: 20px;
   }
@@ -787,6 +910,19 @@
     font-style: italic;
   }
 
+  .empty-state {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 40px;
+  }
+
+  @media (max-width: 1400px) {
+    .analytics-overview {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
   @media (max-width: 1200px) {
     .analytics-overview {
       grid-template-columns: repeat(2, 1fr);
@@ -817,6 +953,10 @@
       grid-template-columns: 1fr;
     }
 
+    .analytics-grid {
+      grid-template-columns: 1fr;
+    }
+
     .insight-item {
       flex-direction: column;
       text-align: center;
@@ -824,6 +964,41 @@
 
     .insight-icon {
       margin: 0 auto 10px auto;
+    }
+
+    .analytics-table-wrapper {
+      font-size: 12px;
+    }
+
+    .analytics-table th,
+    .analytics-table td {
+      padding: 8px 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .metric-card {
+      padding: 15px;
+    }
+
+    .metric-value {
+      font-size: 24px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+    }
+
+    .metric-description {
+      font-size: 11px;
+    }
+
+    .filter-item {
+      min-width: 100%;
+    }
+
+    .filter-input {
+      min-width: 100%;
     }
   }
 </style>
