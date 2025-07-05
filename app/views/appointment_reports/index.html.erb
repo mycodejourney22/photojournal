@@ -67,6 +67,12 @@
   </div>
 
   <div class="metric-card">
+    <div class="metric-value"><%= @online_bookings %></div>
+    <div class="metric-label">Online Bookings</div>
+    <div class="metric-description">Total bookings made online during this period</div>
+  </div>
+
+  <div class="metric-card">
     <div class="metric-value"><%= @photoshoots_completed %></div>
     <div class="metric-label">Photoshoots Completed</div>
     <div class="metric-description">Sessions that were actually conducted</div>
@@ -75,7 +81,7 @@
   <div class="metric-card metric-card--warning">
     <div class="metric-value"><%= @missed_sessions %></div>
     <div class="metric-label">Missed Sessions</div>
-    <div class="metric-description">Paid appointments that didn't show up</div>
+    <div class="metric-description">Appointments that didn't show up</div>
   </div>
 
   <div class="metric-card">

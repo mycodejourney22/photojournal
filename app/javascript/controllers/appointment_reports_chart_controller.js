@@ -5,7 +5,7 @@ import { Chart, registerables } from "chart.js"
 Chart.register(...registerables);
 
 export default class extends Controller {
-  static targets = ["appointmentsChart", "photoshootsChart", "missedChart", "locationChart", "shootTypesChart"]
+  static targets = ["appointmentsChart", "photoshootsChart", "missedChart", "onlineBookingsChart", "locationChart", "shootTypesChart"]
 
   connect() {
     this.initializeCharts();
@@ -40,6 +40,10 @@ export default class extends Controller {
 
     if (this.hasShootTypesChartTarget) {
       this.charts.push(this.createShootTypesChart());
+    }
+
+    if (this.hasOnlineBookingsChartTarget) {
+      this.charts.push(this.createOnlineBookingsChart());
     }
   }
 
@@ -102,6 +106,71 @@ export default class extends Controller {
               },
               label: function(context) {
                 return `${context.dataset.label}: ${context.raw} appointments`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  createOnlineBookingsChart() {
+    const data = JSON.parse(this.onlineBookingsChartTarget.dataset.chartData);
+    
+    return new Chart(this.onlineBookingsChartTarget, {
+      type: 'line',
+      data: {
+        labels: data.map(item => item.date),
+        datasets: [{
+          label: 'Online Bookings',
+          data: data.map(item => item.count),
+          backgroundColor: 'rgba(156, 39, 176, 0.1)',
+          borderColor: '#9C27B0',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#9C27B0',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { 
+              precision: 0,
+              font: { size: 12 }
+            },
+            grid: {
+              color: 'rgba(0,0,0,0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            cornerRadius: 6,
+            callbacks: {
+              title: function(context) {
+                return `Date: ${context[0].label}`;
+              },
+              label: function(context) {
+                return `${context.dataset.label}: ${context.raw} bookings`;
               }
             }
           }

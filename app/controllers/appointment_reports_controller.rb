@@ -14,16 +14,18 @@ class AppointmentReportsController < ApplicationController
     @appointments_created = calculate_appointments_created
     @photoshoots_completed = calculate_photoshoots_completed
     @missed_sessions = calculate_missed_sessions
+    @online_bookings = calculate_online_bookings  # NEW METRIC
     
     # Chart data for daily trends
     @appointments_chart_data = appointments_chart_data
     @photoshoots_chart_data = photoshoots_chart_data
     @missed_sessions_chart_data = missed_sessions_chart_data
+    @online_bookings_chart_data = online_bookings_chart_data
     
     # Location breakdown
     @location_breakdown = location_breakdown
 
-    # Shoot type analytics - ADD THESE LINES
+    # Shoot type analytics
     @shoot_type_breakdown = shoot_type_breakdown
     @popular_shoot_types = popular_shoot_types
     
@@ -76,6 +78,13 @@ class AppointmentReportsController < ApplicationController
     @photoshoots.where(date: @start_date..@end_date).count
   end
 
+  def calculate_online_bookings
+    @appointments.where(
+      created_at: @start_date.beginning_of_day..@end_date.end_of_day,
+      channel: 'online'
+    ).count
+  end
+
   def calculate_missed_sessions
     # Find appointments that:
     # 1. Had a scheduled start_time before today
@@ -94,14 +103,12 @@ class AppointmentReportsController < ApplicationController
       if appointment.photo_shoot.nil?
         # Only count as missed if payment was completed or no payment was required
         missed_count += 1
-        
       end
     end
 
     missed_count
   end
 
-  # MOVE THESE METHODS OUTSIDE OF calculate_missed_sessions
   def shoot_type_breakdown
     # Use base appointments without additional location filtering since @appointments is already filtered
     appointments_scope = @selected_location ? 
@@ -237,6 +244,32 @@ class AppointmentReportsController < ApplicationController
     daily_data.map { |date, count| { date: date, count: count } }
   end
 
+  def online_bookings_chart_data
+    daily_data = {}
+    
+    (@start_date..@end_date).each do |date|
+      daily_data[date.strftime("%b %d")] = 0
+    end
+
+    online_bookings_by_day = @appointments
+      .where(
+        created_at: @start_date.beginning_of_day..@end_date.end_of_day,
+        channel: 'online'
+      )
+      .group('DATE(created_at)')
+      .count
+
+    online_bookings_by_day.each do |date_obj, count|
+      # Handle both Date objects and date strings
+      date = date_obj.is_a?(Date) ? date_obj : Date.parse(date_obj.to_s)
+      if date >= @start_date && date <= @end_date
+        daily_data[date.strftime("%b %d")] = count
+      end
+    end
+
+    daily_data.map { |date, count| { date: date, count: count } }
+  end
+
   def missed_sessions_chart_data
     daily_data = {}
     
@@ -277,6 +310,13 @@ class AppointmentReportsController < ApplicationController
         .where(created_at: @start_date.beginning_of_day..@end_date.end_of_day)
         .count
 
+      online_bookings_count = location_appointments
+        .where(
+          created_at: @start_date.beginning_of_day..@end_date.end_of_day,
+          channel: 'online'
+        )
+        .count
+
       photoshoots_count = location_photoshoots
         .where(date: @start_date..@end_date)
         .count
@@ -297,9 +337,11 @@ class AppointmentReportsController < ApplicationController
       {
         location: location,
         appointments_created: appointments_count,
+        online_bookings: online_bookings_count,
         photoshoots_completed: photoshoots_count,
         missed_sessions: missed_count,
-        conversion_rate: appointments_count > 0 ? ((photoshoots_count.to_f / appointments_count) * 100).round(1) : 0
+        conversion_rate: appointments_count > 0 ? ((photoshoots_count.to_f / appointments_count) * 100).round(1) : 0,
+        online_booking_rate: appointments_count > 0 ? ((online_bookings_count.to_f / appointments_count) * 100).round(1) : 0
       }
     end
   end
@@ -331,22 +373,26 @@ class AppointmentReportsController < ApplicationController
       # Summary metrics
       csv << ["Summary Metrics"]
       csv << ["Total Appointments Created", @appointments_created]
+      csv << ["Online Bookings", @online_bookings]
       csv << ["Total Photoshoots Completed", @photoshoots_completed]
       csv << ["Total Missed Sessions", @missed_sessions]
       csv << ["Conversion Rate", @appointments_created > 0 ? "#{((@photoshoots_completed.to_f / @appointments_created) * 100).round(1)}%" : "0%"]
+      csv << ["Online Booking Rate", @appointments_created > 0 ? "#{((@online_bookings.to_f / @appointments_created) * 100).round(1)}%" : "0%"]
       csv << []
 
       # Location breakdown
       csv << ["Location Breakdown"]
-      csv << ["Location", "Appointments Created", "Photoshoots Completed", "Missed Sessions", "Conversion Rate"]
+      csv << ["Location", "Appointments Created", "Online Bookings", "Photoshoots Completed", "Missed Sessions", "Conversion Rate", "Online Booking Rate"]
       
       @location_breakdown.each do |location_data|
         csv << [
           location_data[:location],
           location_data[:appointments_created],
+          location_data[:online_bookings],
           location_data[:photoshoots_completed],
           location_data[:missed_sessions],
-          "#{location_data[:conversion_rate]}%"
+          "#{location_data[:conversion_rate]}%",
+          "#{location_data[:online_booking_rate]}%"
         ]
       end
       
@@ -354,11 +400,18 @@ class AppointmentReportsController < ApplicationController
 
       # Daily breakdown
       csv << ["Daily Breakdown"]
-      csv << ["Date", "Appointments Created", "Photoshoots Completed", "Missed Sessions"]
+      csv << ["Date", "Appointments Created", "Online Bookings", "Photoshoots Completed", "Missed Sessions"]
       
       (@start_date..@end_date).each do |date|
         appointments_count = @appointments
           .where(created_at: date.beginning_of_day..date.end_of_day)
+          .count
+
+        online_bookings_count = @appointments
+          .where(
+            created_at: date.beginning_of_day..date.end_of_day,
+            channel: 'online'
+          )
           .count
 
         photoshoots_count = @photoshoots
@@ -383,6 +436,7 @@ class AppointmentReportsController < ApplicationController
         csv << [
           date.strftime('%B %d, %Y'),
           appointments_count,
+          online_bookings_count,
           photoshoots_count,
           missed_count
         ]
