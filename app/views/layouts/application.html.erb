@@ -130,7 +130,15 @@
               <span class="g-sidebar__nav-text">Customer Analytics</span>
             <% end %>
           </li>
-
+          <li>
+            <%= link_to appointment_reports_path, 
+                class: "g-sidebar__item #{'g-sidebar__item--active' if current_page?(appointment_reports_path)}" do %>
+              <div class="g-sidebar__icon">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <span class="g-sidebar__text">Appointment Reports</span>
+            <% end %>
+          </li>    
           <li>
             <%= link_to operations_path, class: "g-sidebar__nav-item #{controller_name == 'operations' ? 'g-sidebar__nav-item--active' : ''}" do  %>
               <div class="g-sidebar__nav-icon"></div>

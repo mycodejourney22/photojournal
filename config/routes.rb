@@ -79,6 +79,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  resources :appointment_reports, only: [:index]
+
   get 'photo_shoots/consent'
   resources :customers do
     member do
