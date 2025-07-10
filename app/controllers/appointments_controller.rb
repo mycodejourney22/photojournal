@@ -331,6 +331,7 @@ class AppointmentsController < ApplicationController
                     .joins(:photo_shoot)
                     .where.not(photo_shoots: { status: 'Sent' })
                     .where('start_time < ?', Time.zone.now)
+                    .where('start_time >= ?', 30.days.ago)
                     .order(:start_time)
 
     if params[:query].present?
