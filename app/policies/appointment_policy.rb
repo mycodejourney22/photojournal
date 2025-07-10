@@ -33,6 +33,11 @@ class AppointmentPolicy < ApplicationPolicy
     index?
   end
 
+  def in_progress?
+    # Same access control as other appointment views
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+  end
+  
   def upcoming?
     index?
   end

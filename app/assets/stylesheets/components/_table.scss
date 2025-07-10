@@ -23,3 +23,54 @@
 //   color: #888;
 
 // }
+
+/* app/assets/stylesheets/components/_table.scss */
+/* Add these styles for the status badges in the In Progress tab */
+
+.g-table__status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .g-table__status-badge--new {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #bbdefb;
+  }
+  
+  .g-table__status-badge--pending {
+    background-color: #fff3e0;
+    color: #f57c00;
+    border: 1px solid #ffcc80;
+  }
+  
+  .g-table__status-badge--sent {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+  }
+  
+  /* Additional column styles for In Progress view */
+  .g-table__col--photographer,
+  .g-table__col--editor,
+  .g-table__col--status {
+    min-width: 120px;
+    flex: 1;
+  }
+  
+  .g-table__col--photographer {
+    flex: 1.2;
+  }
+  
+  .g-table__col--editor {
+    flex: 1.2;
+  }
+  
+  .g-table__col--status {
+    flex: 1;
+  }

@@ -4,7 +4,7 @@ class AppointmentsController < ApplicationController
   layout 'public', only: [:type_of_shoots, :booking, :new_customer]
   after_action :verify_policy_scoped, only: :index
   layout :determine_layout
-  before_action :set_appointments, :set_url, only: [:upcoming, :past, :index, :cancel, :cancel_booking]
+  before_action :set_appointments, :set_url, only: [:upcoming, :past, :index, :cancel, :cancel_booking, :in_progress]
   skip_before_action :authenticate_user!, only: [:booking, :available_hours, :selected_date,
                                                  :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit,
                                                  :update, :type_of_shoots,:select_price]
@@ -12,6 +12,12 @@ class AppointmentsController < ApplicationController
   def upcoming
     authorize Appointment
     @appointments = upcoming_appointment
+    respond_to_format
+  end
+
+  def in_progress
+    authorize Appointment
+    @appointments = in_progress_appointments
     respond_to_format
   end
 
@@ -314,6 +320,26 @@ class AppointmentsController < ApplicationController
   #     questions_attributes: [:id, :question, :answer, :_destroy]
   #   )
   # end
+
+  def in_progress_appointments
+    # Find appointments that:
+    # 1. Have an associated photoshoot
+    # 2. The photoshoot status is NOT 'Sent'
+    # 3. The appointment was in the past (already completed)
+    appointments = policy_scope(Appointment)
+                    .includes(:questions, :photo_shoot)
+                    .joins(:photo_shoot)
+                    .where.not(photo_shoots: { status: 'Sent' })
+                    .where('start_time < ?', Time.zone.now)
+                    .order(:start_time)
+
+    if params[:query].present?
+      appointments = appointments.global_search(params[:query])
+    end
+
+    # Always return paginated results, even if empty
+    appointments.page(params[:page])
+  end
 
 
   def render_photos(photo_type)

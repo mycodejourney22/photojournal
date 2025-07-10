@@ -26,6 +26,13 @@ class Appointment < ApplicationRecord
                          .order(start_time: :desc) }
   scope :today, -> { for_today.available_for_booking }
 
+  scope :in_progress, -> { 
+    joins(:photo_shoot)
+      .where.not(photo_shoots: { status: 'Sent' })
+      .where('start_time < ?', Time.zone.now)
+      .order(:start_time)
+  }
+
   def status_object
     @status_object ||= AppointmentStatus.new(self)
   end

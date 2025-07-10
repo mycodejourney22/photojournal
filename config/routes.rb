@@ -161,6 +161,7 @@ Rails.application.routes.draw do
       get :type_of_shoots
       post :select_price
       get :select_price
+      get :in_progress
       get :past
       get :new_customer
       get :available_slots
@@ -168,6 +169,8 @@ Rails.application.routes.draw do
       get :available_hours
       get :booking
       get :thank_you
+      delete :cancel
+
     end
 
     member do
