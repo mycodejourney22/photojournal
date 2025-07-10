@@ -127,6 +127,34 @@ class Appointment < ApplicationRecord
     end
   end
 
+  def schedule_confirmation_sms
+    # Send confirmation SMS immediately (with a small delay to ensure appointment is saved)
+    AppointmentConfirmationSmsJob.set(wait: 1.minute).perform_later(id)
+  end
+
+  # NEW: Schedule reminder SMS
+  def schedule_reminder_sms
+    # Calculate the reminder times
+    reminder_2_hours = start_time - 2.hours
+    reminder_24_hours = start_time - 24.hours
+
+    # Schedule the 24-hour SMS reminder only if it's in the future
+    if reminder_24_hours > Time.current
+      AppointmentReminderSmsJob.set(wait_until: reminder_24_hours).perform_later(id, '24_hours')
+    end
+
+    # Schedule the 2-hour SMS reminder only if it's in the future
+    if reminder_2_hours > Time.current
+      AppointmentReminderSmsJob.set(wait_until: reminder_2_hours).perform_later(id, '2_hours')
+    end
+  end
+
+  # NEW: Schedule all SMS notifications
+  def schedule_sms_notifications
+    schedule_confirmation_sms
+    schedule_reminder_sms
+  end
+
 
   private
 

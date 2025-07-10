@@ -23,6 +23,8 @@ class SmsService
     send_sms(phone_number, message)
   end
 
+
+
   def send_sms(phone_number, message)
     # Format the phone number to international format if needed
     formatted_number = format_phone_number(phone_number)
@@ -78,6 +80,38 @@ class SmsService
     end
   end
 
+  def send_appointment_confirmation_sms(appointment)
+    phone_number = extract_phone_number(appointment)
+    return false unless phone_number.present?
+
+    message = build_appointment_confirmation_message(appointment)
+    send_sms(phone_number, message)
+  end
+
+  def send_appointment_reminder_sms(appointment, reminder_type = '24_hours')
+    phone_number = extract_phone_number(appointment)
+    return false unless phone_number.present?
+
+    message = build_appointment_reminder_message(appointment, reminder_type)
+    send_sms(phone_number, message)
+  end
+
+  def send_appointment_update_sms(appointment)
+    phone_number = extract_phone_number(appointment)
+    return false unless phone_number.present?
+
+    message = build_appointment_update_message(appointment)
+    send_sms(phone_number, message)
+  end
+
+  def send_appointment_cancellation_sms(appointment)
+    phone_number = extract_phone_number(appointment)
+    return false unless phone_number.present?
+
+    message = build_appointment_cancellation_message(appointment)
+    send_sms(phone_number, message)
+  end
+
   private
 
   def extract_phone_number(appointment)
@@ -105,6 +139,50 @@ class SmsService
 
   def generate_unique_id
     "363photo_#{SecureRandom.hex(8)}"
+  end
+
+  def build_appointment_update_message(appointment)
+    customer_name = appointment.name.split.first
+    appointment_date = appointment.formatted_start_time
+    appointment_time = appointment.formatted_time
+    studio_phone = appointment.studio_phone
+
+    message = <<~SMS
+      Hello #{customer_name},
+
+      Your appointment has been updated:
+
+      📅 New Date: #{appointment_date}
+      ⏰ New Time: #{appointment_time}
+      📍 Location: #{appointment.location}
+
+      Please save these new details. Arrive 15 minutes early.
+
+      363 Photography Team
+    SMS
+
+    # Ensure message is not too long (max 612 characters for SMS API)
+    message.gsub(/\s+/, ' ').strip[0...612]
+  end
+
+  def build_appointment_cancellation_message(appointment)
+    customer_name = appointment.name.split.first
+    studio_phone = appointment.studio_phone
+
+    message = <<~SMS
+      Hello #{customer_name},
+
+      Your photoshoot appointment scheduled for #{appointment.formatted_start_time} has been cancelled.
+
+      If you need to reschedule or have questions, please contact us at #{studio_phone}.
+
+      We apologize for any inconvenience.
+
+      363 Photography Team
+    SMS
+
+    # Ensure message is not too long (max 612 characters for SMS API)
+    message.gsub(/\s+/, ' ').strip[0...612]
   end
 
   def build_thank_you_message(photoshoot)
@@ -149,6 +227,79 @@ class SmsService
       Your referral code: #{referral_code}
 
       Share this link: #{base_url}/refer/#{referral_code}
+
+      363 Photography Team
+    SMS
+
+    # Ensure message is not too long (max 612 characters for SMS API)
+    message.gsub(/\s+/, ' ').strip[0...612]
+  end
+
+  def build_appointment_confirmation_message(appointment)
+    customer_name = appointment.name.split.first
+    appointment_date = appointment.formatted_start_time
+    appointment_time = appointment.formatted_time
+    studio_phone = appointment.studio_phone
+    
+    # Check if payment is required
+    payment_text = if appointment.price_id.present? && !appointment.payment_status
+      "\n\nIMPORTANT: Please complete your payment to secure your booking. Visit our website or call us."
+    else
+      ""
+    end
+
+    message = <<~SMS
+      Hello #{customer_name},
+
+      Your photoshoot appointment has been confirmed!
+
+      📅 Date: #{appointment_date}
+      ⏰ Time: #{appointment_time}
+      📍 Location: #{appointment.location}#{payment_text}
+
+      Studio Guidelines:
+      • Arrive 15 mins early
+      • If you are doing makeup in the studio arrive 1hr earlier
+
+      363 Photography Team
+    SMS
+
+    # Ensure message is not too long (max 612 characters for SMS API)
+    message.gsub(/\s+/, ' ').strip[0...612]
+  end
+
+  def build_appointment_reminder_message(appointment, reminder_type)
+    customer_name = appointment.name.split.first
+    appointment_date = appointment.formatted_start_time
+    appointment_time = appointment.formatted_time
+    studio_phone = appointment.studio_phone
+    
+    reminder_text = case reminder_type
+    when '24_hours'
+      "⏰ REMINDER: Your photoshoot is tomorrow!"
+    when '2_hours'
+      "🚨 FINAL REMINDER: Your photoshoot is in 2 hours!"
+    else
+      "📅 REMINDER: You have an upcoming photoshoot!"
+    end
+
+    # Check if payment is still required
+    payment_text = if appointment.price_id.present? && !appointment.payment_status
+      "\n\n⚠️ URGENT: Payment required to proceed with your appointment."
+    else
+      ""
+    end
+
+    message = <<~SMS
+      Hello #{customer_name},
+
+      #{reminder_text}
+
+      📅 Date: #{appointment_date}
+      ⏰ Time: #{appointment_time}
+      📍 Location: #{appointment.location}#{payment_text}
+
+      Please arrive 15 minutes early. Need to reschedule? Call us at least 24 hours before.
 
       363 Photography Team
     SMS

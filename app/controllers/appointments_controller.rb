@@ -123,6 +123,8 @@ class AppointmentsController < ApplicationController
         # Only send 'edited' notification if the appointment was previously active
         if original_status
           AppointmentNotificationJob.perform_later(@appointment, 'edited')
+          AppointmentUpdateSmsJob.perform_later(@appointment.id, 'updated')
+
         end
 
         # Redirect to thank you page with a flag indicating if payment is needed
@@ -131,6 +133,9 @@ class AppointmentsController < ApplicationController
           payment_needed: (!@appointment.payment_status && @appointment.price_id.present? && !has_existing_sales)
         ), notice: "Your appointment has been updated successfully."
       else
+        if original_start_time != @appointment.start_time
+          AppointmentUpdateSmsJob.perform_later(@appointment.id, 'updated')
+        end
         redirect_to @appointment
       end
     else
@@ -153,6 +158,8 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.find(params[:id])
     if @appointment.update(status: false)
       AppointmentNotificationJob.perform_later(@appointment, 'canceled')
+      AppointmentUpdateSmsJob.perform_later(@appointment.id, 'cancelled')
+
       redirect_to appointments_path, notice: 'Booking was successfully cancelled.'
     else
       redirect_to appointments_path, alert: 'Failed to cancel the booking.'

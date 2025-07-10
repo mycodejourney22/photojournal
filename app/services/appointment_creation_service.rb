@@ -32,6 +32,9 @@ class AppointmentCreationService
     appointment.schedule_policy_email
     appointment.schedule_reminder_email
     AppointmentNotificationJob.perform_later(appointment, 'created')
+
+    appointment.schedule_sms_notifications
+
   end
 
   def process_referral(appointment)
