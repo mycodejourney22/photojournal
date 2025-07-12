@@ -31,6 +31,7 @@ class Appointment < ApplicationRecord
       .where.not(photo_shoots: { status: 'Sent' })
       .where('start_time < ?', Time.zone.now)
       .where('start_time >= ?', 30.days.ago)
+      .where(status: true)
       .order(:start_time)
   }
 
@@ -40,6 +41,10 @@ class Appointment < ApplicationRecord
 
   def available_for_booking?
     !no_show && status
+  end
+
+  def validate_sent?
+    photo_shoot&.status.to_s.downcase == "sent"
   end
 
   STUDIO_NUMBERS = {

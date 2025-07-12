@@ -168,10 +168,12 @@
     <div class="g-section">
       <div class="g-section__header">
         <div class="g-section__title">Photo Galleries</div>
-        <div class="g-section__actions">
-          <%= link_to 'Upload Photos', @appointment.galleries.exists? ? add_to_existing_appointment_gallery_path(@appointment, @appointment.galleries.first) :
-                                        new_appointment_gallery_path(@appointment), class: "g-button g-button--action" %>
-        </div>
+        <% if @appointment.validate_sent? %>
+          <div class="g-section__actions">
+            <%= link_to 'Upload Photos', @appointment.galleries.exists? ? add_to_existing_appointment_gallery_path(@appointment, @appointment.galleries.first) :
+                                          new_appointment_gallery_path(@appointment), class: "g-button g-button--action" %>
+          </div>
+        <%end%>
       </div>
 
       <% if @appointment.galleries.exists? %>
