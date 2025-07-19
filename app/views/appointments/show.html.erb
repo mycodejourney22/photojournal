@@ -17,9 +17,11 @@
       <div class="g-section__header">
         <div class="g-section__title">Photoshoot Info</div>
         <div class="g-section__actions">
-          <% if @appointment.photo_shoot.nil? %>
-            <%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(@appointment), class: "g-section__link" %>
-          <% end %>
+        <% if @appointment.photo_shoot.nil? %>
+          <%= link_to 'Create PhotoShoot', new_appointment_photo_shoot_path(@appointment), class: "g-section__link no-underline" %>
+        <% else %>
+          <%= link_to 'Edit PhotoShoot', edit_appointment_photo_shoot_path(@appointment, @appointment.photo_shoot), class: "g-section__link no-underline" %>
+        <% end %>
         </div>
       </div>
 

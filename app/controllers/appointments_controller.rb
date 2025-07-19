@@ -336,11 +336,13 @@ class AppointmentsController < ApplicationController
     appointments = policy_scope(Appointment)
                     .includes(:questions, :photo_shoot)
                     .joins(:photo_shoot)
-                    .where.not(photo_shoots: { status: 'Sent' })
-                    .where('start_time < ?', Time.zone.now)
-                    .where('start_time >= ?', 30.days.ago)
-                    .where(status: true)
+                    .left_joins(:galleries)
+                    .where('appointments.start_time < ?', Time.zone.now)
+                    .where('appointments.start_time >= ?', 30.days.ago)
+                    .where(appointments: { status: true })
+                    .where('photo_shoots.status != ? OR galleries.id IS NULL', 'Sent')
                     .order(:start_time)
+
 
     if params[:query].present?
       appointments = appointments.global_search(params[:query])

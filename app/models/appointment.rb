@@ -26,12 +26,16 @@ class Appointment < ApplicationRecord
                          .order(start_time: :desc) }
   scope :today, -> { for_today.available_for_booking }
 
-  scope :in_progress, -> { 
+  scope :in_progress, -> {
     joins(:photo_shoot)
-      .where.not(photo_shoots: { status: 'Sent' })
-      .where('start_time < ?', Time.zone.now)
-      .where('start_time >= ?', 30.days.ago)
-      .where(status: true)
+      .left_joins(:galleries)
+      .where('appointments.start_time < ?', Time.zone.now)
+      .where('appointments.start_time >= ?', 30.days.ago)
+      .where(appointments: { status: true })
+      .where(
+        'photo_shoots.status != ? OR galleries.id IS NULL',
+        'Sent'
+      )
       .order(:start_time)
   }
 
