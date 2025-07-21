@@ -5,6 +5,21 @@ class AppointmentMailer < ApplicationMailer
     @appointment = appointment
     @location = studio_address
     @studio_phone_number = studio_number
+
+    cal = Icalendar::Calendar.new
+    cal.event do |e|
+      e.dtstart     = @appointment.start_time.utc
+      e.summary     = "Your Appointment at 363 Photography"
+      e.description = "We look forward to seeing you!"
+      e.location    = "Your Studio Address"
+    end
+    cal.publish
+
+    attachments['appointment.ics'] = {
+      mime_type: 'text/calendar',
+      content: cal.to_ical
+    }
+
     mail_from_studio(
       {
         to: @appointment.email,

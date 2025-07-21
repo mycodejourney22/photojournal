@@ -5,6 +5,19 @@
     <p style="color: #666; font-size: 16px;">Your booking confirmation</p>
   </div>
 
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="https://www.google.com/calendar/render?action=TEMPLATE
+      &text=<%= CGI.escape('Your Photoshoot at 363 Photography') %>
+      &dates=<%= @appointment.start_time.utc.strftime('%Y%m%dT%H%M%SZ') %>
+      &details=<%= CGI.escape('We look forward to your session. Please arrive early.') %>
+      &location=<%= CGI.escape(@location) %>"
+      style="display: inline-flex; align-items: center; text-decoration: none; background-color: #4285F4; color: white; padding: 10px 15px; border-radius: 5px; font-weight: bold;"
+      target="_blank" rel="noopener">
+      <img src="https://www.gstatic.com/images/icons/material/system/2x/event_white_24dp.png" alt="Calendar Icon" style="height: 20px; margin-right: 8px;" />
+      Add to Google Calendar
+    </a>
+  </div>
+
   <p style="font-size: 16px; margin-bottom: 20px;">Hi <%= @appointment.name %>,</p>
 
   <p style="font-size: 16px; margin-bottom: 25px;">Your PhotoShoot with 363 PHOTOGRAPHY at <%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %> is scheduled.</p>
