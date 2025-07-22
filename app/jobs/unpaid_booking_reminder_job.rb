@@ -5,7 +5,7 @@ class UnpaidBookingReminderJob < ApplicationJob
     appointment = Appointment.find_by(id: appointment_id)
     
     # Abort if appointment doesn't exist or is already paid
-    return if appointment.nil? || appointment.payment_status || appointment.channel != 'online'
+    return if appointment.nil? || appointment.sale.present? || appointment.channel != 'online'
     
     # Abort if the appointment date has passed
     return if Time.current > appointment.start_time
