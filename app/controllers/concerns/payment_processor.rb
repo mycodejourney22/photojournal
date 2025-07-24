@@ -55,7 +55,7 @@ module PaymentProcessor
     final_amount = [original_amount - discount_amount, 0].max
 
     sale = Sale.new(
-      date: appointment.created_at,
+      date: Time.current,
       amount_paid: final_amount,
       customer_name: appointment.name,
       location: appointment.location,
