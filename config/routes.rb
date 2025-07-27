@@ -236,6 +236,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :staff_reports, only: [:index] do
+    collection do
+      get :photographer_detail
+      get :editor_detail
+    end
+  end
+
 
   # Process pending rewards (admin only)
   post 'referrals/process_rewards', to: 'referrals#process_rewards', as: :process_referral_rewards
