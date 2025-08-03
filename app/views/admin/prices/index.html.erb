@@ -1,0 +1,69 @@
+<!-- app/views/admin/prices/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "All Prices", admin_prices_path, class: "g-content__tab g-content__tab--active" %>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to "New Price Package", new_admin_price_path, class: "g-button g-button--action" %>
+  </div>
+</div>
+
+<div class="g-table__header">
+  <div class="g-table__col--name" style="width: 20%;">Package Name</div>
+  <div class="g-table__col--type" style="width: 20%;">No of outfits</div>
+  <div class="g-table__col--amount" style="width: 20%;">Amount</div>
+  <% if current_user.admin? || current_user.super_admin? %>
+    <div class="g-table__col--actions" style="width: 20%;">Actions</div>
+  <% end %>
+</div>
+
+<% if @prices.present? %>
+  <% @prices.each do |price| %>
+    <div class="g-table__row">
+      <% if price.respond_to?(:active) %>
+        <div class="g-table__status <%= price.active? ? 'g-table__status--confirmed' : 'g-table__status--cancelled' %>"></div>
+      <% else %>
+        <div class="g-table__status g-table__status--confirmed"></div>
+      <% end %>
+
+      <div class="g-table__col--name g-table__cell" style="width: 25%;">
+        <% if price.respond_to?(:name) && price.name.present? %>
+          <%= price.name %>
+        <% else %>
+          <%= price.shoot_type %> Package
+        <% end %>
+      </div>
+
+      <div class="g-table__col--type g-table__cell" style="width: 25%;">
+        <%= price.outfit %>
+      </div>
+
+      <div class="g-table__col--amount g-table__cell" style="width: 25%;">
+        <%= price.formatted_amount %>
+      </div>
+
+      <% if current_user.admin? || current_user.super_admin? %>
+        <div class="g-table__col--actions g-table__cell" style="width: 25%;">
+          <%= link_to "Edit", edit_admin_price_path(price), class: "g-button--link" %>
+          <% if price.respond_to?(:active) %>
+            <%= link_to (price.active? ? "Deactivate" : "Activate"), 
+                toggle_active_admin_price_path(price), 
+                method: :patch, 
+                class: "g-button--link",
+                data: { confirm: "Are you sure?" } %>
+          <% end %>
+          <% unless price.appointments.exists? %>
+            <%= link_to "Delete", admin_price_path(price), 
+                method: :delete, 
+                confirm: "Are you sure? This action cannot be undone.", 
+                class: "g-button--link" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <p>No price packages available.</p>
+  </div>
+<% end %>

@@ -1,0 +1,63 @@
+<!-- app/views/admin/staff/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__tabs">
+    <%= link_to "All Staff", admin_staff_members_path, class: "g-content__tab g-content__tab--active" %>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to "Add Staff Member", new_admin_staff_member_path, class: "g-button g-button--action" %>
+  </div>
+</div>
+
+<div class="g-table__header">
+  <div class="g-table__col--name" style="width: 25%;">Name</div>
+  <div class="g-table__col--role" style="width: 25%;">Role</div>
+  <div class="g-table__col--status" style="width: 25%;">Status</div>
+  <% if current_user.admin? || current_user.super_admin? %>
+    <div class="g-table__col--actions" style="width: 25%;">Actions</div>
+  <% end %>
+</div>
+
+<% if @staff_members.present? %>
+  <% @staff_members.each do |staff| %>
+    <div class="g-table__row">
+      <% if staff.respond_to?(:active) %>
+        <div class="g-table__status <%= staff.active? ? 'g-table__status--confirmed' : 'g-table__status--cancelled' %>"></div>
+      <% else %>
+        <div class="g-table__status g-table__status--confirmed"></div>
+      <% end %>
+
+      <div class="g-table__col--name g-table__cell" style="width: 25%;">
+        <%= staff.name %>
+      </div>
+
+      <% if Staff.column_names.include?('role') %>
+        <div class="g-table__col--role g-table__cell" style="width: 25%;">
+          <%= staff.role if staff.respond_to?(:role) %>
+        </div>
+      <% end %>
+
+      <% if Staff.column_names.include?('active') %>
+        <div class="g-table__col--status g-table__cell" style="width: 25%;">
+          <%= staff.active? ? 'Active' : 'Inactive' %>
+        </div>
+      <% end %>
+
+      <% if current_user.admin? || current_user.super_admin? %>
+        <div class="g-table__col--actions g-table__cell" style="width: 25%;">
+          <%= link_to "Edit", edit_admin_staff_member_path(staff), class: "g-button--link" %>
+          <% if staff.respond_to?(:active) %>
+            <%= link_to (staff.active? ? "Deactivate" : "Activate"), 
+                toggle_active_admin_staff_member_path(staff), 
+                method: :patch, 
+                class: "g-button--link",
+                data: { confirm: "Are you sure?" } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="g-content__empty">
+    <p>No staff members available.</p>
+  </div>
+<% end %>

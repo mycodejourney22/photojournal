@@ -1,0 +1,134 @@
+<div style="margin-left: 20px; padding: 20px;">
+  <div class="g-content__toolbar">
+    <div class="g-content__tabs">
+      <%= link_to "All Prices", admin_prices_path, class: "g-content__tab" %>
+      <span class="g-content__tab g-content__tab--active">Add Price Package</span>
+    </div>
+  </div>
+
+  <%= form_with model: [@price], url: admin_prices_path, local: true, class: "g-form" do |form| %>
+    <div class="g-form__group">
+      <%= form.label :name, class: "g-form__label" %>
+      <%= form.text_field :name, class: "g-form__control", placeholder: "e.g., Premium Wedding Package", required: true %>
+      <% if @price.errors[:name].any? %>
+        <div class="g-form__error"><%= @price.errors[:name].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :shoot_type, class: "g-form__label" %>
+      <%= form.select :shoot_type, 
+          options_for_select([
+            ['Kiddies', 'Kiddies'],
+            ['Portrait', 'Portrait'],
+            ['Wedding', 'Wedding'],
+            ['Corporate', 'Corporate'],
+            ['Family', 'Family'],
+            ['Fashion', 'Fashion'],
+            ['Event', 'Event']
+          ]), 
+          { prompt: 'Select shoot type' }, 
+          { class: "g-form__control", required: true } %>
+      <% if @price.errors[:shoot_type].any? %>
+        <div class="g-form__error"><%= @price.errors[:shoot_type].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :amount, "Amount (₦)", class: "g-form__label" %>
+      <%= form.number_field :amount, class: "g-form__control", step: 1000, min: 0, required: true %>
+      <% if @price.errors[:amount].any? %>
+        <div class="g-form__error"><%= @price.errors[:amount].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :outfit, class: "g-form__label" %>
+      <%= form.select :outfit, 
+          options_for_select([
+            ['1 Outfit', '1 Outfit'],
+            ['2 Outfits', '2 Outfits'],
+            ['3 Outfits', '3 Outfits'],
+            ['4 Outfits', '4 Outfits'],
+            ['5 Outfits', '5 Outfits'],
+            ['Unlimited', 'Unlimited']
+          ]), 
+          { prompt: 'Select number of outfits' }, 
+          { class: "g-form__control" } %>
+      <% if @price.errors[:outfit].any? %>
+        <div class="g-form__error"><%= @price.errors[:outfit].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :duration, "Duration (minutes)", class: "g-form__label" %>
+      <%= form.number_field :duration, class: "g-form__control", min: 15, step: 15, placeholder: "e.g., 60" %>
+      <% if @price.errors[:duration].any? %>
+        <div class="g-form__error"><%= @price.errors[:duration].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :included, "Photos Included", class: "g-form__label" %>
+      <%= form.text_field :included, class: "g-form__control", placeholder: "e.g., 5, 10, All edited photos" %>
+      <% if @price.errors[:included].any? %>
+        <div class="g-form__error"><%= @price.errors[:included].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :discount, "Discount (₦)", class: "g-form__label" %>
+      <%= form.number_field :discount, class: "g-form__control", step: 1000, min: 0, value: 0 %>
+      <% if @price.errors[:discount].any? %>
+        <div class="g-form__error"><%= @price.errors[:discount].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :icon, "Icon Class", class: "g-form__label" %>
+      <%= form.select :icon, 
+          options_for_select([
+            ['Baby (fa-baby)', 'fa-baby'],
+            ['Camera (fa-camera)', 'fa-camera'],
+            ['Heart (fa-heart)', 'fa-heart'],
+            ['Star (fa-star)', 'fa-star'],
+            ['Users (fa-users)', 'fa-users'],
+            ['Building (fa-building)', 'fa-building'],
+            ['Rings (fa-ring)', 'fa-ring']
+          ]), 
+          { prompt: 'Select icon' }, 
+          { class: "g-form__control" } %>
+      <% if @price.errors[:icon].any? %>
+        <div class="g-form__error"><%= @price.errors[:icon].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :period, class: "g-form__label" %>
+      <%= form.text_field :period, class: "g-form__control", placeholder: "e.g., Valid for 6 months" %>
+      <% if @price.errors[:period].any? %>
+        <div class="g-form__error"><%= @price.errors[:period].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <%= form.label :description, class: "g-form__label" %>
+      <%= form.text_area :description, class: "g-form__control", rows: 4, placeholder: "Package description and details..." %>
+      <% if @price.errors[:description].any? %>
+        <div class="g-form__error"><%= @price.errors[:description].first %></div>
+      <% end %>
+    </div>
+    
+    <div class="g-form__group">
+      <div class="g-form__check">
+        <%= form.check_box :still_valid, class: "g-form__check-input", checked: true %>
+        <%= form.label :still_valid, "Package is still valid", class: "g-form__check-label" %>
+      </div>
+    </div>
+    
+    <div class="g-form__actions">
+      <%= link_to "Cancel", admin_prices_path, class: "g-button g-button--secondary" %>
+      <%= form.submit "Add Price Package", class: "g-button g-button--action" %>
+    </div>
+  <% end %>
+</div>

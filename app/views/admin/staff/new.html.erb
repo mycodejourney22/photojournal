@@ -1,0 +1,92 @@
+<div style="margin-left: 20px; padding: 20px;">
+  <div class="g-content__toolbar">
+    <div class="g-content__tabs">
+      <%= link_to "All Staff", admin_staff_members_path, class: "g-content__tab" %>
+      <span class="g-content__tab g-content__tab--active">Add Staff Member</span>
+    </div>
+  </div>
+
+  <%= form_with model: [@staff_member], url: admin_staff_members_path, local: true, class: "g-form" do |form| %>
+  <div class="g-form__group">
+    <%= form.label :name, class: "g-form__label" %>
+    <%= form.text_field :name, class: "g-form__control", placeholder: "Full name", required: true %>
+    <% if @staff_member.errors[:name].any? %>
+      <div class="g-form__error"><%= @staff_member.errors[:name].first %></div>
+    <% end %>
+  </div>
+  
+  <% if Staff.column_names.include?('role') %>
+    <div class="g-form__group">
+      <%= form.label :role, class: "g-form__label" %>
+      <%= form.select :role, 
+          options_for_select([
+            ['Photographer', 'Photographer'],
+            ['Editor', 'Editor'],
+            ['Customer Service', 'Customer Service'],
+            ['Manager', 'Manager'],
+            ['Director', 'Director']
+          ]), 
+          { prompt: 'Select role' }, 
+          { class: "g-form__control" } %>
+      <% if @staff_member.errors[:role].any? %>
+        <div class="g-form__error"><%= @staff_member.errors[:role].first %></div>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <% if Staff.column_names.include?('email') %>
+    <div class="g-form__group">
+      <%= form.label :email, class: "g-form__label" %>
+      <%= form.email_field :email, class: "g-form__control", placeholder: "email@studio.com" %>
+      <% if @staff_member.errors[:email].any? %>
+        <div class="g-form__error"><%= @staff_member.errors[:email].first %></div>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <% if Staff.column_names.include?('phone') %>
+    <div class="g-form__group">
+      <%= form.label :phone, class: "g-form__label" %>
+      <%= form.tel_field :phone, class: "g-form__control", placeholder: "08012345678" %>
+      <% if @staff_member.errors[:phone].any? %>
+        <div class="g-form__error"><%= @staff_member.errors[:phone].first %></div>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <% if Staff.column_names.include?('location') %>
+    <div class="g-form__group">
+      <%= form.label :location, class: "g-form__label" %>
+      <%= form.select :location, 
+          options_for_select([
+            ['All Locations', 'All']
+          ] + Studio.where(active: true).pluck(:location, :location)), 
+          { prompt: 'Select location' }, 
+          { class: "g-form__control" } %>
+      <% if @staff_member.errors[:location].any? %>
+        <div class="g-form__error"><%= @staff_member.errors[:location].first %></div>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <% if Staff.column_names.include?('specialization') %>
+    <div class="g-form__group">
+      <%= form.label :specialization, class: "g-form__label" %>
+      <%= form.text_field :specialization, class: "g-form__control", placeholder: "e.g., Wedding Photography, Portrait Editing" %>
+    </div>
+  <% end %>
+  
+  <% if Staff.column_names.include?('active') %>
+    <div class="g-form__group">
+      <div class="g-form__check">
+        <%= form.check_box :active, class: "g-form__check-input", checked: true %>
+        <%= form.label :active, "Active staff member", class: "g-form__check-label" %>
+      </div>
+    </div>
+  <% end %>
+  
+  <div class="g-form__actions">
+    <%= link_to "Cancel", admin_staff_members_path, class: "g-button g-button--secondary" %>
+    <%= form.submit "Add Staff Member", class: "g-button g-button--action" %>
+  </div>
+<% end %>

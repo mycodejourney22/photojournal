@@ -37,4 +37,13 @@ class Studio < ApplicationRecord
         
         nil
     end
+
+    def display_name
+      "#{location} Studio"
+    end
+  
+    def active?
+      return true unless respond_to?(:active)
+      active
+    end
   end

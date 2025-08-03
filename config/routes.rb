@@ -113,7 +113,12 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
   namespace :admin do
-    resources :users, only: [:index, :edit, :update, :new, :create]
+    resources :users, only: [:index, :edit, :update, :new, :create] do
+      member do
+        patch :toggle_active
+      end
+    end
+    
     resources :special_emails, only: [:index, :new, :create] do
       collection do
         get :mothers_day
@@ -121,6 +126,26 @@ Rails.application.routes.draw do
         get :christmas
         get :new_year
         post :send_special_email
+      end
+    end
+
+    resources :setup, only: [:index]
+    
+    resources :prices do
+      member do
+        patch :toggle_active
+      end
+    end
+    
+    resources :staff_members, controller: 'staff' do
+      member do
+        patch :toggle_active
+      end
+    end
+    
+    resources :studios do
+      member do
+        patch :toggle_active
       end
     end
   end
