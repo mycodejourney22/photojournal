@@ -458,15 +458,32 @@ class AppointmentsController < ApplicationController
   end
 
   def generate_time_slots
-    # Assuming appointments are hourly from 9 AM to 6 PM
     date = Date.parse(params[:date])
-    if date.sunday?
-      start_time = Time.zone.parse("#{date} 12:30")
-    else
-      start_time = Time.zone.parse("#{date} 09:30")
+    
+    # Check if this is a newborn package
+    is_newborn_session = false
+    if params[:price_id].present?
+      price = Price.find_by(id: params[:price_id])
+      is_newborn_session = price&.shoot_type&.downcase&.include?('newborn')
     end
-
-    end_time = Time.zone.parse("#{date} 16:30")
+    
+    if is_newborn_session
+      # No weekend bookings for newborn sessions
+      return [] if date.saturday? || date.sunday?
+      
+      # Newborn sessions: 9:30 AM to 12:30 PM only (weekdays only)
+      start_time = Time.zone.parse("#{date} 09:30")
+      end_time = Time.zone.parse("#{date} 12:30")
+    elsif date.sunday?
+      # Regular Sunday hours
+      start_time = Time.zone.parse("#{date} 12:30")
+      end_time = Time.zone.parse("#{date} 16:30")
+    else
+      # Regular weekday hours
+      start_time = Time.zone.parse("#{date} 09:30")
+      end_time = Time.zone.parse("#{date} 16:30")
+    end
+  
     (start_time.to_i..end_time.to_i).step(1.hour).map { |time| Time.zone.at(time) }
   end
 
