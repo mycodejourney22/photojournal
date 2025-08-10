@@ -40,17 +40,20 @@ class PaymentsController < ApplicationController
       @credits_applied = 0
     end
 
-    # Calculate final amount
-    @final_amount = @price.amount - @credits_applied
-    @final_amount = 0 if @final_amount < 0
+    handle_coupon_application
 
-    # Calculate price with referral discount if applicable
-    if @appointment.referral_source.present?
-      referral = Referral.find_by(code: @appointment.referral_source)
-      @referral_discount = referral&.referred_discount || 5000
-      @final_amount = @final_amount - @referral_discount
-      @final_amount = 0 if @final_amount < 0
-    end
+    calculate_final_amount_with_all_discounts
+    # Calculate final amount
+    # @final_amount = @price.amount - @credits_applied
+    # @final_amount = 0 if @final_amount < 0
+
+    # # Calculate price with referral discount if applicable
+    # if @appointment.referral_source.present?
+    #   referral = Referral.find_by(code: @appointment.referral_source)
+    #   @referral_discount = referral&.referred_discount || 5000
+    #   @final_amount = @final_amount - @referral_discount
+    #   @final_amount = 0 if @final_amount < 0
+    # end
   end
 
   def initiate_payment
@@ -67,13 +70,29 @@ class PaymentsController < ApplicationController
 
     # Calculate payment amount with discount if a referral was used
     amount = price.amount.to_f - credits_applied
-    referral_discount = 0
+    total_discount = 0
+
+    if session[:coupon_discount].present?
+      coupon_discount = session[:coupon_discount].to_i
+      amount -= coupon_discount
+      total_discount += coupon_discount
+      
+      # Store coupon info in appointment for tracking
+      if session[:applied_coupon_code].present?
+        appointment.update(
+          coupon_code: session[:applied_coupon_code],
+          coupon_discount: coupon_discount
+        )
+      end
+    end
 
     if appointment.referral_source.present?
       referral = Referral.find_by(code: appointment.referral_source)
       referral_discount = referral&.referred_discount || 5000
       amount = [amount - referral_discount, 0].max # Make sure amount isn't negative
     end
+
+    amount = [amount, 0].max
 
     if amount <= 0
       appointment.update(payment_status: true)
@@ -303,6 +322,104 @@ class PaymentsController < ApplicationController
   #   # Send success email to referrer
   #   ReferralMailer.referral_success_email(referral).deliver_later
   # end
+
+  def handle_coupon_application
+    # Reset coupon if removal requested
+    if params[:remove_coupon].present?
+      clear_coupon_session
+      redirect_to make_payment_path(appointment_id: @appointment.id, apply_credits: @credits_applied) and return
+    end
+
+    # Apply new coupon if provided
+    if params[:coupon_code].present?
+      apply_coupon(params[:coupon_code])
+    elsif session[:applied_coupon_code].present?
+      # Restore previously applied coupon from session
+      restore_coupon_from_session
+    end
+  end
+
+  def apply_coupon(coupon_code)
+    coupon = Coupon.find_valid_coupon(coupon_code)
+    
+    if coupon.nil?
+      @coupon_error = "Invalid or expired coupon code"
+      clear_coupon_session
+      return
+    end
+
+    # Check customer eligibility for certain coupon types
+    unless coupon_eligible_for_customer?(coupon)
+      @coupon_error = "This coupon is not available for your account"
+      clear_coupon_session
+      return
+    end
+
+    # Store successful coupon application
+    @applied_coupon = coupon
+    session[:applied_coupon_code] = coupon.code
+    session[:applied_coupon_id] = coupon.id
+  end
+
+  def restore_coupon_from_session
+    coupon = Coupon.find_by(id: session[:applied_coupon_id])
+    if coupon&.valid_for_use?
+      @applied_coupon = coupon
+    else
+      clear_coupon_session
+    end
+  end
+
+  def clear_coupon_session
+    session.delete(:applied_coupon_code)
+    session.delete(:applied_coupon_id)
+    session.delete(:coupon_discount)
+    @applied_coupon = nil
+    @coupon_discount = 0
+  end
+
+  def calculate_final_amount_with_all_discounts
+    @final_amount = @price.amount - @credits_applied
+    @final_amount = 0 if @final_amount < 0
+
+    # Apply coupon discount
+    @coupon_discount = 0
+    if @applied_coupon
+      @coupon_discount = @applied_coupon.calculate_discount(@final_amount)
+      session[:coupon_discount] = @coupon_discount
+      @final_amount -= @coupon_discount
+    elsif session[:coupon_discount].present?
+      @coupon_discount = session[:coupon_discount].to_i
+      @final_amount -= @coupon_discount
+    end
+
+    # Apply referral discount (EXISTING LOGIC - UNCHANGED)
+    if @appointment.referral_source.present?
+      referral = Referral.find_by(code: @appointment.referral_source)
+      @referral_discount = referral&.referred_discount || 5000
+      @final_amount -= @referral_discount
+    end
+
+    @final_amount = 0 if @final_amount < 0
+  end
+
+  def coupon_eligible_for_customer?(coupon)
+    return true unless coupon.customer_restrictions?
+    
+    phone_number = extract_phone_number_from_appointment(@appointment)
+    customer = Customer.find_by(phone_number: phone_number)
+    
+    case coupon.coupon_type
+    when 'referral'
+      # For referral coupons, use existing referral eligibility logic
+      Referral.customer_eligible_for_referral?(customer)
+    when 'seasonal', 'adhoc', 'percentage', 'fixed_amount'
+      # For other coupon types, allow unless specifically restricted
+      true
+    else
+      true
+    end
+  end
 
   def process_referral_conversion(appointment, customer)
     referral_code = appointment.referral_source

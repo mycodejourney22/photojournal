@@ -1,0 +1,239 @@
+<!-- app/views/admin/coupons/show.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Coupon: <%= @coupon.code %></h1>
+    <span class="g-badge g-badge--<%= case @coupon.status
+                                     when 'active' then 'success'
+                                     when 'inactive' then 'secondary'
+                                     when 'expired' then 'danger'
+                                     end %>">
+      <%= @coupon.status.humanize %>
+    </span>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to "Edit", edit_admin_coupon_path(@coupon), class: "g-button g-button--action" %>
+    <%= link_to @coupon.active? ? "Deactivate" : "Activate", 
+               toggle_status_admin_coupon_path(@coupon), 
+               method: :patch,
+               class: "g-button g-button--#{@coupon.active? ? 'warning' : 'success'}" %>
+    <%= link_to "Back to Coupons", admin_coupons_path, class: "g-button g-button--outline" %>
+  </div>
+</div>
+
+<div class="g-content__main">
+  <!-- Coupon Details Card -->
+  <div class="g-contact-card">
+    <div class="g-contact-card__header">
+      <h2>Coupon Details</h2>
+    </div>
+    
+    <div class="g-contact-card__content">
+      <div class="g-contact-card__grid">
+        <div class="g-contact-card__row">
+          <div class="g-contact-card__label">Code</div>
+          <div class="g-contact-card__value">
+            <strong><%= @coupon.code %></strong>
+          </div>
+        </div>
+
+        <div class="g-contact-card__row">
+          <div class="g-contact-card__label">Type</div>
+          <div class="g-contact-card__value">
+            <span class="g-badge g-badge--secondary">
+              <%= @coupon.coupon_type.humanize %>
+            </span>
+          </div>
+        </div>
+
+        <div class="g-contact-card__row">
+          <div class="g-contact-card__label">Discount</div>
+          <div class="g-contact-card__value">
+            <% if @coupon.coupon_type == 'percentage' %>
+              <strong><%= @coupon.discount_percentage %>%</strong>
+            <% else %>
+              <strong>₦<%= number_with_delimiter(@coupon.discount_amount) %></strong>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="g-contact-card__row">
+          <div class="g-contact-card__label">Usage</div>
+          <div class="g-contact-card__value">
+            <%= @coupon.usage_count %> / <%= @coupon.max_uses %>
+            <% if @coupon.usage_count >= @coupon.max_uses %>
+              <br><span class="g-badge g-badge--warning">Limit Reached</span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="g-contact-card__row">
+          <div class="g-contact-card__label">Expires</div>
+          <div class="g-contact-card__value">
+            <%= @coupon.expires_at&.strftime("%B %d, %Y at %I:%M %p") || "Never" %>
+            <% if @coupon.expired? %>
+              <br><span class="g-badge g-badge--danger">Expired</span>
+            <% end %>
+          </div>
+        </div>
+
+        <% if @coupon.minimum_amount.present? %>
+          <div class="g-contact-card__row">
+            <div class="g-contact-card__label">Minimum Purchase</div>
+            <div class="g-contact-card__value">
+              ₦<%= number_with_delimiter(@coupon.minimum_amount) %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="g-contact-card__row">
+          <div class="g-contact-card__label">Customer Restrictions</div>
+          <div class="g-contact-card__value">
+            <%= @coupon.customer_restrictions? ? "Yes" : "No" %>
+          </div>
+        </div>
+
+        <div class="g-contact-card__row">
+          <div class="g-contact-card__label">Created</div>
+          <div class="g-contact-card__value">
+            <%= @coupon.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+          </div>
+        </div>
+
+        <% if @coupon.description.present? %>
+          <div class="g-contact-card__row g-contact-card__row--full">
+            <div class="g-contact-card__label">Description</div>
+            <div class="g-contact-card__value">
+              <%= @coupon.description %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @coupon.campaign_notes.present? %>
+          <div class="g-contact-card__row g-contact-card__row--full">
+            <div class="g-contact-card__label">Campaign Notes</div>
+            <div class="g-contact-card__value">
+              <%= simple_format(@coupon.campaign_notes) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Statistics Card -->
+  <div class="g-contact-card">
+    <div class="g-contact-card__header">
+      <h2>Usage Statistics</h2>
+    </div>
+    
+    <div class="g-contact-card__content">
+      <div class="g-stats-grid">
+        <div class="g-stat-card">
+          <div class="g-stat-card__value"><%= @coupon.usage_count %></div>
+          <div class="g-stat-card__label">Times Used</div>
+        </div>
+        
+        <div class="g-stat-card">
+          <div class="g-stat-card__value"><%= @coupon.max_uses - @coupon.usage_count %></div>
+          <div class="g-stat-card__label">Remaining Uses</div>
+        </div>
+        
+        <div class="g-stat-card">
+          <div class="g-stat-card__value">
+            <%= (@coupon.usage_count.to_f / @coupon.max_uses * 100).round(1) %>%
+          </div>
+          <div class="g-stat-card__label">Usage Rate</div>
+        </div>
+        
+        <div class="g-stat-card">
+          <div class="g-stat-card__value">
+            <% if @coupon.expires_at %>
+              <%= distance_of_time_in_words(Time.current, @coupon.expires_at) %>
+            <% else %>
+              ∞
+            <% end %>
+          </div>
+          <div class="g-stat-card__label">
+            <% if @coupon.expires_at && @coupon.expires_at > Time.current %>
+              Time Remaining
+            <% elsif @coupon.expires_at %>
+              Expired
+            <% else %>
+              Never Expires
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Stats grid for usage statistics */
+  .g-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .g-stat-card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    border-left: 4px solid #EDD400;
+  }
+
+  .g-stat-card__value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .g-stat-card__label {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+  }
+
+  /* Badge styles to match your system */
+  .g-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .g-badge--success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .g-badge--danger {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .g-badge--warning {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .g-badge--secondary {
+    background-color: #e2e3e5;
+    color: #495057;
+  }
+
+  /* Full-width rows for longer content */
+  .g-contact-card__row--full {
+    grid-column: 1 / -1;
+  }
+
+  .g-contact-card__row--full .g-contact-card__value {
+    margin-top: 8px;
+  }
+</style>

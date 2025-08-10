@@ -41,16 +41,27 @@
         <p class="discount-amount">- ₦<%= number_with_delimiter(discount_amount) %></p>
       <% end %>
 
+      <% if @appointment.coupon_code.present? && @appointment.coupon_discount > 0 %>
+        <p>Coupon Discount (<%= @appointment.coupon_code %>):</p>
+        <p class="discount-amount">- ₦<%= number_with_delimiter(@appointment.coupon_discount) %></p>
+      <% end %>
+
       <%
         # Calculate final amount
         final_amount = @price.amount
         final_amount -= @credits_applied if @credits_applied && @credits_applied > 0
+
+        if @appointment.coupon_code.present? && @appointment.coupon_discount > 0
+          final_amount -= @appointment.coupon_discount
+        end
 
         if @appointment.referral_source.present?
           referral = Referral.find_by(code: @appointment.referral_source)
           discount_amount = referral&.referred_discount || 5000
           final_amount -= discount_amount
         end
+
+        
 
         final_amount = 0 if final_amount < 0
       %>
@@ -68,6 +79,13 @@
       <p>Appointment Time:</p>
       <p><%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></p>
     </div>
+
+    <% if @appointment.coupon_code.present? && @appointment.coupon_discount > 0 %>
+      <div class="coupon-thanks">
+        <h3>Coupon Applied Successfully!</h3>
+        <p>You saved ₦<%= number_with_delimiter(@appointment.coupon_discount) %> with coupon code "<%= @appointment.coupon_code %>".</p>
+      </div>
+    <% end %>
 
     <div class="next-steps">
       <h3>What's Next?</h3>

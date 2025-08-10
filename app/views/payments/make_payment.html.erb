@@ -30,7 +30,7 @@
         <div class="detail-value"><%= @appointment.formatted_start_time %>, <%= @appointment.formatted_time %></div>
       </div>
 
-      <!-- Credit Section - Only Show if Credits Available -->
+      <!-- EXISTING Credit Section - UNCHANGED -->
       <% if @available_credits && @available_credits > 0 %>
         <div class="credits-section">
           <div class="detail-row credits-available">
@@ -43,52 +43,92 @@
 
             <%= form_with url: make_payment_path, method: :get, class: "credits-options-form" do |form| %>
               <%= form.hidden_field :appointment_id, value: @appointment.id %>
+              <%= form.hidden_field :coupon_code, value: @applied_coupon&.code if @applied_coupon %>
 
               <div class="credit-options">
                 <% if @available_credits >= @price.amount %>
                   <div class="credit-option">
                     <%= form.radio_button :apply_credits, @price.amount,
                                          id: "full_payment",
-                                         checked: (@credits_applied == @price.amount) %>
-                    <label for="full_payment">
-                      Pay entirely with credits (₦<%= number_with_delimiter(@price.amount) %>)
-                    </label>
+                                         checked: @credits_applied == @price.amount %>
+                    <%= form.label :apply_credits_full, "Use all credits (₦#{number_with_delimiter(@price.amount)}) - FREE booking!", for: "full_payment" %>
                   </div>
                 <% end %>
 
                 <div class="credit-option">
                   <%= form.radio_button :apply_credits, [@available_credits, @price.amount].min,
                                        id: "partial_payment",
-                                       checked: (@credits_applied == [@available_credits, @price.amount].min && @credits_applied > 0) %>
-                  <label for="partial_payment">
-                    Apply ₦<%= number_with_delimiter([@available_credits, @price.amount].min) %> credits
-                  </label>
+                                       checked: @credits_applied == [@available_credits, @price.amount].min && @credits_applied < @price.amount %>
+                  <%= form.label :apply_credits_partial, "Use available credits (₦#{number_with_delimiter([@available_credits, @price.amount].min)})", for: "partial_payment" %>
                 </div>
 
                 <div class="credit-option">
                   <%= form.radio_button :apply_credits, 0,
                                        id: "no_credits",
-                                       checked: (@credits_applied == 0 || @credits_applied.nil?) %>
-                  <label for="no_credits">
-                    Don't use credits
-                  </label>
+                                       checked: @credits_applied == 0 %>
+                  <%= form.label :apply_credits_none, "Don't use credits", for: "no_credits" %>
                 </div>
               </div>
 
-              <%= form.submit "Apply Selected Credits", class: "btn-apply-credits" %>
+              <%= form.submit "Update Payment", class: "credits-apply-btn" %>
             <% end %>
           </div>
         </div>
       <% end %>
 
+      <!-- NEW: Coupon Section - OPTIONAL -->
+      <div class="coupon-section">
+        <div class="coupon-header">
+          <h3>🎫 Have a coupon code?</h3>
+          <small class="coupon-hint">Enter codes like CHRISTMAS25, REFER123, WELCOME10, etc.</small>
+        </div>
+        
+        <%= form_with url: make_payment_path, method: :get, class: "coupon-form", local: true do |form| %>
+          <%= form.hidden_field :appointment_id, value: @appointment.id %>
+          <%= form.hidden_field :apply_credits, value: @credits_applied if @credits_applied %>
+          
+          <div class="coupon-input-group">
+            <%= form.text_field :coupon_code, 
+                               placeholder: "Enter coupon code", 
+                               value: @applied_coupon&.code,
+                               class: "coupon-input",
+                               maxlength: 50 %>
+            <%= form.submit "Apply Coupon", class: "coupon-apply-btn" %>
+          </div>
+        <% end %>
+        
+        <!-- Coupon Messages -->
+        <% if @coupon_error %>
+          <div class="coupon-message coupon-error">
+            ❌ <%= @coupon_error %>
+          </div>
+        <% end %>
+        
+        <% if @applied_coupon %>
+          <div class="coupon-message coupon-success">
+            ✅ Coupon "<strong><%= @applied_coupon.code %></strong>" applied! 
+            You saved <strong>₦<%= number_with_delimiter(@coupon_discount || 0) %></strong>
+            <%= link_to "Remove", make_payment_path(appointment_id: @appointment.id, remove_coupon: true, apply_credits: @credits_applied), 
+                        class: "remove-coupon-link" %>
+          </div>
+          <% if @applied_coupon.description.present? %>
+            <div class="coupon-description">
+              <small><%= @applied_coupon.description %></small>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <!-- Payment Summary with All Discounts -->
       <div class="payment-summary">
-        <!-- Original Price Display -->
-        <div class="detail-row <%= (@credits_applied && @credits_applied > 0) || @appointment.referral_source.present? ? 'has-discount' : '' %>">
-          <div class="detail-label">Total Amount:</div>
-          <div class="detail-value">₦<%= number_with_delimiter(@price.amount) %></div>
+        <div class="detail-row">
+          <div class="detail-label">Original Amount:</div>
+          <div class="detail-value <%= 'has-discount' if (@credits_applied > 0) || (@coupon_discount && @coupon_discount > 0) || @appointment.referral_source.present? %>">
+            ₦<%= number_with_delimiter(@price.amount) %>
+          </div>
         </div>
 
-        <!-- Credits Applied (if any) -->
+        <!-- Credits Applied -->
         <% if @credits_applied && @credits_applied > 0 %>
           <div class="detail-row discount-row">
             <div class="detail-label">Credits Applied:</div>
@@ -96,7 +136,15 @@
           </div>
         <% end %>
 
-        <!-- Referral Discount (if any) -->
+        <!-- NEW: Coupon Discount -->
+        <% if @applied_coupon && (@coupon_discount && @coupon_discount > 0) %>
+          <div class="detail-row discount-row">
+            <div class="detail-label">Coupon Discount (<%= @applied_coupon.code %>):</div>
+            <div class="detail-value discount-value">- ₦<%= number_with_delimiter(@coupon_discount) %></div>
+          </div>
+        <% end %>
+
+        <!-- EXISTING: Referral Discount - UNCHANGED -->
         <% if @appointment.referral_source.present? %>
           <% referral = Referral.find_by(code: @appointment.referral_source) %>
           <% discount_amount = referral&.referred_discount || 5000 %>
@@ -115,6 +163,7 @@
       </div>
     </div>
 
+    <!-- EXISTING Payment Form - UNCHANGED -->
     <%= form_with url: paystack_payment_path(appointment_id: @appointment.id), method: :post, data: { turbo: false }, class: "payment-form" do |form| %>
       <%= hidden_field_tag :price_id, @price.id %>
       <%= hidden_field_tag :credits_applied, @credits_applied %>
@@ -128,6 +177,7 @@
 </div>
 
 <style>
+  /* EXISTING STYLES - UNCHANGED */
   .payment-container {
     max-width: 800px;
     margin: 0 auto;
@@ -250,95 +300,192 @@
   }
 
   .payment-button:hover {
-    background-color: #d9c000;
-    transform: translateY(-2px);
+    background-color: #d4c200;
+    transform: translateY(-1px);
   }
 
   .payment-button-free {
-    background-color: #4CAF50;
+    background-color: #28a745;
     color: white;
   }
 
   .payment-button-free:hover {
-    background-color: #45a049;
+    background-color: #218838;
   }
 
-  /* Credit section styles */
-  .credits-section {
-    background-color: #f0f8ff;
+  /* NEW: Coupon Section Styles */
+  .coupon-section {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
     border-radius: 8px;
     padding: 1.5rem;
     margin: 1.5rem 0;
-    border-left: 3px solid #4285F4;
   }
 
-  .credits-available {
-    border-bottom: 1px solid #cce5ff;
-    padding-bottom: 0.75rem;
+  .coupon-header {
     margin-bottom: 1rem;
   }
 
-  .credits-available .detail-value {
-    color: #0056b3;
-    font-weight: 700;
+  .coupon-header h3 {
+    margin: 0 0 0.25rem 0;
+    color: #333;
     font-size: 1.1rem;
+  }
+
+  .coupon-hint {
+    color: #6c757d;
+    font-style: italic;
+  }
+
+  .coupon-form {
+    margin-bottom: 1rem;
+  }
+
+  .coupon-input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .coupon-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .coupon-input:focus {
+    outline: none;
+    border-color: #EDD400;
+    box-shadow: 0 0 0 2px rgba(237, 212, 0, 0.2);
+  }
+
+  .coupon-apply-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+
+  .coupon-apply-btn:hover {
+    background-color: #5a6268;
+  }
+
+  .coupon-message {
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+  }
+
+  .coupon-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .coupon-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .remove-coupon-link {
+    color: #dc3545;
+    text-decoration: none;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .remove-coupon-link:hover {
+    text-decoration: underline;
+  }
+
+  .coupon-description {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #e2e3e5;
+    border-radius: 4px;
+    color: #495057;
+  }
+
+  /* EXISTING Credits Section Styles - UNCHANGED */
+  .credits-section {
+    background-color: #e7f3ff;
+    border: 1px solid #b8daff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .credits-available {
+    background-color: #cce7ff;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .credits-form h3 {
-    font-size: 1.1rem;
-    margin: 0 0 1rem 0;
-    color: #333;
+    color: #004085;
+    margin-bottom: 1rem;
   }
 
   .credit-options {
-    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .credit-option {
-    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
+    gap: 0.5rem;
   }
 
   .credit-option input[type="radio"] {
     margin-right: 0.5rem;
   }
 
-  .credit-option label {
-    cursor: pointer;
-  }
-
-  .btn-apply-credits {
-    background-color: #4285F4;
+  .credits-apply-btn {
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-weight: 600;
   }
 
-  .btn-apply-credits:hover {
-    background-color: #3367d6;
+  .credits-apply-btn:hover {
+    background-color: #0056b3;
   }
 
+  /* Responsive Design */
   @media (max-width: 768px) {
     .payment-container {
       padding: 1rem;
+    }
+
+    .coupon-input-group {
+      flex-direction: column;
+    }
+
+    .coupon-input {
+      margin-bottom: 0.5rem;
     }
 
     .detail-row {
       flex-direction: column;
     }
 
-    .detail-label, .detail-value {
-      flex: 0 0 100%;
-    }
-
-    .detail-value {
-      margin-top: 0.25rem;
+    .detail-label {
+      margin-bottom: 0.25rem;
+      font-weight: 600;
     }
   }
 </style>

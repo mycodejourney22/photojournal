@@ -1,0 +1,280 @@
+<!-- app/views/admin/coupons/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Manage Coupons</h1>
+  </div>
+  <div class="g-content__toolbar-actions">
+    <%= link_to "New Coupon", new_admin_coupon_path, class: "g-button g-button--action" %>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="g-content__filters">
+  <%= form_with url: admin_coupons_path, method: :get, local: true, class: "g-filters__form" do |form| %>
+    <div class="g-filters__inputs">
+      <%= form.text_field :search, 
+                         placeholder: "Search by code or description", 
+                         value: params[:search], 
+                         class: "g-form-input" %>
+      
+      <%= form.select :status, 
+                     options_for_select([['All Statuses', ''], ['Active', 'active'], ['Inactive', 'inactive'], ['Expired', 'expired']], params[:status]),
+                     {}, { class: "g-form-input" } %>
+      
+      <%= form.select :coupon_type,
+                     options_for_select([['All Types', ''], ['Fixed Amount', 'fixed_amount'], ['Percentage', 'percentage'], ['Referral', 'referral'], ['Seasonal', 'seasonal'], ['Ad-hoc', 'adhoc']], params[:coupon_type]),
+                     {}, { class: "g-form-input" } %>
+    </div>
+    
+    <div class="g-filters__actions">
+      <%= form.submit "Filter", class: "g-button g-button--secondary" %>
+      <%= link_to "Clear", admin_coupons_path, class: "g-button g-button--outline" %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Coupons Table -->
+<div class="coupons-table">
+  <div class="g-table__header">
+    <div class="g-table__col--coupon-code">Code</div>
+    <div class="g-table__col--coupon-type">Type</div>
+    <div class="g-table__col--coupon-discount">Discount</div>
+    <div class="g-table__col--coupon-usage">Usage</div>
+    <div class="g-table__col--coupon-status">Status</div>
+    <div class="g-table__col--coupon-expires">Expires</div>
+    <div class="g-table__col--coupon-actions">Actions</div>
+  </div>
+
+  <% if @coupons.present? %>
+    <% @coupons.each do |coupon| %>
+      <div class="g-table__row <%= 'g-table__row--muted' unless coupon.active? %>">
+        <div class="g-table__status <%= case coupon.status
+                                        when 'active' then 'g-table__status--confirmed'
+                                        when 'inactive' then 'g-table__status--cancelled'
+                                        when 'expired' then 'g-table__status--pending'
+                                        end %>"></div>
+
+        <div class="g-table__col--coupon-code g-table__cell">
+          <div class="g-table__name-container">
+            <div class="g-table__name"><%= coupon.code %></div>
+            <% if coupon.description.present? %>
+              <div class="g-table__date"><%= truncate(coupon.description, length: 50) %></div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="g-table__col--coupon-type g-table__cell">
+          <span class="g-badge <%= coupon.coupon_type == 'percentage' ? 'g-badge--info' : 'g-badge--secondary' %>">
+            <%= coupon.coupon_type.humanize %>
+          </span>
+        </div>
+
+        <div class="g-table__col--coupon-discount g-table__cell">
+          <% if coupon.coupon_type == 'percentage' %>
+            <%= coupon.discount_percentage %>%
+          <% else %>
+            ₦<%= number_with_delimiter(coupon.discount_amount) %>
+          <% end %>
+        </div>
+
+        <div class="g-table__col--coupon-usage g-table__cell">
+          <%= coupon.usage_count %> / <%= coupon.max_uses %>
+          <% if coupon.usage_count >= coupon.max_uses %>
+            <br><span class="g-badge g-badge--warning">Full</span>
+          <% end %>
+        </div>
+
+        <div class="g-table__col--coupon-status g-table__cell">
+          <span class="g-badge <%= case coupon.status
+                                 when 'active' then 'g-badge--success'
+                                 when 'inactive' then 'g-badge--secondary'
+                                 when 'expired' then 'g-badge--danger'
+                                 end %>">
+            <%= coupon.status.humanize %>
+          </span>
+          <% if coupon.expired? %>
+            <br><small class="g-text--danger">(Expired)</small>
+          <% end %>
+        </div>
+
+        <div class="g-table__col--coupon-expires g-table__cell">
+          <%= coupon.expires_at&.strftime("%m/%d/%Y") || "Never" %>
+        </div>
+
+        <div class="g-table__col--coupon-actions g-table__cell">
+          <div class="g-table__actions">
+            <%= link_to "View", admin_coupon_path(coupon), class: "g-button--link" %>
+            <%= link_to "Edit", edit_admin_coupon_path(coupon), class: "g-button--link" %>
+            <%= link_to coupon.active? ? "Deactivate" : "Activate", 
+                       toggle_status_admin_coupon_path(coupon), 
+                       method: :patch,
+                       class: "g-button--link g-button--#{coupon.active? ? 'warning' : 'success'}" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="g-content__empty">
+      <h3>No coupons found</h3>
+      <p>Create your first coupon to start offering discounts to customers.</p>
+      <%= link_to "Create Coupon", new_admin_coupon_path, class: "g-button g-button--action" %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Pagination -->
+<% if @coupons.respond_to?(:total_pages) %>
+  <div class="g-content__pagination">
+    <%= paginate @coupons %>
+  </div>
+<% end %>
+
+<style>
+  /* Custom CSS Grid for Coupons Table */
+  .coupons-table .g-table__header,
+  .coupons-table .g-table__row {
+    display: grid;
+    grid-template-columns: 4px 2fr 1fr 1fr 1fr 1fr 1fr 1.5fr;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .coupons-table .g-table__header {
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+  }
+
+  .coupons-table .g-table__row {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 16px;
+    transition: background-color 0.2s;
+  }
+
+  .coupons-table .g-table__row:hover {
+    background-color: #f9f9f9;
+  }
+
+  .coupons-table .g-table__row--muted {
+    opacity: 0.6;
+  }
+
+  .coupons-table .g-table__cell {
+    padding: 0;
+  }
+
+  .coupons-table .g-table__status {
+    width: 4px;
+    height: 40px;
+    border-radius: 2px;
+  }
+
+  .coupons-table .g-table__actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .coupons-table .g-button--link {
+    font-size: 12px;
+    color: #4285F4;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  .coupons-table .g-button--link:hover {
+    background-color: #e3f2fd;
+  }
+
+  .coupons-table .g-button--warning {
+    color: #ff9800;
+  }
+
+  .coupons-table .g-button--success {
+    color: #4caf50;
+  }
+
+  /* Badge styles */
+  .g-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .g-badge--success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .g-badge--danger {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+
+  .g-badge--warning {
+    background-color: #fff8e1;
+    color: #f57f17;
+  }
+
+  .g-badge--secondary {
+    background-color: #f5f5f5;
+    color: #666;
+  }
+
+  .g-badge--info {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+
+  .g-text--danger {
+    color: #c62828;
+  }
+
+  /* Name container styling */
+  .coupons-table .g-table__name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .coupons-table .g-table__date {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1200px) {
+    .coupons-table .g-table__header,
+    .coupons-table .g-table__row {
+      grid-template-columns: 4px 2fr 1fr 1fr 1fr 1fr 2fr;
+    }
+
+    .g-table__col--coupon-expires {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .coupons-table .g-table__header,
+    .coupons-table .g-table__row {
+      grid-template-columns: 4px 2fr 1fr 1fr 1.5fr;
+    }
+
+    .g-table__col--coupon-type,
+    .g-table__col--coupon-usage,
+    .g-table__col--coupon-expires {
+      display: none;
+    }
+  }
+</style>

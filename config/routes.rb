@@ -118,6 +118,12 @@ Rails.application.routes.draw do
         patch :toggle_active
       end
     end
+
+    resources :coupons do
+      member do
+        patch :toggle_status
+      end
+    end
     
     resources :special_emails, only: [:index, :new, :create] do
       collection do

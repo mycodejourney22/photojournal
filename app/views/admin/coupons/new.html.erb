@@ -1,0 +1,13 @@
+<!-- app/views/admin/coupons/new.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Create New Coupon</h1>
+  </div>
+  <div class="g-content__actions">
+    <%= link_to "Back to Coupons", admin_coupons_path, class: "g-button g-button--outline" %>
+  </div>
+</div>
+
+<div class="g-form-container">
+  <%= render 'form', coupon: @coupon %>
+</div>

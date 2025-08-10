@@ -1,0 +1,126 @@
+<!-- app/views/admin/coupons/_form.html.erb -->
+<%= simple_form_for [:admin, @coupon] do |f| %>
+  <%= f.error_notification %>
+
+  <div class="g-form-card">
+    <div class="g-form-grid">
+      <!-- Basic Information -->
+      <div class="g-form-group g-form-group--full">
+        <%= f.input :code, 
+            label: "Coupon Code",
+            hint: "e.g. CHRISTMAS25, WELCOME10, REFER123",
+            input_html: { class: "g-form-input", style: "text-transform: uppercase;" } %>
+      </div>
+
+      <div class="g-form-group">
+        <%= f.input :coupon_type,
+            collection: [
+              ['Fixed Amount (₦)', 'fixed_amount'],
+              ['Percentage (%)', 'percentage'],
+              ['Referral Discount', 'referral'],
+              ['Seasonal Campaign', 'seasonal'],
+              ['Ad-hoc Campaign', 'adhoc']
+            ],
+            input_html: { class: "g-form-input", data: { controller: "coupon-type" } } %>
+      </div>
+
+      <div class="g-form-group">
+        <%= f.input :status,
+            collection: [['Active', 'active'], ['Inactive', 'inactive']],
+            input_html: { class: "g-form-input" } %>
+      </div>
+
+      <!-- Discount Amount (for fixed amount coupons) -->
+      <div class="g-form-group" data-coupon-type-target="fixedAmount">
+        <%= f.input :discount_amount,
+            label: "Discount Amount (₦)",
+            input_html: { class: "g-form-input", min: 0 } %>
+      </div>
+
+      <!-- Discount Percentage (for percentage coupons) -->
+      <div class="g-form-group" data-coupon-type-target="percentage" style="display: none;">
+        <%= f.input :discount_percentage,
+            label: "Discount Percentage (%)",
+            input_html: { class: "g-form-input", min: 1, max: 100 } %>
+      </div>
+
+      <div class="g-form-group">
+        <%= f.input :max_uses,
+            label: "Maximum Uses",
+            hint: "How many times this coupon can be used",
+            input_html: { class: "g-form-input", min: 1 } %>
+      </div>
+
+      <div class="g-form-group">
+        <%= f.input :expires_at,
+            as: :string,
+            label: "Expires At",
+            hint: "Leave blank for no expiration",
+            input_html: { 
+              class: "g-form-input", 
+              data: { controller: "datepicker" },
+              placeholder: "Select expiration date"
+            } %>
+      </div>
+
+      <div class="g-form-group">
+        <%= f.input :minimum_amount,
+            label: "Minimum Purchase Amount (₦)",
+            hint: "Optional: minimum amount required to use this coupon",
+            input_html: { class: "g-form-input", min: 0 } %>
+      </div>
+
+      <div class="g-form-group g-form-group--full">
+        <%= f.input :description,
+            label: "Description",
+            hint: "Brief description of this coupon for internal reference",
+            input_html: { class: "g-form-input", rows: 3 } %>
+      </div>
+
+      <!-- Advanced Options -->
+      <div class="g-form-group g-form-group--full">
+        <%= f.input :customer_restrictions,
+            as: :boolean,
+            label: "Apply Customer Restrictions",
+            hint: "Check if this coupon should only be available to eligible customers (e.g., new customers only)" %>
+      </div>
+
+      <div class="g-form-group g-form-group--full">
+        <%= f.input :campaign_notes,
+            label: "Campaign Notes",
+            hint: "Internal notes about this coupon campaign",
+            input_html: { class: "g-form-input", rows: 3 } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="g-form-actions">
+    <%= f.submit @coupon.persisted? ? "Update Coupon" : "Create Coupon", 
+                class: "g-button g-button--action" %>
+    <%= link_to "Cancel", admin_coupons_path, class: "g-button g-button--outline" %>
+  </div>
+<% end %>
+
+<script>
+  // Simple JavaScript to show/hide discount fields based on coupon type
+  document.addEventListener('DOMContentLoaded', function() {
+    const couponTypeSelect = document.querySelector('[data-controller="coupon-type"]');
+    const fixedAmountField = document.querySelector('[data-coupon-type-target="fixedAmount"]');
+    const percentageField = document.querySelector('[data-coupon-type-target="percentage"]');
+    
+    function toggleDiscountFields() {
+      const selectedType = couponTypeSelect.value;
+      
+      if (selectedType === 'percentage') {
+        fixedAmountField.style.display = 'none';
+        percentageField.style.display = 'block';
+      } else {
+        fixedAmountField.style.display = 'block';
+        percentageField.style.display = 'none';
+      }
+    }
+    
+    couponTypeSelect.addEventListener('change', toggleDiscountFields);
+    toggleDiscountFields(); // Run on page load
+  });
+</script>
