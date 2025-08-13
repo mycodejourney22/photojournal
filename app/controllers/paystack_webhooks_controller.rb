@@ -79,6 +79,15 @@ class PaystackWebhooksController < ApplicationController
     if appointment.referral_source.present?
       process_referral_conversion(appointment, customer)
     end
+
+    begin
+      AppointmentMailer.payment_confirmation(appointment, data).deliver_now
+      Rails.logger.info("Payment confirmation email sent for appointment #{appointment.id}")
+    rescue => e
+      Rails.logger.error("Failed to send payment confirmation email: #{e.message}")
+      # Don't fail the webhook if email sending fails
+    end
+    
     Rails.logger.info("Successfully processed payment for appointment #{appointment.id}")
   end
 end

@@ -1,0 +1,59 @@
+Payment Confirmation - 363 Photography
+======================================
+
+Hi <%= @appointment.name.split(" ").first %>,
+
+PAYMENT SUCCESSFUL! ✓
+
+Thank you for your payment! Your photoshoot booking with 363 Photography is now fully confirmed.
+
+PAYMENT DETAILS
+---------------
+Transaction Reference: <%= @reference %>
+Amount Paid: ₦<%= number_with_delimiter(@amount_paid.to_i) %>
+Payment Date: <%= @payment_date %>
+Payment Method: Card Payment
+
+<% if @discount_amount > 0 %>
+DISCOUNT APPLIED
+----------------
+Original Amount: ₦<%= number_with_delimiter(@original_amount.to_i) %>
+Referral Discount (<%= @referral_code %>): -₦<%= number_with_delimiter(@discount_amount.to_i) %>
+<% end %>
+
+YOUR APPOINTMENT DETAILS
+------------------------
+Date & Time: <%= @appointment.start_time.strftime("%B %d, %Y at %I:%M %p") %>
+Location: <%= @location %>
+Studio Phone: <%= @studio_phone_number %>
+
+Add to Google Calendar: <%= @calendar_link %>
+
+IMPORTANT REMINDERS
+-------------------
+• Please arrive 15 minutes early for your session
+• If you need makeup done at the studio, arrive 1 hour early
+• Edited photos will be delivered within 48-72 hours
+• Contact us immediately if you need to reschedule (24hrs notice required)
+
+WHAT HAPPENS NEXT?
+------------------
+1. You'll receive a separate email with detailed studio policies and guidelines
+2. Our team will prepare for your session and ensure everything is ready
+3. After your photoshoot, edited images will be delivered to your email
+
+NEED TO CONTACT US?
+-------------------
+Studio Phone: <%= @studio_phone_number %>
+Email: info@363photography.org
+
+Reschedule Booking: <%= edit_appointment_url(@appointment) %>
+Cancel Booking: <%= cancel_booking_appointment_url(@appointment) %>
+
+This is your official payment receipt.
+Transaction processed securely by Paystack.
+
+---
+363 PHOTOGRAPHY
+Creating Beautiful Moments
+© 2025 363 Photography. All rights reserved.

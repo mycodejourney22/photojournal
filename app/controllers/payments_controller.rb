@@ -72,7 +72,7 @@ class PaymentsController < ApplicationController
     amount = price.amount.to_f - credits_applied
     total_discount = 0
 
-    if session[:coupon_discount].present?
+    if session[:coupon_discount].present? && session[:coupon_appointment_id] == appointment.id.to_s
       coupon_discount = session[:coupon_discount].to_i
       amount -= coupon_discount
       total_discount += coupon_discount
@@ -83,6 +83,13 @@ class PaymentsController < ApplicationController
           coupon_code: session[:applied_coupon_code],
           coupon_discount: coupon_discount
         )
+        
+        # Increment coupon usage and clear session after successful application
+        coupon = Coupon.find_by(code: session[:applied_coupon_code])
+        coupon&.increment_usage!
+        
+        # Clear coupon session after successful payment initiation
+        clear_coupon_session_for_payment
       end
     end
 
@@ -235,6 +242,13 @@ class PaymentsController < ApplicationController
       Rails.logger.error(e.backtrace.join("\n"))
       redirect_to failure_payments_path, alert: "An error occurred during payment verification. Please contact support."
     end
+    begin
+      AppointmentMailer.payment_confirmation(appointment, data).deliver_now
+      Rails.logger.info("Payment confirmation email sent for appointment #{appointment.id}")
+    rescue => e
+      Rails.logger.error("Failed to send payment confirmation email: #{e.message}")
+      # Don't fail the webhook if email sending fails
+    end
   end
 
   def success
@@ -325,6 +339,12 @@ class PaymentsController < ApplicationController
 
   def handle_coupon_application
     # Reset coupon if removal requested
+    current_appointment_id = session[:coupon_appointment_id]
+
+    if current_appointment_id != @appointment.id.to_s
+      clear_coupon_session
+    end
+
     if params[:remove_coupon].present?
       clear_coupon_session
       redirect_to make_payment_path(appointment_id: @appointment.id, apply_credits: @credits_applied) and return
@@ -333,9 +353,11 @@ class PaymentsController < ApplicationController
     # Apply new coupon if provided
     if params[:coupon_code].present?
       apply_coupon(params[:coupon_code])
-    elsif session[:applied_coupon_code].present?
+    elsif session[:applied_coupon_code].present? && session[:coupon_appointment_id] == @appointment.id.to_s
       # Restore previously applied coupon from session
       restore_coupon_from_session
+    else
+      clear_coupon_session
     end
   end
 
@@ -347,18 +369,18 @@ class PaymentsController < ApplicationController
       clear_coupon_session
       return
     end
-
-    # Check customer eligibility for certain coupon types
+  
     unless coupon_eligible_for_customer?(coupon)
       @coupon_error = "This coupon is not available for your account"
       clear_coupon_session
       return
     end
-
-    # Store successful coupon application
+  
+    # Store successful coupon application WITH appointment ID
     @applied_coupon = coupon
     session[:applied_coupon_code] = coupon.code
     session[:applied_coupon_id] = coupon.id
+    session[:coupon_appointment_id] = @appointment.id.to_s  # ADD THIS LINE!
   end
 
   def restore_coupon_from_session
@@ -370,12 +392,20 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def clear_coupon_session_for_payment
+    session.delete(:applied_coupon_code)
+    session.delete(:applied_coupon_id)
+    session.delete(:coupon_discount)
+    session.delete(:coupon_appointment_id)
+  end
+
   def clear_coupon_session
     session.delete(:applied_coupon_code)
     session.delete(:applied_coupon_id)
     session.delete(:coupon_discount)
-    @applied_coupon = nil
-    @coupon_discount = 0
+    session.delete(:coupon_appointment_id)
+    @applied_coupon = nil      # Clears instance variables too
+    @coupon_discount = 0       # Clears instance variables too
   end
 
   def calculate_final_amount_with_all_discounts

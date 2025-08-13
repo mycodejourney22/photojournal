@@ -1,0 +1,162 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <!-- Header -->
+  <div style="background-color: #EDD400; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0;">
+    <h1 style="color: #000; margin: 0; font-size: 28px; font-weight: bold;">363 PHOTOGRAPHY</h1>
+    <p style="color: #333; font-size: 16px; margin: 10px 0 0 0;">Payment Confirmation</p>
+  </div>
+
+  <!-- Success Icon -->
+  <div style="text-align: center; padding: 30px 20px 20px; background-color: #ffffff;">
+    <div style="display: inline-block; width: 80px; height: 80px; background-color: #22c55e; border-radius: 50%; position: relative; margin-bottom: 20px;">
+      <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 40px; font-weight: bold;">✓</span>
+    </div>
+    <h2 style="color: #22c55e; margin: 0 0 10px; font-size: 24px;">Payment Successful!</h2>
+    <p style="color: #666; font-size: 16px; margin: 0;">Your booking has been confirmed and payment received.</p>
+  </div>
+
+  <!-- Main Content -->
+  <div style="padding: 0 30px; background-color: #ffffff;">
+    <p style="font-size: 16px; color: #333; margin-bottom: 25px;">Hi <%= @appointment.name.split(" ").first %>,</p>
+    
+    <p style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 30px;">
+      Thank you for your payment! Your photoshoot booking with 363 Photography is now fully confirmed. 
+      We're excited to capture beautiful moments with you.
+    </p>
+
+    <!-- Payment Details Card -->
+    <div style="background-color: #f8f9fa; border-radius: 8px; padding: 25px; margin-bottom: 30px; border-left: 4px solid #EDD400;">
+      <h3 style="color: #333; margin: 0 0 20px; font-size: 18px;">Payment Details</h3>
+      
+      <div style="margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="color: #666; font-weight: 500;">Transaction Reference:</span>
+          <span style="color: #333; font-weight: 600; font-family: monospace;"><%= @reference %></span>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="color: #666; font-weight: 500;">Amount Paid:</span>
+          <span style="color: #22c55e; font-weight: 700; font-size: 18px;">₦<%= number_with_delimiter(@amount_paid.to_i) %></span>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="color: #666; font-weight: 500;">Payment Date:</span>
+          <span style="color: #333; font-weight: 600;"><%= @payment_date %></span>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="color: #666; font-weight: 500;">Payment Method:</span>
+          <span style="color: #333; font-weight: 600;">Card Payment</span>
+        </div>
+      </div>
+
+      <% if @discount_amount > 0 %>
+        <!-- Referral Discount -->
+        <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #666; font-weight: 500;">Original Amount:</span>
+            <span style="color: #666;">₦<%= number_with_delimiter(@original_amount.to_i) %></span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #22c55e; font-weight: 500;">Referral Discount (<%= @referral_code %>):</span>
+            <span style="color: #22c55e; font-weight: 600;">-₦<%= number_with_delimiter(@discount_amount.to_i) %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Appointment Details Card -->
+    <div style="background-color: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 25px; margin-bottom: 30px;">
+      <h3 style="color: #333; margin: 0 0 20px; font-size: 18px;">Your Appointment Details</h3>
+      
+      <div style="margin-bottom: 15px;">
+        <span style="color: #666; font-weight: 500; display: block; margin-bottom: 4px;">Date & Time:</span>
+        <span style="color: #333; font-weight: 600; font-size: 16px;"><%= @appointment.start_time.strftime("%B %d, %Y at %I:%M %p") %></span>
+      </div>
+      
+      <div style="margin-bottom: 15px;">
+        <span style="color: #666; font-weight: 500; display: block; margin-bottom: 4px;">Location:</span>
+        <span style="color: #333; font-weight: 600;"><%= @location %></span>
+      </div>
+
+      <div style="margin-bottom: 0;">
+        <span style="color: #666; font-weight: 500; display: block; margin-bottom: 4px;">Studio Phone:</span>
+        <span style="color: #333; font-weight: 600;"><%= @studio_phone_number %></span>
+      </div>
+    </div>
+
+    <!-- Add to Calendar -->
+    <div style="text-align: center; margin-bottom: 30px;">
+      <a href="<%= @calendar_link %>" 
+         style="display: inline-flex; align-items: center; text-decoration: none; background-color: #4285F4; color: white; padding: 12px 20px; border-radius: 6px; font-weight: 600; font-size: 14px;">
+        📅 Add to Google Calendar
+      </a>
+    </div>
+
+    <!-- Important Reminders -->
+    <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 30px;">
+      <h3 style="color: #92400e; margin: 0 0 15px; font-size: 16px;">📋 Important Reminders</h3>
+      <ul style="color: #92400e; margin: 0; padding-left: 20px; line-height: 1.6;">
+        <li style="margin-bottom: 8px;">Please arrive <strong>15 minutes early</strong> for your session</li>
+        <li style="margin-bottom: 8px;">If you need makeup done at the studio, arrive <strong>1 hour early</strong></li>
+        <li style="margin-bottom: 8px;">Edited photos will be delivered within <strong>48-72 hours</strong></li>
+        <li style="margin-bottom: 0;">Contact us immediately if you need to reschedule (24hrs notice required)</li>
+      </ul>
+    </div>
+
+    <!-- What to Expect -->
+    <div style="margin-bottom: 30px;">
+      <h3 style="color: #333; margin: 0 0 15px; font-size: 18px;">What Happens Next?</h3>
+      <div style="background-color: #f0f9ff; padding: 20px; border-radius: 8px; border-left: 4px solid #0ea5e9;">
+        <p style="color: #0c4a6e; margin: 0 0 10px; line-height: 1.6;">
+          <strong>1.</strong> You'll receive a separate email with detailed studio policies and guidelines
+        </p>
+        <p style="color: #0c4a6e; margin: 0 0 10px; line-height: 1.6;">
+          <strong>2.</strong> Our team will prepare for your session and ensure everything is ready
+        </p>
+        <p style="color: #0c4a6e; margin: 0 0 0; line-height: 1.6;">
+          <strong>3.</strong> After your photoshoot, edited images will be delivered to your email
+        </p>
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div style="text-align: center; margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+      <h3 style="color: #333; margin: 0 0 15px; font-size: 16px;">Need to Contact Us?</h3>
+      <p style="color: #666; margin: 0 0 10px;">Studio Phone: <strong><%= @studio_phone_number %></strong></p>
+      <p style="color: #666; margin: 0 0 20px;">Email: <strong>info@363photography.org</strong></p>
+      
+      <div style="margin-top: 20px;">
+        <a href="<%= edit_appointment_url(@appointment) %>" 
+           style="display: inline-block; background-color: #EDD400; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin: 0 5px 10px; font-weight: 600; font-size: 14px;">
+          Reschedule Booking
+        </a>
+        <a href="<%= cancel_booking_appointment_url(@appointment) %>" 
+           style="display: inline-block; background-color: #f3f4f6; color: #374151; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin: 0 5px 10px; font-weight: 600; font-size: 14px;">
+          Cancel Booking
+        </a>
+      </div>
+    </div>
+
+    <!-- Receipt Footer -->
+    <div style="border-top: 1px solid #e5e7eb; padding: 20px 0; text-align: center; margin-bottom: 20px;">
+      <p style="color: #666; font-size: 14px; margin: 0 0 5px;">This is your official payment receipt</p>
+      <p style="color: #999; font-size: 12px; margin: 0;">Transaction processed securely by Paystack</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="background-color: #1f2937; color: #ffffff; padding: 25px; text-align: center; border-radius: 0 0 8px 8px;">
+    <h3 style="margin: 0 0 10px; font-size: 18px;">363 PHOTOGRAPHY</h3>
+    <p style="margin: 0 0 15px; color: #d1d5db; font-size: 14px;">Creating Beautiful Moments</p>
+    
+    <p style="margin: 0; color: #9ca3af; font-size: 12px;">
+      © 2025 363 Photography. All rights reserved.
+    </p>
+  </div>
+</div>
