@@ -398,11 +398,29 @@ class AppointmentsController < ApplicationController
     # Get appointments within +3 to -3 days from today
     date_range = 3.days.ago.beginning_of_day..3.days.from_now.end_of_day
     
-    AppointmentNote.joins(:appointment)
-                   .where(appointments: { start_time: date_range })
-                   .includes(:appointment, :created_by)
-                   .order(priority: :desc, created_at: :desc)
-                   .limit(10) # Limit to show most recent/important 10 notes
+    base_query = AppointmentNote.joins(:appointment)
+                                .where(appointments: { start_time: date_range })
+                                .includes(:appointment, :created_by, :actioned_by)
+    
+    # Apply location-based filtering based on user role
+    filtered_query = if current_user.admin? || current_user.manager? || current_user.super_admin?
+                       # Admins and managers see all notes
+                       base_query
+                     else
+                       case current_user.role
+                       when 'ikeja'
+                         base_query.where("appointments.location ILIKE ?", "%ikeja%")
+                       when 'surulere'
+                         base_query.where("appointments.location ILIKE ?", "%surulere%")
+                       when 'ajah'
+                         base_query.where("appointments.location ILIKE ? OR appointments.location ILIKE ?", '%Ajah%', '%Ilaje%')
+                       else
+                         base_query.none # No access for other roles
+                       end
+                     end
+    
+    filtered_query.order(priority: :desc, created_at: :desc)
+                  .limit(10) # Limit to show most recent/important 10 notes
   end
 
   # def appointment_params
