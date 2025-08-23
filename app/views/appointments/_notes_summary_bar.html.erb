@@ -1,0 +1,305 @@
+<!-- app/views/appointments/_notes_summary_bar.html.erb -->
+<div class="notes-summary-bar mb-4">
+  <div class="notes-summary-header">
+    <h5>Recent Notes & Instructions</h5>
+    <small class="text-muted">Appointments from <%= 3.days.ago.strftime("%b %d") %> to <%= 3.days.from_now.strftime("%b %d") %></small>
+  </div>
+
+  <% if @recent_notes.present? %>
+    <div class="notes-table-container">
+      <table class="table notes-summary-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Note Type</th>
+            <th>Note</th>
+            <th>Priority</th>
+            <th>Date</th>
+            <th>Action Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_notes.each do |note| %>
+            <tr class="notes-row <%= 'actioned-row' if note.actioned? %>" data-appointment-id="<%= note.appointment.id %>">
+              <td>
+                <%= link_to appointment_path(note.appointment), class: "customer-link" do %>
+                  <div class="customer-name"><%= note.appointment.name %></div>
+                  <div class="customer-location"><%= note.appointment.location %></div>
+                <% end %>
+              </td>
+              
+              <td>
+                <%= note.note_type_label %>
+              </td>
+              
+              <td class="note-content">
+                <% if note.title.present? %>
+                  <strong><%= note.title %></strong><br>
+                <% end %>
+                <%= truncate(note.content, length: 60) %>
+              </td>
+              
+              <td>
+                <%= note.priority_label %>
+              </td>
+              
+              <td>
+                <div><%= note.appointment.formatted_start_time %></div>
+                <div class="appointment-time"><%= note.appointment.formatted_time %></div>
+              </td>
+              
+              <td>
+                <div class="action-status">
+                  <input type="checkbox" 
+                         class="action-checkbox" 
+                         data-note-id="<%= note.id %>"
+                         data-appointment-id="<%= note.appointment.id %>"
+                         id="action_<%= note.id %>"
+                         <%= 'checked' if note.actioned? %>>
+                  <label for="action_<%= note.id %>">
+                    <span class="action-text">
+                      <%= note.actioned? ? 'Actioned' : 'Pending' %>
+                    </span>
+                    <% if note.actioned? && note.actioned_by %>
+                      <div class="action-details">
+                        by <%= note.actioned_by.email %>
+                      </div>
+                    <% end %>
+                  </label>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="no-recent-notes text-center py-4">
+      <p>No notes for appointments in the next 6 days</p>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .notes-summary-bar {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .notes-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .notes-summary-header h5 {
+    margin: 0;
+    color: #333333;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .notes-summary-table {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .notes-summary-table th {
+    background-color: #f9f9f9;
+    color: #333333;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .notes-summary-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  
+  .notes-row {
+    transition: background-color 0.2s;
+  }
+  
+  .notes-row:hover {
+    background-color: #fafafa;
+  }
+  
+  .notes-row.actioned-row {
+    opacity: 0.7;
+    background-color: #f8f9fa;
+  }
+  
+  .notes-row.actioned-row .customer-name,
+  .notes-row.actioned-row .note-content {
+    text-decoration: line-through;
+  }
+  
+  .customer-link {
+    text-decoration: none;
+    color: #333333;
+  }
+  
+  .customer-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333333;
+  }
+  
+  .customer-location {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 2px;
+  }
+  
+  .customer-link:hover .customer-name {
+    color: #D9C000;
+  }
+  
+  .note-content {
+    max-width: 300px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555555;
+  }
+  
+  .appointment-time {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 2px;
+  }
+  
+  .action-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .action-checkbox {
+    margin: 0;
+    margin-top: 2px;
+  }
+  
+  .action-status label {
+    margin: 0;
+    font-size: 12px;
+    color: #666666;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .action-text {
+    font-weight: 500;
+  }
+  
+  .action-details {
+    font-size: 10px;
+    color: #999999;
+    margin-top: 2px;
+  }
+  
+  .action-checkbox:checked + label .action-text {
+    color: #28a745;
+    font-weight: 600;
+  }
+  
+  .no-recent-notes {
+    color: #666666;
+    font-size: 14px;
+    padding: 40px 0;
+  }
+  
+  .text-muted {
+    color: #666666;
+    font-size: 12px;
+  }
+</style>
+
+<script>
+  // Handle action checkbox changes with AJAX
+  document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.action-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const noteId = this.dataset.noteId;
+        const appointmentId = this.dataset.appointmentId;
+        const isActioned = this.checked;
+        const row = this.closest('.notes-row');
+        const actionText = this.parentElement.querySelector('.action-text');
+        const actionDetails = this.parentElement.querySelector('.action-details');
+        
+        // Disable checkbox while processing
+        this.disabled = true;
+        
+        // Make AJAX request
+        fetch(`/appointments/${appointmentId}/toggle_note_action`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          },
+          body: JSON.stringify({
+            note_id: noteId,
+            actioned: isActioned
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Update UI based on response
+            if (data.actioned) {
+              actionText.textContent = 'Actioned';
+              actionText.style.color = '#28a745';
+              actionText.style.fontWeight = '600';
+              row.classList.add('actioned-row');
+              
+              // Add action details if not exists
+              if (!actionDetails) {
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'action-details';
+                detailsDiv.textContent = data.message.replace('Note marked as actioned by ', 'by ');
+                this.parentElement.querySelector('label').appendChild(detailsDiv);
+              }
+            } else {
+              actionText.textContent = 'Pending';
+              actionText.style.color = '#666666';
+              actionText.style.fontWeight = '500';
+              row.classList.remove('actioned-row');
+              
+              // Remove action details
+              if (actionDetails) {
+                actionDetails.remove();
+              }
+            }
+          } else {
+            // Revert checkbox on error
+            this.checked = !isActioned;
+            alert('Failed to update note status: ' + data.error);
+          }
+        })
+        .catch(error => {
+          // Revert checkbox on error
+          this.checked = !isActioned;
+          alert('Error updating note status');
+          console.error('Error:', error);
+        })
+        .finally(() => {
+          // Re-enable checkbox
+          this.disabled = false;
+        });
+      });
+    });
+  });
+</script>

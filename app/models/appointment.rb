@@ -17,6 +17,8 @@ class Appointment < ApplicationRecord
   belongs_to :studio, optional: true
   before_validation :set_location_from_studio
   before_validation :set_studio_from_location
+  has_many :appointment_notes, dependent: :destroy
+  accepts_nested_attributes_for :appointment_notes, allow_destroy: true, reject_if: :all_blank
 
 
   scope :available_for_booking, -> { where(no_show: false, status: true) }
@@ -49,6 +51,46 @@ class Appointment < ApplicationRecord
 
   def validate_sent?
     photo_shoot&.status.to_s.downcase == "sent"
+  end
+
+  def pre_shoot_notes
+    appointment_notes.pre_shoot.by_priority
+  end
+  
+  def post_shoot_notes
+    appointment_notes.post_shoot.by_priority
+  end
+  
+  def editing_notes  
+    appointment_notes.editing.by_priority
+  end
+  
+  def general_notes
+    appointment_notes.general.by_priority
+  end
+  
+  def high_priority_notes
+    appointment_notes.high_priority.by_priority
+  end
+  
+  def has_notes?
+    appointment_notes.exists?
+  end
+  
+  def has_high_priority_notes?
+    appointment_notes.high_priority.exists?
+  end
+  
+  # Summary of notes for quick overview
+  def notes_summary
+    {
+      total: appointment_notes.count,
+      pre_shoot: appointment_notes.pre_shoot.count,
+      post_shoot: appointment_notes.post_shoot.count,
+      editing: appointment_notes.editing.count,
+      general: appointment_notes.general.count,
+      high_priority: appointment_notes.high_priority.count
+    }
   end
 
   STUDIO_NUMBERS = {

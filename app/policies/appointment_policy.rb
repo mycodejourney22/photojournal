@@ -46,6 +46,18 @@ class AppointmentPolicy < ApplicationPolicy
     true
   end
 
+  def add_note?
+    true
+  end
+
+  def remove_note?
+    true
+  end
+
+  def toggle_note_action?
+    true
+  end
+
   def new?
     true
   end

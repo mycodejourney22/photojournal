@@ -135,38 +135,15 @@
     </div>
 
     <!-- Customer Outfit Section -->
-    <div class="g-section">
-      <div class="g-section__header">
-        <div class="g-section__title">Customer Outfit</div>
-      </div>
 
-      <% if @appointment.customer_pictures.attached? %>
-        <div class="g-content__link-container">
-          <p>View Customer outfits <%= link_to "here", customer_pictures_appointment_path(@appointment), class: "g-link" %></p>
-        </div>
-      <% else %>
-        <div class="g-content__empty">
-          <p>No customer Outfits Pictures.</p>
-        </div>
-      <% end %>
-    </div>
 
     <!-- Inspo Images Section -->
-    <div class="g-section">
-      <div class="g-section__header">
-        <div class="g-section__title">Inspo Images</div>
-      </div>
 
-      <% if @appointment.photo_inspirations.attached? %>
-        <div class="g-content__link-container">
-          <p>View Customer Inspiration images <%= link_to "here", photo_inspirations_appointment_path(@appointment), class: "g-link" %></p>
-        </div>
-      <% else %>
-        <div class="g-content__empty">
-          <p>No Inspo Images.</p>
-        </div>
-      <% end %>
+
+    <div class="notes-section mt-5">
+      <%= render 'appointment_notes' %>
     </div>
+
     <div class="g-section">
       <div class="g-section__header">
         <div class="g-section__title">Photo Galleries</div>

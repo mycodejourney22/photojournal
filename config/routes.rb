@@ -205,6 +205,12 @@ Rails.application.routes.draw do
     end
 
     member do
+      post :add_note
+      delete :remove_note
+      patch :toggle_note_action
+    end
+
+    member do
       patch :mark_no_show
       get :available_hours
       get :new_customer

@@ -12,24 +12,28 @@ class AppointmentsController < ApplicationController
   def upcoming
     authorize Appointment
     @appointments = upcoming_appointment
+    @recent_notes = fetch_recent_notes # Add this line
     respond_to_format
   end
 
   def in_progress
     authorize Appointment
     @appointments = in_progress_appointments
+    @recent_notes = fetch_recent_notes # Add this line
     respond_to_format
   end
 
   def past
     authorize Appointment
     @appointments = past_appointment
+    @recent_notes = fetch_recent_notes # Add this line
     respond_to_format
   end
 
   def index
     authorize Appointment
     @appointments = today_appointment
+    @recent_notes = fetch_recent_notes # Add this line
     respond_to_format
   end
 
@@ -199,6 +203,69 @@ class AppointmentsController < ApplicationController
   def show
     authorize Appointment
     @appointment = Appointment.find(params[:id])
+    @appointment_note = AppointmentNote.new # For new note form
+    @notes_by_type = @appointment.appointment_notes.includes(:created_by)
+                                 .group_by(&:note_type)
+  end
+
+  def add_note
+    authorize Appointment
+    @appointment = Appointment.find(params[:id])
+    @appointment_note = @appointment.appointment_notes.build(appointment_note_params)
+    @appointment_note.created_by = current_user
+    
+    if @appointment_note.save
+      redirect_to @appointment, notice: 'Internal note added successfully.'
+    else
+      redirect_to @appointment, alert: 'Failed to add note.'
+    end
+  end
+  
+  # Action to delete notes  
+  def remove_note
+    authorize Appointment
+    @appointment = Appointment.find(params[:id])
+    @note = @appointment.appointment_notes.find(params[:note_id])
+    
+    if @note.destroy
+      redirect_to @appointment, notice: 'Note removed successfully.'
+    else
+      redirect_to @appointment, alert: 'Failed to remove note.'
+    end
+  end
+
+  def toggle_note_action
+    authorize Appointment
+    @appointment = Appointment.find(params[:id])
+    @note = @appointment.appointment_notes.find(params[:note_id])
+    
+    if params[:actioned] == 'true' || params[:actioned] == true
+      @note.update!(
+        actioned: true,
+        actioned_at: Time.current,
+        actioned_by: current_user
+      )
+      
+      render json: { 
+        success: true, 
+        actioned: true, 
+        message: "Note marked as actioned by #{current_user.email}"
+      }
+    else
+      @note.update!(
+        actioned: false,
+        actioned_at: nil,
+        actioned_by: nil
+      )
+      
+      render json: { 
+        success: true, 
+        actioned: false, 
+        message: "Note marked as pending"
+      }
+    end
+  rescue => e
+    render json: { success: false, error: e.message }, status: 422
   end
 
   def mark_no_show
@@ -306,6 +373,10 @@ class AppointmentsController < ApplicationController
 
   private
 
+  def appointment_note_params
+    params.require(:appointment_note).permit(:content, :note_type, :title, :priority)
+  end
+
   def appointment_params
     params.require(:appointment).permit(
       :name,
@@ -317,8 +388,21 @@ class AppointmentsController < ApplicationController
       :studio_id,
       customer_pictures: [],
       photo_inspirations: [],
-      questions_attributes: [:id, :question, :answer, :_destroy]
+      questions_attributes: [:id, :question, :answer, :_destroy],
+      appointment_notes_attributes: [:id, :content, :note_type, :title, :priority, :_destroy]
+
     )
+  end
+
+  def fetch_recent_notes
+    # Get appointments within +3 to -3 days from today
+    date_range = 3.days.ago.beginning_of_day..3.days.from_now.end_of_day
+    
+    AppointmentNote.joins(:appointment)
+                   .where(appointments: { start_time: date_range })
+                   .includes(:appointment, :created_by)
+                   .order(priority: :desc, created_at: :desc)
+                   .limit(10) # Limit to show most recent/important 10 notes
   end
 
   # def appointment_params
