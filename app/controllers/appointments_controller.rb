@@ -455,7 +455,7 @@ class AppointmentsController < ApplicationController
                     .joins(:photo_shoot)
                     .left_joins(:galleries)
                     .where('appointments.start_time < ?', Time.zone.now)
-                    .where('appointments.start_time >= ?', 30.days.ago)
+                    .where('appointments.start_time >= ?', 90.days.ago)
                     .where(appointments: { status: true })
                     .where('photo_shoots.status != ? OR galleries.id IS NULL', 'Sent')
                     .order(:start_time)
