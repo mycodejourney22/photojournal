@@ -423,7 +423,7 @@ class AppointmentsController < ApplicationController
     unactioned_notes = location_filtered_query.where(actioned: false)
     
     # 2. All notes from ±3 days (both actioned and unactioned)
-    recent_notes = location_filtered_query.where(appointments: { start_time: date_range })
+    recent_notes = location_filtered_query.where(appointments: { start_time: date_range }, actioned: false)
     
     # Combine and remove duplicates, then order by priority and date
     combined_notes = (unactioned_notes.to_a + recent_notes.to_a).uniq
