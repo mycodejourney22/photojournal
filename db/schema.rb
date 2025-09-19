@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_23_103346) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_19_210624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -234,6 +234,23 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_23_103346) do
     t.index ["phone_number"], name: "index_customers_on_phone_number", unique: true
   end
 
+  create_table "editor_assignments", force: :cascade do |t|
+    t.bigint "photo_shoot_id", null: false
+    t.bigint "editor_id", null: false
+    t.bigint "assigned_by_id"
+    t.datetime "assigned_at", null: false
+    t.string "status", default: "active", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assigned_at"], name: "index_editor_assignments_on_assigned_at"
+    t.index ["assigned_by_id"], name: "index_editor_assignments_on_assigned_by_id"
+    t.index ["editor_id", "assigned_at"], name: "index_editor_assignments_on_editor_id_and_assigned_at"
+    t.index ["editor_id"], name: "index_editor_assignments_on_editor_id"
+    t.index ["photo_shoot_id", "status"], name: "index_editor_assignments_on_photo_shoot_id_and_status"
+    t.index ["photo_shoot_id"], name: "index_editor_assignments_on_photo_shoot_id"
+  end
+
   create_table "expenses", force: :cascade do |t|
     t.date "date"
     t.string "description"
@@ -299,7 +316,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_23_103346) do
     t.integer "editor_id"
     t.integer "customer_service_id"
     t.integer "number_of_selections"
-    t.string "status"
+    t.string "status", default: "New"
     t.string "type_of_shoot"
     t.integer "number_of_outfits"
     t.date "date_sent"
@@ -452,6 +469,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_23_103346) do
   add_foreign_key "campaign_customers", "customers"
   add_foreign_key "credit_usages", "appointments"
   add_foreign_key "credit_usages", "customers"
+  add_foreign_key "editor_assignments", "photo_shoots"
+  add_foreign_key "editor_assignments", "staffs", column: "assigned_by_id"
+  add_foreign_key "editor_assignments", "staffs", column: "editor_id"
   add_foreign_key "galleries", "appointments"
   add_foreign_key "gallery_mappings", "customers"
   add_foreign_key "gallery_mappings", "galleries"

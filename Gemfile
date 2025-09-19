@@ -127,7 +127,7 @@ group :development do
 
   # gem 'letter_opener'
 
-  # gem 'pry'
+  gem 'pry'
   # gem 'pry-byebug'
 
 

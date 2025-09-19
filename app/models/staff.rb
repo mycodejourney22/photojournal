@@ -3,6 +3,8 @@ class Staff < ApplicationRecord
   has_many :photo_shoots_as_editor, class_name: 'PhotoShoot', foreign_key: 'editor_id'
   has_many :photo_shoots_as_customer_service, class_name: 'PhotoShoot', foreign_key: 'customer_service_id'
   has_many :sales
+  has_many :editor_assignments, foreign_key: 'editor_id', dependent: :destroy
+  has_many :assignments_made, class_name: 'EditorAssignment', foreign_key: 'assigned_by_id'
 
   scope :active, -> { where(active: true) } if column_names.include?('active')
   scope :photographers, -> { where(role: 'Photographer') } if column_names.include?('role')
@@ -18,6 +20,10 @@ class Staff < ApplicationRecord
     end
   end
 
+  def editor_assignments_in_range(start_date, end_date)
+    editor_assignments.by_date_range(start_date, end_date)
+  end
+  
   def active?
     return true unless respond_to?(:active)
     active

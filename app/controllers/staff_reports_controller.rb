@@ -13,7 +13,11 @@ class StaffReportsController < ApplicationController
       
       # Calculate metrics for photographers and editors
       @photographer_stats = calculate_photographer_stats
-      @editor_stats = calculate_editor_stats
+      if params[:report_by] == 'assignment_date'
+        @editor_stats = calculate_editor_stats_by_assignment
+      else
+        @editor_stats = calculate_editor_stats # your current method
+      end
       @combined_staff_stats = calculate_combined_staff_stats
       
       # Location breakdown (simplified)
@@ -25,7 +29,7 @@ class StaffReportsController < ApplicationController
       # Summary metrics
       @total_photoshoots = @photoshoots.count
       @completed_photoshoots = @photoshoots.where(status: 'Sent').count
-      @pending_photoshoots = @photoshoots.where(status: 'Pending').count
+      @pending_photoshoots = @photoshoots.where(status: ['Pending', 'New']).count
       @new_photoshoots = @photoshoots.where(status: 'New').count
       @average_selections = @photoshoots.where.not(number_of_selections: nil).average(:number_of_selections)&.round(1) || 0
       
@@ -154,7 +158,7 @@ class StaffReportsController < ApplicationController
           total_shoots: shoots.count,
           completed_edits: shoots.where(status: 'Sent').count,
           pending_edits: shoots.where(status: 'Pending').count,
-          new_assignments: shoots.where(status: 'New').count,
+          new_assignments: shoots.where(status: ['New', 'Pending']).sum(:number_of_selections) || 0,
           total_selections_edited: shoots.where(status: 'Sent').sum(:number_of_selections) || 0,
           average_selections_per_shoot: shoots.where.not(number_of_selections: nil).average(:number_of_selections)&.round(1) || 0,
           completion_rate: shoots.count > 0 ? (shoots.where(status: 'Sent').count.to_f / shoots.count * 100).round(1) : 0,
@@ -162,6 +166,86 @@ class StaffReportsController < ApplicationController
         }
       end.reject { |stat| stat[:total_shoots] == 0 }
     end
+
+    def calculate_editor_stats_by_assignment
+      editors = Staff.where(role: 'Editor', active: true)
+      editors.map do |editor|
+        # Get assignments within the date range (not photoshoot dates)
+        assignments = editor.editor_assignments_in_range(@start_date, @end_date).includes(photo_shoot: :appointment)
+        shoots = assignments.map(&:photo_shoot)
+
+        completed_shoots = shoots.select { |s| s.status == 'Sent' }
+        pending_shoots = shoots.select { |s| s.status == 'Pending' }
+        new_pending_shoots = shoots.select { |s| ['New', 'Pending'].include?(s.status) }
+        # Calculate location distribution
+        location_counts = {}
+        shoots.each do |shoot|
+          location = shoot.appointment.location
+          location_counts[location] = (location_counts[location] || 0) + 1
+        end
+        
+        {
+          staff: editor,
+          total_assignments: assignments.count,
+          assignments_by_date: assignments.group_by { |a| a.assigned_at.to_date },
+          completed_edits: shoots.count { |s| s.status == 'Sent' },
+          pending_edits: shoots.count { |s| s.status == 'Pending' },
+          new_assignments: new_pending_shoots.sum(&:number_of_selections) || 0,
+          total_selections_edited: shoots.select { |s| s.status == 'Sent' }.sum(&:number_of_selections) || 0,
+          average_selections_per_shoot: calculate_average_selections(shoots),
+          completion_rate: calculate_completion_rate(shoots),
+          locations: location_counts
+        }
+      end.reject { |stat| stat[:total_assignments] == 0 }
+    end
+
+    def calculate_daily_editor_assignments
+      daily_data = []
+      
+      (@start_date..@end_date).each do |date|
+        assignments = EditorAssignment.assigned_on(date).includes(:editor, photoshoot: :appointment)
+        
+        daily_data << {
+          date: date,
+          total_assignments: assignments.count,
+          editors_assigned: assignments.distinct.count(:editor_id),
+          assignments_by_editor: assignments.group_by(&:editor).transform_values(&:count),
+          assignments_by_location: assignments.group_by { |a| a.photoshoot.appointment.location }.transform_values(&:count)
+        }
+      end
+      
+      daily_data
+    end
+
+    def editor_workload_by_assignment_date
+      # This gives you the workload based on when work was assigned, not shoot date
+      EditorAssignment.joins(photoshoot: :appointment)
+                      .includes(:editor, photoshoot: :appointment)
+                      .by_date_range(@start_date, @end_date)
+                      .group_by(&:editor)
+                      .transform_values do |assignments|
+        {
+          total_assignments: assignments.count,
+          daily_breakdown: assignments.group_by { |a| a.assigned_at.to_date }.transform_values(&:count),
+          location_breakdown: assignments.group_by { |a| a.photoshoot.appointment.location }.transform_values(&:count)
+        }
+      end
+    end
+    
+    def calculate_average_selections(shoots)
+      shoots_with_selections = shoots.select { |s| s.number_of_selections.present? }
+      return 0 if shoots_with_selections.empty?
+      
+      (shoots_with_selections.sum(&:number_of_selections).to_f / shoots_with_selections.count).round(1)
+    end
+    
+    def calculate_completion_rate(shoots)
+      return 0 if shoots.empty?
+      
+      completed = shoots.count { |s| s.status == 'Sent' }
+      ((completed.to_f / shoots.count) * 100).round(1)
+    end
+
     
     def calculate_combined_staff_stats
       staff_members = Staff.where(role: ['Photographer', 'Editor'], active: true)

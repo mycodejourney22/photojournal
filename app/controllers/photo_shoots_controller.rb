@@ -44,6 +44,9 @@ class PhotoShootsController < ApplicationController
     phone_number = extract_phone_number_from_appointment(@appointment)
     @customer = Customer.find_or_initialize_by(phone_number: normalize_phone_number(phone_number))
     if @photo_shoot.save
+      if @photo_shoot.editor_id.present?
+        track_editor_assignment(@photo_shoot, @photo_shoot.editor)
+      end
       create_customer(@customer, @appointment, normalize_phone_number(phone_number))
       redirect_to appointments_path, notice: 'PhotoShoot was successfully created.'
     else
@@ -92,14 +95,24 @@ class PhotoShootsController < ApplicationController
   end
 
   def update
+    # Store the old editor to check if it changed
     authorize PhotoShoot
     @photo_shoot = PhotoShoot.find(params[:id])
-    @photo_shoot.assign_attributes(photo_shoot_params)
-    appointment = Appointment.find(params[:appointment_id])
-    @photo_shoot.appointment = appointment
-    # build_sales(@photo_shoot)
-    if @photo_shoot.save
-      redirect_to photo_shoots_path, notice: 'PhotoShoot and Sale were successfully updated.'
+    old_editor_id = @photo_shoot.editor_id
+    if @photo_shoot.update(photo_shoot_params)
+      # Track editor assignment if editor was changed or newly assigned
+      new_editor_id = @photo_shoot.editor_id
+      
+      # Only track assignment if there's actually a new editor assigned
+      if new_editor_id != old_editor_id && new_editor_id.present?
+        new_editor = Staff.find(new_editor_id)
+        track_editor_assignment(@photo_shoot, new_editor)
+      elsif new_editor_id != old_editor_id && new_editor_id.nil?
+        # Editor was removed - mark current assignment as cancelled
+        @photo_shoot.current_editor_assignment&.update!(status: 'cancelled')
+      end
+      
+      redirect_to appointment_path(@appointment), notice: 'Photoshoot was successfully updated.'
     else
       render :edit
     end
@@ -112,6 +125,18 @@ class PhotoShootsController < ApplicationController
       ThankYouEmailJob.set(wait_until: @photo_shoot.created_at + 120.minutes).perform_later(@photo_shoot)
       ThankYouSmsJob.set(wait_until: @photo_shoot.created_at + 120.minutes).perform_later(@photo_shoot.id)
     end
+  end
+
+  def track_editor_assignment(photoshoot, editor)
+    # Use the assign_editor! method we created in the model
+    photoshoot.assign_editor!(
+      editor,
+      assigned_by: nil, # Assuming you have current_user available
+      notes: "Assigned via photoshoot form"
+    )
+  rescue => e
+    Rails.logger.error("Failed to track editor assignment: #{e.message}")
+    # Don't fail the whole operation if assignment tracking fails
   end
 
   def schedule_referral_invitation

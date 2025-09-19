@@ -56,6 +56,13 @@
           class: "quick-filter-btn #{'active' if @selected_period == 'this_month'}" %>
     </div>
 
+    <div class="report-type-toggle">
+      <%= link_to "By Shoot Date", staff_reports_path(report_by: 'shoot_date', **request.query_parameters.except('report_by')), 
+          class: "toggle-btn #{'active' if params[:report_by] != 'assignment_date'}" %>
+      <%= link_to "By Assignment Date", staff_reports_path(report_by: 'assignment_date', **request.query_parameters.except('report_by')), 
+          class: "toggle-btn #{'active' if params[:report_by] == 'assignment_date'}" %>
+    </div>
+
     <!-- Filter Info -->
     <div class="filter-info">
       Showing data from <strong><%= @start_date.strftime("%B %d, %Y") %></strong> to <strong><%= @end_date.strftime("%B %d, %Y") %></strong>
@@ -206,13 +213,13 @@
           <div class="col-number">Completed</div>
           <div class="col-number">Pending</div>
           <div class="col-number">Edited</div>
-          <div class="col-number">Avg. Selections</div>
+          <div class="col-number">Total Assigned</div>
           <div class="col-rate">Completion Rate</div>
           <div class="col-locations">Locations</div>
         </div>
 
         <% if @editor_stats.any? %>
-          <% @editor_stats.sort_by { |s| -s[:total_shoots] }.each do |stat| %>
+          <% @editor_stats.sort_by { |s| s[:total_shoots] }.each do |stat| %>
             <div class="staff-table-row">
               <div class="col-staff">
                 <div class="staff-profile">
@@ -226,7 +233,7 @@
               <div class="col-number success"><%= stat[:completed_edits] %></div>
               <div class="col-number warning"><%= stat[:pending_edits] %></div>
               <div class="col-number"><%= stat[:total_selections_edited] %></div>
-              <div class="col-number"><%= stat[:average_selections_per_shoot] %></div>
+              <div class="col-number"><%= stat[:new_assignments] %></div>
               <div class="col-rate">
                 <span class="rate-percentage"><%= stat[:completion_rate] %>%</span>
                 <div class="rate-bar">
@@ -687,6 +694,33 @@ document.addEventListener('DOMContentLoaded', function() {
   flex-direction: column;
   align-items: center;
   gap: 6px;
+}
+
+.report-type-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.toggle-btn {
+  color: #6b7280;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: #f9fafb;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.toggle-btn:hover,
+.toggle-btn.active {
+  background: #4285F4;
+  color: white;
+  border-color: #4285F4;
 }
 
 .rate-percentage {
