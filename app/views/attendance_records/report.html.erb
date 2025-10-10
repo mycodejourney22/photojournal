@@ -1,0 +1,208 @@
+<!-- app/views/attendance_records/report.html.erb -->
+<div class="g-content">
+  <div class="g-content__header">
+    <h1>Attendance Report</h1>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <p style="margin: 0; color: #6b7280; font-size: 0.875rem;">
+        <strong><%= @start_date.strftime('%b %d, %Y') %></strong> to 
+        <strong><%= @end_date.strftime('%b %d, %Y') %></strong>
+        <% if params[:location].present? && params[:location] != 'All Locations' %>
+          • <%= params[:location] %>
+        <% end %>
+      </p>
+      <%= link_to "Export CSV", report_attendance_records_path(format: :csv, start_date: @start_date, end_date: @end_date, location: params[:location]), class: "g-button g-button--secondary" %>
+    </div>
+  </div>
+
+  <!-- Date Filter Section -->
+  <div class="g-card" style="margin-bottom: 2rem;">
+    <div class="g-card__body">
+      <%= form_with url: report_attendance_records_path, method: :get, class: "g-form" do |f| %>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+            <div class="g-form__group" style="margin-bottom: 0;">
+              <%= f.label :start_date, "Start Date", class: "g-form__label" %>
+              <%= f.date_field :start_date, 
+                  value: @start_date,
+                  class: "g-form__control" %>
+            </div>
+
+            <div class="g-form__group" style="margin-bottom: 0;">
+              <%= f.label :location, "Location", class: "g-form__label" %>
+              <%= f.date_field :end_date, 
+                  value: @end_date,
+                  class: "g-form__control" %>
+            </div>
+
+            <% if current_user.admin? || current_user.super_admin? %>
+              <div class="g-form__group" style="margin-bottom: 0;">
+                <%= f.label :location, "Location", class: "g-form__label" %>
+                <%= f.select :location, 
+                    options_for_select(['All Locations'] + AttendanceRecord::STUDIO_LOCATIONS.map(&:capitalize), params[:location] || 'All Locations'),
+                    {},
+                    class: "g-form__control" %>
+              </div>
+            <% else %>
+              <!-- Manager sees their studio only -->
+              <div class="g-form__group" style="margin-bottom: 0;">
+                <%= f.label :location, "Location", class: "g-form__label" %>
+                <input type="text" 
+                       value="<%= current_user.studio.location.capitalize %>" 
+                       class="g-form__control" 
+                       disabled>
+              </div>
+            <% end %>
+
+            <div class="g-form__actions" style="margin-bottom: 0; display: flex; gap: 0.5rem;">
+              <%= f.submit "Apply Filters", class: "g-button g-button--primary" %>
+              <%= link_to "Reset", report_attendance_records_path, class: "g-button g-button--secondary" %>
+            </div>
+          </div>
+
+          <!-- Quick Date Filters on the Right -->
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+            <%= link_to "Today", report_attendance_records_path(start_date: Date.today, end_date: Date.today, location: params[:location]), class: "g-button--link" %>
+            <%= link_to "Last 7 Days", report_attendance_records_path(start_date: 7.days.ago.to_date, end_date: Date.today, location: params[:location]), class: "g-button--link" %>
+            <%= link_to "Last 30 Days", report_attendance_records_path(start_date: 30.days.ago.to_date, end_date: Date.today, location: params[:location]), class: "g-button--link" %>
+            <%= link_to "This Month", report_attendance_records_path(start_date: Date.today.beginning_of_month, end_date: Date.today.end_of_month, location: params[:location]), class: "g-button--link" %>
+            <%= link_to "This Year", report_attendance_records_path(start_date: Date.today.beginning_of_year, end_date: Date.today.end_of_year, location: params[:location]), class: "g-button--link" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+    <div class="g-card">
+      <div class="g-card__body" style="text-align: center; padding: 1.5rem 1rem;">
+        <h2 style="font-size: 2rem; margin: 0; color: #2563eb;"><%= @total_staff %></h2>
+        <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.875rem;">Total Staff</p>
+      </div>
+    </div>
+
+    <div class="g-card">
+      <div class="g-card__body" style="text-align: center; padding: 1.5rem 1rem;">
+        <h2 style="font-size: 2rem; margin: 0; color: #10b981;"><%= @total_attendance_days %></h2>
+        <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.875rem;">Attendance Days</p>
+      </div>
+    </div>
+
+    <div class="g-card">
+      <div class="g-card__body" style="text-align: center; padding: 1.5rem 1rem;">
+        <h2 style="font-size: 2rem; margin: 0; color: #f59e0b;"><%= @avg_work_hours %></h2>
+        <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.875rem;">Avg. Hours/Day</p>
+      </div>
+    </div>
+
+    <div class="g-card">
+      <div class="g-card__body" style="text-align: center; padding: 1.5rem 1rem;">
+        <h2 style="font-size: 2rem; margin: 0; color: #ef4444;"><%= @late_arrivals_count %></h2>
+        <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.875rem;">Late Arrivals (After 9:15 AM)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attendance by Staff Table -->
+  <div class="g-card" style="margin-bottom: 2rem;">
+    <div class="g-card__header">
+      <h3>Staff Attendance Summary</h3>
+    </div>
+    <div class="g-table">
+      <div class="g-table__header">
+        <div class="g-table__col--name" style="flex: 2;">Staff Name</div>
+        <div class="g-table__col--date" style="flex: 0.8;">Days</div>
+        <div class="g-table__col--hours" style="flex: 1;">Avg Hours</div>
+        <div class="g-table__col--late" style="flex: 0.8;">Late</div>
+        <div class="g-table__col--date" style="flex: 1;">Early Out</div>
+        <div class="g-table__col--location" style="flex: 1;">Location</div>
+      </div>
+
+      <% if @staff_summary.any? %>
+        <% @staff_summary.each do |summary| %>
+          <div class="g-table__row">
+            <div class="g-table__status <%= summary[:late_count] > 0 ? 'g-table__status--pending' : 'g-table__status--confirmed' %>"></div>
+            
+            <div class="g-table__col--name g-table__cell" style="flex: 2;">
+              <strong><%= summary[:name] %></strong>
+              <% if summary[:late_count] > 0 %>
+                <br><small style="color: #ef4444;">Late <%= ((summary[:late_count].to_f / summary[:days_worked]) * 100).round(0) %>% of time</small>
+              <% elsif summary[:days_worked] >= 3 %>
+                <br><small style="color: #10b981;">Always on time</small>
+              <% end %>
+            </div>
+
+            <div class="g-table__col--date g-table__cell" style="flex: 0.8;">
+              <%= summary[:days_worked] %>
+            </div>
+
+            <div class="g-table__col--hours g-table__cell" style="flex: 1;">
+              <%= summary[:avg_hours] %>h
+            </div>
+
+            <div class="g-table__col--late g-table__cell" style="flex: 0.8;">
+              <span style="<%= summary[:late_count] > 0 ? 'color: #ef4444; font-weight: 600;' : 'color: #10b981;' %>">
+                <%= summary[:late_count] %>
+              </span>
+            </div>
+
+            <div class="g-table__col--date g-table__cell" style="flex: 1;">
+              <%= summary[:early_departures] %>
+            </div>
+
+            <div class="g-table__col--location g-table__cell" style="flex: 1;">
+              <%= summary[:location]&.capitalize || '-' %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="g-content__empty">
+          <p>No attendance data found for this period.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Most Punctual and Late Staff in a cleaner layout -->
+  <% if @most_punctual.any? || @frequently_late.any? %>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+      
+      <% if @most_punctual.any? %>
+        <div class="g-card">
+          <div class="g-card__header">
+            <h3>⭐ Most Punctual</h3>
+          </div>
+          <div class="g-card__body">
+            <% @most_punctual.first(3).each do |staff| %>
+              <div style="padding: 0.75rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                <strong><%= staff[:name] %></strong>
+                <span style="color: #10b981; font-size: 0.875rem;">
+                  <%= staff[:on_time_rate] %>% on time (<%= staff[:on_time_count] %>/<%= staff[:days_worked] %>)
+                </span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @frequently_late.any? %>
+        <div class="g-card">
+          <div class="g-card__header">
+            <h3>⚠️ Needs Improvement</h3>
+          </div>
+          <div class="g-card__body">
+            <% @frequently_late.first(3).each do |staff| %>
+              <div style="padding: 0.75rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                <strong><%= staff[:name] %></strong>
+                <span style="color: #ef4444; font-size: 0.875rem;">
+                  <%= staff[:late_rate] %>% late (<%= staff[:late_count] %>/<%= staff[:days_worked] %>)
+                </span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+  <% end %>
+
+</div>

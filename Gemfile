@@ -11,6 +11,10 @@ gem 'sib-api-v3-sdk', '~> 7.5.0'
 
 gem 'icalendar'
 
+gem 'roo', '~> 2.10'
+gem 'roo-xls'
+
+
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"

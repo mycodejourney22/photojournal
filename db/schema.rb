@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_19_210624) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_10_212958) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,6 +86,34 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_19_210624) do
     t.index ["start_time"], name: "index_appointments_on_start_time"
     t.index ["studio_id"], name: "index_appointments_on_studio_id"
     t.index ["uuid"], name: "index_appointments_on_uuid", unique: true
+  end
+
+  create_table "attendance_records", force: :cascade do |t|
+    t.string "ac_no"
+    t.string "staff_name", null: false
+    t.date "attendance_date", null: false
+    t.string "on_duty"
+    t.string "off_duty"
+    t.string "clock_in"
+    t.string "clock_out"
+    t.string "work_time"
+    t.string "before_ot"
+    t.string "after_ot"
+    t.string "ndays_ot"
+    t.string "weekend_ot"
+    t.string "holiday_ot"
+    t.string "total_ot"
+    t.text "memo"
+    t.bigint "user_id", null: false
+    t.string "studio_location"
+    t.integer "upload_batch_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ac_no", "attendance_date"], name: "index_attendance_records_on_ac_no_and_attendance_date", unique: true
+    t.index ["attendance_date"], name: "index_attendance_records_on_attendance_date"
+    t.index ["staff_name"], name: "index_attendance_records_on_staff_name"
+    t.index ["studio_location"], name: "index_attendance_records_on_studio_location"
+    t.index ["user_id"], name: "index_attendance_records_on_user_id"
   end
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -454,8 +482,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_19_210624) do
     t.string "role"
     t.string "password_setup_token"
     t.datetime "password_setup_sent_at"
+    t.bigint "studio_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["role", "studio_id"], name: "index_users_on_role_and_studio_id"
+    t.index ["studio_id"], name: "index_users_on_studio_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -465,6 +496,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_19_210624) do
   add_foreign_key "appointment_notes", "users", column: "created_by_id"
   add_foreign_key "appointments", "prices"
   add_foreign_key "appointments", "studios"
+  add_foreign_key "attendance_records", "users"
   add_foreign_key "campaign_customers", "campaigns"
   add_foreign_key "campaign_customers", "customers"
   add_foreign_key "credit_usages", "appointments"
@@ -484,4 +516,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_19_210624) do
   add_foreign_key "sales", "appointments"
   add_foreign_key "sales", "photo_shoots"
   add_foreign_key "sales", "studios"
+  add_foreign_key "users", "studios"
 end

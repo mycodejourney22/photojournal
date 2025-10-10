@@ -8,9 +8,19 @@ class AppointmentPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve
-      if user.admin? || user.manager? || user.super_admin?
+      if user.admin? || user.super_admin?
+        # Admins see everything
         scope.all
+      elsif user.manager? && user.studio_id.present?
+        # Managers see only their studio's appointments
+        studio = Studio.find_by(id: user.studio_id)
+        if studio
+          scope.where('location iLIKE ?', "%#{studio.location}%")
+        else
+          scope.none
+        end
       else
+        # Generic studio accounts (ikeja, surulere, ajah)
         case user.role
         when 'ikeja'
           scope.where('location iLIKE ?', '%Ikeja%')

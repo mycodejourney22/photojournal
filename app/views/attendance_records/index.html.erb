@@ -1,0 +1,113 @@
+<!-- app/views/attendance_records/index.html.erb -->
+<div class="g-content mx-5">
+  <div class="g-content__header">
+    <h1>Staff Attendance</h1>
+    <div class="g-content__actions">
+      <%= link_to "Upload Attendance", upload_attendance_records_path, class: "g-button g-button--primary" %>
+      <%= link_to "Generate Report", report_attendance_records_path, class: "g-button g-button--secondary" %>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="g-card" style="margin-bottom: 2rem;">
+    <div class="g-card__body">
+      <%= form_with url: attendance_records_path, method: :get, class: "g-form g-form--inline" do |f| %>
+        <div class="g-form__group">
+          <%= f.label :staff_name, "Staff Name", class: "g-form__label" %>
+          <%= f.select :staff_name, 
+              options_for_select(@staff_names, params[:staff_name]),
+              { prompt: "All Staff" },
+              class: "g-form__control" %>
+        </div>
+
+        <div class="g-form__group">
+          <%= f.label :location, "Location", class: "g-form__label" %>
+          <%= f.select :location, 
+              options_for_select(AttendanceRecord::STUDIO_LOCATIONS.map(&:capitalize), params[:location]),
+              { prompt: "All Locations" },
+              class: "g-form__control" %>
+        </div>
+
+        <div class="g-form__group">
+          <%= f.label :start_date, "From Date", class: "g-form__label" %>
+          <%= f.date_field :start_date, 
+              value: params[:start_date],
+              class: "g-form__control" %>
+        </div>
+
+        <div class="g-form__group">
+          <%= f.label :end_date, "To Date", class: "g-form__label" %>
+          <%= f.date_field :end_date, 
+              value: params[:end_date],
+              class: "g-form__control" %>
+        </div>
+
+        <div class="g-form__actions">
+          <%= f.submit "Filter", class: "g-button g-button--primary" %>
+          <%= link_to "Clear", attendance_records_path, class: "g-button g-button--secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Attendance Table -->
+  <div class="g-table">
+    <div class="g-table__header">
+      <div class="g-table__col--name">Staff Name</div>
+      <div class="g-table__col--date">Date</div>
+      <div class="g-table__col--time">Clock In</div>
+      <div class="g-table__col--time">Clock Out</div>
+      <div class="g-table__col--hours">Work Time</div>
+      <div class="g-table__col--hours">Total OT</div>
+      <div class="g-table__col--location">Location</div>
+    </div>
+
+    <% if @attendance_records.any? %>
+      <% @attendance_records.each do |record| %>
+        <div class="g-table__row">
+          <div class="g-table__status g-table__status--confirmed"></div>
+          
+          <div class="g-table__col--name g-table__cell">
+            <%= record.staff_name %>
+          </div>
+
+          <div class="g-table__col--date g-table__cell">
+            <%= record.attendance_date.strftime('%b %d, %Y') %>
+            <small class="g-text--muted"><%= record.attendance_date.strftime('%A') %></small>
+          </div>
+
+          <div class="g-table__col--time g-table__cell">
+            <%= record.clock_in || '-' %>
+          </div>
+
+          <div class="g-table__col--time g-table__cell">
+            <%= record.clock_out || '-' %>
+          </div>
+
+          <div class="g-table__col--hours g-table__cell">
+            <%= record.work_time || '-' %>
+          </div>
+
+          <div class="g-table__col--hours g-table__cell">
+            <%= record.total_ot || '-' %>
+          </div>
+
+          <div class="g-table__col--location g-table__cell">
+            <%= record.studio_location&.capitalize || '-' %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="g-content__empty">
+        <p>No attendance records found.</p>
+        <%= link_to "Upload Attendance", upload_attendance_records_path, class: "g-button g-button--primary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @attendance_records.respond_to?(:total_pages) %>
+    <div class="g-content__pagination">
+      <%= paginate @attendance_records %>
+    </div>
+  <% end %>
+</div>

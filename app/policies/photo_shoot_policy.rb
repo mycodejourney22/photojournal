@@ -8,16 +8,26 @@ class PhotoShootPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve
-      if user.admin? || user.manager? || user.super_admin?
+      if user.admin? || user.super_admin?
+        # Admins see everything
         scope.all
+      elsif user.manager? && user.studio_id.present?
+        # Managers see only their studio's photoshoots
+        studio = Studio.find_by(id: user.studio_id)
+        if studio
+          scope.joins(:appointment).where("appointments.location ILIKE ?", "%#{studio.location}%")
+        else
+          scope.none
+        end
       else
+        # Generic studio accounts (ikeja, surulere, ajah)
         case user.role
         when 'ikeja'
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%ikeja%")
         when 'surulere'
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%surulere%")
         when 'ajah'
-          scope.joins(:appointment).where("appointments.location ILIKE ? OR location ILIKE ?", '%Ajah%', '%Ilaje%')
+          scope.joins(:appointment).where("appointments.location ILIKE ? OR appointments.location ILIKE ?", '%Ajah%', '%Ilaje%')
         else
           scope.none
         end

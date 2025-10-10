@@ -1,0 +1,67 @@
+<!-- app/views/attendance_records/upload.html.erb -->
+<div class="g-content">
+  <div class="g-content__header">
+    <h1>Upload Attendance Sheet</h1>
+  </div>
+
+  <div class="g-card">
+    <div class="g-card__body">
+      <%= form_with url: import_attendance_records_path, method: :post, multipart: true, class: "g-form" do |f| %>
+        
+        <% if current_user.studio_manager? %>
+          <!-- Manager sees their studio (read-only) -->
+          <div class="g-form__group">
+            <%= f.label :studio_location, "Studio Location", class: "g-form__label" %>
+            <input type="text" 
+                   value="<%= current_user.studio.location.capitalize %>" 
+                   class="g-form__control" 
+                   disabled>
+            <small class="g-form__text">You can only upload attendance for your assigned studio</small>
+          </div>
+        <% else %>
+          <!-- Admin can select location -->
+          <div class="g-form__group">
+            <%= f.label :studio_location, "Studio Location", class: "g-form__label" %>
+            <%= f.select :studio_location, 
+                options_for_select(AttendanceRecord::STUDIO_LOCATIONS.map(&:capitalize)),
+                { prompt: "Select location" },
+                class: "g-form__control" %>
+          </div>
+        <% end %>
+
+        <div class="g-form__group">
+          <%= f.label :file, "Attendance File (.xls or .xlsx)", class: "g-form__label" %>
+          <%= f.file_field :file, 
+              accept: ".xls,.xlsx",
+              class: "g-form__control",
+              required: true %>
+          <small class="g-form__text">Upload weekly attendance Excel file</small>
+        </div>
+
+        <div class="g-form__actions">
+          <%= f.submit "Upload Attendance", class: "g-button g-button--primary" %>
+          <%= link_to "Cancel", attendance_records_path, class: "g-button g-button--secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="g-card" style="margin-top: 2rem;">
+    <div class="g-card__header">
+      <h3>File Format Requirements</h3>
+    </div>
+    <div class="g-card__body">
+      <p>Your Excel file should have the following columns:</p>
+      <ul>
+        <li><strong>AC-No.</strong> - Staff ID number</li>
+        <li><strong>Name</strong> - Staff name</li>
+        <li><strong>Date</strong> - Attendance date</li>
+        <li><strong>Clock In</strong> - Check-in time</li>
+        <li><strong>Clock Out</strong> - Check-out time</li>
+        <li><strong>Work Time</strong> - Total work hours</li>
+        <li><strong>Total OT</strong> - Overtime hours</li>
+      </ul>
+      <p class="g-text--muted">The system will skip the header row and import all data rows.</p>
+    </div>
+  </div>
+</div>

@@ -112,6 +112,15 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: 'users/sessions'
   }
+
+  resources :attendance_records do
+    collection do
+      get 'upload'
+      post 'import'
+      get 'report'
+    end
+  end
+
   namespace :admin do
     resources :users, only: [:index, :edit, :update, :new, :create] do
       member do

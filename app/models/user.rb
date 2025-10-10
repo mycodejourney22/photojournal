@@ -4,6 +4,7 @@ class User < ApplicationRecord
   ROLES = %w[admin ikeja surulere ajah social super_admin manager customer_service user]
 
   validates :role, presence: true, inclusion: { in: ROLES }
+  belongs_to :studio, optional: true
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
@@ -34,6 +35,15 @@ class User < ApplicationRecord
 
   def customer_service?
     role == 'customer_service'
+  end
+
+  def studio_location
+    studio&.location&.downcase
+  end
+  
+  # Check if user is a studio manager (has studio assigned)
+  def studio_manager?
+    manager? && studio_id.present?
   end
 
   attr_accessor :skip_password_validation
