@@ -17,7 +17,7 @@ class ExpensePolicy < ApplicationPolicy
         if studio
           scope.where('location iLIKE ?', "%#{studio.location}%")
         else
-          scope.none
+          scope.all
         end
       else
         # Generic studio accounts (ikeja, surulere, ajah)

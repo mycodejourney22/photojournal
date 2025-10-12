@@ -17,7 +17,7 @@ class PhotoShootPolicy < ApplicationPolicy
         if studio
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%#{studio.location}%")
         else
-          scope.none
+          scope.all
         end
       else
         # Generic studio accounts (ikeja, surulere, ajah)
