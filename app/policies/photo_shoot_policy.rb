@@ -8,7 +8,7 @@ class PhotoShootPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve
-      if user.admin? || user.super_admin?
+      if user.admin? || user.super_admin? || (user.manager? && user.studio_id.nil?)
         # Admins see everything
         scope.all
       elsif user.manager? && user.studio_id.present?
@@ -16,8 +16,6 @@ class PhotoShootPolicy < ApplicationPolicy
         studio = Studio.find_by(id: user.studio_id)
         if studio
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%#{studio.location}%")
-        else
-          scope.all
         end
       else
         # Generic studio accounts (ikeja, surulere, ajah)

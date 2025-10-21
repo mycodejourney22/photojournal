@@ -27,7 +27,7 @@ class SalePolicy < ApplicationPolicy
     #   end
     # end
     def resolve
-      if user.admin? || user.super_admin?
+      if user.admin? || user.super_admin? || (user.manager? && user.studio_id.nil?)
         # Admins see everything
         scope.all
       elsif user.manager? && user.studio_id.present?
@@ -35,8 +35,6 @@ class SalePolicy < ApplicationPolicy
         studio = Studio.find_by(id: user.studio_id)
         if studio
           scope.where('location iLIKE ?', "%#{studio.location}%")
-        else
-          scope.all
         end
       else
         # Generic studio accounts (ikeja, surulere, ajah)
