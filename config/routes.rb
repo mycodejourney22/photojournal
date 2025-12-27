@@ -133,7 +133,7 @@ Rails.application.routes.draw do
         patch :toggle_status
       end
     end
-    
+
     resources :special_emails, only: [:index, :new, :create] do
       collection do
         get :mothers_day
@@ -145,19 +145,19 @@ Rails.application.routes.draw do
     end
 
     resources :setup, only: [:index]
-    
+
     resources :prices do
       member do
         patch :toggle_active
       end
     end
-    
+
     resources :staff_members, controller: 'staff' do
       member do
         patch :toggle_active
       end
     end
-    
+
     resources :studios do
       member do
         patch :toggle_active
