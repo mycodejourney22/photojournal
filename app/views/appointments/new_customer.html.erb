@@ -50,19 +50,43 @@
             </div>
           </div>
 
+        <%# <% elsif question_form.object.question == 'Type of shoots' %>
+          <%# <div class="custom-shoot-types-grid"> %>
+            <%# <% ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding', 'Christmas Kiddies', 'Christmas Personal', 'Christmas Family'].each do |shoot_type| %> %>
+              <%# <div class="custom-shoot-type-item"> %>
+                <%# <%= question_form.radio_button :answer, shoot_type, %>
+                                              <%# id: "custom_shoot_type_#{shoot_type.downcase}", %>
+                                              <%# class: "custom-shoot-type-input" %>
+                <%# <label for="custom_shoot_type_<%= shoot_type.downcase %>
+                <%# " class="custom-shoot-type-label"> %>
+                  <%# <%= shoot_type %>
+                <%# </label> %>
+              <%# </div> %>
+            <%# <% end %>
+          <%# </div> %>
+
         <% elsif question_form.object.question == 'Type of shoots' %>
-          <div class="custom-shoot-types-grid">
-            <% ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding', 'Christmas Kiddies', 'Christmas Personal', 'Christmas Family'].each do |shoot_type| %>
-              <div class="custom-shoot-type-item">
-                <%= question_form.radio_button :answer, shoot_type,
-                                              id: "custom_shoot_type_#{shoot_type.downcase}",
-                                              class: "custom-shoot-type-input" %>
-                <label for="custom_shoot_type_<%= shoot_type.downcase %>" class="custom-shoot-type-label">
-                  <%= shoot_type %>
-                </label>
-              </div>
-            <% end %>
-          </div>
+          <% if @appointment.price_id.present? %>
+            <%# If price is selected, auto-fill from price and show as text %>
+            <%= question_form.hidden_field :answer, value: @appointment.price&.shoot_type %>
+            <div class="custom-form-display">
+              <strong><%= @appointment.price&.shoot_type %></strong>
+            </div>
+          <% else %>
+            <%# Walk-in: show the radio buttons as usual %>
+            <div class="custom-shoot-types-grid">
+              <% ['Kiddies', 'Newborn', 'Family', 'Personal', 'Maternity', 'PreWedding', 'Christmas Kiddies', 'Christmas Personal', 'Christmas Family'].each do |shoot_type| %>
+                <div class="custom-shoot-type-item">
+                  <%= question_form.radio_button :answer, shoot_type,
+                                                id: "custom_shoot_type_#{shoot_type.downcase}",
+                                                class: "custom-shoot-type-input" %>
+                  <label for="custom_shoot_type_<%= shoot_type.downcase %>" class="custom-shoot-type-label">
+                    <%= shoot_type %>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
 
         <% elsif question_form.object.question == 'Please share anything else that would help prepare for your shoot with us.' %>
           <%= question_form.text_area :answer, class: "custom-form-input", rows: 4 %>

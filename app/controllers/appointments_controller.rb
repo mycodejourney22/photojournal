@@ -213,20 +213,20 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.find(params[:id])
     @appointment_note = @appointment.appointment_notes.build(appointment_note_params)
     @appointment_note.created_by = current_user
-    
+
     if @appointment_note.save
       redirect_to @appointment, notice: 'Internal note added successfully.'
     else
       redirect_to @appointment, alert: 'Failed to add note.'
     end
   end
-  
-  # Action to delete notes  
+
+  # Action to delete notes
   def remove_note
     authorize Appointment
     @appointment = Appointment.find(params[:id])
     @note = @appointment.appointment_notes.find(params[:note_id])
-    
+
     if @note.destroy
       redirect_to @appointment, notice: 'Note removed successfully.'
     else
@@ -238,17 +238,17 @@ class AppointmentsController < ApplicationController
     authorize Appointment
     @appointment = Appointment.find(params[:id])
     @note = @appointment.appointment_notes.find(params[:note_id])
-    
+
     if params[:actioned] == 'true' || params[:actioned] == true
       @note.update!(
         actioned: true,
         actioned_at: Time.current,
         actioned_by: current_user
       )
-      
-      render json: { 
-        success: true, 
-        actioned: true, 
+
+      render json: {
+        success: true,
+        actioned: true,
         message: "Note marked as actioned by #{current_user.email}"
       }
     else
@@ -257,10 +257,10 @@ class AppointmentsController < ApplicationController
         actioned_at: nil,
         actioned_by: nil
       )
-      
-      render json: { 
-        success: true, 
-        actioned: false, 
+
+      render json: {
+        success: true,
+        actioned: false,
         message: "Note marked as pending"
       }
     end
@@ -397,10 +397,10 @@ class AppointmentsController < ApplicationController
   def fetch_recent_notes
     # Get appointments within +3 to -3 days from today
     date_range = 3.days.ago.beginning_of_day..3.days.from_now.end_of_day
-    
+
     base_query = AppointmentNote.joins(:appointment)
                                 .includes(:appointment, :created_by, :actioned_by)
-    
+
     # Apply location-based filtering based on user role
     location_filtered_query = if current_user.admin? || current_user.manager? || current_user.super_admin?
                                 # Admins and managers see all notes
@@ -417,17 +417,17 @@ class AppointmentsController < ApplicationController
                                   base_query.none # No access for other roles
                                 end
                               end
-    
+
     # Get two sets of notes and combine them
     # 1. All unactioned notes (regardless of date)
     unactioned_notes = location_filtered_query.where(actioned: false)
-    
+
     # 2. All notes from ±3 days (both actioned and unactioned)
     recent_notes = location_filtered_query.where(appointments: { start_time: date_range }, actioned: false)
-    
+
     # Combine and remove duplicates, then order by priority and date
     combined_notes = (unactioned_notes.to_a + recent_notes.to_a).uniq
-    
+
     # Sort by priority (high first), then by actioned status (pending first), then by creation date
     combined_notes.sort_by do |note|
       [
@@ -491,11 +491,24 @@ class AppointmentsController < ApplicationController
     end
   end
 
+  # def build_questions_for_booking(appointment)
+  #   if appointment.questions.empty?
+  #     # Assuming you want to build a set of default questions
+  #     Question::QUESTIONS.each do |question_text|
+  #       appointment.questions.build(question: question_text)
+  #     end
+  #   end
+  # end
+
   def build_questions_for_booking(appointment)
     if appointment.questions.empty?
-      # Assuming you want to build a set of default questions
       Question::QUESTIONS.each do |question_text|
-        appointment.questions.build(question: question_text)
+        question = appointment.questions.build(question: question_text)
+
+        # Auto-fill "Type of shoots" from price if price_id exists
+        if question_text == 'Type of shoots' && appointment.price.present?
+          question.answer = appointment.price.shoot_type
+        end
       end
     end
   end
@@ -576,18 +589,18 @@ class AppointmentsController < ApplicationController
 
   def generate_time_slots
     date = Date.parse(params[:date])
-    
+
     # Check if this is a newborn package
     is_newborn_session = false
     if params[:price_id].present?
       price = Price.find_by(id: params[:price_id])
       is_newborn_session = price&.shoot_type&.downcase&.include?('newborn')
     end
-    
+
     if is_newborn_session
       # No weekend bookings for newborn sessions
       return [] if date.saturday? || date.sunday?
-      
+
       # Newborn sessions: 9:30 AM to 12:30 PM only (weekdays only)
       start_time = Time.zone.parse("#{date} 09:30")
       end_time = Time.zone.parse("#{date} 12:30")
@@ -600,7 +613,7 @@ class AppointmentsController < ApplicationController
       start_time = Time.zone.parse("#{date} 09:30")
       end_time = Time.zone.parse("#{date} 16:30")
     end
-  
+
     (start_time.to_i..end_time.to_i).step(1.hour).map { |time| Time.zone.at(time) }
   end
 
