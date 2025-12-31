@@ -22,6 +22,15 @@
 
         gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
       </script>
+      <script>
+        document.addEventListener("turbo:load", function () {
+          if (typeof gtag === "function") {
+            gtag("config", "<%= ENV['GA_MEASUREMENT_ID'] %>", {
+              page_path: window.location.pathname
+            });
+          }
+        });
+      </script>
     <% end %>
     <%= javascript_importmap_tags %>
   </head>
