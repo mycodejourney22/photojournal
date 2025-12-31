@@ -13,6 +13,16 @@
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <% if Rails.env.production? %>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '<%= ENV['GA_MEASUREMENT_ID'] %>');
+      </script>
+    <% end %>
     <%= javascript_importmap_tags %>
   </head>
 
@@ -131,13 +141,13 @@
             <% end %>
           </li>
           <li>
-            <%= link_to appointment_reports_path, 
+            <%= link_to appointment_reports_path,
                 class: "g-sidebar__nav-item #{controller_name == 'appointment_reports' ? 'g-sidebar__nav-item--active' : ''}" do %>
               <div class="g-sidebar__nav-icon">
               </div>
               <span class="g-sidebar__nav-text">Appointment Reports</span>
             <% end %>
-          </li>    
+          </li>
           <li>
             <%= link_to operations_path, class: "g-sidebar__nav-item #{controller_name == 'operations' ? 'g-sidebar__nav-item--active' : ''}" do  %>
               <div class="g-sidebar__nav-icon"></div>
