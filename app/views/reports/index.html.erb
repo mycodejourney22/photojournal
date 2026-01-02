@@ -1,0 +1,112 @@
+<!-- app/views/reports/index.html.erb -->
+<div class="g-content__toolbar">
+  <div class="g-content__page-title">
+    <h1>Reports</h1>
+  </div>
+</div>
+
+<div style="padding: 1rem 0;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+
+    <!-- Customer Analytics -->
+    <a href="<%= customers_analytics_path %>" style="text-decoration: none;">
+      <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease; cursor: pointer; height: 180px;">
+        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+          <div style="width: 48px; height: 48px; background: #e8f5e9; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+            <span style="font-size: 1.5rem;">📊</span>
+          </div>
+          <div>
+            <h3 style="margin: 0; color: #333; font-size: 1.1rem;">Customer Analytics</h3>
+          </div>
+        </div>
+        <p style="color: #666; font-size: 0.875rem; margin: 0; line-height: 1.5;">
+          Analyze customer behavior, top spenders, frequent visitors, and customer lifetime value.
+        </p>
+      </div>
+    </a>
+
+    <!-- Daily Summary (Operations) -->
+    <a href="<%= operations_path %>" style="text-decoration: none;">
+      <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease; cursor: pointer; height: 180px;">
+        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+          <div style="width: 48px; height: 48px; background: #fff3e0; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+            <span style="font-size: 1.5rem;">📋</span>
+          </div>
+          <div>
+            <h3 style="margin: 0; color: #333; font-size: 1.1rem;">Daily Summary</h3>
+          </div>
+        </div>
+        <p style="color: #666; font-size: 0.875rem; margin: 0; line-height: 1.5;">
+          View daily sales summaries, revenue tracking, and operational metrics by date.
+        </p>
+      </div>
+    </a>
+
+    <!-- Appointment Reports -->
+    <a href="<%= appointment_reports_path %>" style="text-decoration: none;">
+      <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease; cursor: pointer; height: 180px;">
+        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+          <div style="width: 48px; height: 48px; background: #e3f2fd; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+            <span style="font-size: 1.5rem;">📅</span>
+          </div>
+          <div>
+            <h3 style="margin: 0; color: #333; font-size: 1.1rem;">Appointment Reports</h3>
+          </div>
+        </div>
+        <p style="color: #666; font-size: 0.875rem; margin: 0; line-height: 1.5;">
+          Track bookings, photoshoots completed, missed sessions, online vs walk-in bookings.
+        </p>
+      </div>
+    </a>
+
+    <!-- Staff Performance -->
+    <a href="<%= staff_reports_path %>" style="text-decoration: none;">
+      <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease; cursor: pointer; height: 180px;">
+        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+          <div style="width: 48px; height: 48px; background: #f3e5f5; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+            <span style="font-size: 1.5rem;">👥</span>
+          </div>
+          <div>
+            <h3 style="margin: 0; color: #333; font-size: 1.1rem;">Staff Performance</h3>
+          </div>
+        </div>
+        <p style="color: #666; font-size: 0.875rem; margin: 0; line-height: 1.5;">
+          Monitor photographer and editor productivity, completion rates, and workload distribution.
+        </p>
+      </div>
+    </a>
+
+    <a href="<%= attendance_records_path %>" style="text-decoration: none;">
+      <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease; cursor: pointer; height: 180px;">
+        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+          <div style="width: 48px; height: 48px; background: #e1f5fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+            <span style="font-size: 1.5rem;">⏰</span>
+          </div>
+          <div>
+            <h3 style="margin: 0; color: #333; font-size: 1.1rem;">Attendance Reports</h3>
+          </div>
+        </div>
+        <p style="color: #666; font-size: 0.875rem; margin: 0; line-height: 1.5;">
+          Track staff attendance, clock-in/out times, and generate attendance reports.
+        </p>
+      </div>
+    </a>
+
+    <a href="<%= expense_reports_path %>" style="text-decoration: none;">
+      <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease; cursor: pointer; height: 180px;">
+        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+          <div style="width: 48px; height: 48px; background: #ffebee; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+            <span style="font-size: 1.5rem;">💸</span>
+          </div>
+          <div>
+            <h3 style="margin: 0; color: #333; font-size: 1.1rem;">Expense Reports</h3>
+          </div>
+        </div>
+        <p style="color: #666; font-size: 0.875rem; margin: 0; line-height: 1.5;">
+          Analyze expenses by location, category, and time period. Track spending trends across studios.
+        </p>
+      </div>
+    </a>
+
+  </div>
+</div>

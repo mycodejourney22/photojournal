@@ -308,6 +308,8 @@ Rails.application.routes.draw do
 
   # This route is for the download handler
   get 'galleries/download/:id', to: 'galleries#download', as: 'download_gallery'
+  resources :reports, only: [:index]
+  resources :expense_reports, only: [:index]
 
   # Customer gallery access
   resources :customer_galleries, only: [:index, :show] do

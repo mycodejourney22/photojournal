@@ -15,4 +15,9 @@ class ReportPolicy < ApplicationPolicy
   def dashboard?
     true
   end
+
+  def index?
+    # Allow managers, admins, or users with reporting access
+    user.present? && (user.admin? || user.manager? || user.super_admin?)
+  end
 end
