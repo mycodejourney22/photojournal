@@ -5,6 +5,7 @@ class AppointmentsController < ApplicationController
   after_action :verify_policy_scoped, only: :index
   layout :determine_layout
   before_action :set_appointments, :set_url, only: [:upcoming, :past, :index, :cancel, :cancel_booking, :in_progress]
+  before_action :set_staff_filters, only: [:past]
   skip_before_action :authenticate_user!, only: [:booking, :available_hours, :selected_date,
                                                  :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit,
                                                  :update, :type_of_shoots,:select_price]
@@ -500,6 +501,16 @@ class AppointmentsController < ApplicationController
   #   end
   # end
 
+  def set_staff_filters
+  # Get all active photographers and editors who have worked on photoshoots
+    @photographers = Staff.photographers.active.order(:name)
+    @editors = Staff.editors.active.order(:name)
+
+    # Get selected filters from params
+    @selected_photographer_ids = params[:photographer_ids]&.reject(&:blank?) || []
+    @selected_editor_ids = params[:editor_ids]&.reject(&:blank?) || []
+  end
+
   def build_questions_for_booking(appointment)
     if appointment.questions.empty?
       Question::QUESTIONS.each do |question_text|
@@ -539,8 +550,31 @@ class AppointmentsController < ApplicationController
   #   end
   # end
 
+  # def past_appointment
+  #   appointments = policy_scope(Appointment).includes(:questions).past
+
+  #   if params[:query].present?
+  #     appointments = appointments.global_search(params[:query])
+  #   end
+
+  #   appointments.page(params[:page]) if appointments.present?
+  # end
+
   def past_appointment
-    appointments = policy_scope(Appointment).includes(:questions).past
+    appointments = policy_scope(Appointment).includes(:questions, :photo_shoot).past
+
+    # Apply staff filters if selected
+    if @selected_photographer_ids.present? || @selected_editor_ids.present?
+      appointments = appointments.joins(:photo_shoot)
+
+      if @selected_photographer_ids.present?
+        appointments = appointments.where(photo_shoots: { photographer_id: @selected_photographer_ids })
+      end
+
+      if @selected_editor_ids.present?
+        appointments = appointments.where(photo_shoots: { editor_id: @selected_editor_ids })
+      end
+    end
 
     if params[:query].present?
       appointments = appointments.global_search(params[:query])

@@ -8,6 +8,77 @@
   </div>
 </div>
 
+<%# Staff Filter Section - Only show on Past Appointments tab %>
+<% if current_page?(past_appointments_path) && @photographers.present? %>
+  <div class="g-filters" style="margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+    <%= form_with url: past_appointments_path, method: :get, local: true, html: { class: "g-filters__form", style: "display: flex; flex-direction: row; gap: 1rem; align-items: flex-end;"} do |f| %>
+
+      <%# Photographer Filter %>
+      <div class="g-filters__group" style="flex: 1; min-width: 150px; max-width: 250px;">
+        <%= f.label :photographer_ids, "Filter by Photographer", class: "g-filters__label", style: "display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;" %>
+        <%= f.select :photographer_ids,
+            options_from_collection_for_select(@photographers, :id, :name, @selected_photographer_ids),
+            { include_blank: "All Photographers" },
+            {
+              multiple: true,
+              class: "g-form__control g-filters__select",
+              style: "width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; min-height: 38px;",
+              data: { controller: "multi-select" }
+            } %>
+      </div>
+
+      <%# Editor Filter %>
+      <div class="g-filters__group" style="flex: 1; min-width: 150px; max-width: 250px;">
+        <%= f.label :editor_ids, "Filter by Editor", class: "g-filters__label", style: "display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;" %>
+        <%= f.select :editor_ids,
+            options_from_collection_for_select(@editors, :id, :name, @selected_editor_ids),
+            { include_blank: "All Editors" },
+            {
+              multiple: true,
+              class: "g-form__control g-filters__select",
+              style: "width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; min-height: 38px;",
+              data: { controller: "multi-select" }
+            } %>
+      </div>
+
+      <%# Preserve existing search query if present %>
+      <% if params[:query].present? %>
+        <%= f.hidden_field :query, value: params[:query] %>
+      <% end %>
+
+      <%# Action Buttons %>
+      <div class="g-filters__actions" style="display: flex; gap: 0.5rem;">
+        <%= f.submit "Apply Filters", class: "g-button g-button--action", style: "padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer;" %>
+        <%= link_to "Clear", past_appointments_path, class: "g-button g-button--secondary", style: "padding: 0.5rem 1rem; background: #6c757d; color: white; border: none; border-radius: 4px; text-decoration: none;" %>
+      </div>
+    <% end %>
+
+    <%# Active Filters Display %>
+    <% if @selected_photographer_ids.present? || @selected_editor_ids.present? %>
+      <div class="g-filters__active" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #dee2e6;">
+        <span style="font-size: 0.875rem; color: #666;">Active filters: </span>
+        <% @selected_photographer_ids.each do |id| %>
+          <% photographer = @photographers.find { |p| p.id.to_s == id.to_s } %>
+          <% if photographer %>
+            <span class="g-filters__tag" style="display: inline-block; background: #e3f2fd; color: #1976d2; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-right: 0.25rem;">
+              📷 <%= photographer.name %>
+            </span>
+          <% end %>
+        <% end %>
+        <% @selected_editor_ids.each do |id| %>
+          <% editor = @editors.find { |e| e.id.to_s == id.to_s } %>
+          <% if editor %>
+            <span class="g-filters__tag" style="display: inline-block; background: #fce4ec; color: #c2185b; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-right: 0.25rem;">
+              ✏️ <%= editor.name %>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+
 <div class="g-table__header">
   <div class="g-table__col--name">Name</div>
   <div class="g-table__col--type">Type</div>
