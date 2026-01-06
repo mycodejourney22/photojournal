@@ -12,19 +12,25 @@
     <div style="font-size: 14px; color: #666;">Price Packages</div>
     <div style="font-size: 12px; color: #999; margin-top: 4px;">Available pricing options</div>
   </div>
-  
+
   <div style="text-align: center; padding: 20px; border: 1px solid #e5e5e5; border-radius: 8px; background: white;">
     <div style="font-size: 36px; font-weight: 600; color: #333; margin-bottom: 8px;"><%= @stats[:staff_members] %></div>
     <div style="font-size: 14px; color: #666;">Staff Members</div>
     <div style="font-size: 12px; color: #999; margin-top: 4px;">Team members registered</div>
   </div>
-  
+
   <div style="text-align: center; padding: 20px; border: 1px solid #e5e5e5; border-radius: 8px; background: white;">
     <div style="font-size: 36px; font-weight: 600; color: #333; margin-bottom: 8px;"><%= @stats[:studios] %></div>
     <div style="font-size: 14px; color: #666;">Studio Locations</div>
     <div style="font-size: 12px; color: #999; margin-top: 4px;">Active studio branches</div>
   </div>
-  
+
+  <div style="text-align: center; padding: 20px; border: 1px solid #e5e5e5; border-radius: 8px; background: white;">
+    <div style="font-size: 36px; font-weight: 600; color: #333; margin-bottom: 8px;"><%= @stats[:users] %></div>
+    <div style="font-size: 14px; color: #666;">User Accounts</div>
+    <div style="font-size: 12px; color: #999; margin-top: 4px;">System users created</div>
+  </div>
+
   <div style="text-align: center; padding: 20px; border: 1px solid #e5e5e5; border-radius: 8px; background: white;">
     <div style="font-size: 36px; font-weight: 600; color: #333; margin-bottom: 8px;"><%= @stats[:users] %></div>
     <div style="font-size: 14px; color: #666;">User Accounts</div>
@@ -109,5 +115,23 @@
   </div>
   <div class="g-table__col--actions g-table__cell">
     <%= link_to "Manage Users", admin_users_path, class: "g-button--link" %>
+  </div>
+</div>
+
+<div class="g-table__row">
+  <div class="g-table__status g-table__status--confirmed"></div>
+  <div class="g-table__col--name g-table__cell">
+    <div class="g-table__name-container">
+      <div class="g-table__name">Gadget Management</div>
+    </div>
+  </div>
+  <div class="g-table__col--description g-table__cell">
+    Manage assets and studio gadgets.
+  </div>
+  <div class="g-table__col--count g-table__cell">
+    <%= @stats[:gadgets] %>
+  </div>
+  <div class="g-table__col--actions g-table__cell">
+    <%= link_to "Manage Gadgets", gadgets_path, class: "g-button--link" %>
   </div>
 </div>

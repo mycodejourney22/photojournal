@@ -1,29 +1,69 @@
-<div class="container" data-controller="calendly" >
-  <%= render "shared/sidebar" %>
+<div class="container" data-controller="calendly">
   <section class="content">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>All Asset Purchase</h1>
-      <div class="row justify-content-center w-50">
-        <div class=" my-3">
-          <%= form_with url: gadgets_path, method: :get, class: "d-flex" do %>
-            <%= text_field_tag :query,
-                  params[:query],
-                  class: "form-control search-border",
-                  placeholder: "Category or Description or Staff"
-              %>
-          <% end %>
-        </div>
-      </div>
-      <%= link_to 'New gadget', new_gadget_path, class: "btn-photoshoot btn" %>
+
+      <%= form_with url: gadgets_path, method: :get, class: "d-flex align-items-center" do %>
+        <%= text_field_tag :query,
+              params[:query],
+              class: "form-control search-border",
+              placeholder: "Category or Description or Staff" %>
+        <button type="submit" class="btn btn-outline-secondary ms-2">
+          <i class="fas fa-search"></i>
+        </button>
+      <% end %>
+
+      <%= link_to 'New gadget', new_gadget_path, class: "g-button g-button--action" %>
     </div>
-    <% if  @gadgets.empty? %>
-      <h3 class="text-center">You do not have any gadgets recorded yet!!!</h3>
+
+    <% if @gadgets.empty? %>
+      <p class="text-center text-muted">You do not have any gadgets recorded yet.</p>
     <% else %>
-      <div>
-        <%= render "gadget_table", gadgets: @gadgets %>
-      </div>
+      <%= render "gadget_table", gadgets: @gadgets %>
     <% end %>
+
     <%= paginate @gadgets %>
   </section>
-
 </div>
+
+<style>
+  .bordered-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .bordered-table th,
+  .bordered-table td {
+    border: 1px solid #dee2e6;
+    padding: 12px 15px;
+    text-align: left;
+  }
+
+  .bordered-table thead {
+    background-color: #f8f9fa;
+  }
+
+  .bordered-table thead th {
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+  }
+
+  .bordered-table tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+
+  .btn-photoshoot {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .btn-photoshoot:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+</style>
