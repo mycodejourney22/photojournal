@@ -1,0 +1,66 @@
+<%# app/views/training_enrollment_mailer/admin_notification.html.erb %>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #1A1A1A; color: #C9A227; padding: 20px; text-align: center; }
+    .content { padding: 30px; background: #f9f9f9; }
+    .field { margin-bottom: 15px; }
+    .label { font-weight: bold; color: #666; font-size: 12px; text-transform: uppercase; }
+    .value { font-size: 16px; color: #333; margin-top: 5px; }
+    .highlight { background: #C9A227; color: #1A1A1A; padding: 15px; border-radius: 4px; text-align: center; margin: 20px 0; }
+    .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 style="margin: 0;">🎓 New Training Enrollment</h1>
+    </div>
+
+    <div class="content">
+      <div class="highlight">
+        <strong><%= @enrollment.program_name %></strong>
+      </div>
+
+      <div class="field">
+        <div class="label">Full Name</div>
+        <div class="value"><%= @enrollment.full_name %></div>
+      </div>
+
+      <div class="field">
+        <div class="label">Email</div>
+        <div class="value"><%= @enrollment.email %></div>
+      </div>
+
+      <div class="field">
+        <div class="label">Phone</div>
+        <div class="value"><%= @enrollment.phone %></div>
+      </div>
+
+      <div class="field">
+        <div class="label">Experience Level</div>
+        <div class="value"><%= @enrollment.experience_level %></div>
+      </div>
+
+      <% if @enrollment.message.present? %>
+        <div class="field">
+          <div class="label">Message / Goals</div>
+          <div class="value"><%= @enrollment.message %></div>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <div class="label">Submitted At</div>
+        <div class="value"><%= @enrollment.created_at.strftime("%B %d, %Y at %I:%M %p") %></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>This enrollment is pending. Please contact the applicant within 24 hours.</p>
+    </div>
+  </div>
+</body>
+</html>

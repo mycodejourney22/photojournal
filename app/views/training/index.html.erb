@@ -1,0 +1,330 @@
+<%# app/views/training/index.html.erb %>
+
+<!-- Navigation -->
+<nav>
+    <%= link_to root_path, class: "logo" do %>
+        363 <span>Photography</span>
+    <% end %>
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#curriculum">Curriculum</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#signup">Enroll</a></li>
+        <li><a href="#faq">FAQ</a></li>
+    </ul>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <span class="hero-label">Photography & Editing Training</span>
+        <h1>Master the Art of <em>Visual Storytelling</em></h1>
+        <p>Transform your creative vision into stunning imagery. Learn professional photography techniques and advanced editing skills from industry experts.</p>
+        <a href="#signup" class="hero-cta">
+            Begin Your Journey
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="line"></div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about" id="about">
+    <div class="section-header">
+        <span class="section-label">Why Choose Us</span>
+        <h2 class="section-title">Elevate Your Craft</h2>
+        <p class="section-subtitle">A comprehensive program designed to take you from enthusiast to professional photographer and editor.</p>
+    </div>
+
+    <div class="about-grid">
+        <div class="about-card reveal">
+            <div class="about-icon">📷</div>
+            <h3>Hands-On Learning</h3>
+            <p>Practice with real equipment and live shoots. Every lesson includes practical assignments to reinforce your skills and build your portfolio.</p>
+        </div>
+        <div class="about-card reveal">
+            <div class="about-icon">🎨</div>
+            <h3>Professional Editing</h3>
+            <p>Master industry-standard software including Lightroom and Photoshop. Learn color grading, retouching, and creating your signature style.</p>
+        </div>
+        <div class="about-card reveal">
+            <div class="about-icon">👨‍🏫</div>
+            <h3>Expert Mentorship</h3>
+            <p>Learn from working professionals with years of industry experience. Get personalized feedback and guidance throughout your journey.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Curriculum Section -->
+<section class="curriculum" id="curriculum">
+    <div class="section-header">
+        <span class="section-label">What You'll Learn</span>
+        <h2 class="section-title">Program Curriculum</h2>
+        <p class="section-subtitle">A structured path from fundamentals to advanced techniques.</p>
+    </div>
+
+    <div class="curriculum-container">
+        <div class="curriculum-module reveal">
+            <div class="module-number">01</div>
+            <div class="module-content">
+                <h3>Photography Fundamentals</h3>
+                <p>Master camera settings, exposure triangle, and composition principles that form the foundation of great photography.</p>
+                <div class="module-topics">
+                    <span>Manual Mode</span>
+                    <span>Aperture & Shutter</span>
+                    <span>ISO Mastery</span>
+                    <span>Composition Rules</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="curriculum-module reveal">
+            <div class="module-number">02</div>
+            <div class="module-content">
+                <h3>Lighting Techniques</h3>
+                <p>Understand natural and artificial lighting. Learn to shape light for portraits, products, and creative projects.</p>
+                <div class="module-topics">
+                    <span>Natural Light</span>
+                    <span>Studio Lighting</span>
+                    <span>Flash Photography</span>
+                    <span>Light Modifiers</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="curriculum-module reveal">
+            <div class="module-number">03</div>
+            <div class="module-content">
+                <h3>Adobe Lightroom Mastery</h3>
+                <p>From import to export, learn professional workflow, color correction, batch editing, and creating presets.</p>
+                <div class="module-topics">
+                    <span>RAW Processing</span>
+                    <span>Color Grading</span>
+                    <span>Preset Creation</span>
+                    <span>Batch Editing</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="curriculum-module reveal">
+            <div class="module-number">04</div>
+            <div class="module-content">
+                <h3>Advanced Photoshop</h3>
+                <p>Master retouching, compositing, and creative manipulation. Learn techniques used by top professionals.</p>
+                <div class="module-topics">
+                    <span>Skin Retouching</span>
+                    <span>Compositing</span>
+                    <span>Background Removal</span>
+                    <span>Creative Effects</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="curriculum-module reveal">
+            <div class="module-number">05</div>
+            <div class="module-content">
+                <h3>Business & Branding</h3>
+                <p>Build your photography business. Learn client management, pricing strategies, and marketing your services.</p>
+                <div class="module-topics">
+                    <span>Portfolio Building</span>
+                    <span>Pricing Strategy</span>
+                    <span>Client Relations</span>
+                    <span>Social Media</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="pricing" id="pricing">
+    <div class="section-header">
+        <span class="section-label">Investment</span>
+        <h2 class="section-title">Choose Your Path</h2>
+        <p class="section-subtitle">Flexible options to fit your learning goals and budget.</p>
+    </div>
+
+    <div class="pricing-cards">
+        <%# <div class="pricing-card reveal">
+            <h3>Essentials</h3>
+            <p style="color: var(--warm-gray); font-size: 0.9rem;">Photography Fundamentals</p>
+            <div class="price">₦150,000 <span>/ course</span></div>
+            <ul class="pricing-features">
+                <li>4-week intensive program</li>
+                <li>Photography fundamentals</li>
+                <li>Basic Lightroom editing</li>
+                <li>2 practical shoots</li>
+                <li>Certificate of completion</li>
+                <li>Email support</li>
+            </ul>
+            <a href="#signup" class="pricing-btn">Get Started</a>
+        </div> %>
+
+        <div class="pricing-card featured reveal">
+            <h3>Complete Mastery</h3>
+            <p style="color: var(--warm-gray); font-size: 0.9rem;">Photography + Full Editing Suite</p>
+            <div class="price">₦300,000 <span>/ course</span></div>
+            <ul class="pricing-features">
+                <li>6-week comprehensive program</li>
+                <li>Advanced photography techniques</li>
+                <li>Full Lightroom & Photoshop training</li>
+                <li>5 practical shoots</li>
+                <li>Portfolio development</li>
+                <li>Business & branding module</li>
+                <li>1-on-1 mentorship sessions</li>
+                <li>Lifetime community access</li>
+            </ul>
+            <a href="#signup" class="pricing-btn">Get Started</a>
+        </div>
+    </div>
+</section>
+
+<!-- Sign Up Section -->
+<section class="signup" id="signup">
+    <div class="section-header">
+        <span class="section-label">Join Us</span>
+        <h2 class="section-title">Begin Your Journey</h2>
+        <p class="section-subtitle">Fill out the form below and we'll get back to you within 24 hours.</p>
+    </div>
+
+    <div class="signup-container">
+        <%= form_with url: training_enroll_path, method: :post, class: "signup-form reveal", local: true do |f| %>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="program">Select Program</label>
+                <select id="program" name="program" required>
+                    <option value="">Choose a program...</option>
+                    <%# <option value="essentials">Essentials - ₦150,000</option> %>
+                    <option value="mastery">Complete Mastery - ₦300,000</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Current Experience Level</label>
+                <select id="experience" name="experience" required>
+                    <option value="">Select your level...</option>
+                    <option value="beginner">Complete Beginner</option>
+                    <option value="hobbyist">Hobbyist / Enthusiast</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced (looking to specialize)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Tell us about your goals (optional)</label>
+                <textarea id="message" name="message" rows="4" placeholder="What do you hope to achieve with this training?"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Application</button>
+        <% end %>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq" id="faq">
+    <div class="section-header">
+        <span class="section-label">Questions</span>
+        <h2 class="section-title">Frequently Asked</h2>
+    </div>
+
+    <div class="faq-container">
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                Do I need my own camera to join the program?
+                <span class="icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <p>While having your own camera is beneficial for practice, it's not required. We provide cameras during practical sessions, and you can use a smartphone for initial assignments. We'll guide you on camera purchases if you decide to invest in equipment.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                Is this program suitable for complete beginners?
+                <span class="icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <p>Absolutely! Our curriculum is designed to take you from zero to professional level. We start with the fundamentals and progressively build your skills. Many of our most successful students started with no prior experience.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                What software will I learn?
+                <span class="icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <p>You'll learn Adobe Lightroom Classic for photo organization and editing, plus Adobe Photoshop for advanced retouching and compositing. The Complete Mastery program includes in-depth training on both applications.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                Are there payment plans available?
+                <span class="icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <p>Yes, we offer flexible payment options. You can pay in 2-3 installments, however all payments must be completed before the start of class.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                What happens after I complete the program?
+                <span class="icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <p>You'll receive a certificate of completion and join our alumni community. Complete Mastery graduates get lifetime access to our private group, job opportunities, and continued mentorship. Many graduates have gone on to start successful photography businesses or work with major studios.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" type="button">
+                What are the class schedules?
+                <span class="icon">+</span>
+            </button>
+            <div class="faq-answer">
+                <p>Classes hold 3 times a week. Each session begins with one hour of theory discussion, followed by hands-on practical work for the rest of the day. Specific days and times are shared once enrollment is confirmed.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-logo">363 <span>Photography</span></div>
+    <p class="footer-text">Transform your passion into profession</p>
+    <div class="social-links">
+        <a href="#" aria-label="Instagram">📸</a>
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="YouTube">▶️</a>
+        <a href="#" aria-label="Facebook">👍</a>
+    </div>
+    <p class="copyright">© <%= Date.today.year %> 363 Photography. All rights reserved.</p>
+</footer>

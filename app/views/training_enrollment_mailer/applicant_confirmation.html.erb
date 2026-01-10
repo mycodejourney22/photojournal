@@ -1,0 +1,83 @@
+<%# app/views/training_enrollment_mailer/applicant_confirmation.html.erb %>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #1A1A1A; color: #FAF8F5; padding: 40px 20px; text-align: center; }
+    .header h1 { margin: 0; color: #C9A227; }
+    .header p { margin: 10px 0 0; opacity: 0.8; }
+    .content { padding: 40px 30px; background: #ffffff; }
+    .greeting { font-size: 18px; margin-bottom: 20px; }
+    .program-box { background: linear-gradient(135deg, #1A1A1A 0%, #2a2a2a 100%); color: #FAF8F5; padding: 25px; border-radius: 8px; margin: 25px 0; text-align: center; }
+    .program-box h3 { color: #C9A227; margin: 0 0 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+    .program-box p { margin: 0; font-size: 20px; }
+    .next-steps { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 25px 0; }
+    .next-steps h3 { margin: 0 0 15px; color: #1A1A1A; }
+    .next-steps ul { margin: 0; padding-left: 20px; }
+    .next-steps li { margin-bottom: 10px; }
+    .cta { text-align: center; margin: 30px 0; }
+    .cta a { display: inline-block; background: #C9A227; color: #1A1A1A; padding: 15px 30px; text-decoration: none; font-weight: bold; border-radius: 4px; }
+    .footer { text-align: center; padding: 30px; color: #666; font-size: 13px; }
+    .social { margin: 20px 0; }
+    .social a { margin: 0 10px; color: #666; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>363 Photography</h1>
+      <p>Photography & Editing Training</p>
+    </div>
+
+    <div class="content">
+      <p class="greeting">Hi <%= @enrollment.first_name %>,</p>
+
+      <p>Thank you for your interest in our Photography & Editing Training Program! We're excited that you've taken the first step towards mastering the art of visual storytelling.</p>
+
+      <div class="program-box">
+        <h3>Program Selected</h3>
+        <p><%= @enrollment.program_name %></p>
+      </div>
+
+      <p>We've received your application and our team will review it shortly. You can expect to hear from us within <strong>24 hours</strong>.</p>
+
+      <div class="next-steps">
+        <h3>What happens next?</h3>
+        <ul>
+          <li><strong>Review:</strong> Our team will review your application</li>
+          <li><strong>Contact:</strong> We'll call or email you to discuss the program details</li>
+          <li><strong>Schedule:</strong> We'll help you choose a class schedule that works for you</li>
+          <li><strong>Payment:</strong> We'll share payment options including installment plans</li>
+          <li><strong>Start:</strong> Begin your photography journey!</li>
+        </ul>
+      </div>
+
+      <p>In the meantime, follow us on social media to see the amazing work our students create:</p>
+
+      <div class="cta">
+        <a href="https://instagram.com/363photography">Follow Us on Instagram</a>
+      </div>
+
+      <p>If you have any questions, feel free to reply to this email or call us directly.</p>
+
+      <p>
+        Warm regards,<br>
+        <strong>The 363 Photography Team</strong>
+      </p>
+    </div>
+
+    <div class="footer">
+      <div class="social">
+        <a href="#">Instagram</a> |
+        <a href="#">Facebook</a> |
+        <a href="#">YouTube</a>
+      </div>
+      <p>363 Photography<br>
+      Lagos, Nigeria</p>
+      <p style="font-size: 11px; color: #999;">You received this email because you applied for our training program.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -2,6 +2,11 @@ require 'sidekiq/web'
 require 'sidekiq-scheduler/web'
 
 Rails.application.routes.draw do
+
+  # Training Landing Page (Public - No Authentication Required)
+  get '/training', to: 'training#index', as: :training
+  post '/training/enroll', to: 'training#enroll', as: :training_enroll
+
   get 'prices/new'
   get 'prices/index'
   get 'prices/create'
