@@ -242,10 +242,10 @@ Price.create!([
     amount: 35000.00, discount: 0, duration: 45, included: "3 Soft Copies", shoot_type: "Graduation",
     still_valid: true, icon: "fa-solid fa-user-graduate" },
   { name: "Graduation", outfit: "1 Outfit", description: "This shoot is designed for one person and family/friends can join in the session.",
-    amount: 55000.00, discount: 0, duration: 30, included: "5 photos", shoot_type: "Graduation",
+    amount: 55000.00, discount: 0, duration: 30, included: "5 Soft Copies", shoot_type: "Graduation",
     still_valid: true, icon: "fa-solid fa-user-graduate" },
   { name: "Graduation", outfit: "2 Outfit", description: "This shoot is designed for one person.",
-    amount: 65000.00, discount: 0, duration: 30, included: "6 photos", shoot_type: "Graduation",
+    amount: 65000.00, discount: 0, duration: 30, included: "6 Soft Copies", shoot_type: "Graduation",
     still_valid: true, icon: "fa-solid fa-user-graduate" }
 ])
 
