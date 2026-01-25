@@ -1,0 +1,290 @@
+<%# app/views/training/success.html.erb %>
+
+<nav>
+    <%= link_to training_path, class: "logo" do %>
+        363 <span>Photography</span>
+    <% end %>
+</nav>
+
+<div class="success-page">
+    <div class="success-container">
+        <div class="success-icon">✓</div>
+
+        <h1>Payment Successful!</h1>
+        <p class="success-message">Welcome to 363 Photography Training, <%= @enrollment.first_name %>!</p>
+
+        <div class="confirmation-card">
+            <div class="card-header">
+                <span class="label">Enrollment Confirmed</span>
+            </div>
+
+            <div class="card-body">
+                <div class="detail-row">
+                    <span class="label">Program</span>
+                    <span class="value"><%= @enrollment.program_name %></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="label">Amount Paid</span>
+                    <span class="value">₦<%= number_with_delimiter(@enrollment.program_price) %></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="label">Email</span>
+                    <span class="value"><%= @enrollment.email %></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="label">Phone</span>
+                    <span class="value"><%= @enrollment.phone %></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h2>What Happens Next?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Check Your Email</h3>
+                        <p>You'll receive a confirmation email with your enrollment details shortly.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>We'll Contact You</h3>
+                        <p>Our team will reach out within 24 hours to discuss class schedules and answer any questions.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Start Learning</h3>
+                        <p>Get ready to begin your photography and editing journey with us!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="social-cta">
+            <p>Follow us on social media to stay connected:</p>
+            <div class="social-links">
+                <a href="#" class="social-link">Instagram</a>
+                <a href="#" class="social-link">Facebook</a>
+                <a href="#" class="social-link">YouTube</a>
+            </div>
+        </div>
+
+        <div class="back-home">
+            <%= link_to "← Back to Home", training_path, class: "home-link" %>
+        </div>
+    </div>
+</div>
+
+<style>
+    .success-page {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-container {
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .success-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--gold);
+        color: var(--warm-black);
+        font-size: 2.5rem;
+        font-weight: bold;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        animation: scaleIn 0.5s ease;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .success-container h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .success-message {
+        color: var(--warm-gray);
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .confirmation-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--gold);
+        margin-bottom: 3rem;
+        text-align: left;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, rgba(201, 162, 39, 0.2) 0%, rgba(201, 162, 39, 0.1) 100%);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(201, 162, 39, 0.3);
+    }
+
+    .card-header .label {
+        font-size: 0.8rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-row .label {
+        color: var(--warm-gray);
+    }
+
+    .detail-row .value {
+        font-weight: 500;
+    }
+
+    .next-steps {
+        text-align: left;
+        margin-bottom: 3rem;
+    }
+
+    .next-steps h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .step {
+        display: flex;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .step-number {
+        width: 36px;
+        height: 36px;
+        background: var(--gold);
+        color: var(--warm-black);
+        font-weight: 700;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .step-content h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .step-content p {
+        color: var(--warm-gray);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .social-cta {
+        margin-bottom: 2rem;
+    }
+
+    .social-cta p {
+        color: var(--warm-gray);
+        margin-bottom: 1rem;
+    }
+
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .social-link {
+        padding: 0.5rem 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--cream);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+    }
+
+    .back-home {
+        margin-top: 2rem;
+    }
+
+    .home-link {
+        color: var(--warm-gray);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .home-link:hover {
+        color: var(--gold);
+    }
+
+    @media (max-width: 600px) {
+        .success-container h1 {
+            font-size: 2rem;
+        }
+
+        .step {
+            padding: 1rem;
+        }
+    }
+</style>

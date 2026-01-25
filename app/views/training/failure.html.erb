@@ -1,0 +1,174 @@
+<%# app/views/training/failure.html.erb %>
+
+<nav>
+    <%= link_to training_path, class: "logo" do %>
+        363 <span>Photography</span>
+    <% end %>
+</nav>
+
+<div class="failure-page">
+    <div class="failure-container">
+        <div class="failure-icon">✕</div>
+
+        <h1>Payment Failed</h1>
+        <p class="failure-message">We couldn't process your payment. Don't worry, you haven't been charged.</p>
+
+        <div class="failure-card">
+            <h2>What could have gone wrong?</h2>
+            <ul>
+                <li>Insufficient funds in your account</li>
+                <li>Card declined by your bank</li>
+                <li>Network connection issues</li>
+                <li>Payment session timed out</li>
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <%= link_to "Try Again", training_path, class: "primary-btn" %>
+            <a href="mailto:info@363photography.org" class="secondary-btn">Contact Support</a>
+        </div>
+
+        <div class="help-text">
+            <p>Need help? Contact us at <a href="mailto:info@363photography.org">info@363photography.org</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .failure-page {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .failure-container {
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .failure-icon {
+        width: 80px;
+        height: 80px;
+        background: #dc3545;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: bold;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+    }
+
+    .failure-container h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .failure-message {
+        color: var(--warm-gray);
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .failure-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+    .failure-card h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .failure-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .failure-card li {
+        padding: 0.5rem 0;
+        color: var(--warm-gray);
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .failure-card li::before {
+        content: '•';
+        color: var(--gold);
+        position: absolute;
+        left: 0;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .primary-btn {
+        padding: 1rem 2rem;
+        background: var(--gold);
+        color: var(--warm-black);
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+    }
+
+    .primary-btn:hover {
+        background: var(--cream);
+        transform: translateY(-2px);
+    }
+
+    .secondary-btn {
+        padding: 1rem 2rem;
+        background: transparent;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .secondary-btn:hover {
+        background: var(--gold);
+        color: var(--warm-black);
+    }
+
+    .help-text {
+        color: var(--warm-gray);
+        font-size: 0.9rem;
+    }
+
+    .help-text a {
+        color: var(--gold);
+        text-decoration: none;
+    }
+
+    .help-text a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .failure-container h1 {
+            font-size: 2rem;
+        }
+    }
+</style>

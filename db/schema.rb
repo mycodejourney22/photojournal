@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_10_104341) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_25_072410) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -443,10 +443,16 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_10_104341) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uuid", null: false
+    t.boolean "payment_status", default: false
+    t.datetime "paid_at"
+    t.bigint "customer_id"
     t.index ["created_at"], name: "index_training_enrollments_on_created_at"
+    t.index ["customer_id"], name: "index_training_enrollments_on_customer_id"
     t.index ["email"], name: "index_training_enrollments_on_email"
     t.index ["program"], name: "index_training_enrollments_on_program"
     t.index ["status"], name: "index_training_enrollments_on_status"
+    t.index ["uuid"], name: "index_training_enrollments_on_uuid", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -492,5 +498,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_10_104341) do
   add_foreign_key "sales", "appointments"
   add_foreign_key "sales", "photo_shoots"
   add_foreign_key "sales", "studios"
+  add_foreign_key "training_enrollments", "customers"
   add_foreign_key "users", "studios"
 end

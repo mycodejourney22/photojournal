@@ -6,6 +6,11 @@ Rails.application.routes.draw do
   # Training Landing Page (Public - No Authentication Required)
   get '/training', to: 'training#index', as: :training
   post '/training/enroll', to: 'training#enroll', as: :training_enroll
+  get '/training/payment', to: 'training#payment', as: :training_payment
+  post '/training/payment/initiate', to: 'training#initiate_payment', as: :training_initiate_payment
+  get '/training/payment/verify', to: 'training#verify_payment', as: :training_verify_payment
+  get '/training/success', to: 'training#success', as: :training_success
+  get '/training/failure', to: 'training#failure', as: :training_failure
 
   get 'prices/new'
   get 'prices/index'

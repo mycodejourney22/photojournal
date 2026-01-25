@@ -1,10 +1,78 @@
 <%# app/views/training/index.html.erb %>
 
-<!-- Navigation -->
+<style>
+    .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; padding: 0 5%; }
+    .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 20% 80%, rgba(201, 162, 39, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(201, 162, 39, 0.05) 0%, transparent 50%), linear-gradient(135deg, var(--warm-black) 0%, var(--charcoal) 100%); }
+    .hero-content { position: relative; text-align: center; max-width: 900px; animation: fadeUp 1s ease forwards; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-label { display: inline-block; padding: 0.5rem 1.5rem; border: 1px solid var(--gold); color: var(--gold); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2rem; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 500; line-height: 1.1; margin-bottom: 1.5rem; }
+    .hero h1 em { font-style: italic; color: var(--gold); }
+    .hero p { font-size: 1.15rem; color: var(--warm-gray); max-width: 600px; margin: 0 auto 2.5rem; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 1rem; padding: 1rem 2.5rem; background: var(--gold); color: var(--warm-black); text-decoration: none; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.4s ease; }
+    .hero-cta:hover { background: var(--cream); transform: translateY(-2px); box-shadow: 0 20px 40px rgba(201, 162, 39, 0.3); }
+    .about { background: linear-gradient(180deg, var(--warm-black) 0%, var(--charcoal) 100%); }
+    .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; max-width: 1200px; margin: 0 auto; }
+    .about-card { padding: 3rem 2rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(201, 162, 39, 0.1); transition: all 0.4s ease; }
+    .about-card:hover { background: rgba(255, 255, 255, 0.04); transform: translateY(-5px); }
+    .about-icon { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold); color: var(--gold); margin-bottom: 1.5rem; font-size: 1.5rem; }
+    .about-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1rem; }
+    .about-card p { color: var(--warm-gray); font-size: 0.95rem; }
+    .curriculum { background: var(--charcoal); }
+    .curriculum-container { max-width: 1000px; margin: 0 auto; }
+    .curriculum-module { display: grid; grid-template-columns: 120px 1fr; gap: 3rem; padding: 3rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .module-number { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 300; color: var(--gold); opacity: 0.5; }
+    .module-content h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .module-content p { color: var(--warm-gray); margin-bottom: 1rem; }
+    .module-topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .module-topics span { padding: 0.4rem 1rem; background: rgba(201, 162, 39, 0.1); color: var(--gold-light); font-size: 0.8rem; }
+    .pricing { background: linear-gradient(180deg, var(--charcoal) 0%, var(--warm-black) 100%); }
+    .pricing-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto; }
+    .pricing-card { padding: 3rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease; position: relative; }
+    .pricing-card.featured { border-color: var(--gold); background: linear-gradient(135deg, rgba(201, 162, 39, 0.08) 0%, rgba(201, 162, 39, 0.02) 100%); }
+    .pricing-card.featured::before { content: 'Most Popular'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 0.4rem 1.5rem; background: var(--gold); color: var(--warm-black); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+    .pricing-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .pricing-card .price { font-size: 3rem; font-weight: 300; color: var(--gold); margin: 1.5rem 0; }
+    .pricing-card .price span { font-size: 1rem; color: var(--warm-gray); }
+    .pricing-features { list-style: none; margin-bottom: 2rem; }
+    .pricing-features li { padding: 0.75rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; gap: 0.75rem; }
+    .pricing-features li::before { content: '✓'; color: var(--gold); font-weight: 600; }
+    .pricing-btn { display: block; width: 100%; padding: 1rem; text-align: center; background: transparent; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; font-weight: 500; text-transform: uppercase; transition: all 0.3s ease; }
+    .pricing-btn:hover, .pricing-card.featured .pricing-btn { background: var(--gold); color: var(--warm-black); }
+    .signup { background: var(--warm-black); position: relative; }
+    .signup-container { max-width: 600px; margin: 0 auto; }
+    .signup-form { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 3rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 0.5rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 1rem; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); }
+    .form-group select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23C9A227' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+    .form-group select option { background: var(--charcoal); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .submit-btn { width: 100%; padding: 1.25rem; background: var(--gold); border: none; color: var(--warm-black); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; }
+    .submit-btn:hover { background: var(--cream); transform: translateY(-2px); }
+    .faq { background: var(--charcoal); }
+    .faq-container { max-width: 800px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .faq-question { width: 100%; padding: 1.5rem 0; background: none; border: none; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 1.1rem; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-question:hover { color: var(--gold); }
+    .faq-question .icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold); color: var(--gold); transition: all 0.3s ease; }
+    .faq-item.active .faq-question .icon { background: var(--gold); color: var(--warm-black); transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: all 0.4s ease; }
+    .faq-item.active .faq-answer { max-height: 300px; padding-bottom: 1.5rem; }
+    .faq-answer p { color: var(--warm-gray); line-height: 1.8; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
+    .footer-logo span { color: var(--gold); }
+    .footer-text { color: var(--warm-gray); margin-bottom: 2rem; }
+    .social-links { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+    .social-links a { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--cream); text-decoration: none; transition: all 0.3s ease; }
+    .social-links a:hover { border-color: var(--gold); color: var(--gold); }
+    .copyright { color: var(--warm-gray); font-size: 0.8rem; }
+    @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } .curriculum-module { grid-template-columns: 1fr; gap: 1rem; } .module-number { font-size: 2rem; } .pricing-cards { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+</style>
+
 <nav>
-    <%= link_to root_path, class: "logo" do %>
-        363 <span>Photography</span>
-    <% end %>
+    <%= link_to training_path, class: "logo" do %>363 <span>Photography</span><% end %>
     <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#curriculum">Curriculum</a></li>
@@ -14,317 +82,104 @@
     </ul>
 </nav>
 
-<!-- Hero Section -->
 <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
         <span class="hero-label">Photography & Editing Training</span>
         <h1>Master the Art of <em>Visual Storytelling</em></h1>
         <p>Transform your creative vision into stunning imagery. Learn professional photography techniques and advanced editing skills from industry experts.</p>
-        <a href="#signup" class="hero-cta">
-            Begin Your Journey
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-        </a>
-    </div>
-    <div class="scroll-indicator">
-        <span>Scroll</span>
-        <div class="line"></div>
+        <a href="#signup" class="hero-cta">Begin Your Journey →</a>
     </div>
 </section>
 
-<!-- About Section -->
 <section class="about" id="about">
     <div class="section-header">
         <span class="section-label">Why Choose Us</span>
         <h2 class="section-title">Elevate Your Craft</h2>
-        <p class="section-subtitle">A comprehensive program designed to take you from enthusiast to professional photographer and editor.</p>
+        <p class="section-subtitle">A comprehensive program designed to take you from enthusiast to professional.</p>
     </div>
-
     <div class="about-grid">
-        <div class="about-card reveal">
-            <div class="about-icon">📷</div>
-            <h3>Hands-On Learning</h3>
-            <p>Practice with real equipment and live shoots. Every lesson includes practical assignments to reinforce your skills and build your portfolio.</p>
-        </div>
-        <div class="about-card reveal">
-            <div class="about-icon">🎨</div>
-            <h3>Professional Editing</h3>
-            <p>Master industry-standard software including Lightroom and Photoshop. Learn color grading, retouching, and creating your signature style.</p>
-        </div>
-        <div class="about-card reveal">
-            <div class="about-icon">👨‍🏫</div>
-            <h3>Expert Mentorship</h3>
-            <p>Learn from working professionals with years of industry experience. Get personalized feedback and guidance throughout your journey.</p>
-        </div>
+        <div class="about-card reveal"><div class="about-icon">📷</div><h3>Hands-On Learning</h3><p>Practice with real equipment and live shoots. Every lesson includes practical assignments.</p></div>
+        <div class="about-card reveal"><div class="about-icon">🎨</div><h3>Professional Editing</h3><p>Master Lightroom and Photoshop. Learn color grading, retouching, and your signature style.</p></div>
+        <div class="about-card reveal"><div class="about-icon">👨‍🏫</div><h3>Expert Mentorship</h3><p>Learn from working professionals with years of experience. Get personalized feedback.</p></div>
     </div>
 </section>
 
-<!-- Curriculum Section -->
 <section class="curriculum" id="curriculum">
     <div class="section-header">
         <span class="section-label">What You'll Learn</span>
         <h2 class="section-title">Program Curriculum</h2>
-        <p class="section-subtitle">A structured path from fundamentals to advanced techniques.</p>
     </div>
-
     <div class="curriculum-container">
-        <div class="curriculum-module reveal">
-            <div class="module-number">01</div>
-            <div class="module-content">
-                <h3>Photography Fundamentals</h3>
-                <p>Master camera settings, exposure triangle, and composition principles that form the foundation of great photography.</p>
-                <div class="module-topics">
-                    <span>Manual Mode</span>
-                    <span>Aperture & Shutter</span>
-                    <span>ISO Mastery</span>
-                    <span>Composition Rules</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="curriculum-module reveal">
-            <div class="module-number">02</div>
-            <div class="module-content">
-                <h3>Lighting Techniques</h3>
-                <p>Understand natural and artificial lighting. Learn to shape light for portraits, products, and creative projects.</p>
-                <div class="module-topics">
-                    <span>Natural Light</span>
-                    <span>Studio Lighting</span>
-                    <span>Flash Photography</span>
-                    <span>Light Modifiers</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="curriculum-module reveal">
-            <div class="module-number">03</div>
-            <div class="module-content">
-                <h3>Adobe Lightroom Mastery</h3>
-                <p>From import to export, learn professional workflow, color correction, batch editing, and creating presets.</p>
-                <div class="module-topics">
-                    <span>RAW Processing</span>
-                    <span>Color Grading</span>
-                    <span>Preset Creation</span>
-                    <span>Batch Editing</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="curriculum-module reveal">
-            <div class="module-number">04</div>
-            <div class="module-content">
-                <h3>Advanced Photoshop</h3>
-                <p>Master retouching, compositing, and creative manipulation. Learn techniques used by top professionals.</p>
-                <div class="module-topics">
-                    <span>Skin Retouching</span>
-                    <span>Compositing</span>
-                    <span>Background Removal</span>
-                    <span>Creative Effects</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="curriculum-module reveal">
-            <div class="module-number">05</div>
-            <div class="module-content">
-                <h3>Business & Branding</h3>
-                <p>Build your photography business. Learn client management, pricing strategies, and marketing your services.</p>
-                <div class="module-topics">
-                    <span>Portfolio Building</span>
-                    <span>Pricing Strategy</span>
-                    <span>Client Relations</span>
-                    <span>Social Media</span>
-                </div>
-            </div>
-        </div>
+        <div class="curriculum-module reveal"><div class="module-number">01</div><div class="module-content"><h3>Photography Fundamentals</h3><p>Master camera settings, exposure triangle, and composition.</p><div class="module-topics"><span>Manual Mode</span><span>Aperture & Shutter</span><span>ISO</span><span>Composition</span></div></div></div>
+        <div class="curriculum-module reveal"><div class="module-number">02</div><div class="module-content"><h3>Lighting Techniques</h3><p>Natural and artificial lighting for portraits and products.</p><div class="module-topics"><span>Natural Light</span><span>Studio Lighting</span><span>Flash</span><span>Modifiers</span></div></div></div>
+        <div class="curriculum-module reveal"><div class="module-number">03</div><div class="module-content"><h3>Adobe Lightroom Mastery</h3><p>Professional workflow, color correction, and presets.</p><div class="module-topics"><span>RAW Processing</span><span>Color Grading</span><span>Presets</span><span>Batch Editing</span></div></div></div>
+        <div class="curriculum-module reveal"><div class="module-number">04</div><div class="module-content"><h3>Advanced Photoshop</h3><p>Retouching, compositing, and creative manipulation.</p><div class="module-topics"><span>Retouching</span><span>Compositing</span><span>Background Removal</span><span>Effects</span></div></div></div>
+        <div class="curriculum-module reveal"><div class="module-number">05</div><div class="module-content"><h3>Business & Branding</h3><p>Build your photography business and client management.</p><div class="module-topics"><span>Portfolio</span><span>Pricing</span><span>Clients</span><span>Social Media</span></div></div></div>
     </div>
 </section>
 
-<!-- Pricing Section -->
 <section class="pricing" id="pricing">
     <div class="section-header">
         <span class="section-label">Investment</span>
         <h2 class="section-title">Choose Your Path</h2>
-        <p class="section-subtitle">Flexible options to fit your learning goals and budget.</p>
     </div>
-
     <div class="pricing-cards">
         <%# <div class="pricing-card reveal">
-            <h3>Essentials</h3>
-            <p style="color: var(--warm-gray); font-size: 0.9rem;">Photography Fundamentals</p>
+            <h3>Essentials</h3><p style="color: var(--warm-gray);">Photography Fundamentals</p>
             <div class="price">₦150,000 <span>/ course</span></div>
-            <ul class="pricing-features">
-                <li>4-week intensive program</li>
-                <li>Photography fundamentals</li>
-                <li>Basic Lightroom editing</li>
-                <li>2 practical shoots</li>
-                <li>Certificate of completion</li>
-                <li>Email support</li>
-            </ul>
+            <ul class="pricing-features"><li>4-week intensive program</li><li>Photography fundamentals</li><li>Basic Lightroom editing</li><li>2 practical shoots</li><li>Certificate of completion</li></ul>
             <a href="#signup" class="pricing-btn">Get Started</a>
         </div> %>
-
         <div class="pricing-card featured reveal">
-            <h3>Complete Mastery</h3>
-            <p style="color: var(--warm-gray); font-size: 0.9rem;">Photography + Full Editing Suite</p>
+            <h3>Complete Mastery</h3><p style="color: var(--warm-gray);">Photography + Full Editing Suite</p>
             <div class="price">₦300,000 <span>/ course</span></div>
-            <ul class="pricing-features">
-                <li>6-week comprehensive program</li>
-                <li>Advanced photography techniques</li>
-                <li>Full Lightroom & Photoshop training</li>
-                <li>5 practical shoots</li>
-                <li>Portfolio development</li>
-                <li>Business & branding module</li>
-                <li>1-on-1 mentorship sessions</li>
-                <li>Lifetime community access</li>
-            </ul>
+            <ul class="pricing-features"><li>8-week comprehensive program</li><li>Advanced photography techniques</li><li>Full Lightroom & Photoshop</li><li>5 practical shoots</li><li>Portfolio development</li><li>Business & branding module</li><li>1-on-1 mentorship</li><li>Lifetime community access</li></ul>
             <a href="#signup" class="pricing-btn">Get Started</a>
         </div>
     </div>
 </section>
 
-<!-- Sign Up Section -->
 <section class="signup" id="signup">
     <div class="section-header">
         <span class="section-label">Join Us</span>
         <h2 class="section-title">Begin Your Journey</h2>
-        <p class="section-subtitle">Fill out the form below and we'll get back to you within 24 hours.</p>
+        <p class="section-subtitle">Fill out the form below and proceed to payment.</p>
     </div>
-
     <div class="signup-container">
         <%= form_with url: training_enroll_path, method: :post, class: "signup-form reveal", local: true do |f| %>
             <div class="form-row">
-                <div class="form-group">
-                    <label for="first_name">First Name</label>
-                    <input type="text" id="first_name" name="first_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="last_name">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" required>
-                </div>
+                <div class="form-group"><label for="first_name">First Name</label><input type="text" id="first_name" name="first_name" required></div>
+                <div class="form-group"><label for="last_name">Last Name</label><input type="text" id="last_name" name="last_name" required></div>
             </div>
-
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required>
-            </div>
-
-            <div class="form-group">
-                <label for="program">Select Program</label>
-                <select id="program" name="program" required>
-                    <option value="">Choose a program...</option>
-                    <%# <option value="essentials">Essentials - ₦150,000</option> %>
-                    <option value="mastery">Complete Mastery - ₦300,000</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="experience">Current Experience Level</label>
-                <select id="experience" name="experience" required>
-                    <option value="">Select your level...</option>
-                    <option value="beginner">Complete Beginner</option>
-                    <option value="hobbyist">Hobbyist / Enthusiast</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced (looking to specialize)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="message">Tell us about your goals (optional)</label>
-                <textarea id="message" name="message" rows="4" placeholder="What do you hope to achieve with this training?"></textarea>
-            </div>
-
-            <button type="submit" class="submit-btn">Submit Application</button>
+            <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" required></div>
+            <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required></div>
+            <div class="form-group"><label for="program">Select Program</label><select id="program" name="program" required><option value="">Choose a program...</option><option value="mastery">Complete Mastery - ₦300,000</option></select></div>
+            <div class="form-group"><label for="experience">Experience Level</label><select id="experience" name="experience" required><option value="">Select your level...</option><option value="beginner">Complete Beginner</option><option value="hobbyist">Hobbyist / Enthusiast</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></div>
+            <div class="form-group"><label for="message">Tell us about your goals (optional)</label><textarea id="message" name="message" rows="4" placeholder="What do you hope to achieve?"></textarea></div>
+            <button type="submit" class="submit-btn">Proceed to Payment</button>
         <% end %>
     </div>
 </section>
 
-<!-- FAQ Section -->
 <section class="faq" id="faq">
     <div class="section-header">
         <span class="section-label">Questions</span>
         <h2 class="section-title">Frequently Asked</h2>
     </div>
-
     <div class="faq-container">
-        <div class="faq-item">
-            <button class="faq-question" type="button">
-                Do I need my own camera to join the program?
-                <span class="icon">+</span>
-            </button>
-            <div class="faq-answer">
-                <p>While having your own camera is beneficial for practice, it's not required. We provide cameras during practical sessions, and you can use a smartphone for initial assignments. We'll guide you on camera purchases if you decide to invest in equipment.</p>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" type="button">
-                Is this program suitable for complete beginners?
-                <span class="icon">+</span>
-            </button>
-            <div class="faq-answer">
-                <p>Absolutely! Our curriculum is designed to take you from zero to professional level. We start with the fundamentals and progressively build your skills. Many of our most successful students started with no prior experience.</p>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" type="button">
-                What software will I learn?
-                <span class="icon">+</span>
-            </button>
-            <div class="faq-answer">
-                <p>You'll learn Adobe Lightroom Classic for photo organization and editing, plus Adobe Photoshop for advanced retouching and compositing. The Complete Mastery program includes in-depth training on both applications.</p>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" type="button">
-                Are there payment plans available?
-                <span class="icon">+</span>
-            </button>
-            <div class="faq-answer">
-                <p>Yes, we offer flexible payment options. You can pay in 2-3 installments, however all payments must be completed before the start of class.</p>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" type="button">
-                What happens after I complete the program?
-                <span class="icon">+</span>
-            </button>
-            <div class="faq-answer">
-                <p>You'll receive a certificate of completion and join our alumni community. Complete Mastery graduates get lifetime access to our private group, job opportunities, and continued mentorship. Many graduates have gone on to start successful photography businesses or work with major studios.</p>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" type="button">
-                What are the class schedules?
-                <span class="icon">+</span>
-            </button>
-            <div class="faq-answer">
-                <p>Classes hold 3 times a week. Each session begins with one hour of theory discussion, followed by hands-on practical work for the rest of the day. Specific days and times are shared once enrollment is confirmed.</p>
-            </div>
-        </div>
+        <div class="faq-item"><button class="faq-question" type="button">Do I need my own camera to join?<span class="icon">+</span></button><div class="faq-answer"><p>While having your own camera is beneficial, it's not required. We provide cameras during practical sessions.</p></div></div>
+        <div class="faq-item"><button class="faq-question" type="button">Is this suitable for complete beginners?<span class="icon">+</span></button><div class="faq-answer"><p>Absolutely! We start with fundamentals and progressively build your skills from zero to professional level.</p></div></div>
+        <div class="faq-item"><button class="faq-question" type="button">What software will I learn?<span class="icon">+</span></button><div class="faq-answer"><p>Adobe Lightroom Classic for editing and organization, plus Adobe Photoshop for advanced retouching.</p></div></div>
+        <div class="faq-item"><button class="faq-question" type="button">Are there payment plans available?<span class="icon">+</span></button><div class="faq-answer"><p>Yes, we offer flexible payment options. You can pay in 2-3 installments, however all payments must be completed before the start of class.</p></div></div>
+        <div class="faq-item"><button class="faq-question" type="button">What happens after I complete the program?<span class="icon">+</span></button><div class="faq-answer"><p>You'll receive a certificate and join our alumni community with lifetime access and continued mentorship.</p></div></div>
+        <div class="faq-item"><button class="faq-question" type="button">What are the class schedules?<span class="icon">+</span></button><div class="faq-answer"><p>Classes hold 3 times a week. Each session begins with one hour of theory discussion, followed by hands-on practical work for the rest of the day. Specific days and times are shared once enrollment is confirmed.</p></div></div>
     </div>
 </section>
 
-<!-- Footer -->
 <footer>
     <div class="footer-logo">363 <span>Photography</span></div>
     <p class="footer-text">Transform your passion into profession</p>
-    <div class="social-links">
-        <a href="#" aria-label="Instagram">📸</a>
-        <a href="#" aria-label="Twitter">🐦</a>
-        <a href="#" aria-label="YouTube">▶️</a>
-        <a href="#" aria-label="Facebook">👍</a>
-    </div>
+    <div class="social-links"><a href="#">📸</a><a href="#">🐦</a><a href="#">▶️</a><a href="#">👍</a></div>
     <p class="copyright">© <%= Date.today.year %> 363 Photography. All rights reserved.</p>
 </footer>
