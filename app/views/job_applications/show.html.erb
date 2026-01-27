@@ -13,7 +13,7 @@
     <div class="g-card__header">
       <h3>Application Details</h3>
       <span class="g-badge g-badge--<%= @job_application.status %>">
-        <%= @job_application.status.capitalize %>
+        <%= @job_application.status.capitalize if @job_application.status %>
       </span>
     </div>
     <div class="g-card__body">

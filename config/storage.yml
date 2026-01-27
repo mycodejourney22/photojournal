@@ -24,7 +24,7 @@ wasabi:
   force_path_style: true
   upload:
     cache_control: 'max-age=31557600'
-    acl: 'bucket-owner-full-control'
+    # acl: 'bucket-owner-full-control'
 
 
 

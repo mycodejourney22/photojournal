@@ -64,7 +64,7 @@
 
           <div class="g-table__col--status g-table__cell">
             <span class="g-badge g-badge--<%= application.status %>">
-              <%= application.status.capitalize %>
+              <%= application.status.capitalize if application.status %>
             </span>
           </div>
 

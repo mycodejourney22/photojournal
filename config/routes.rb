@@ -143,6 +143,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :job_applications, only: [:index, :show, :update] do
+      member do
+        get :download_cv
+      end
+  end
+
   namespace :admin do
     resources :users, only: [:index, :edit, :update, :new, :create] do
       member do
@@ -151,11 +157,7 @@ Rails.application.routes.draw do
     end
 
       # Admin routes for managing applications
-    resources :job_applications, only: [:index, :show, :update] do
-      member do
-        get :download_cv
-      end
-    end
+
 
     resources :coupons do
       member do
