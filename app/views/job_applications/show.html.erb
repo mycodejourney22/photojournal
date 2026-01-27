@@ -1,0 +1,259 @@
+<!-- app/views/job_applications/show.html.erb -->
+<div class="g-content">
+  <div class="g-content__toolbar">
+    <div class="g-content__page-title">
+      <h1>Application: <%= @job_application.name %></h1>
+    </div>
+    <div class="g-content__actions">
+      <%= link_to "Back to Applications", job_applications_path, class: "g-button g-button--secondary" %>
+    </div>
+  </div>
+
+  <div class="g-card" style="margin-bottom: 2rem;">
+    <div class="g-card__header">
+      <h3>Application Details</h3>
+      <span class="g-badge g-badge--<%= @job_application.status %>">
+        <%= @job_application.status.capitalize %>
+      </span>
+    </div>
+    <div class="g-card__body">
+      <div class="application-details">
+        <div class="detail-row">
+          <div class="detail-label">Reference Number:</div>
+          <div class="detail-value"><strong><%= @job_application.reference_number %></strong></div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Full Name:</div>
+          <div class="detail-value"><%= @job_application.name %></div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Email:</div>
+          <div class="detail-value">
+            <a href="mailto:<%= @job_application.email %>"><%= @job_application.email %></a>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Phone:</div>
+          <div class="detail-value">
+            <a href="tel:<%= @job_application.phone %>"><%= @job_application.phone %></a>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Position Applied:</div>
+          <div class="detail-value"><%= @job_application.position %></div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Applied On:</div>
+          <div class="detail-value"><%= @job_application.formatted_created_at %></div>
+        </div>
+        <% if @job_application.portfolio_link.present? %>
+          <div class="detail-row">
+            <div class="detail-label">Portfolio Link:</div>
+            <div class="detail-value">
+              <a href="<%= @job_application.portfolio_link %>" target="_blank"><%= @job_application.portfolio_link %></a>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="g-card" style="margin-bottom: 2rem;">
+    <div class="g-card__header">
+      <h3>Motivation</h3>
+    </div>
+    <div class="g-card__body">
+      <p style="white-space: pre-wrap; line-height: 1.6;"><%= @job_application.motivation %></p>
+    </div>
+  </div>
+
+  <div class="g-card" style="margin-bottom: 2rem;">
+    <div class="g-card__header">
+      <h3>Attachments</h3>
+    </div>
+    <div class="g-card__body">
+      <div class="attachments-grid">
+        <% if @job_application.cv.attached? %>
+          <div class="attachment-item">
+            <div class="attachment-icon">📄</div>
+            <div class="attachment-info">
+              <p class="attachment-name"><%= @job_application.cv.filename %></p>
+              <p class="attachment-size"><%= number_to_human_size(@job_application.cv.byte_size) %></p>
+            </div>
+            <%= link_to "Download CV", download_cv_job_application_path(@job_application), class: "g-button g-button--primary" %>
+          </div>
+        <% else %>
+          <p class="g-text--muted">No CV attached.</p>
+        <% end %>
+
+        <% if @job_application.portfolio_files.attached? %>
+          <div class="portfolio-files">
+            <h4 style="margin-top: 20px; margin-bottom: 15px;">Portfolio Files</h4>
+            <% @job_application.portfolio_files.each do |file| %>
+              <div class="attachment-item">
+                <div class="attachment-icon">🖼️</div>
+                <div class="attachment-info">
+                  <p class="attachment-name"><%= file.filename %></p>
+                  <p class="attachment-size"><%= number_to_human_size(file.byte_size) %></p>
+                </div>
+                <%= link_to "Download", rails_blob_path(file, disposition: "attachment"), class: "g-button g-button--secondary" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="g-card">
+    <div class="g-card__header">
+      <h3>Update Status</h3>
+    </div>
+    <div class="g-card__body">
+      <%= form_with model: @job_application, local: true do |f| %>
+        <div class="g-form__group">
+          <%= f.label :status, "Application Status", class: "g-form__label" %>
+          <%= f.select :status,
+              options_for_select([
+                ['Pending', 'pending'],
+                ['Reviewed', 'reviewed'],
+                ['Shortlisted', 'shortlisted'],
+                ['Rejected', 'rejected'],
+                ['Hired', 'hired']
+              ], @job_application.status),
+              {},
+              class: "g-form__control", style: "max-width: 300px;" %>
+        </div>
+        <%= f.submit "Update Status", class: "g-button g-button--primary" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+.application-details {
+  display: grid;
+  gap: 15px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #333;
+}
+
+.detail-value a {
+  color: #333;
+  text-decoration: underline;
+}
+
+.attachments-grid {
+  display: grid;
+  gap: 15px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.attachment-icon {
+  font-size: 32px;
+}
+
+.attachment-info {
+  flex: 1;
+}
+
+.attachment-name {
+  font-weight: 500;
+  margin: 0 0 5px 0;
+}
+
+.attachment-size {
+  color: #666;
+  font-size: 13px;
+  margin: 0;
+}
+
+.g-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.g-badge--pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.g-badge--reviewed {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.g-badge--shortlisted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.g-badge--rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.g-badge--hired {
+  background-color: #d4edda;
+  color: #155724;
+  font-weight: 600;
+}
+
+.g-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.g-card__header h3 {
+  margin: 0;
+}
+
+.g-card__body {
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .attachment-item {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+</style>

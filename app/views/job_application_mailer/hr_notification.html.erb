@@ -1,0 +1,98 @@
+<!-- app/views/job_application_mailer/hr_notification.html.erb -->
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+  <div style="text-align: center; margin-bottom: 30px;">
+    <div style="width: 50px; height: 50px; background-color: #EDD400; border-radius: 50%; margin: 0 auto 10px;"></div>
+    <h1 style="color: #333; margin-bottom: 5px; font-size: 24px;">363 PHOTOGRAPHY</h1>
+    <p style="color: #666; font-size: 14px;">New Job Application</p>
+  </div>
+
+  <div style="background-color: #EDD400; color: #333; padding: 15px 20px; border-radius: 8px; margin-bottom: 25px;">
+    <h2 style="margin: 0; font-size: 18px;">New Application for <%= @job_application.position %></h2>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 25px; margin-bottom: 25px;">
+    <h3 style="color: #333; margin-top: 0; margin-bottom: 20px; font-size: 16px; border-bottom: 2px solid #EDD400; padding-bottom: 10px;">
+      Applicant Details
+    </h3>
+
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 10px 0; color: #666; width: 140px; vertical-align: top;">Reference:</td>
+        <td style="padding: 10px 0; color: #333; font-weight: bold;"><%= @job_application.reference_number %></td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; color: #666; vertical-align: top;">Full Name:</td>
+        <td style="padding: 10px 0; color: #333;"><%= @job_application.name %></td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; color: #666; vertical-align: top;">Email:</td>
+        <td style="padding: 10px 0; color: #333;">
+          <a href="mailto:<%= @job_application.email %>" style="color: #333;"><%= @job_application.email %></a>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; color: #666; vertical-align: top;">Phone:</td>
+        <td style="padding: 10px 0; color: #333;">
+          <a href="tel:<%= @job_application.phone %>" style="color: #333;"><%= @job_application.phone %></a>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; color: #666; vertical-align: top;">Position:</td>
+        <td style="padding: 10px 0; color: #333; font-weight: bold;"><%= @job_application.position %></td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; color: #666; vertical-align: top;">Applied On:</td>
+        <td style="padding: 10px 0; color: #333;"><%= @job_application.formatted_created_at %></td>
+      </tr>
+      <% if @job_application.portfolio_link.present? %>
+      <tr>
+        <td style="padding: 10px 0; color: #666; vertical-align: top;">Portfolio Link:</td>
+        <td style="padding: 10px 0;">
+          <a href="<%= @job_application.portfolio_link %>" style="color: #EDD400; text-decoration: none;" target="_blank">
+            <%= @job_application.portfolio_link %>
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 25px; margin-bottom: 25px;">
+    <h3 style="color: #333; margin-top: 0; margin-bottom: 15px; font-size: 16px; border-bottom: 2px solid #EDD400; padding-bottom: 10px;">
+      Why They Want to Join
+    </h3>
+    <p style="color: #333; line-height: 1.6; margin: 0; white-space: pre-wrap;"><%= @job_application.motivation %></p>
+  </div>
+
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 25px; margin-bottom: 25px;">
+    <h3 style="color: #333; margin-top: 0; margin-bottom: 15px; font-size: 16px; border-bottom: 2px solid #EDD400; padding-bottom: 10px;">
+      Attachments
+    </h3>
+
+    <% if @cv_url.present? %>
+    <div style="margin-bottom: 15px;">
+      <p style="color: #666; margin: 0 0 8px 0; font-size: 14px;">Resume/CV:</p>
+      <a href="<%= @cv_url %>" style="display: inline-block; background-color: #EDD400; color: #333; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px;">
+        Download CV
+      </a>
+    </div>
+    <% end %>
+
+    <% if @portfolio_urls.any? %>
+    <div>
+      <p style="color: #666; margin: 0 0 8px 0; font-size: 14px;">Portfolio Files:</p>
+      <% @portfolio_urls.each do |file| %>
+        <a href="<%= file[:url] %>" style="display: inline-block; background-color: #333; color: #fff; padding: 8px 16px; border-radius: 5px; text-decoration: none; font-size: 13px; margin-right: 8px; margin-bottom: 8px;">
+          <%= file[:name] %>
+        </a>
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+
+  <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+    <p style="color: #999; font-size: 12px; margin: 0;">
+      This is an automated notification from 363 Photography HR System.
+    </p>
+  </div>
+</div>

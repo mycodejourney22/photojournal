@@ -1,0 +1,127 @@
+<!-- app/views/job_applications/index.html.erb -->
+<div class="g-content">
+  <div class="g-content__toolbar">
+    <div class="g-content__page-title">
+      <h1>Job Applications</h1>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="g-card" style="margin-bottom: 2rem;">
+    <div class="g-card__body">
+      <%= form_with url: job_applications_path, method: :get, class: "g-form g-form--inline" do |f| %>
+        <div class="g-form__group">
+          <%= f.label :position, "Position", class: "g-form__label" %>
+          <%= f.select :position,
+              options_for_select(JobApplication::POSITIONS, params[:position]),
+              { prompt: "All Positions" },
+              class: "g-form__control" %>
+        </div>
+
+        <div class="g-form__group">
+          <%= f.label :status, "Status", class: "g-form__label" %>
+          <%= f.select :status,
+              options_for_select([['Pending', 'pending'], ['Reviewed', 'reviewed'], ['Shortlisted', 'shortlisted'], ['Rejected', 'rejected'], ['Hired', 'hired']], params[:status]),
+              { prompt: "All Statuses" },
+              class: "g-form__control" %>
+        </div>
+
+        <div class="g-form__actions">
+          <%= f.submit "Filter", class: "g-button g-button--primary" %>
+          <%= link_to "Clear", job_applications_path, class: "g-button g-button--secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Applications Table -->
+  <div class="g-table">
+    <div class="g-table__header">
+      <div class="g-table__col--name">Applicant</div>
+      <div class="g-table__col--position">Position</div>
+      <div class="g-table__col--date">Applied</div>
+      <div class="g-table__col--status">Status</div>
+      <div class="g-table__col--actions">Actions</div>
+    </div>
+
+    <% if @job_applications.any? %>
+      <% @job_applications.each do |application| %>
+        <div class="g-table__row">
+          <div class="g-table__col--name g-table__cell">
+            <strong><%= application.name %></strong>
+            <small class="g-text--muted" style="display: block;"><%= application.email %></small>
+            <small class="g-text--muted"><%= application.phone %></small>
+          </div>
+
+          <div class="g-table__col--position g-table__cell">
+            <%= application.position %>
+          </div>
+
+          <div class="g-table__col--date g-table__cell">
+            <%= application.created_at.strftime('%b %d, %Y') %>
+            <small class="g-text--muted" style="display: block;"><%= application.reference_number %></small>
+          </div>
+
+          <div class="g-table__col--status g-table__cell">
+            <span class="g-badge g-badge--<%= application.status %>">
+              <%= application.status.capitalize %>
+            </span>
+          </div>
+
+          <div class="g-table__col--actions g-table__cell">
+            <%= link_to 'View', job_application_path(application), class: "g-button--link" %>
+            <% if application.cv.attached? %>
+              <%= link_to 'CV', download_cv_job_application_path(application), class: "g-button--link" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="g-content__empty">
+        <p>No job applications found.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @job_applications.respond_to?(:total_pages) %>
+    <div class="g-content__pagination">
+      <%= paginate @job_applications %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.g-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.g-badge--pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.g-badge--reviewed {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.g-badge--shortlisted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.g-badge--rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.g-badge--hired {
+  background-color: #d4edda;
+  color: #155724;
+  font-weight: 600;
+}
+</style>

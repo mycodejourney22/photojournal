@@ -1,0 +1,242 @@
+<!-- app/views/job_applications/thank_you.html.erb -->
+<style>
+  :root {
+    --primary-color: #EDD400;
+    --primary-dark: #D9C000;
+    --secondary-color: #333333;
+    --text-color: #333333;
+    --light-text: #666666;
+    --light-bg: #f9f9f9;
+    --white: #ffffff;
+    --border-color: #e0e0e0;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+  }
+
+  .thank-you-page {
+    font-family: 'Poppins', 'Helvetica', sans-serif;
+    color: var(--text-color);
+    background-color: var(--light-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .thank-you-page h1, .thank-you-page h2, .thank-you-page h3 {
+    font-family: 'Nunito', 'Helvetica', sans-serif;
+  }
+
+  /* Header */
+  .thank-you-header {
+    background-color: var(--white);
+    padding: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .thank-you-header .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .thank-you-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .thank-you-logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    margin-right: 12px;
+  }
+
+  .thank-you-logo-text {
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--secondary-color);
+  }
+
+  /* Content */
+  .thank-you-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+  }
+
+  .thank-you-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 50px;
+    box-shadow: var(--card-shadow);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .thank-you-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #d4edda;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    font-size: 40px;
+  }
+
+  .thank-you-card h1 {
+    font-size: 32px;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+  }
+
+  .thank-you-card p {
+    font-size: 16px;
+    color: var(--light-text);
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+
+  .reference-box {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
+
+  .reference-box p {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: var(--secondary-color);
+  }
+
+  .reference-number {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .thank-you-steps {
+    text-align: left;
+    background-color: var(--light-bg);
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+
+  .thank-you-steps h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+  }
+
+  .thank-you-steps ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .thank-you-steps li {
+    font-size: 14px;
+    color: var(--light-text);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .thank-you-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: var(--transition);
+    background-color: var(--secondary-color);
+    color: var(--white);
+  }
+
+  .thank-you-btn:hover {
+    background-color: #444;
+    transform: translateY(-2px);
+  }
+
+  /* Footer */
+  .thank-you-footer {
+    background-color: var(--white);
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .thank-you-footer p {
+    font-size: 14px;
+    color: var(--light-text);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .thank-you-card {
+      padding: 30px 20px;
+    }
+
+    .thank-you-card h1 {
+      font-size: 26px;
+    }
+
+    .reference-number {
+      font-size: 20px;
+    }
+  }
+</style>
+
+<div class="thank-you-page">
+  <!-- Header -->
+  <header class="thank-you-header">
+    <div class="container">
+      <a href="<%= public_home_path %>" class="thank-you-logo">
+        <div class="thank-you-logo-icon"></div>
+        <span class="thank-you-logo-text">363 Photography</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="thank-you-content">
+    <div class="thank-you-card">
+      <div class="thank-you-icon">✓</div>
+      <h1>Application Submitted!</h1>
+      <p>Thank you for your interest in joining the 363 Photography team. We've received your application and will review it shortly.</p>
+
+      <% if @reference_number.present? %>
+        <div class="reference-box">
+          <p>Your Reference Number</p>
+          <p class="reference-number"><%= @reference_number %></p>
+        </div>
+      <% end %>
+
+      <div class="thank-you-steps">
+        <h3>What happens next?</h3>
+        <ol>
+          <li>Our HR team will review your application within 5-7 business days.</li>
+          <li>If your profile matches our requirements, we will contact you via email or phone to schedule an interview.</li>
+          <li>Please check your email regularly, including your spam folder.</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+</div>

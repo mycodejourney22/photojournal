@@ -1,0 +1,652 @@
+<!-- app/views/job_applications/new.html.erb -->
+<style>
+  :root {
+    --primary-color: #EDD400;
+    --primary-dark: #D9C000;
+    --secondary-color: #333333;
+    --text-color: #333333;
+    --light-text: #666666;
+    --light-bg: #f9f9f9;
+    --white: #ffffff;
+    --border-color: #e0e0e0;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+  }
+
+  .career-page {
+    font-family: 'Poppins', 'Helvetica', sans-serif;
+    color: var(--text-color);
+    background-color: var(--light-bg);
+  }
+
+  .career-page h1, .career-page h2, .career-page h3 {
+    font-family: 'Nunito', 'Helvetica', sans-serif;
+  }
+
+  /* Header */
+  .career-header {
+    background-color: var(--white);
+    padding: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .career-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .career-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .career-logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    margin-right: 12px;
+  }
+
+  .career-logo-text {
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--secondary-color);
+  }
+
+  .career-nav-links {
+    display: flex;
+    gap: 30px;
+  }
+
+  .career-nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .career-nav-links a:hover {
+    color: var(--primary-dark);
+  }
+
+  /* Hero */
+  .career-hero {
+    background-color: var(--secondary-color);
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .career-hero::before {
+    content: '363';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Nunito', sans-serif;
+    font-size: 300px;
+    font-weight: 700;
+    color: rgba(237, 212, 0, 0.05);
+    pointer-events: none;
+  }
+
+  .career-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .career-badge {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .career-hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .career-hero h1 span {
+    color: var(--primary-color);
+  }
+
+  .career-hero p {
+    font-size: 18px;
+    color: #cccccc;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Benefits */
+  .career-benefits {
+    padding: 80px 0;
+    background-color: var(--white);
+  }
+
+  .career-benefits .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .career-section-title {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 50px;
+    color: var(--secondary-color);
+  }
+
+  .career-section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+    margin: 15px auto 0;
+  }
+
+  .career-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+  }
+
+  .career-benefit-card {
+    background-color: var(--light-bg);
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .career-benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-shadow);
+  }
+
+  .career-benefit-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 24px;
+  }
+
+  .career-benefit-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+  }
+
+  .career-benefit-card p {
+    font-size: 14px;
+    color: var(--light-text);
+  }
+
+  /* Application Form */
+  .career-application {
+    padding: 80px 0;
+    background-color: var(--light-bg);
+  }
+
+  .career-application-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .career-form-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .career-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .career-form-group {
+    margin-bottom: 24px;
+  }
+
+  .career-form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .career-form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 8px;
+  }
+
+  .career-form-group input,
+  .career-form-group select,
+  .career-form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: var(--text-color);
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: var(--transition);
+    outline: none;
+  }
+
+  .career-form-group input:focus,
+  .career-form-group select:focus,
+  .career-form-group textarea:focus {
+    border-color: var(--primary-color);
+    background-color: var(--white);
+  }
+
+  .career-form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+
+  .career-form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  /* File Upload */
+  .career-file-upload {
+    position: relative;
+    border: 2px dashed var(--border-color);
+    border-radius: 6px;
+    padding: 30px;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    background-color: var(--light-bg);
+  }
+
+  .career-file-upload:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(237, 212, 0, 0.05);
+  }
+
+  .career-file-upload input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .career-file-upload-content {
+    pointer-events: none;
+  }
+
+  .career-file-upload-icon {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 10px;
+  }
+
+  .career-file-upload-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--primary-dark);
+  }
+
+  .career-file-upload-text {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 5px;
+  }
+
+  .career-file-upload-hint {
+    font-size: 12px;
+    color: var(--light-text);
+  }
+
+  .career-file-names {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--primary-dark);
+    font-weight: 500;
+  }
+
+  /* Submit Button */
+  .career-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+  }
+
+  .career-btn-primary {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    width: 100%;
+  }
+
+  .career-btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+
+  /* Error Messages */
+  .career-form-errors {
+    background-color: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .career-form-errors h4 {
+    color: #dc2626;
+    margin: 0 0 10px 0;
+    font-size: 14px;
+  }
+
+  .career-form-errors ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .career-form-errors li {
+    color: #dc2626;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  .field_with_errors input,
+  .field_with_errors select,
+  .field_with_errors textarea {
+    border-color: #dc2626;
+  }
+
+  /* Footer */
+  .career-footer {
+    background-color: var(--white);
+    padding: 30px 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .career-footer-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .career-footer-logo-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    margin-right: 10px;
+  }
+
+  .career-footer-logo-text {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--secondary-color);
+  }
+
+  .career-footer p {
+    font-size: 14px;
+    color: var(--light-text);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .career-nav-links {
+      display: none;
+    }
+
+    .career-hero h1 {
+      font-size: 32px;
+    }
+
+    .career-hero::before {
+      font-size: 150px;
+    }
+
+    .career-form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .career-form-card {
+      padding: 25px;
+    }
+
+    .career-section-title {
+      font-size: 26px;
+    }
+  }
+</style>
+
+<div class="career-page">
+  <!-- Header -->
+  <header class="career-header">
+    <div class="container">
+
+        <%# <div class="career-logo-icon"></div> %>
+        <span class="career-logo-text">363 Photography</span>
+
+
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="career-hero">
+    <div class="career-hero-content">
+      <span class="career-badge">We're Hiring</span>
+      <h1>Join the <span>363 Photography</span> Team</h1>
+      <p>We're looking for passionate, creative individuals ready to capture beautiful moments and deliver exceptional experiences.</p>
+    </div>
+  </section>
+
+  <!-- Why Join Section -->
+  <section class="career-benefits">
+    <div class="container">
+      <h2 class="career-section-title">Why Join Us?</h2>
+      <div class="career-benefits-grid">
+        <div class="career-benefit-card">
+          <div class="career-benefit-icon">📸</div>
+          <h3>Creative Freedom</h3>
+          <p>Express your artistic vision and grow your skills in a supportive environment.</p>
+        </div>
+        <div class="career-benefit-card">
+          <div class="career-benefit-icon">👥</div>
+          <h3>Great Team</h3>
+          <p>Work alongside talented professionals who share your passion for photography.</p>
+        </div>
+        <div class="career-benefit-card">
+          <div class="career-benefit-icon">📈</div>
+          <h3>Career Growth</h3>
+          <p>We invest in your development with training and advancement opportunities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Application Section -->
+  <section class="career-application">
+    <div class="career-application-container">
+      <h2 class="career-section-title">Apply Now</h2>
+
+      <div class="career-form-card">
+        <% if @job_application.errors.any? %>
+          <div class="career-form-errors">
+            <h4><%= pluralize(@job_application.errors.count, "error") %> prevented your application from being submitted:</h4>
+            <ul>
+              <% @job_application.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= form_with model: @job_application, local: true, html: { multipart: true } do |f| %>
+          <div class="career-form-row">
+            <div class="career-form-group">
+              <%= f.label :name, "Full Name *" %>
+              <%= f.text_field :name, placeholder: "Enter your full name", required: true %>
+            </div>
+            <div class="career-form-group">
+              <%= f.label :email, "Email Address *" %>
+              <%= f.email_field :email, placeholder: "your@email.com", required: true %>
+            </div>
+          </div>
+
+          <div class="career-form-row">
+            <div class="career-form-group">
+              <%= f.label :phone, "Phone Number *" %>
+              <%= f.telephone_field :phone, placeholder: "+234 000 000 0000", required: true %>
+            </div>
+            <div class="career-form-group">
+              <%= f.label :position, "Position *" %>
+              <%= f.select :position,
+                  options_for_select(JobApplication::POSITIONS.map { |p| [p, p] }, @job_application.position),
+                  { prompt: "Select a position" },
+                  { required: true } %>
+            </div>
+          </div>
+
+          <div class="career-form-group full-width">
+            <%= f.label :cv, "Resume / CV *" %>
+            <div class="career-file-upload">
+              <%= f.file_field :cv,
+                  accept: ".pdf,.doc,.docx",
+                  required: true,
+                  direct_upload: true,
+                  data: { direct_upload_url: rails_direct_uploads_url } %>
+              <div class="career-file-upload-content">
+                <div class="career-file-upload-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 15V3m0 0l-4 4m4-4l4 4"/>
+                    <path d="M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/>
+                  </svg>
+                </div>
+                <p class="career-file-upload-text">Click to upload or drag and drop</p>
+                <p class="career-file-upload-hint">PDF, DOC, or DOCX (Max 10MB)</p>
+              </div>
+              <div class="career-file-names" id="cvFileName"></div>
+            </div>
+          </div>
+
+          <div class="career-form-group full-width">
+            <%= f.label :portfolio_files, "Portfolio Files (Optional)" %>
+            <div class="career-file-upload">
+              <%= f.file_field :portfolio_files,
+                  accept: ".pdf,.jpg,.jpeg,.png,.zip",
+                  multiple: true,
+                  direct_upload: true,
+                  data: { direct_upload_url: rails_direct_uploads_url } %>
+              <div class="career-file-upload-content">
+                <div class="career-file-upload-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="M21 15l-5-5L5 21"/>
+                  </svg>
+                </div>
+                <p class="career-file-upload-text">Share your best work</p>
+                <p class="career-file-upload-hint">PDF, JPG, PNG, or ZIP (Multiple files allowed)</p>
+              </div>
+              <div class="career-file-names" id="portfolioFileNames"></div>
+            </div>
+          </div>
+
+          <div class="career-form-group full-width">
+            <%= f.label :portfolio_link, "Online Portfolio Link (Optional)" %>
+            <%= f.url_field :portfolio_link, placeholder: "https://your-portfolio.com" %>
+          </div>
+
+          <div class="career-form-group full-width">
+            <%= f.label :motivation, "Why do you want to join 363 Photography? *" %>
+            <%= f.text_area :motivation,
+                placeholder: "Tell us what draws you to our work and what unique perspective you'd bring to our team...",
+                required: true %>
+          </div>
+
+          <%= f.submit "Submit Application", class: "career-btn career-btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="career-footer">
+    <div class="container">
+      <div class="career-footer-logo">
+        <div class="career-footer-logo-icon"></div>
+        <span class="career-footer-logo-text">363 Photography</span>
+      </div>
+      <p>&copy; <%= Date.today.year %> 363 Photography. All rights reserved.</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // File upload display
+  document.addEventListener('DOMContentLoaded', function() {
+    const cvInput = document.querySelector('input[name="job_application[cv]"]');
+    const portfolioInput = document.querySelector('input[name="job_application[portfolio_files][]"]');
+
+    if (cvInput) {
+      cvInput.addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        document.getElementById('cvFileName').textContent = fileName || '';
+      });
+    }
+
+    if (portfolioInput) {
+      portfolioInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        const names = files.map(f => f.name).join(', ');
+        document.getElementById('portfolioFileNames').textContent = names || '';
+      });
+    }
+  });
+</script>

@@ -12,6 +12,18 @@ Rails.application.routes.draw do
   get '/training/success', to: 'training#success', as: :training_success
   get '/training/failure', to: 'training#failure', as: :training_failure
 
+  # Public career page routes
+  resources :job_applications, only: [:new, :create] do
+    collection do
+      get :thank_you
+    end
+  end
+
+  # Convenience route for /careers
+  get '/careers', to: 'job_applications#new', as: :careers
+
+
+
   get 'prices/new'
   get 'prices/index'
   get 'prices/create'
@@ -135,6 +147,13 @@ Rails.application.routes.draw do
     resources :users, only: [:index, :edit, :update, :new, :create] do
       member do
         patch :toggle_active
+      end
+    end
+
+      # Admin routes for managing applications
+    resources :job_applications, only: [:index, :show, :update] do
+      member do
+        get :download_cv
       end
     end
 
