@@ -78,7 +78,7 @@
     </div>
     <% end %>
 
-    <% if @portfolio_urls.any? %>
+    <% if @portfolio_urls.present? %>
     <div>
       <p style="color: #666; margin: 0 0 8px 0; font-size: 14px;">Portfolio Files:</p>
       <% @portfolio_urls.each do |file| %>
