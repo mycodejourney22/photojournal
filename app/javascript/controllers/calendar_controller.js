@@ -1,8 +1,8 @@
 // app/javascript/controllers/calendar_controller.js
 import { Controller } from "@hotwired/stimulus";
-import { Calendar } from "@fullcalendar/core";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction"; // For day click interaction
+// import { Calendar } from "@fullcalendar/core";
+// import dayGridPlugin from "@fullcalendar/daygrid";
+// import interactionPlugin from "@fullcalendar/interaction"; // For day click interaction
 
 export default class extends Controller {
   static targets = ["timeSlots", "calendar"];
@@ -18,9 +18,12 @@ export default class extends Controller {
 
   initializeCalendar() {
     const calendarEl = this.calendarTarget;
-    const calendar = new Calendar(calendarEl, {
+    // const calendar = new Calendar(calendarEl, {
+    //   timeZone: 'Africa/Lagos',
+    //   plugins: [dayGridPlugin, interactionPlugin],
+    const calendar = new FullCalendar.Calendar(calendarEl, {
       timeZone: 'Africa/Lagos',
-      plugins: [dayGridPlugin, interactionPlugin],
+      // plugins: [FullCalendar.DayGridPlugin, FullCalendar.InteractionPlugin],
       initialView: 'dayGridMonth',
       validRange: {
         start: new Date()
