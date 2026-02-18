@@ -1,4 +1,7 @@
 <!-- app/views/appointments/select_price.html.erb -->
+<!-- app/views/appointments/select_price.html.erb -->
+<!-- UPDATED: Now receives @location and passes it forward in the booking flow -->
+
 <div class="pricing-container">
   <!-- Logo and header section -->
   <div class="logo-header">
@@ -6,29 +9,37 @@
     <h1 class="logo-text">363 PHOTOGRAPHY</h1>
   </div>
 
-  <!-- Back navigation -->
+  <!-- Back navigation - now goes back to location selection -->
   <div class="back-navigation">
-    <%= link_to :back, class: "back-links" do %>
+    <%= link_to select_location_appointments_path(shoot_type: @shoot_type), class: "back-links" do %>
       <i class="fa-solid fa-chevron-left"></i> Back
     <% end %>
   </div>
 
-  <!-- Page title -->
+  <!-- Page title with location context -->
   <h2 class="page-titles">Choose a Package for <%= @shoot_type %></h2>
+  <p class="location-badge">
+    <i class="fa-solid fa-location-dot"></i> <%= @location %> Studio
+  </p>
 
   <!-- Pricing packages -->
   <div class="packages-grid">
     <% @prices.each do |price| %>
-      <%= link_to booking_appointments_path(price_id: price.id), class: "package-link" do %>
+      <%= link_to booking_appointments_path(price_id: price.id, location: @location), class: "package-link" do %>
         <div class="package-card">
           <!-- Package image with price tag -->
           <div class="package-image">
-            <%# <%= price.photo.attached? ? cl_image_tag(price.photo.key, class: "card-image") : image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", class: "card-image") %>
-            <%=  image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", class: "card-image") %>
+            <%= image_tag("https://images.unsplash.com/photo-1736354220560-420e5b075881?q=80&w=500&auto=format&fit=crop", class: "card-image") %>
 
             <div class="price-tag">
-              ₦<%= number_with_delimiter(price.amount) %>
+              <%= price.formatted_amount %>
             </div>
+
+            <% if price.studio_specific? %>
+              <div class="exclusive-badge">
+                <%= @location %> Exclusive
+              </div>
+            <% end %>
           </div>
 
           <!-- Package information -->
@@ -46,6 +57,10 @@
                 <span>Unedited Copies: Available on request</span>
               </div>
               <div class="feature-item">
+                <i class="fa-solid fa-clock feature-icon"></i>
+                <span>Duration: <%= price.duration %> minutes</span>
+              </div>
+              <div class="feature-item">
                 <i class="fa-solid fa-info-circle feature-icon"></i>
                 <span>Hardcopies/Print: Not included in pricing</span>
               </div>
@@ -55,6 +70,14 @@
       <% end %>
     <% end %>
   </div>
+
+  <% if @prices.empty? %>
+    <div class="no-packages">
+      <i class="fa-solid fa-box-open"></i>
+      <p>No packages available for <%= @shoot_type %> at <%= @location %> studio.</p>
+      <%= link_to "Choose a different location", select_location_appointments_path(shoot_type: @shoot_type), class: "back-button" %>
+    </div>
+  <% end %>
 </div>
 
 <style>
@@ -75,23 +98,21 @@
   }
 
   .logo-circle {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background-color: #EDD400;
     border-radius: 50%;
-    margin-right: 15px;
-    flex-shrink: 0;
+    margin-right: 12px;
   }
 
   .logo-text {
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     color: #333;
     margin: 0;
-    line-height: 1.2;
   }
 
-  /* Back button */
+  /* Back navigation */
   .back-navigation {
     margin-bottom: 20px;
   }
@@ -101,57 +122,72 @@
     align-items: center;
     color: #666;
     text-decoration: none;
-    font-size: 16px;
-    padding: 5px 0;
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+
+  .back-links:hover {
+    color: #333;
   }
 
   .back-links i {
-    margin-right: 8px;
+    margin-right: 6px;
   }
 
   /* Page title */
   .page-titles {
-    font-size: 18px;
-    color: #333;
-    margin: 0 0 40px 0;
+    font-size: 24px;
     font-weight: 600;
-    line-height: 1.3;
+    color: #333;
+    margin-bottom: 8px;
   }
 
-  /* Package grid */
+  /* Location badge */
+  .location-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #f5f5f5;
+    color: #666;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .location-badge i {
+    color: #EDD400;
+    margin-right: 8px;
+  }
+
+  /* Packages grid */
   .packages-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
   }
 
   .package-link {
     text-decoration: none;
     color: inherit;
-    display: block;
-    height: 100%;
   }
 
   .package-card {
-    background-color: white;
-    border-radius: 12px;
+    background: white;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
   }
 
   .package-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   }
 
   /* Package image */
   .package-image {
     position: relative;
-    height: 220px;
+    height: 200px;
     overflow: hidden;
   }
 
@@ -161,126 +197,112 @@
     object-fit: cover;
   }
 
-  /* Price tag */
   .price-tag {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: #EDD400;
-    color: #000;
+    bottom: 12px;
+    right: 12px;
+    background: #EDD400;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 8px;
     font-weight: 700;
     font-size: 18px;
-    padding: 10px 20px;
-    border-radius: 50px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .exclusive-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #333;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
   }
 
   /* Package content */
   .package-content {
-    padding: 25px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+    padding: 20px;
   }
 
   .package-title {
-    font-size: 22px;
-    margin: 0 0 15px 0;
+    font-size: 20px;
+    font-weight: 600;
     color: #333;
+    margin: 0 0 10px 0;
   }
 
   .package-description {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
     line-height: 1.5;
+    margin-bottom: 16px;
   }
 
-  /* Features list */
+  /* Package features */
   .package-features {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: auto;
+    gap: 8px;
   }
 
   .feature-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    font-size: 13px;
+    color: #555;
   }
 
   .feature-icon {
     color: #EDD400;
     margin-right: 10px;
-    margin-top: 3px;
+    font-size: 12px;
+    width: 16px;
+  }
+
+  /* No packages message */
+  .no-packages {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f9f9f9;
+    border-radius: 12px;
+  }
+
+  .no-packages i {
+    font-size: 48px;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+
+  .no-packages p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  .back-button {
+    display: inline-block;
+    background: #EDD400;
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease;
+  }
+
+  .back-button:hover {
+    background: #d4bc00;
   }
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
-    .pricing-container {
-      padding: 15px;
-    }
-
     .packages-grid {
       grid-template-columns: 1fr;
     }
-  }
-
-  @media (max-width: 480px) {
-    .logo-header {
-      margin-bottom: 20px;
-    }
-
-    .logo-circle {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-    }
-
-    .logo-text {
-      font-size: 18px;
-    }
-
-    .back-navigation {
-      margin-bottom: 15px;
-    }
-
-    .back-links {
-      font-size: 14px;
-    }
 
     .page-titles {
-      font-size: 22px;
-      margin-bottom: 25px;
-    }
-
-    .package-image {
-      height: 180px;
-    }
-
-    .price-tag {
-      font-size: 16px;
-      padding: 8px 15px;
-      top: 15px;
-      right: 15px;
-    }
-
-    .package-content {
-      padding: 20px;
-    }
-
-    .package-title {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .package-description {
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
-
-    .feature-item {
-      font-size: 14px;
+      font-size: 20px;
     }
   }
 </style>

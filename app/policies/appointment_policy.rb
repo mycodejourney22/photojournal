@@ -45,7 +45,7 @@ class AppointmentPolicy < ApplicationPolicy
     # Same access control as other appointment views
     user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
   end
-  
+
   def upcoming?
     index?
   end
@@ -71,6 +71,10 @@ class AppointmentPolicy < ApplicationPolicy
   end
 
   def show?
+    true
+  end
+
+  def select_location?
     true
   end
 

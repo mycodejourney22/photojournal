@@ -17,7 +17,7 @@
 
   <div class="shoot-types-grid">
     <% @shoot_types.each do |shoot_type| %>
-      <%= link_to select_price_appointments_path(shoot_type: shoot_type.shoot_type), class: "shoot-type-card" do %>
+      <%= link_to select_location_appointments_path(shoot_type: shoot_type.shoot_type), class: "shoot-type-card" do %>
         <div class="shoot-type-icon">
           <i class="fa-solid <%= shoot_type.icon %>"></i>
         </div>

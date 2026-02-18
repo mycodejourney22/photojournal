@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_27_135857) do
+ActiveRecord::Schema[7.1].define(version: 2026_02_18_132516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -345,6 +345,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_27_135857) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "period"
+    t.bigint "studio_id"
+    t.index ["studio_id", "shoot_type", "still_valid"], name: "index_prices_on_studio_shoot_type_valid"
+    t.index ["studio_id"], name: "index_prices_on_studio_id"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -503,6 +506,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_27_135857) do
   add_foreign_key "gallery_mappings", "customers"
   add_foreign_key "gallery_mappings", "galleries"
   add_foreign_key "photo_shoots", "appointments"
+  add_foreign_key "prices", "studios"
   add_foreign_key "questions", "appointments"
   add_foreign_key "referrals", "customers", column: "referred_id"
   add_foreign_key "referrals", "customers", column: "referrer_id"

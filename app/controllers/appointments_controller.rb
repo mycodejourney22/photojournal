@@ -8,7 +8,7 @@ class AppointmentsController < ApplicationController
   before_action :set_staff_filters, only: [:past]
   skip_before_action :authenticate_user!, only: [:booking, :available_hours, :selected_date,
                                                  :new_customer, :cancel_booking, :cancel, :create, :thank_you, :edit,
-                                                 :update, :type_of_shoots,:select_price]
+                                                 :update, :type_of_shoots,:select_price, :select_location]
 
   def upcoming
     authorize Appointment
@@ -38,9 +38,21 @@ class AppointmentsController < ApplicationController
     respond_to_format
   end
 
+  def select_location
+    authorize Appointment
+    @shoot_type = params[:shoot_type]
+    @studios = Studio.active
+
+    if @shoot_type.blank?
+      redirect_to type_of_shoots_appointments_path, alert: "Please select a shoot type first."
+      return
+    end
+  end
+
   def booking
     authorize Appointment
     @studios = Studio.active
+    @location = params[:location]
     if params[:id].present?
       @appointment = Appointment.find(params[:id])
       build_questions_for_booking(@appointment)
@@ -289,10 +301,30 @@ class AppointmentsController < ApplicationController
 
   end
 
+  # def select_price
+  #   authorize Appointment
+  #   @shoot_type = params[:shoot_type]
+  #   @prices = Price.where(shoot_type: @shoot_type, still_valid: true ).order(:outfit)
+  # end
+  #
   def select_price
     authorize Appointment
     @shoot_type = params[:shoot_type]
-    @prices = Price.where(shoot_type: @shoot_type, still_valid: true ).order(:outfit)
+    @location = params[:location]
+
+    if @shoot_type.blank?
+      redirect_to type_of_shoots_appointments_path, alert: "Please select a shoot type first."
+      return
+    end
+
+    if @location.blank?
+      redirect_to select_location_appointments_path(shoot_type: @shoot_type), alert: "Please select a location first."
+      return
+    end
+
+    @prices = Price.where(shoot_type: @shoot_type, still_valid: true)
+                  .for_location(@location)
+                  .order(:amount)
   end
 
 
@@ -665,7 +697,9 @@ class AppointmentsController < ApplicationController
   end
 
   def determine_layout
-    public_actions = ['type_of_shoots', 'booking', 'new_customer', 'available_hours', 'selected_date', 'cancel_booking', 'thank_you', 'edit', 'select_price']
+    public_actions = ['type_of_shoots', 'booking', 'new_customer',
+      'available_hours', 'selected_date', 'cancel_booking',
+      'thank_you', 'edit', 'select_price', 'select_location']
 
     if public_actions.include?(action_name)
       'public'

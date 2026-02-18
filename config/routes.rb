@@ -230,6 +230,7 @@ Rails.application.routes.draw do
     collection do
       get :upcoming
       get :type_of_shoots
+      get :select_location
       post :select_price
       get :select_price
       get :in_progress

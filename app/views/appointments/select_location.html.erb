@@ -1,0 +1,222 @@
+<!-- app/views/appointments/select_location.html.erb -->
+<div class="location-container">
+  <!-- Logo and header section -->
+  <div class="logo-header">
+    <div class="logo-circle"></div>
+    <h1 class="logo-text">363 PHOTOGRAPHY</h1>
+  </div>
+
+  <!-- Back navigation -->
+  <div class="back-navigation">
+    <%= link_to type_of_shoots_appointments_path, class: "back-links" do %>
+      <i class="fa-solid fa-chevron-left"></i> Back
+    <% end %>
+  </div>
+
+  <!-- Page title -->
+  <h2 class="page-titles">Select a Studio Location</h2>
+  <p class="page-subtitle">Choose the studio where you'd like to have your <%= @shoot_type %> session</p>
+
+  <!-- Studio cards -->
+  <div class="studios-grid">
+    <% @studios.each do |studio| %>
+      <%= link_to select_price_appointments_path(shoot_type: @shoot_type, location: studio.location), class: "studio-link" do %>
+        <div class="studio-card">
+          <div class="studio-icon">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+
+          <div class="studio-content">
+            <h3 class="studio-name"><%= studio.location %></h3>
+            <p class="studio-address"><%= studio.address %></p>
+            <p class="studio-phone">
+              <i class="fa-solid fa-phone"></i> <%= studio.phone %>
+            </p>
+          </div>
+
+          <div class="studio-arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  /* Core container */
+  .location-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+
+  /* Logo styling */
+  .logo-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-top: 10px;
+  }
+
+  .logo-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #EDD400;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+
+  /* Back navigation */
+  .back-navigation {
+    margin-bottom: 20px;
+  }
+
+  .back-links {
+    display: inline-flex;
+    align-items: center;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+
+  .back-links:hover {
+    color: #333;
+  }
+
+  .back-links i {
+    margin-right: 6px;
+  }
+
+  /* Page title */
+  .page-titles {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+  }
+
+  /* Studios grid */
+  .studios-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .studio-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .studio-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .studio-card:hover {
+    border-color: #EDD400;
+    box-shadow: 0 4px 12px rgba(237, 212, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .studio-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #EDD400 0%, #d4bc00 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+
+  .studio-icon i {
+    font-size: 22px;
+    color: white;
+  }
+
+  .studio-content {
+    flex: 1;
+  }
+
+  .studio-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 6px 0;
+  }
+
+  .studio-address {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 4px 0;
+    line-height: 1.4;
+  }
+
+  .studio-phone {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+  }
+
+  .studio-phone i {
+    margin-right: 6px;
+    font-size: 12px;
+  }
+
+  .studio-arrow {
+    color: #EDD400;
+    font-size: 16px;
+    margin-left: 16px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .location-container {
+      padding: 15px;
+    }
+
+    .page-titles {
+      font-size: 20px;
+    }
+
+    .studio-card {
+      padding: 16px;
+    }
+
+    .studio-icon {
+      width: 44px;
+      height: 44px;
+    }
+
+    .studio-icon i {
+      font-size: 18px;
+    }
+
+    .studio-name {
+      font-size: 16px;
+    }
+  }
+</style>

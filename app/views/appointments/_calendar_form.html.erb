@@ -12,12 +12,13 @@
   <%= form.hidden_field :price_id, value: params[:price_id] || @appointment.price_id %>
   <%= form.hidden_field :start_time, id: 'start_time_input', required: true %>
 
-  <div class="d-flex flex-column py-3">
-    <%= form.label :location, "Studio Location:" %>
-    <%= form.select :location,
-                   options_for_select(['Ajah', 'Ikeja', 'Surulere'], @appointment.location),
-                   { prompt: 'Choose your location' },
-                   class: "w-100 form-data__input" %>
+ <div class="d-flex flex-column py-3">
+    <label class="form-label">Studio Location:</label>
+    <div class="location-display">
+      <i class="fa-solid fa-location-dot" style="color: #EDD400; margin-right: 8px;"></i>
+      <strong><%= @location %></strong>
+    </div>
+    <%= form.hidden_field :location, value: @location %>
   </div>
 
   <button type="button" id="redirect_button" class="booking-action-button" data-action="click->calendar#redirectToAvailableHours">

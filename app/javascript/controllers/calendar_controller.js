@@ -156,7 +156,8 @@ export default class extends Controller {
 
   redirectToAvailableHours() {
     const selectedDate = document.getElementById('selected_date_input').value;
-    const selectedLocation = document.querySelector('select[name="appointment[location]"]').value;
+    // const selectedLocation = document.querySelector('select[name="appointment[location]"]').value;
+    const selectedLocation = document.querySelector('input[name="appointment[location]"]').value;
     const priceId = document.getElementById('appointment_price_id').value || null;
 
     // Check if we're editing an existing appointment
