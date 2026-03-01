@@ -9,6 +9,8 @@ class ReferralPolicy < ApplicationPolicy
           scope.joins(referrer: :sales).where("sales.location ILIKE ?", "%ikeja%").distinct
         when 'surulere'
           scope.joins(referrer: :sales).where("sales.location ILIKE ?", "%surulere%").distinct
+        when 'lekki'
+          scope.joins(referrer: :sales).where("sales.location ILIKE ?", "%lekki%").distinct
         when 'ajah'
           scope.joins(referrer: :sales).where("sales.location ILIKE ? OR sales.location ILIKE ?", '%Ajah%', '%Ilaje%').distinct
         else
@@ -19,7 +21,7 @@ class ReferralPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah lekki].include?(user.role)
   end
 
   def show?

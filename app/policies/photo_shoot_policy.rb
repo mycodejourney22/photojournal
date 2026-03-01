@@ -24,6 +24,8 @@ class PhotoShootPolicy < ApplicationPolicy
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%ikeja%")
         when 'surulere'
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%surulere%")
+        when 'lekki'
+          scope.joins(:appointment).where("appointments.location ILIKE ?", "%lekki%")
         when 'ajah'
           scope.joins(:appointment).where("appointments.location ILIKE ? OR appointments.location ILIKE ?", '%Ajah%', '%Ilaje%')
         else
@@ -34,7 +36,7 @@ class PhotoShootPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere lekki ajah].include?(user.role)
   end
 
   def upfront?

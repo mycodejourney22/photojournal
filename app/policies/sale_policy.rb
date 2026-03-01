@@ -43,6 +43,8 @@ class SalePolicy < ApplicationPolicy
           scope.where('location iLIKE ?', '%Ikeja%')
         when 'surulere'
           scope.where('location iLIKE ?', '%Surulere%')
+        when 'lekki'
+          scope.where('location iLIKE ?', '%Lekki%')
         when 'ajah'
           scope.where('location ILIKE ? OR location ILIKE ?', '%Ajah%', '%Ilaje%')
         else
@@ -53,15 +55,15 @@ class SalePolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah lekki].include?(user.role)
   end
 
   def new?
-    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah lekki].include?(user.role)
   end
 
   def create?
-    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah lekki].include?(user.role)
   end
 
   def edit?
@@ -72,6 +74,6 @@ class SalePolicy < ApplicationPolicy
     new?
   end
   def upfront?
-    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah lekki].include?(user.role)
   end
 end

@@ -10,6 +10,8 @@ class RefundRequestPolicy < ApplicationPolicy
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%ikeja%")
         when 'surulere'
           scope.joins(:appointment).where("appointments.location ILIKE ?", "%surulere%")
+        when 'lekki'
+          scope.joins(:appointment).where("appointments.location ILIKE ?", "%lekki%")
         when 'ajah'
           scope.joins(:appointment).where("appointments.location ILIKE ? OR appointments.location ILIKE ?", '%Ajah%', '%Ilaje%')
         else
@@ -20,12 +22,13 @@ class RefundRequestPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah].include?(user.role)
+    user.admin? || user.manager? || user.super_admin? || %w[ikeja surulere ajah lekki].include?(user.role)
   end
 
   def show?
     user.admin? || user.manager? || user.super_admin? ||
       (user.ikeja? && record.appointment.location.downcase.include?('ikeja')) ||
+      (user.lekki && record.appointment.location.downcase.include?('lekki')) ||
       (user.surulere? && record.appointment.location.downcase.include?('surulere')) ||
       (user.ajah? && (record.appointment.location.downcase.include?('ajah') || record.appointment.location.downcase.include?('ilaje')))
   end

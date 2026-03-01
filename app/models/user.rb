@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  ROLES = %w[admin ikeja surulere ajah social super_admin manager customer_service user]
+  ROLES = %w[admin ikeja surulere ajah lekki social super_admin manager customer_service user]
 
   validates :role, presence: true, inclusion: { in: ROLES }
   belongs_to :studio, optional: true
@@ -19,6 +19,10 @@ class User < ApplicationRecord
 
   def ikeja?
     role == 'ikeja'
+  end
+
+  def lekki?
+    role == 'lekki'
   end
 
   def not_social?
@@ -40,7 +44,7 @@ class User < ApplicationRecord
   def studio_location
     studio&.location&.downcase
   end
-  
+
   # Check if user is a studio manager (has studio assigned)
   def studio_manager?
     manager? && studio_id.present?
