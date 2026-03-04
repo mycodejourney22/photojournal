@@ -43,6 +43,8 @@ class ExpensesController < ApplicationController
       'ikeja'
     when 'surulere'
       'surulere'
+    when 'lekki'
+      'lekki'
     else
       'unknown'
     end

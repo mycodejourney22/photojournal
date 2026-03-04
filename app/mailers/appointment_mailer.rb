@@ -78,7 +78,7 @@ class AppointmentMailer < ApplicationMailer
     @payment_data = payment_data
     @location = studio_address
     @studio_phone_number = studio_number
-    
+
     # Extract payment information
     @amount_paid = @payment_data['amount'] / 100.0 # Convert from kobo to naira
     @reference = @payment_data['reference']
@@ -86,10 +86,10 @@ class AppointmentMailer < ApplicationMailer
     @original_amount = @payment_data.dig('metadata', 'original_amount') || @amount_paid
     @discount_amount = @payment_data.dig('metadata', 'discount_amount') || 0
     @referral_code = @payment_data.dig('metadata', 'referral_code')
-  
+
     # Generate Google Calendar link
     @calendar_link = generate_calendar_link(@appointment)
-  
+
     mail_from_studio(
       {
         to: @appointment.email,
@@ -108,6 +108,8 @@ class AppointmentMailer < ApplicationMailer
       "115A Bode Thomas Street, Surulere, Lagos"
     elsif @appointment.location.downcase == "ikeja"
       "66 Adeniyi Jones, Ikeja, Lagos"
+    elsif @appointment.location.downcase == "lekki"
+      "Crystall Mall, 40 Providence Road, Lekki Phase 1"
     end
   end
 
@@ -118,6 +120,8 @@ class AppointmentMailer < ApplicationMailer
       "07048891715"
     elsif @appointment.location.downcase == "ikeja"
       "08090151168"
+    elsif @appointment.location.downcase == "lekki"
+      "07048289684"
     end
   end
 
@@ -128,7 +132,7 @@ class AppointmentMailer < ApplicationMailer
     end_time = (appointment.start_time + 2.hours).utc.strftime('%Y%m%dT%H%M%SZ')
     details = CGI.escape('We look forward to your session. Please arrive 15 minutes early.')
     location = CGI.escape(studio_address)
-  
+
     "#{base_url}&text=#{event_title}&dates=#{start_time}/#{end_time}&details=#{details}&location=#{location}"
   end
 end

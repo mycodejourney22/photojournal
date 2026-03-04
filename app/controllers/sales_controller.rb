@@ -29,7 +29,7 @@ class SalesController < ApplicationController
       studio = Studio.find_by(id: @sale.studio_id)
       @sale.location = studio&.location
     end
-    
+
 
     if @sale.save
       redirect_to_success
@@ -109,6 +109,8 @@ class SalesController < ApplicationController
       Studio.find_by("location ILIKE ?", "%ikeja%")&.id
     when 'surulere'
       Studio.find_by("location ILIKE ?", "%surulere%")&.id
+    when 'lekki'
+      Studio.find_by("location ILIKE ?", "%lekki%")&.id
     else
       # Could return nil or a default studio
       nil
